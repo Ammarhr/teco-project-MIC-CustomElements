@@ -11,6 +11,7 @@
   export let oweAmmount = "$842.76";
   export let pastDueDate = "Jan 25, 2022";
   export let previousBill = "$842.76";
+  export let state={};
 </script>
 
 <div id="card">

@@ -7,44 +7,40 @@
   import BillSelector from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
   import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import Insighta from "./lib/Components/MIC-Insights.svelte";
+  import {fetchstore, date, getDate } from "./js/store";
 
   //mocking data
-  let apiKey = "55555";
-  let state = {};
-
-  fetch("./data/data.json")
-    .then((response) => response.json())
-    .then((data) => {
-      if (!apiKey) state = { message: "Please provide an api key!" };
-      else if (apiKey === "55555") state = { ...data };
-      else state = { message: "invalid api key!" };
-    })
-    .catch((err) => console.log("it is an error ===> ", err));
+  const [data, loading, error, get] = fetchstore("./data/data.json");
 
   //trigger the change of the state
-  $: if (state && state.account) {
-    console.log(state.account.date, "this is account date");
-    state.account.date = state.account.date;
+  $: if (data && data.account) {
+    // console.log(data.account.date, "this is account date");
+    data.account.date = data.account.date;
   }
+
 </script>
 
 <main>
-  <div class="Header"><HeaderInformation {state} /></div>
-  <div class="container">
-    <div class="Billing-message">
-      <BillsHistory {state} />
-      <ImportantMessage {state} />
-    </div>
-    {#if state.account}
+  {#if $loading}
+    Loading: {$loading}
+  {:else if $error}
+    Error: {$error}
+  {:else}
+    <div class="Header"><HeaderInformation state={$data} /></div>
+    <div class="container">
+      <div class="Billing-message">
+        <BillsHistory state={$data} />
+        <ImportantMessage state={$data} />
+      </div>
       <div id="bill-selector">
-        <BillSelector bind:date={state.account.date} />
+        <BillSelector  />
       </div>
       <div class="Billing">
         <BillingSummary />
-        <Insighta bind:date={state.account.date} />
+        <Insighta />
       </div>
-    {/if}
-  </div>
+    </div>
+  {/if}
 </main>
 
 <style>

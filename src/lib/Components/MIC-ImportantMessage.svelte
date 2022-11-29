@@ -6,8 +6,7 @@
 
   //state
   export let state = {};
-  export let message;
-
+  let message;;
   //unreaded messages counter
   let counter;
   const unReadedMessagesHandle = () => {

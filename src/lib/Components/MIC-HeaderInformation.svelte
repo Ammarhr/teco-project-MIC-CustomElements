@@ -61,103 +61,58 @@
   }
 
   .header-label {
-    /* Label */
-
     width: 62px;
     height: 29px;
     font-style: normal;
     font-weight: 700;
     font-size: 24px;
     line-height: 29px;
-    /* identical to box height */
-
-    /* Generic/White */
-
     color: #ffffff;
-
-    /* Inside auto layout */
-
     flex: none;
     order: 0;
     flex-grow: 0;
   }
 
   .header-container {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 10px 32px;
     width: 1258px;
     height: 55px;
-
-    /* Teco Primary Blue */
-
     background: #005faa;
     border-radius: 6px 6px 0px 0px;
-
-    /* Inside auto layout */
-
     flex: none;
     order: 0;
     flex-grow: 0;
   }
 
   .header-btn {
+    position: absolute;
+    right: 10px;
     cursor: pointer;
     box-sizing: border-box;
     margin-left: 15px;
-    /* Auto layout */
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     padding: 8px 20px;
     gap: 10px;
-
-    width: 161px;
+    width: 163px;
     height: 35px;
-
-    /* Generic/White */
-
     background: #ffffff;
-    /* Neutral/300 */
-
     border: 1px solid #d1d5db;
-    /* Drop shadow/XSmall */
-
     box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
     border-radius: 6px;
-
-    /* Inside auto layout */
-
-    flex: none;
-    order: 0;
-    flex-grow: 0;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-
-    /* Neutral/700 */
-
     color: #374151;
-
-    /* Inside auto layout */
-
-    flex: none;
     order: 1;
     flex-grow: 0;
   }
   .star {
-    position: static;
-    left: 8.33%;
-    right: 8.33%;
-    top: 8.33%;
-    bottom: 12.5%;
+    position: absolute;
+    right: 190px;
     padding-left: 5px;
     border-radius: 0.5px;
   }
@@ -180,7 +135,8 @@
   }
   .account-number {
     width: 174px;
-    height: 38px;    font-style: normal;
+    height: 38px;
+    font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
@@ -194,7 +150,8 @@
   }
   .account-adress {
     width: 300px;
-    height: 19px;    font-size: 16px;
+    height: 19px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 19px;
     letter-spacing: 0em;
@@ -206,7 +163,8 @@
   }
   .account-status {
     width: 150px;
-    height: 19px;    font-style: normal;
+    height: 19px;
+    font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;

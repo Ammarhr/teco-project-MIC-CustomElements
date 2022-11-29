@@ -5,13 +5,14 @@
   import redArrow from "../../assets/redArrow.svg";
   // @ts-ignore
   import { chart } from "svelte-apexcharts";
-  import { renderBarChart, renderRadialBar } from "../MIC-chart-bundle";
+  import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
+  import { date, getDate } from "../../js/store";
+
   //state
-  export let date ='';
   export let data = [1.358, 1.453];
-  export let dataLables = ["Jan 2020", "Feb 2021"];
+  export let dataLables = [$date, "Feb 2021"];
   export let demandIsightsData = [79];
-  export let insightsDataLables = [date];
+  export let insightsDataLables = [$date];
   export let avgTempComparison = 65;
   export let thisMonthComparisonPercentage = 105;
   export let thisMonthComparsionAmmount = 1.358;
@@ -20,8 +21,18 @@
 
   //charts renderer
   let options = renderBarChart(data, dataLables);
+
   let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
   let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
+
+  $: if (date) {
+    console.log($date, "this is from store and insights");
+    insightsDataLables = [$date];
+    dataLables = [$date, $date];
+    options = renderBarChart(data, dataLables);
+    options2 = renderRadialBar(demandIsightsData, insightsDataLables);
+    options3 = renderRadialBar(demandIsightsData, insightsDataLables);
+  }
 </script>
 
 <div class="card">
@@ -38,7 +49,9 @@
   <!-- <hr id="active"/>
   <hr id="inactive" style="width: 50%;"/> -->
   <div class="chart-container">
-    <div use:chart={options} />
+    {#key $date}
+      <div use:chart={options} />
+    {/key}
   </div>
   <div class="content">
     <h6 class="label">THIS MONTH</h6>
@@ -64,8 +77,10 @@
   </div>
   <h4 class="title-2">MY Demand INSIGHTS</h4>
   <div class="chart-container">
-    <div class="sub-container"><div use:chart={options2} /></div>
-    <div class="sub-container"><div use:chart={options3} /></div>
+    {#key $date}
+      <div class="sub-container"><div use:chart={options2} /></div>
+      <div class="sub-container"><div use:chart={options3} /></div>
+    {/key}
   </div>
   <div class="content">
     <h6 class="label">THIS MONTH</h6>
