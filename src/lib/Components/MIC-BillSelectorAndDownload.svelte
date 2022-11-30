@@ -3,8 +3,6 @@
   import downloadIcon from "../../assets/Icon-left.svg";
   import line from "../../assets/Line1812.svg";
   import { date, getDate } from "../../js/store";
-  //state
-  // export let date = {};
 </script>
 
 <div id="selector-card">
