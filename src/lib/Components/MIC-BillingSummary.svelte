@@ -16,6 +16,7 @@
   export let cleanEnergyTransitionMechanism = 96.8;
   export let electricChargesSubtotal = 3638.58;
 </script>
+<svelte:options tag="mic-billingsummary" />
 
 <div class="card">
   <h4 id="title">BILLING SUMMARY</h4>

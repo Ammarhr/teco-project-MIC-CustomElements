@@ -12,7 +12,9 @@
   export let pastDueDate = "Jan 25, 2022";
   export let previousBill = "$842.76";
   export let state={};
+
 </script>
+<svelte:options tag="mic-accountbalance" />
 
 <div id="card">
   <img src={vector550} alt="" id="vector550" />

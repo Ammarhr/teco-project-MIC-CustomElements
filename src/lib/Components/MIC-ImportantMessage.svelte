@@ -22,6 +22,7 @@
     message = state.messages[0].message.slice(0, 240);
   }
 </script>
+<svelte:options tag="mic-importentmessage" />
 
 <div class="message-container">
   <div class="container">

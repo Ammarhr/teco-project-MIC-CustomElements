@@ -5,6 +5,7 @@
   import { date, getDate } from "../../js/store";
 </script>
 
+<svelte:options tag="mic-billselector" />
 <div id="selector-card">
   <div id="selector-container">
     <div id="sub-container">

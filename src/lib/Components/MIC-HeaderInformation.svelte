@@ -3,22 +3,23 @@
 
   import star from "../../assets/Vector.svg";
   import fire from "../../assets/Fire.svg";
-  export let state = {};
 
+  export let account;
   let statusClass = "Inactive";
 
-  $: if (state.account) {
-    if (state.account.status == true) {
+  $: if (account) {
+    if (account.status == true) {
       statusClass = "Active";
     } else {
       statusClass = "Inactive";
     }
   }
+  
 </script>
-<svelte:options tag="mic-accountheader" />
 
+<svelte:options tag="mic-headerinformation" />
 <div>
-  {#if state.account}
+  {#if account}
     <header>
       <nav>
         <div class="header-container">
@@ -34,11 +35,11 @@
               <img src={fire} alt="fire" />
             </span>
             <span class="account-number">
-              Account #: <br /> {state.account.accountNumber}</span
+              Account #: <br /> {account.accountNumber}</span
             >
           </div>
 
-          <span class="account-adress">Address: {state.account.adress}</span>
+          <span class="account-adress">Address: {account.adress}</span>
           <span class="account-status"
             >Status: <span class={statusClass}>{statusClass}</span></span
           >
@@ -47,7 +48,7 @@
     </header>
   {:else}
     <div>
-      <p>{state.message}</p>
+      <p>errphello</p>
     </div>
   {/if}
 </div>

@@ -34,6 +34,7 @@
     options3 = renderRadialBar(demandIsightsData, insightsDataLables);
   }
 </script>
+
 <svelte:options tag="mic-insights" />
 <div class="card">
   <div id="header">
