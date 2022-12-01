@@ -15,6 +15,7 @@
     }
   }
 </script>
+<svelte:options tag="mic-accountheader" />
 
 <div>
   {#if state.account}

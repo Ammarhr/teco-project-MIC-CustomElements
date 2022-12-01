@@ -20,7 +20,7 @@
   let avgClass = "red"; //toggle style class (complete it later)
 
   //charts renderer
-  let options = renderBarChart(data, dataLables);
+  let options1 = renderBarChart(data, dataLables);
 
   let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
   let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
@@ -29,12 +29,12 @@
     console.log($date, "this is from store and insights");
     insightsDataLables = [$date];
     dataLables = [$date, $date];
-    options = renderBarChart(data, dataLables);
+    options1 = renderBarChart(data, dataLables);
     options2 = renderRadialBar(demandIsightsData, insightsDataLables);
     options3 = renderRadialBar(demandIsightsData, insightsDataLables);
   }
 </script>
-
+<svelte:options tag="mic-insights" />
 <div class="card">
   <div id="header">
     <h5 class="title">MY BILLING INSIGHTS</h5>
@@ -50,7 +50,7 @@
   <hr id="inactive" style="width: 50%;"/> -->
   <div class="chart-container">
     {#key $date}
-      <div use:chart={options} />
+      <div use:chart={options1} />
     {/key}
   </div>
   <div class="content">

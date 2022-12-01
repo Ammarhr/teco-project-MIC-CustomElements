@@ -6,20 +6,19 @@
   import BillsHistory from "./lib/Components/MIC-AccountBalance-DS.svelte";
   import BillSelector from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
   import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
-  import Insighta from "./lib/Components/MIC-Insights.svelte";
+  import Insights from "./lib/Components/MIC-Insights.svelte";
   import {fetchstore, date, getDate } from "./js/store";
 
   //mocking data
   const [data, loading, error, get] = fetchstore("./data/data.json");
 
   //trigger the change of the state
-  $: if (data && data.account) {
-    // console.log(data.account.date, "this is account date");
-    data.account.date = data.account.date;
-  }
+  // $: if (data && data.account) {
+  //   // console.log(data.account.date, "this is account date");
+  //   data.account.date = data.account.date;
+  // }
 
 </script>
-
 <main>
   {#if $loading}
     Loading: {$loading}
@@ -37,7 +36,7 @@
       </div>
       <div class="Billing">
         <BillingSummary />
-        <Insighta />
+        <Insights />
       </div>
     </div>
   {/if}
