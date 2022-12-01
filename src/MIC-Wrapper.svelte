@@ -26,7 +26,7 @@
   {:else if $error}
     Error: {$error}
   {:else}
-    <div class="Header"><HeaderInformation state={$data} /></div>
+    <div class="Header"><HeaderInformation {...$data} /></div>
     <div class="container">
       <div class="Billing-message">
         <BillsHistory state={$data} />
