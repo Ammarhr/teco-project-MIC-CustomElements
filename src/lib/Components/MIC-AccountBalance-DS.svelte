@@ -12,7 +12,9 @@
   export let pastDueDate = "Jan 25, 2022";
   export let previousBill = "$842.76";
   export let state={};
-
+  export let item = { name: "Item" };
+  export let token;
+  
 </script>
 <svelte:options tag="mic-accountbalance" />
 
@@ -91,8 +93,8 @@
   }
   #card {
     position: relative;
-    width: 750px;
-    height: 403px;
+    width: 46.875rem;
+    height: 25.188rem;
     border-radius: 20px;
     flex: none;
     order: 0;

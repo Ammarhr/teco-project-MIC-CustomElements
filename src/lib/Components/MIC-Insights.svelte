@@ -16,6 +16,7 @@
   export let avgTempComparison = 65;
   export let thisMonthComparisonPercentage = 105;
   export let thisMonthComparsionAmmount = 1.358;
+  export let token;
 
   let avgClass = "red"; //toggle style class (complete it later)
 
@@ -33,6 +34,8 @@
     options2 = renderRadialBar(demandIsightsData, insightsDataLables);
     options3 = renderRadialBar(demandIsightsData, insightsDataLables);
   }
+
+  export let item = { name: "Item" };
 </script>
 
 <svelte:options tag="mic-insights" />
@@ -114,8 +117,8 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 5px;
-    min-width: 30%;
-    min-height: 1121.4px;
+    max-width: 25rem;
+    max-height: 75.025rem;
     padding: 20px;
     background: #ffffff;
     border-radius: 20px;
@@ -128,8 +131,8 @@
     align-items: center;
     padding: 0px;
     gap: 499px;
-    width: 392px;
-    height: 50px;
+    width: 25rem;
+    height: 4rem;
     flex: none;
     order: 0;
     flex-grow: 0;

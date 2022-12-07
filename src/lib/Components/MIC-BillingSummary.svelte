@@ -15,7 +15,10 @@
   export let environmentalCostRecovery = 73.11;
   export let cleanEnergyTransitionMechanism = 96.8;
   export let electricChargesSubtotal = 3638.58;
+  export let item = { name: "Item" };
+  export let token;
 </script>
+
 <svelte:options tag="mic-billingsummary" />
 
 <div class="card">

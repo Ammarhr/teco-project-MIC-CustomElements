@@ -1,3 +1,5 @@
+<svelte:options tag="mic-wrapper" />
+
 <script>
   // @ts-nocheck
   //svg imports
@@ -7,34 +9,29 @@
   import BillSelector from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
   import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import Insights from "./lib/Components/MIC-Insights.svelte";
-  
-  import {fetchstore, date, getDate } from "./js/store";
+
+  import { fetchstore } from "./js/store";
 
   //mocking data
-  const [data, loading, error, get] = fetchstore("https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json");
-
-  //trigger the change of the state
-  // $: if (data && data.account) {
-  //   // console.log(data.account.date, "this is account date");
-  //   data.account.date = data.account.date;
-  // }
+  const [data, loading, error, get] = fetchstore(
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json"
+  );
 </script>
 
-<svelte:options tag="mic-wrapper" />
 <main>
   {#if $loading}
     Loading: {$loading}
   {:else if $error}
     Error: {$error}
   {:else}
-    <div class="Header"><HeaderInformation {...$data} /></div>
+    <div class="Header"><HeaderInformation /></div>
     <div class="container">
       <div class="Billing-message">
         <BillsHistory state={$data} />
         <ImportantMessage state={$data} />
       </div>
       <div id="bill-selector">
-        <BillSelector  />
+        <BillSelector />
       </div>
       <div class="Billing">
         <BillingSummary />
