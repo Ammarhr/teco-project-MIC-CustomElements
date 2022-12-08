@@ -3,12 +3,33 @@
 
   import star from "../../assets/Vector.svg";
   import fire from "../../assets/Fire.svg";
+<<<<<<< HEAD
   export let state = {};
   export let account;
   export let message;
+=======
+  import { fetchstore } from "../../js/store";
+>>>>>>> staging
 
+  
+  export let token;
+  export let item = { name: "Item" };
+  let account;
   let statusClass = "Inactive";
 
+<<<<<<< HEAD
+=======
+  //mocking data
+  const [data, loading, error, get] = fetchstore(
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json"
+  ,token);
+
+  $: if ($data) {
+    console.log('token from header' , token);
+    account = $data.account;
+  }
+
+>>>>>>> staging
   $: if (account) {
     if (account.status == true) {
       statusClass = "Active";
@@ -16,10 +37,21 @@
       statusClass = "Inactive";
     }
   }
+
+
 </script>
 
+<svelte:options tag="mic-headerinformation" />
 <div>
+<<<<<<< HEAD
   {#if account}
+=======
+  {#if $loading}
+    Loading: {$loading}
+  {:else if $error}
+    Error: {$error}
+  {:else if account}
+>>>>>>> staging
     <header>
       <nav>
         <div class="header-container">
@@ -48,7 +80,7 @@
     </header>
   {:else}
     <div>
-      <p>error: {message}</p>
+      <p>{$data.errrorMessage}</p>
     </div>
   {/if}
 </div>
@@ -81,8 +113,8 @@
     flex-direction: row;
     align-items: center;
     padding: 10px 32px;
-    width: 1258px;
-    height: 55px;
+    width: 78.625rem;
+    height: 3.438rem;
     background: #005faa;
     border-radius: 6px 6px 0px 0px;
     flex: none;

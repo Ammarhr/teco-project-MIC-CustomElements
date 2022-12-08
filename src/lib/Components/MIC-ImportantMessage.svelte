@@ -1,4 +1,8 @@
+<svelte:options tag="mic-importentmessage" />
+
 <script>
+  // @ts-nocheck
+
   //svg imports
   import messageLogo from "../../assets/envelope-solid.svg";
   import circyle from "../../assets/cr.svg";
@@ -6,7 +10,10 @@
 
   //state
   export let state = {};
-  let message;;
+  export let item = { name: "Item" };
+  export let token;
+
+  let message;
   //unreaded messages counter
   let counter;
   const unReadedMessagesHandle = () => {
@@ -15,34 +22,52 @@
     );
     counter = unreadedMwssages.length;
   };
+  import { fetchstore } from "../../js/store";
+
+  //mocking data
+  const [data, loading, error, get] = fetchstore(
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json",
+    token
+  );
+
+  $: if ($data) {
+    state = $data;
+  }
 
   //slice long message
   $: if (state && state.messages) {
     unReadedMessagesHandle();
     message = state.messages[0].message.slice(0, 240);
+    console.log(token);
   }
 </script>
 
-<div class="message-container">
-  <div class="container">
-    <div class="message-logo">
-      <img src={messageLogo} alt="" /><img
-        src={notification}
-        alt=""
-        id="notification"
-      />
-      <span id="unreaded-msgs">{counter}</span>
-    </div>
-    <div class="message-lable">Important Message</div>
-    <div class="message-btn"><img src={circyle} alt="" /></div>
-    {#if state.messages}
-      <div class="message-body">
-        <p class="msg-data">{message}...</p>
+{#if $loading}
+  Loading: {$loading}
+{:else if $error}
+  Error: {$error}
+{:else}
+  <div class="message-container">
+    <div class="container">
+      <div class="message-logo">
+        <img src={messageLogo} alt="" /><img
+          src={notification}
+          alt=""
+          id="notification"
+        />
+        <span id="unreaded-msgs">{counter}</span>
       </div>
-    {/if}
-    <div class="message-footer"><button><span>View</span></button></div>
+      <div class="message-lable">Important Message</div>
+      <div class="message-btn"><img src={circyle} alt="" /></div>
+      {#if state.messages}
+        <div class="message-body">
+          <p class="msg-data">{message}...</p>
+        </div>
+      {/if}
+      <div class="message-footer"><button><span>View</span></button></div>
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   @font-face {
@@ -54,7 +79,8 @@
   }
 
   .message-container {
-    height: 403px;
+    max-height: 25.188rem;
+    max-width: 30rem;
   }
   .container {
     display: grid;
@@ -68,8 +94,8 @@
       "message-footer message-footer message-footer";
     padding: 32px;
     gap: 7px;
-    width: 370px;
-    height: 392px;
+    max-width: 23.125rem;
+    min-height: 24rem;
     background: #ffffff;
     box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
     border-radius: 20px;

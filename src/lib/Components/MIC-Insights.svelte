@@ -16,11 +16,12 @@
   export let avgTempComparison = 65;
   export let thisMonthComparisonPercentage = 105;
   export let thisMonthComparsionAmmount = 1.358;
+  export let token;
 
   let avgClass = "red"; //toggle style class (complete it later)
 
   //charts renderer
-  let options = renderBarChart(data, dataLables);
+  let options1 = renderBarChart(data, dataLables);
 
   let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
   let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
@@ -29,12 +30,15 @@
     console.log($date, "this is from store and insights");
     insightsDataLables = [$date];
     dataLables = [$date, $date];
-    options = renderBarChart(data, dataLables);
+    options1 = renderBarChart(data, dataLables);
     options2 = renderRadialBar(demandIsightsData, insightsDataLables);
     options3 = renderRadialBar(demandIsightsData, insightsDataLables);
   }
+
+  export let item = { name: "Item" };
 </script>
 
+<svelte:options tag="mic-insights" />
 <div class="card">
   <div id="header">
     <h5 class="title">MY BILLING INSIGHTS</h5>
@@ -50,7 +54,7 @@
   <hr id="inactive" style="width: 50%;"/> -->
   <div class="chart-container">
     {#key $date}
-      <div use:chart={options} />
+      <div use:chart={options1} />
     {/key}
   </div>
   <div class="content">
@@ -113,8 +117,8 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 5px;
-    min-width: 30%;
-    min-height: 1121.4px;
+    max-width: 25rem;
+    max-height: 75.025rem;
     padding: 20px;
     background: #ffffff;
     border-radius: 20px;
@@ -127,8 +131,8 @@
     align-items: center;
     padding: 0px;
     gap: 499px;
-    width: 392px;
-    height: 50px;
+    width: 25rem;
+    height: 4rem;
     flex: none;
     order: 0;
     flex-grow: 0;

@@ -1,8 +1,13 @@
+<svelte:options tag="mic-billselector" />
+
 <script>
   // svg imports
   import downloadIcon from "../../assets/Icon-left.svg";
   import line from "../../assets/Line1812.svg";
-  import { date, getDate } from "../../js/store";
+  import { date } from "../../js/store";
+
+  export let token;
+  export let item = { name: "Item" };
 </script>
 
 <div id="selector-card">
@@ -49,8 +54,8 @@
     align-items: center;
     padding: 0px;
     gap: 51px;
-    width: 370px;
-    height: 48px;
+    min-width: 23.125rem;
+    min-height: 3rem;
     flex: none;
     order: 1;
     flex-grow: 0;
@@ -60,7 +65,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 798px;
+    width: auto;
     height: 140px;
     flex: none;
     order: 0;
@@ -76,7 +81,7 @@
     padding: 0px 32px;
     gap: 41px;
     position: absolute;
-    width: 770px;
+    width: auto;
     height: 86px;
     left: 0px;
     top: 26px;
@@ -88,7 +93,7 @@
     align-items: flex-start;
     padding: 0px;
     gap: 8px;
-    width: 286px;
+    width: auto;
     height: 88px;
     flex: none;
     order: 0;
@@ -97,7 +102,7 @@
   }
 
   label {
-    width: 286px;
+    width: auto;
     height: 30px;
     font-style: normal;
     font-weight: 400;
@@ -119,7 +124,7 @@
     align-items: center;
     padding: 15px 12px;
     gap: 12px;
-    width: 286px;
+    width: auto;
     height: 50px;
     background: #ffffff;
     border: 1px solid #d1d5db;
