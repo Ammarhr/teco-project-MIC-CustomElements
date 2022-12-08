@@ -3,13 +3,7 @@
 
   import star from "../../assets/Vector.svg";
   import fire from "../../assets/Fire.svg";
-<<<<<<< HEAD
-  export let state = {};
-  export let account;
-  export let message;
-=======
   import { fetchstore } from "../../js/store";
->>>>>>> staging
 
   
   export let token;
@@ -17,8 +11,6 @@
   let account;
   let statusClass = "Inactive";
 
-<<<<<<< HEAD
-=======
   //mocking data
   const [data, loading, error, get] = fetchstore(
     "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json"
@@ -29,7 +21,6 @@
     account = $data.account;
   }
 
->>>>>>> staging
   $: if (account) {
     if (account.status == true) {
       statusClass = "Active";
@@ -43,15 +34,11 @@
 
 <svelte:options tag="mic-headerinformation" />
 <div>
-<<<<<<< HEAD
-  {#if account}
-=======
   {#if $loading}
     Loading: {$loading}
   {:else if $error}
     Error: {$error}
   {:else if account}
->>>>>>> staging
     <header>
       <nav>
         <div class="header-container">
