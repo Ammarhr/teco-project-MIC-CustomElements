@@ -44,7 +44,7 @@
 
   import { slide } from "svelte/transition";
   let isOpen = true;
-  let svgId = "none";
+  let svgId = "rotate-svg";
 
   const toggle = () => {
     isOpen = !isOpen;
@@ -122,7 +122,6 @@
   .container {
     display: grid;
     grid-template-columns: 0.4fr 1.7fr 0.4fr;
-    grid-template-rows: 0.4fr 2.1fr 0.4fr;
     gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
@@ -132,7 +131,7 @@
     padding: 32px;
     gap: 7px;
     max-width: 23.125rem;
-    min-height: auto;
+    max-height: 23.125rem;
     background: #ffffff;
     box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
     border-radius: 20px;
@@ -267,11 +266,14 @@
     width: 4rem;
   }
 
-  #btn-toggle img {
+  #rotate-svg {
     transition: transform 0.2s ease-in;
+    transform: rotate(0.25turn);
+
   }
 
   #rotate-svg-true {
+    transition: transform 0.2s ease-in;
     transform: rotate(0.5turn);
   }
 </style>

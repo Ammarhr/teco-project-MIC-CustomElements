@@ -86,9 +86,7 @@
     .container {
         display: grid;
         grid-template-columns: 0.4fr 1.7fr 0.4fr;
-        grid-template-rows: 0.4fr 2.1fr 0.4fr;
         gap: 0px 0px;
-        grid-auto-flow: row;
         grid-template-areas:
             "message-logo message-lable message-"
             "message-body message-body message-body"
