@@ -1,3 +1,5 @@
+<svelte:options tag="mic-headerinformation" />
+
 <script>
   // @ts-nocheck
 
@@ -5,7 +7,6 @@
   import fire from "../../assets/Fire.svg";
   import { fetchstore } from "../../js/store";
 
-  
   export let token;
   export let item = { name: "Item" };
   let account;
@@ -13,11 +14,11 @@
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json"
-  ,token);
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json",
+    token
+  );
 
   $: if ($data) {
-    console.log('token from header' , token);
     account = $data.account;
   }
 
@@ -28,11 +29,8 @@
       statusClass = "Inactive";
     }
   }
-
-
 </script>
 
-<svelte:options tag="mic-headerinformation" />
 <div>
   {#if $loading}
     Loading: {$loading}

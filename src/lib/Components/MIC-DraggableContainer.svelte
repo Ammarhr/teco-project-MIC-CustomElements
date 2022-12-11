@@ -55,9 +55,8 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto;
-    /* max-width: 30rem !important; */
-    column-gap: 50px;
-    row-gap: 50px;
+    column-gap:2rem;
+    row-gap: 2.5rem;
   }
   .wrapper-container {
     margin-top: 20px;

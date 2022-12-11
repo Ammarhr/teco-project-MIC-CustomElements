@@ -17,30 +17,38 @@
   const [token, loading, error, get] = getToken("data/Token.json", "Ammar");
 
   $: if ($token) {
-    console.log("toekn form app", $token);
     apiToken = $token.token;
   }
   let items = [
     // {id: 1, name: MicHeaderInformation},
-    { id: 2, name: MicBillSelectorAndDownload },
-    { id: 3, name: MicBillingSummary },
-    { id: 4, name: MicImportantMessage },
-    { id: 5, name: MicAccountBalanceDs },
-    { id: 6, name: MicInsights },
+    { id: 1, name: MicAccountBalanceDs },
+    { id: 2, name: MicImportantMessage },
+    { id: 3, name: MicInsights },
+    { id: 4, name: MicBillingSummary },
+    { id: 5, name: MicBillSelectorAndDownload },
   ];
   function onDrop(newItems) {
     items = newItems;
   }
 </script>
 
-<div>
-  {#if $loading}
+<div class="app-container">
+  <!-- {#if $loading}
     Loading: {$loading}
   {:else if $error}
     Error: {$error}
   {:else}
     <MicHeaderInformation token={apiToken} />
     <MicDraggableContainer itemData={items} {onDrop} />
-  {/if}
-  <!-- <MicWrapper /> -->
+  {/if} -->
+  <MicWrapper />
 </div>
+
+<style>
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+</style>

@@ -67,7 +67,6 @@ let newDate = new Date();
 let year = newDate.getFullYear();
 let month = newDate.getMonth();
 
-// console.log('month', month)
 export const date = writable(month + 1 + ' ' + year);
 export const getDate = derived(
     date,

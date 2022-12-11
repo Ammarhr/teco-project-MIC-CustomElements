@@ -1,3 +1,5 @@
+<svelte:options tag="mic-insights" />
+
 <script>
   //svg imports
   import arrowUp from "../../assets/arrowUp.svg";
@@ -17,6 +19,7 @@
   export let thisMonthComparisonPercentage = 105;
   export let thisMonthComparsionAmmount = 1.358;
   export let token;
+  export let item = { name: "Item" };
 
   let avgClass = "red"; //toggle style class (complete it later)
 
@@ -27,81 +30,99 @@
   let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
 
   $: if (date) {
-    console.log($date, "this is from store and insights");
     insightsDataLables = [$date];
     dataLables = [$date, $date];
     options1 = renderBarChart(data, dataLables);
     options2 = renderRadialBar(demandIsightsData, insightsDataLables);
     options3 = renderRadialBar(demandIsightsData, insightsDataLables);
   }
+  ///////// acordion functionality
 
-  export let item = { name: "Item" };
+  import { slide } from "svelte/transition";
+  let isOpen = true;
+  let svgId = "rotate-svg-" + isOpen;
+
+  const toggle = () => {
+    isOpen = !isOpen;
+    svgId = "rotate-svg-" + isOpen;
+  };
+
+  ////////////////////////
 </script>
 
-<svelte:options tag="mic-insights" />
 <div class="card">
   <div id="header">
     <h5 class="title">MY BILLING INSIGHTS</h5>
-    <img src={dropDown} alt="" id="drop" />
+    <img
+      src={dropDown}
+      alt=""
+      id={svgId}
+      on:click={toggle}
+      aria-expanded={isOpen}
+    />
   </div>
-  <div id="tabs">
-    <h6 id="tab-title-active">Annual Comparison</h6>
-    <h6 id="tab-title-inactive">
-      Monthly Comparison <br />
-    </h6>
-  </div>
-  <!-- <hr id="active"/>
+  {#if isOpen}
+    <div transition:slide={{ duration: 300 }}>
+      <div id="tabs">
+        <h6 id="tab-title-active">Annual Comparison</h6>
+        <h6 id="tab-title-inactive">
+          Monthly Comparison <br />
+        </h6>
+      </div>
+      <!-- <hr id="active"/>
   <hr id="inactive" style="width: 50%;"/> -->
-  <div class="chart-container">
-    {#key $date}
-      <div use:chart={options1} />
-    {/key}
-  </div>
-  <div class="content">
-    <h6 class="label">THIS MONTH</h6>
-    <div class="val-content">
-      <p class="value">{thisMonthComparsionAmmount} kWh</p>
-      <p class="percentage">
-        <!-- <img src={arrowUp} class="arrow" alt="" /> -->
-        <img src={redArrow} class="arrow" alt="" />
-        <span class={avgClass}>{thisMonthComparisonPercentage}% kWh</span>
-      </p>
+      <div class="chart-container">
+        {#key $date}
+          <div use:chart={options1} />
+        {/key}
+      </div>
+      <div class="content">
+        <h6 class="label">THIS MONTH</h6>
+        <div class="val-content">
+          <p class="value">{thisMonthComparsionAmmount} kWh</p>
+          <p class="percentage">
+            <!-- <img src={arrowUp} class="arrow" alt="" /> -->
+            <img src={redArrow} class="arrow" alt="" />
+            <span class={avgClass}>{thisMonthComparisonPercentage}% kWh</span>
+          </p>
+        </div>
+      </div>
+      <div class="content">
+        <h6 class="label">Avg. Temp.</h6>
+        <div class="val-content">
+          <p class="value">{avgTempComparison + "°"}</p>
+          <p class="percentage">
+            <!-- <img src={redArrow} class="arrow" alt="" /> -->
+            <img src={arrowUp} class="arrow" alt="" />
+            <span class="blue">{avgTempComparison + "°"}</span>
+          </p>
+        </div>
+      </div>
+      <h4 class="title-2">MY Demand INSIGHTS</h4>
+      <div class="chart-container">
+        {#key $date}
+          <div class="sub-container"><div use:chart={options2} /></div>
+          <div class="sub-container"><div use:chart={options3} /></div>
+        {/key}
+      </div>
+      <div class="content">
+        <h6 class="label">THIS MONTH</h6>
+        <div class="val-content">
+          <p class="value">{thisMonthComparsionAmmount}% kWh</p>
+          <p class="percentage">
+            <img src={redArrow} class="arrow" alt="" />
+            <!-- <img src={arrowUp} class="arrow" alt="" /> -->
+            <span class={avgClass}>{thisMonthComparisonPercentage}% kWh</span>
+          </p>
+        </div>
+      </div>
+      <hr id="hr-footer" />
+      <div id="footer">
+        <p>Insight title here</p>
+        <button>VIEW</button>
+      </div>
     </div>
-  </div>
-  <div class="content">
-    <h6 class="label">Avg. Temp.</h6>
-    <div class="val-content">
-      <p class="value">{avgTempComparison + "°"}</p>
-      <p class="percentage">
-        <!-- <img src={redArrow} class="arrow" alt="" /> -->
-        <img src={arrowUp} class="arrow" alt="" />
-        <span class="blue">{avgTempComparison + "°"}</span>
-      </p>
-    </div>
-  </div>
-  <h4 class="title-2">MY Demand INSIGHTS</h4>
-  <div class="chart-container">
-    {#key $date}
-      <div class="sub-container"><div use:chart={options2} /></div>
-      <div class="sub-container"><div use:chart={options3} /></div>
-    {/key}
-  </div>
-  <div class="content">
-    <h6 class="label">THIS MONTH</h6>
-    <div class="val-content">
-      <p class="value">{thisMonthComparsionAmmount}% kWh</p>
-      <p class="percentage">
-        <img src={redArrow} class="arrow" alt="" />
-        <!-- <img src={arrowUp} class="arrow" alt="" /> -->
-        <span class={avgClass}>{thisMonthComparisonPercentage}% kWh</span>
-      </p>
-    </div>
-  </div>
-  <hr id="hr-footer" />
-  <div id="footer">
-    <p>Insight title here</p>
-    <button>VIEW</button>
-  </div>
+  {/if}
 </div>
 
 <style>
@@ -137,10 +158,7 @@
     order: 0;
     flex-grow: 0;
   }
-  #drop {
-    position: absolute;
-    right: 0;
-  }
+
   .title {
     width: 242px;
     height: 29px;
@@ -403,5 +421,16 @@
     flex: none;
     order: 8;
     flex-grow: 0;
+  }
+
+  /*-----------------------*/
+  #rotate-svg-false {
+    position: absolute;
+    right: 0;
+  }
+  #rotate-svg-true {
+    transform: rotate(0.5turn);
+    position: absolute;
+    right: 0;
   }
 </style>

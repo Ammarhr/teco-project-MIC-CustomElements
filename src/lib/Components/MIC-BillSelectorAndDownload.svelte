@@ -54,7 +54,7 @@
     align-items: center;
     padding: 0px;
     gap: 51px;
-    min-width: 23.125rem;
+    min-width: 29.125rem;
     min-height: 3rem;
     flex: none;
     order: 1;
@@ -81,7 +81,7 @@
     padding: 0px 32px;
     gap: 41px;
     position: absolute;
-    width: auto;
+    width: 100%;
     height: 86px;
     left: 0px;
     top: 26px;
@@ -93,7 +93,7 @@
     align-items: flex-start;
     padding: 0px;
     gap: 8px;
-    width: auto;
+    width: 33%;
     height: 88px;
     flex: none;
     order: 0;
@@ -106,7 +106,7 @@
     height: 30px;
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 1rem;
     line-height: 30px;
     display: flex;
     align-items: center;
@@ -124,7 +124,7 @@
     align-items: center;
     padding: 15px 12px;
     gap: 12px;
-    width: auto;
+    width: 100%;
     height: 50px;
     background: #ffffff;
     border: 1px solid #d1d5db;
@@ -139,16 +139,13 @@
     padding-top: 36px;
     display: flex;
     flex-direction: row;
-    gap: 51px;
+    gap: 6%;
     flex: none;
     order: 3;
     flex-grow: 0;
-    width: 130px;
+    width: 55%;
     height: 0px;
-    flex: none;
-    order: 1;
     align-self: stretch;
-    flex-grow: 0;
   }
   #btn-download {
     box-sizing: border-box;
@@ -158,7 +155,7 @@
     align-items: center;
     padding: 10px 24px;
     gap: 10px;
-    width: 189px;
+    width: 50%;
     height: 48px;
     background: #ffffff;
     border: 1px solid #d1d5db;
@@ -175,7 +172,7 @@
     align-items: center;
     padding: 0px;
     gap: 7px;
-    width: 141px;
+    width: 100%;
     height: 28px;
     flex: none;
     order: 0;
@@ -188,7 +185,7 @@
     align-items: center;
     padding: 5px 0px;
     gap: 10px;
-    width: 130px;
+    width: 33%;
     height: 38px;
     border: 1px solid #d1d5db17;
     border-radius: 6px;
@@ -200,11 +197,11 @@
     flex-grow: 0;
   }
   #show-btn span {
-    width: 130px;
+    width: 100%;
     height: 28px;
     font-style: normal;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 0.8rem;
     line-height: 28px;
     display: flex;
     align-items: center;
@@ -216,7 +213,7 @@
     flex-grow: 0;
   }
   #show-btn img {
-    width: 130px;
+    width: 100%;
     height: 0px;
     border: 1px solid #005faa;
     flex: none;

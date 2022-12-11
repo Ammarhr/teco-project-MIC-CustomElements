@@ -9,7 +9,7 @@
   import notification from "../../assets/notification.svg";
 
   //state
-  export let state = {};
+  let state = {};
   export let item = { name: "Item" };
   export let token;
 
@@ -38,8 +38,28 @@
   $: if (state && state.messages) {
     unReadedMessagesHandle();
     message = state.messages[0].message.slice(0, 240);
-    console.log(token);
   }
+
+  ///////// acordion functionality
+
+  import { slide } from "svelte/transition";
+  let isOpen = true;
+  let svgId = "none";
+
+  const toggle = () => {
+    isOpen = !isOpen;
+    svgId = "rotate-svg-" + isOpen;
+    modal.set(null);
+  };
+
+  ////////////////////////
+  ///////// modal pop up dunctionality
+  import { writable } from "svelte/store";
+  import Modal from "svelte-simple-modal";
+  import ImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
+  const modal = writable(null);
+  const showModal = () => modal.set(ImportantMessagesDetails);
+  /////////////////////////
 </script>
 
 {#if $loading}
@@ -58,13 +78,30 @@
         <span id="unreaded-msgs">{counter}</span>
       </div>
       <div class="message-lable">Important Message</div>
-      <div class="message-btn"><img src={circyle} alt="" /></div>
+      <div class="message-btn">
+        <button id="btn-toggle" on:click={toggle} aria-expanded={isOpen}
+          ><img src={circyle} alt="" id={svgId} /></button
+        >
+      </div>
       {#if state.messages}
-        <div class="message-body">
-          <p class="msg-data">{message}...</p>
-        </div>
+        {#if isOpen}
+          <div class="message-body" transition:slide={{ duration: 300 }}>
+            <p class="msg-data">{message}...</p>
+          </div>
+          <div class="message-footer" transition:slide={{ duration: 300 }}>
+            <Modal
+              show={$modal}
+              styleWindow={{
+                boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.15)",
+                minHeight: "62rem",
+                maxWidth: "30rem",
+              }}
+            >
+              <button on:click={showModal}><span>View</span></button>
+            </Modal>
+          </div>
+        {/if}
       {/if}
-      <div class="message-footer"><button><span>View</span></button></div>
     </div>
   </div>
 {/if}
@@ -95,7 +132,7 @@
     padding: 32px;
     gap: 7px;
     max-width: 23.125rem;
-    min-height: 24rem;
+    min-height: auto;
     background: #ffffff;
     box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
     border-radius: 20px;
@@ -103,31 +140,15 @@
     order: 0;
     flex-grow: 0;
   }
+
   .message-lable {
     width: 267px;
     height: 29px;
-
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
     line-height: 29px;
     display: flex;
-    align-items: center;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    color: #005faa;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-  }
-  .msg-label {
-    width: 246px;
-    height: 29px;
-
-    font-style: normal;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 29px;
     align-items: center;
     letter-spacing: -0.02em;
     text-transform: uppercase;
@@ -167,7 +188,7 @@
     padding: 0px;
     gap: 499px;
     width: 392px;
-    height: 40px;
+    height: auto;
     flex: none;
     order: 0;
     flex-grow: 0;
@@ -184,6 +205,7 @@
     flex: none;
     order: 1;
     flex-grow: 0;
+    height: auto;
   }
 
   .message-logo {
@@ -228,5 +250,28 @@
 
   .message-footer {
     grid-area: message-footer;
+    height: auto;
+  }
+
+  /* acordion style */
+  #btn-toggle {
+    border: none;
+    background: none;
+    display: block;
+    color: inherit;
+    font-size: 36px;
+    cursor: pointer;
+    margin: 0;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    width: 4rem;
+  }
+
+  #btn-toggle img {
+    transition: transform 0.2s ease-in;
+  }
+
+  #rotate-svg-true {
+    transform: rotate(0.5turn);
   }
 </style>

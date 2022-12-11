@@ -10,12 +10,16 @@
   import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import Insights from "./lib/Components/MIC-Insights.svelte";
 
-  import { fetchstore } from "./js/store";
+  import { getToken } from "./js/store";
+
+  let apiToken;
 
   //mocking data
-  const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json"
-  );
+  const [token, loading, error, get] = getToken("data/Token.json", "Ammar");
+
+  $: if ($token) {
+    apiToken = $token.token;
+  }
 </script>
 
 <main>
@@ -24,11 +28,11 @@
   {:else if $error}
     Error: {$error}
   {:else}
-    <div class="Header"><HeaderInformation /></div>
+    <div class="Header"><HeaderInformation token={apiToken} /></div>
     <div class="container">
       <div class="Billing-message">
-        <BillsHistory state={$data} />
-        <ImportantMessage state={$data} />
+        <BillsHistory token={apiToken} />
+        <ImportantMessage token={apiToken} />
       </div>
       <div id="bill-selector">
         <BillSelector />
