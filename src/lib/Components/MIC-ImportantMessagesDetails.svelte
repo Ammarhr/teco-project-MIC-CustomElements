@@ -6,7 +6,6 @@
 
     //state
     let state = {};
-    export let item = { name: "Item" };
     export let token;
 
     let message;
@@ -22,7 +21,7 @@
 
     //mocking data
     const [data, loading, error, get] = fetchstore(
-        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json",
+        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/messages.json",
         "token 2022"
     );
 

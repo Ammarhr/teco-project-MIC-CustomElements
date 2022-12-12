@@ -28,7 +28,7 @@
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "../../../data/BillingSummary.json",
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillingSummary.json",
     token
   );
   const getPropertyTitle = (str)=>{
