@@ -5,22 +5,22 @@
     "active": true,
     "records": [
         {
-            "date":"November 2, 2021",
+            "date":"Nov 2, 2021",
             "bill": 91.46,
             "payment": 91.46
         },
         {
-            "date":"October 2, 2021",
+            "date":"Oct 2, 2021",
             "bill": 91.46,
             "payment": 91.46
         },
         {
-            "date":"September 2, 2021",
+            "date":"Sep 2, 2021",
             "bill": 91.46,
             "payment": 91.46
         },
         {
-            "date":"Augest 2, 2021",
+            "date":"Aug 2, 2021",
             "bill": 91.46,
             "payment": 91.46
         }

@@ -1,4 +1,8 @@
+<svelte:options tag="mic-accountbalance" />
+
 <script>
+  // @ts-nocheck
+
   //svg imports
   import vector550 from "../../assets/Vector 550.svg";
   import vector549 from "../../assets/Vector 549.svg";
@@ -6,45 +10,55 @@
   import vector2 from "../../assets/backgroundicons/Vector2.svg";
   import vector3 from "../../assets/backgroundicons/Vector3.svg";
   import vector from "../../assets/backgroundicons/Vector.svg";
+
   //state
-  export let totalAmmountDue = "1,142";
-  export let oweAmmount = "$842.76";
-  export let pastDueDate = "Jan 25, 2022";
-  export let previousBill = "$842.76";
-  export let state={};
   export let item = { name: "Item" };
   export let token;
-  
+
+  import { fetchstore } from "../../js/store";
+
+  //mocking data
+  const [data, loading, error, get] = fetchstore(
+    "../../../data/AccountBalanceData.json",
+    token
+  );
 </script>
-<svelte:options tag="mic-accountbalance" />
 
 <div id="card">
-  <img src={vector550} alt="" id="vector550" />
-  <div id="info-container">
-    <img src={vector1} alt="" id="v1" />
-    <img src={vector2} alt="" id="v2" />
-    <img src={vector3} alt="" id="v3" />
-    <img src={vector} alt="" id="v" />
-    <span id="label">Past Due</span>
-    <span id="details">Your bill is past due. You owe {oweAmmount}.</span>
-    <img src={vector549} alt="" id="vector549" />
-    <span id="details2">
-      Your previous bill of {previousBill} is past due on Dec. {pastDueDate}
-    </span>
-  </div>
-  <div id="info-container2">
-    <span id="label2">Total Amount Due</span>
-    <div id="total">
-      <span id="coin">$</span>
-      <span id="ammount">{totalAmmountDue}</span>
-      <span id="power">02</span>
+  {#if $loading}
+    Loading: {$loading}
+  {:else if $error}
+    Error: {$error}
+  {:else}
+    <img src={vector550} alt="" id="vector550" />
+    <div id="info-container">
+      <img src={vector1} alt="" id="v1" />
+      <img src={vector2} alt="" id="v2" />
+      <img src={vector3} alt="" id="v3" />
+      <img src={vector} alt="" id="v" />
+      <span id="label">Past Due</span>
+      <span id="details"
+        >Your bill is past due. You owe {$data.oweAmmount}.</span
+      >
+      <img src={vector549} alt="" id="vector549" />
+      <span id="details2">
+        Your previous bill of {$data.previousBill} is past due on Dec. {$data.pastDueDate}
+      </span>
     </div>
-    <p id="due-date">Due Date: {pastDueDate}</p>
-    <button>PAY NOW</button>
-    <div id="icon">
-      <div id="group" />
+    <div id="info-container2">
+      <span id="label2">Total Amount Due</span>
+      <div id="total">
+        <span id="coin">$</span>
+        <span id="ammount">{$data.totalAmmountDue}</span>
+        <span id="power">02</span>
+      </div>
+      <p id="due-date">Due Date: {$data.pastDueDate}</p>
+      <button>PAY NOW</button>
+      <div id="icon">
+        <div id="group" />
+      </div>
     </div>
-  </div>
+  {/if}
 </div>
 
 <style>

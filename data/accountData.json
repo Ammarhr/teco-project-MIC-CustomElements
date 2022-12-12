@@ -1,0 +1,9 @@
+{
+    "account":{
+      "name": "John meow",
+      "accountNumber": 6484884,
+      "status": "Active",
+      "adress": "Daraa 152 Main St, Tampa FL",
+      "services":["electricity","naturalGasCharges"]
+    }
+}

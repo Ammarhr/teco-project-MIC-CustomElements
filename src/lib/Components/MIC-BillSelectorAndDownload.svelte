@@ -54,7 +54,7 @@
     align-items: center;
     padding: 0px;
     gap: 51px;
-    min-width: 29.125rem;
+    min-width: 50.125rem;
     min-height: 3rem;
     flex: none;
     order: 1;

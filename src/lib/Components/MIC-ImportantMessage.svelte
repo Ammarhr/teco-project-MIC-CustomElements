@@ -26,7 +26,7 @@
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json",
+    "../../../data/messages.json",
     token
   );
 

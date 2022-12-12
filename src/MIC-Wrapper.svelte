@@ -35,11 +35,11 @@
         <ImportantMessage token={apiToken} />
       </div>
       <div id="bill-selector">
-        <BillSelector />
+        <BillSelector token={apiToken} />
       </div>
       <div class="Billing">
-        <BillingSummary />
-        <Insights />
+        <BillingSummary token={apiToken} />
+        <Insights token={apiToken} />
       </div>
     </div>
   {/if}

@@ -34,6 +34,7 @@ export function fetchstore(url, token) {
     return [data, loading, error, get]
 }
 
+// grtting the token:
 export function getToken(url, user) {
     const loading = writable(false)
     const error = writable(false)

@@ -6,7 +6,6 @@
   import star from "../../assets/Vector.svg";
   import fire from "../../assets/Fire.svg";
   import { fetchstore } from "../../js/store";
-
   export let token;
   export let item = { name: "Item" };
   let account;
@@ -14,7 +13,7 @@
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/data.json",
+    "../../../data/accountData.json",
     token
   );
 
@@ -23,7 +22,7 @@
   }
 
   $: if (account) {
-    if (account.status == true) {
+    if (account.status == "Active") {
       statusClass = "Active";
     } else {
       statusClass = "Inactive";
