@@ -1,0 +1,53 @@
+{
+  "servicePeriod": null,
+  "rateSchadule": null,
+  "services": [
+    {
+      "title": "Electric Charges",
+      "servicePeriod": "November 25, 2021 - December 28, 2022",
+      "rateSchadule": "General Service",
+      "icon": "<font-awsome>/<material_icon>",
+      "color": "#1112313",
+      "sections": [
+        {
+          "title": "",
+          "icon": "<font-awsome>/<material_icon>",
+          "color": "#1112313",
+          "controls": [
+            {
+              "label": "Daily Basic Service Charge",
+              "tooltip": "Description",
+              "description": "26 days @ $1.07000",
+              "value": 36.38,
+              "isTotal": true,
+              "breakdown": [
+                {
+                  "label": "Daily Basic Service Charge",
+                  "tooltip": "Description",
+                  "description": "26 days @ $1.07000",
+                  "value": 36.38
+                }
+              ]
+            },
+            {
+              "label": "Daily Basic Service Charge",
+              "tooltip": "Description",
+              "description": "26 days @ $1.07000",
+              "value": 36.38,
+              "isTotal": false,
+              "breakdown": []
+            },
+            {
+              "label": "Billing Demand Charge",
+              "tooltip": "Description",
+              "description": "26 days @ $1.07000",
+              "value": 36.38,
+              "isTotal": false,
+              "breakdown": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
