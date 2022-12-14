@@ -1,9 +1,9 @@
 {
-    "totalAmmountDue": 1142,
-    "oweAmmount": 842.76,
-    "pastDueDate": "Jan 25, 2022",
-    "previousBill": 842.76,
+    "totalAmmount": 1142,
+    "dueDate": "Jan 25, 2022",
     "html_message":"<h1>test</h1>",
     "pay_now_link":"https://pay.teco.com",
-    "title":"total charges"
+    "title":"total charges",
+    "postive_color":"#2222",
+    "negative_color":"#4444"
 }
