@@ -25,6 +25,7 @@
                   "label": "Daily Basic Service Charge",
                   "tooltip": "Description",
                   "description": "26 days @ $1.07000",
+                  "color": "#1112313",
                   "value": 36.38
                 }
               ]
