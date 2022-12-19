@@ -1,6 +1,8 @@
 <svelte:options tag="mic-insights" />
 
 <script>
+  // @ts-nocheck
+
   //svg imports
   import arrowUp from "../../assets/arrowUp.svg";
   import dropDown from "../../assets/cr.svg";
@@ -8,122 +10,148 @@
   // @ts-ignore
   import { chart } from "svelte-apexcharts";
   import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
-  import { date, getDate } from "../../js/store";
+  import {
+    fetchstore,
+    date,
+    CopmarsionDate,
+    billNumber,
+    getToken,
+  } from "../../js/store";
 
   //state
-  export let data = [1.358, 1.453];
-  export let dataLables = [$date, "Feb 2021"];
+  export let data2 = [1358, 1453];
+  export let dataLables = [$date, $CopmarsionDate];
   export let demandIsightsData = [79];
   export let insightsDataLables = [$date];
   export let avgTempComparison = 65;
   export let thisMonthComparisonPercentage = 105;
-  export let thisMonthComparsionAmmount = 1.358;
   export let token;
   export let item = { name: "Item" };
-
   let avgClass = "red"; //toggle style class (complete it later)
 
   //charts renderer
-  let options1 = renderBarChart(data, dataLables);
-
+  let options1;
   let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
   let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
 
-  $: if (date) {
-    insightsDataLables = [$date];
-    dataLables = [$date, $date];
-    options1 = renderBarChart(data, dataLables);
-    options2 = renderRadialBar(demandIsightsData, insightsDataLables);
-    options3 = renderRadialBar(demandIsightsData, insightsDataLables);
-  }
-  ///////// acordion functionality
+  const [datatoken] = getToken("../../../data/Token.json", "Ammar");
 
+  const [data, loading, error, get] = fetchstore(
+    "../../../data/Insights.json",
+    token
+  );
+  const [servicesData] = fetchstore("../../../data/Insights.json", token);
+  $: if ($billNumber) {
+    get($datatoken.token);
+  }
+
+  $: if ($billNumber && $data && $data.y) {
+
+    let { x, y } = $data;
+    insightsDataLables = [$date];
+    dataLables = [$date];
+    options1 = renderBarChart(y, x);
+    options2 = renderRadialBar(
+      demandIsightsData,
+      insightsDataLables,
+      "#005FAA"
+    );
+    options3 = renderRadialBar(demandIsightsData, [$CopmarsionDate], "#B1DBFD");
+  }
+
+  ///////// acordion functionality
   import { slide } from "svelte/transition";
-  let isOpen = true;
+  let isOpen = false;
   let svgId = "rotate-svg-" + isOpen;
 
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
   };
-
   ////////////////////////
 </script>
 
-<div class="card">
-  <div id="header">
-    <h5 class="title">MY BILLING INSIGHTS</h5>
-    <img
-      src={dropDown}
-      alt=""
-      id={svgId}
-      on:click={toggle}
-      aria-expanded={isOpen}
-    />
-  </div>
-  {#if isOpen}
-    <div transition:slide={{ duration: 300 }}>
-      <div id="tabs">
-        <h6 id="tab-title-active">Annual Comparison</h6>
-        <h6 id="tab-title-inactive">
-          Monthly Comparison <br />
-        </h6>
-      </div>
-      <!-- <hr id="active"/>
-  <hr id="inactive" style="width: 50%;"/> -->
-      <div class="chart-container">
-        {#key $date}
-          <div use:chart={options1} />
-        {/key}
-      </div>
-      <div class="content">
-        <h6 class="label">THIS MONTH</h6>
-        <div class="val-content">
-          <p class="value">{thisMonthComparsionAmmount} kWh</p>
-          <p class="percentage">
-            <!-- <img src={arrowUp} class="arrow" alt="" /> -->
-            <img src={redArrow} class="arrow" alt="" />
-            <span class={avgClass}>{thisMonthComparisonPercentage}% kWh</span>
-          </p>
-        </div>
-      </div>
-      <div class="content">
-        <h6 class="label">Avg. Temp.</h6>
-        <div class="val-content">
-          <p class="value">{avgTempComparison + "°"}</p>
-          <p class="percentage">
-            <!-- <img src={redArrow} class="arrow" alt="" /> -->
-            <img src={arrowUp} class="arrow" alt="" />
-            <span class="blue">{avgTempComparison + "°"}</span>
-          </p>
-        </div>
-      </div>
-      <h4 class="title-2">MY Demand INSIGHTS</h4>
-      <div class="chart-container">
-        {#key $date}
-          <div class="sub-container"><div use:chart={options2} /></div>
-          <div class="sub-container"><div use:chart={options3} /></div>
-        {/key}
-      </div>
-      <div class="content">
-        <h6 class="label">THIS MONTH</h6>
-        <div class="val-content">
-          <p class="value">{thisMonthComparsionAmmount}% kWh</p>
-          <p class="percentage">
-            <img src={redArrow} class="arrow" alt="" />
-            <!-- <img src={arrowUp} class="arrow" alt="" /> -->
-            <span class={avgClass}>{thisMonthComparisonPercentage}% kWh</span>
-          </p>
-        </div>
-      </div>
-      <hr id="hr-footer" />
-      <div id="footer">
-        <p>Insight title here</p>
-        <button>VIEW</button>
-      </div>
+<!----------html----------->
+{#if $loading}
+  <h1>loading...</h1>
+{:else if $error}
+  <h1>{$error}</h1>
+{:else if $data.VisibilityTab == true}
+  <div class="card">
+    <div id="header">
+      <h5 class="title">MY BILLING INSIGHTS</h5>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <img
+        src={dropDown}
+        alt=""
+        id={svgId}
+        on:click={toggle}
+        aria-expanded={isOpen}
+      />
     </div>
-  {/if}
-</div>
+    {#if isOpen}
+      <div transition:slide={{ duration: 300 }}>
+        <div id="tabs">
+          <h6 id="tab-title-active">Annual Comparison</h6>
+          <h6 id="tab-title-inactive">
+            Monthly Comparison <br />
+          </h6>
+        </div>
+        <div class="chart-container" transition:slide={{ duration: 300 }}>
+          {#key $billNumber}
+            <div use:chart={options1} />
+          {/key}
+        </div>
+        <div class="content">
+          <h6 class="label">THIS MONTH</h6>
+          <div class="val-content">
+            <p class="value">{$data.valueConsumption} {$data.unit}</p>
+            <p class="percentage">
+              <img src={redArrow} class="arrow" alt="" />
+              <span class={avgClass} style="background-color:{$data.colorConsumption}"
+                >{thisMonthComparisonPercentage}% {$data.unit}</span
+              >
+            </p>
+          </div>
+        </div>
+        <div class="content">
+          <h6 class="label">Avg. Temp.</h6>
+          <div class="val-content">
+            <p class="value">{$data.valueTemp + "°"}</p>
+            <p class="percentage">
+              <img src={arrowUp} class="arrow" alt="" />
+              <span class="blue" style="background-color:{$data.colorTemp}">{$data.valueTemp + "°"}</span>
+            </p>
+          </div>
+        </div>
+        <h4 class="title-2">MY Demand INSIGHTS</h4>
+        <div class="chart-container">
+          {#key $date}
+            <div class="sub-container"><div use:chart={options2} /></div>
+            <div class="sub-container"><div use:chart={options3} /></div>
+          {/key}
+        </div>
+        <div class="content">
+          <h6 class="label">THIS MONTH</h6>
+          <div class="val-content">
+            <p class="value">{$data.valueConsumption}% {$data.unit}</p>
+            <p class="percentage">
+              <img src={redArrow} class="arrow" alt="" />
+              <span class={avgClass} style="background-color:{$data.colorConsumption}">{thisMonthComparisonPercentage}% {$data.unit}</span>
+            </p>
+          </div>
+        </div>
+        <hr id="hr-footer" />
+        <div id="footer">
+          <p>Insight title here</p>
+          <button>VIEW</button>
+        </div>
+      </div>
+    {/if}
+  </div>
+{:else}
+  <h1>error</h1>
+{/if}
 
 <style>
   @font-face {
@@ -137,12 +165,9 @@
   .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
-    border-radius: 5px;
-    max-width: 25rem;
-    max-height: 75.025rem;
+    border-radius: 16px;
+    max-width: 60%;
     padding: 20px;
-    background: #ffffff;
-    border-radius: 20px;
   }
   #header {
     position: relative;
@@ -153,7 +178,7 @@
     padding: 0px;
     gap: 499px;
     width: 25rem;
-    height: 4rem;
+    height: 40px;
     flex: none;
     order: 0;
     flex-grow: 0;

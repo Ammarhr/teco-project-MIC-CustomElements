@@ -4,10 +4,11 @@
   // @ts-nocheck
 
   //svg imports
-  import toggle from "../../assets/Icon.svg";
+  import toggle from "../../assets/cr.svg";
+  // import toggle from "../../assets/Icon.svg";
   import electricityIcon from "../../assets/Iconawesome-bolt.svg";
   //state
-  export let servicePeriod = "November 25, 2021 - December 28, 2022";
+  // export let servicePeriod = "November 25, 2021 - December 28, 2022";
   // export let dailyBasicServiceCharge = 36.38;
   // export let billingDemandCharge = 387.2;
   // export let peakDemandCharge = 91.12;
@@ -28,12 +29,35 @@
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillingSummary.json",
+    "../../../data/ChargeDetails.json",
     token
   );
-  const getPropertyTitle = (str)=>{
-    return str.split(/(?=[A-Z])/).join(" ").charAt(0).toUpperCase() + str.split(/(?=[A-Z])/).join(" ").slice(1)
-  }
+  const getPropertyTitle = (str) => {
+    return (
+      str
+        .split(/(?=[A-Z])/)
+        .join(" ")
+        .charAt(0)
+        .toUpperCase() +
+      str
+        .split(/(?=[A-Z])/)
+        .join(" ")
+        .slice(1)
+    );
+  };
+  ///////// acordion functionality
+
+  import { slide } from "svelte/transition";
+  let isOpen = false;
+  let svgId = "rotate-svg-" + isOpen;
+
+  const toggleContainer = () => {
+    isOpen = !isOpen;
+    svgId = "rotate-svg-" + isOpen;
+  };
+
+  ////////////////////////
+
   $: if ($data && $data.electricityCharges) {
     billingData = $data.electricityCharges.billSummary;
     keys = Object.keys(billingData);
@@ -46,12 +70,24 @@
   {:else if $error}
     Error: {$error}
   {:else}
-    <h4 id="title">BILLING SUMMARY</h4>
-    <h3 id="sectiontitle">
-      <span><img src={electricityIcon} alt="" style="width: 15px;" /></span> {$data.electricityCharges.BillsTitle}
+    <div id="bills-header">
+      <h4 id="title">BILLING SUMMARY</h4>
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <img
+        src={toggle}
+        alt=""
+        id={svgId}
+        on:click={toggleContainer}
+        aria-expanded={isOpen}
+      />
+    </div>
+    {#if isOpen}
+    <h3 id="sectiontitle" transition:slide={{ duration: 300 }}>
+      <span><img src={electricityIcon} alt="" style="width: 15px;" /></span>
+      {$data.electricityCharges.BillsTitle}
     </h3>
     <p id="comment">Service Period: {$data.electricityCharges.servicePeriod}</p>
-    <div id="content">
+    <div id="content" transition:slide={{ duration: 300 }}>
       {#each keys as value, i}
         {#if value != "energyCharge" && value != "fuelCharge"}
           <div class="row" id="daily-basic-service-charge">
@@ -60,14 +96,14 @@
             <p class="value">${billingData[value].cost}</p>
           </div>
         {:else}
-          <div class="multi-row" id="EnergyCharge">
+          <div class="multi-row" id="EnergyCharge" >
             <h5 class="bold-label">{getPropertyTitle(value)}</h5>
             <div class="sub-row" id="energy-charge-on-peak">
               <p class="first-label">On Peak</p>
               <p class="sub-label">{billingData[value].onPeak.consumption}</p>
               <p class="value">${billingData[value].onPeak.cost}</p>
             </div>
-            <div class="sub-row" id="energy-charge-off-peak">
+            <div class="sub-row" id="energy-charge-off-peak" transition:slide={{ duration: 300 }}>
               <p class="first-label">Off Peak</p>
               <p class="sub-label">{billingData[value].onPeak.consumption}</p>
               <p class="value">${billingData[value].offPeak.cost}</p>
@@ -76,10 +112,11 @@
         {/if}
       {/each}
     </div>
-    <div class="sub-row total-row" id="electric-charges-subtotal">
+    <div class="sub-row total-row" id="electric-charges-subtotal" >
       <p class="first-label">Electric Charges Subtotal</p>
       <p class="value">${electricChargesSubtotal}</p>
     </div>
+  {/if}
   {/if}
 </div>
 
@@ -91,11 +128,33 @@
   * {
     font-family: "Interstate";
   }
-
+  #bills-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 31.188rem;
+    width: 100%;
+    height: 40px;
+    order: 0;
+    flex-grow: 0;
+  }
+    /*-----------------------*/
+    #rotate-svg-false {
+    cursor: pointer;
+    transform: rotate(0.25turn);
+    transition: transform 0.2s ease-in;
+  }
+  #rotate-svg-true {
+    cursor: pointer;
+    transition: transform 0.2s ease-in;
+    transform: rotate(0.5turn);
+  }
   .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
-    border-radius: 5px;
+    border-radius: 16px;
     min-width: 60%;
     padding: 20px;
   }
@@ -124,9 +183,18 @@
   }
 
   #title {
-    margin: 0 0 15px 0;
-    color: #1f5da6;
-    font-weight: 500;
+    height: 29px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.02em;
+    color: #005faa;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
   }
 
   #sectiontitle {
@@ -176,10 +244,6 @@
     width: 50%;
   }
 
-  /* .sub-label span {
-    color: #a7a7a7;
-    font-weight: 500;
-  } */
 
   .value {
     padding: 5px 15px;

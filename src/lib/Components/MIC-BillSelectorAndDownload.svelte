@@ -1,27 +1,61 @@
 <svelte:options tag="mic-billselector" />
 
 <script>
+  // @ts-nocheck
+  import { slide } from "svelte/transition";
+
   // svg imports
   import downloadIcon from "../../assets/Icon-left.svg";
   import line from "../../assets/Line1812.svg";
-  import { date } from "../../js/store";
+  import { date, billNumber } from "../../js/store";
 
   export let token;
   export let item = { name: "Item" };
+
+
+  import { fetchstore } from "../../js/store";
+
+//mocking data
+const [data, loading, error, get] = fetchstore(
+  "../../../data/BillSelector.json",
+  token
+);
+
+// const handleBillChange = (e)=>{
+// console.log(e.target.value, 'event');
+// $date
+// }
 </script>
 
 <div id="selector-card">
   <div id="selector-container">
     <div id="sub-container">
       <div id="date-container">
-        <label for="bill-selector">VIEW PRIOR STATEMENTS</label>
-        <!-- <input type="date" name="bill-selector" bind:value={date} /> -->
+        <!-- <label for="bill-selector">VIEW PRIOR STATEMENTS</label>
         <input
           type="date"
           name="bill-selector"
           bind:value={$date}
-          on:change={(event) => ($date = event.currentTarget.value)}
-        />
+          on:change={(event) => {
+            
+            let date1 = new Date(event.currentTarget.value)
+            let year = date1.getFullYear();
+            let month = date1.getMonth();
+            $date = month + 1 + " " + year;
+            $CopmarsionDate = yearComparsion(new Date($date));
+          }}
+          on:change={(event) => {handleBillChange(event)}}
+        /> -->
+        {#if $data && $data.bills}
+        <label for="bill-selector">VIEW PRIOR STATEMENTS</label>
+        <select name="bill-selector"
+        bind:value={$billNumber}
+        >
+          {#each $data.bills as billDate}
+          <option value={billDate.value}>{billDate.lable}</option>
+           {/each} 
+        </select>
+        {/if}
       </div>
       <div id="btn-container">
         <button id="btn-download">
@@ -72,6 +106,7 @@
     align-self: stretch;
     flex-grow: 1;
     box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
+    border-radius: 16px;
   }
 
   #sub-container {
@@ -117,7 +152,8 @@
     align-self: stretch;
     flex-grow: 0;
   }
-  input {
+  select {
+    font-family: 'Interstate';
     box-sizing: border-box;
     display: flex;
     flex-direction: row;

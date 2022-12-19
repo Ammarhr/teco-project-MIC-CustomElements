@@ -3,13 +3,12 @@ export const renderBarChart = (dataArr, labels, colorsArr) => {
     let options = {
         series: [
             {
-                name: "Inflation",
                 data: dataArr,
             },
         ],
         fill: {
-            colors: ['#005FAA', 'B1DBFD'],
             opacity: 100,
+            colors: ['#005FAA', '#B1DBFD'],
         },
         chart: {
             height: 250,
@@ -19,24 +18,13 @@ export const renderBarChart = (dataArr, labels, colorsArr) => {
                 show: false,
             },
         },
-        responsive: [
-            {
-                breakpoint: 480,
-                options: {
-                    legend: {
-                        position: "bottom",
-                        offsetX: -10,
-                        offsetY: 0,
-                    },
-                },
-            },
-        ],
         plotOptions: {
             bar: {
                 borderRadius: 10,
                 dataLabels: {
                     position: "top", // top, center, bottom
                 },
+                distributed: true,
             },
         },
         dataLabels: {
@@ -49,6 +37,10 @@ export const renderBarChart = (dataArr, labels, colorsArr) => {
                 fontSize: "12px",
                 colors: ["#304758"],
             },
+
+        },
+        legend: {
+            show: false
         },
 
         xaxis: {
@@ -62,7 +54,7 @@ export const renderBarChart = (dataArr, labels, colorsArr) => {
             },
             crosshairs: {},
             tooltip: {
-                enabled: true,
+                enabled: false,
             },
         },
         yaxis: {
@@ -73,9 +65,9 @@ export const renderBarChart = (dataArr, labels, colorsArr) => {
                 show: false,
             },
             labels: {
-                show: false,
+                show: true,
                 formatter: function (val) {
-                    return val + "kWh";
+                    return val;
                 },
             },
         },
@@ -83,7 +75,7 @@ export const renderBarChart = (dataArr, labels, colorsArr) => {
     return options;
 }
 
-export const renderRadialBar = (seriesArr, labels, colorsArr) => {
+export const renderRadialBar = (seriesArr, labels, color) => {
     let options = {
         series: seriesArr,
         chart: {
@@ -118,7 +110,9 @@ export const renderRadialBar = (seriesArr, labels, colorsArr) => {
                 },
             },
         },
-
+        fill: {
+            colors: color,
+        },
         stroke: {
             lineCap: "round",
         },

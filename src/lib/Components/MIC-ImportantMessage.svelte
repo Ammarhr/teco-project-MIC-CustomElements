@@ -15,18 +15,11 @@
 
   let message;
   //unreaded messages counter
-  let counter;
-  const unReadedMessagesHandle = () => {
-    let unreadedMwssages = state.messages.filter(
-      (message) => message.readed == false
-    );
-    counter = unreadedMwssages.length;
-  };
   import { fetchstore } from "../../js/store";
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/messages.json",
+    "../../../data/messages.json",
     token
   );
 
@@ -36,23 +29,21 @@
 
   //slice long message
   $: if (state && state.messages) {
-    unReadedMessagesHandle();
-    message = state.messages[0].message.slice(0, 240);
+    message = state.messages[0].message.slice(0, 233);
   }
 
   ///////// acordion functionality
-
   import { slide } from "svelte/transition";
-  let isOpen = true;
-  let svgId = "rotate-svg";
+  let isOpen = false;
+  let svgId = "rotate-svg-" + isOpen;
 
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
     modal.set(null);
   };
-
   ////////////////////////
+
   ///////// modal pop up dunctionality
   import { writable } from "svelte/store";
   import Modal from "svelte-simple-modal";
@@ -69,19 +60,22 @@
 {:else}
   <div class="message-container">
     <div class="container">
-      <div class="message-logo">
+      <div id="message-header">
         <img src={messageLogo} alt="" /><img
           src={notification}
           alt=""
           id="notification"
         />
-        <span id="unreaded-msgs">{counter}</span>
-      </div>
-      <div class="message-lable">Important Message</div>
-      <div class="message-btn">
-        <button id="btn-toggle" on:click={toggle} aria-expanded={isOpen}
-          ><img src={circyle} alt="" id={svgId} /></button
-        >
+        <span id="unreaded-msgs">{state.messages.length}</span>
+        <h4 id="title">Important Message</h4>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <img
+          src={circyle}
+          alt=""
+          id={svgId}
+          on:click={toggle}
+          aria-expanded={isOpen}
+        />
       </div>
       {#if state.messages}
         {#if isOpen}
@@ -94,7 +88,8 @@
               styleWindow={{
                 boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.15)",
                 minHeight: "62rem",
-                maxWidth: "30rem",
+                Width: "30rem",
+                overflow: "hidden",
               }}
             >
               <button on:click={showModal}><span>View</span></button>
@@ -109,40 +104,49 @@
 <style>
   @font-face {
     font-family: "Interstate";
-    src: url("../../assets/fonts/Interstate.ttf") format("truetype");
+    src: url("../../assets/fonts/InterstateThin.ttf") format("truetype");
   }
   * {
     font-family: "Interstate";
-  }
-
-  .message-container {
-    max-height: 25.188rem;
-    max-width: 30rem;
+    letter-spacing: -0.02em;
   }
   .container {
     display: grid;
-    grid-template-columns: 0.4fr 1.7fr 0.4fr;
     gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
       "message-logo message-lable message-"
       "message-body message-body message-body"
       "message-footer message-footer message-footer";
-    padding: 32px;
-    gap: 7px;
+    padding: 2rem;
     max-width: 23.125rem;
     max-height: 23.125rem;
     background: #ffffff;
-    box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
-    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 16px;
     flex: none;
     order: 0;
     flex-grow: 0;
+    margin: 0 auto;
   }
-
-  .message-lable {
-    width: 267px;
+  #message-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 2rem;
+    width: 100%;
+    height: 40px;
+    order: 0;
+    flex-grow: 0;
+    position: relative;
+    text-transform: uppercase;
+  }
+  #message-header h4 {
     height: 29px;
+    font-family: "Interstate";
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
@@ -153,29 +157,37 @@
     text-transform: uppercase;
     color: #005faa;
     flex: none;
-    order: 1;
     flex-grow: 0;
+  }
+  #rotate-svg-false {
+    cursor: pointer;
+    transform: rotate(0.25turn);
+    transition: transform 0.2s ease-in;
+  }
+  #rotate-svg-true {
+    cursor: pointer;
+    transition: transform 0.2s ease-in;
+    transform: rotate(0.5turn);
+  }
+  .message-container {
+    max-height: fit-content;
+    min-width: 30rem;
   }
   #notification {
     position: absolute;
-    left: 5.71%;
-    left: 25.71%;
+    left: 4.71%;
     right: 0;
-    top: -7px;
-    border: 2px solid #ffffff;
+    top: -2px;
   }
   #unreaded-msgs {
     position: absolute;
-    left: 40.88%;
-    right: 89.07%;
-    top: -7.54%;
-    bottom: 30.58%;
+    left: 1.5rem;
+    top: -0.1rem;
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
     line-height: 20px;
     font-feature-settings: "salt" on;
-
     color: #ffffff;
   }
   .message-body {
@@ -196,7 +208,7 @@
     font-family: "Interstate";
     font-style: normal;
     font-weight: 300;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 30px;
     display: flex;
     align-items: center;
@@ -205,17 +217,9 @@
     order: 1;
     flex-grow: 0;
     height: auto;
+    padding: 1rem;
   }
 
-  .message-logo {
-    grid-area: message-logo;
-    position: relative;
-    width: 58px;
-  }
-
-  .message-btn {
-    grid-area: message-;
-  }
   button {
     display: flex;
     flex-direction: column;
@@ -250,6 +254,9 @@
   .message-footer {
     grid-area: message-footer;
     height: auto;
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
   }
 
   /* acordion style */
@@ -269,7 +276,6 @@
   #rotate-svg {
     transition: transform 0.2s ease-in;
     transform: rotate(0.25turn);
-
   }
 
   #rotate-svg-true {

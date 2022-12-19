@@ -1,28 +1,27 @@
 {
     
-    "download_link": "https://<ibill-domain>/v1/api/download-pdf", // POST with JWT Authorization Header - Get Bill Number from the Decoded JWT
+    "download_link": "https://<ibill-domain>/v1/api/download-pdf",
     "bills": [
         {
-            "lable":"Nov 2, 2021",
-            "value": "1122332123312313" // Bill Number
+            "lable":"Jul 2, 2021",
+            "value": "1122332123312313" 
+        },
+        {
+            "lable":"Aug 2, 2021",
+            "value": "654684684815126156" 
+        },
+        {
+            "lable":"Sep 2, 2021",
+            "value": "121515155148564" 
         },
         {
             "lable":"Nov 2, 2021",
-            "value": "1122332123312313" // Bill Number
+            "value": "518489874984984" 
         },
         {
-            "lable":"Nov 2, 2021",
-            "value": "1122332123312313" // Bill Number
-        },
-        {
-            "lable":"Nov 2, 2021",
-            "value": "1122332123312313" // Bill Number
-        },
-        {
-            "lable":"Nov 2, 2021",
-            "value": "1122332123312313" // Bill Number
+            "lable":"Dec 2, 2021",
+            "value": "8887445878787" 
         }
     ]
 }
 
-// We need a refresh token API to call and generate a new JWT with the selected bill or latest bill that can refresh the interactive bill view

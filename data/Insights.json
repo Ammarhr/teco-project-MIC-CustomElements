@@ -1,0 +1,27 @@
+{
+    "VisibilityTab": true,
+   "SelectedBill" : "1122332123312313",
+   "ComparedBill" : "112233212331222",
+    "unit": "KWH",
+    "valueConsumption": 1358,
+    "percentageConsumption": 105,
+    "colorConsumption": "#F7E6E6",
+    "iconConsumption": "<font-awsome>/<material_icon>",
+    "valueTemp": 56,
+    "percentageTemp": 5,
+    "colorTemp": "#e6eff7",
+    "iconTemp": "<font-awsome>/<material_icon>",
+    "y": [
+      2500,
+      1000
+      ]
+      ,
+        "x": [
+      "Dec 2021",
+      "Dec 2020"
+      ],
+      "hover" : [
+        "Dec 2021 2000 KWH",
+        "Dec 2020 3000 KWH"
+        ]
+  }

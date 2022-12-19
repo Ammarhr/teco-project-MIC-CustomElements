@@ -1,9 +1,9 @@
 {
-    "totalAmmount": 1142,
+    "totalAmmount": -1142,
     "dueDate": "Jan 25, 2022",
-    "html_message":"<h1>test</h1>",
+    "html_message":"<span  style=\"width:303px; height:44px; font-style:normal; font-weight:400; font-size:36px; line-height:44px; color:#da1e28;\">Past Due</span> <span style=\"width: 309px;height: 60px;font-style: normal;font-weight: 300;font-size: 20px;line-height: 30px; color: #000000; flex-grow: 0;\" >Your bill is past due. You owe 842.76.</span> <img src='/src/assets/Vector 549.svg' alt='' id='vector549' > <span style=\"width: 309px;height: 60px;font-style: normal;font-weight: 300;font-size: 20px;line-height: 30px; color: #000000; flex-grow: 0;\" >Your previous bill of 842.76 is past due on Dec. Jan 25, 2022</span>",
     "pay_now_link":"https://pay.teco.com",
-    "title":"total charges",
-    "postive_color":"#2222",
-    "negative_color":"#4444"
+    "title":"Total Amount Due",
+    "postive_color":"#005faa",
+    "negative_color":"#24A148"
 }
