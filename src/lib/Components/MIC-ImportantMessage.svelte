@@ -110,25 +110,22 @@
     font-family: "Interstate";
     letter-spacing: -0.02em;
   }
+  .message-container {
+    min-width: 38%;
+  }
   .container {
-    display: grid;
-    gap: 0px 0px;
-    grid-auto-flow: row;
-    grid-template-areas:
-      "message-logo message-lable message-"
-      "message-body message-body message-body"
-      "message-footer message-footer message-footer";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-height: fit-content;
+    min-width: fit-content;
+    order: 0;
     padding: 2rem;
-    max-width: 23.125rem;
-    max-height: 23.125rem;
-    background: #ffffff;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 16px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
   }
   #message-header {
     display: flex;
@@ -136,8 +133,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px;
-    gap: 2rem;
-    width: 100%;
+    width: 90%;
     height: 40px;
     order: 0;
     flex-grow: 0;
@@ -169,10 +165,6 @@
     transition: transform 0.2s ease-in;
     transform: rotate(0.5turn);
   }
-  .message-container {
-    max-height: fit-content;
-    min-width: 30rem;
-  }
   #notification {
     position: absolute;
     left: 4.71%;
@@ -191,7 +183,6 @@
     color: #ffffff;
   }
   .message-body {
-    grid-area: message-body;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -252,11 +243,10 @@
   }
 
   .message-footer {
-    grid-area: message-footer;
     height: auto;
     display: flex;
     flex-direction: row-reverse;
-    width: 100%;
+    width: 90%;
   }
 
   /* acordion style */
@@ -281,5 +271,20 @@
   #rotate-svg-true {
     transition: transform 0.2s ease-in;
     transform: rotate(0.5turn);
+  }
+  @media screen and (max-width: 1000px) {
+    .container {
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.7rem 0.2rem;
+    }
+    .message-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 </style>

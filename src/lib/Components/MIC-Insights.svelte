@@ -19,11 +19,9 @@
   } from "../../js/store";
 
   //state
-  export let data2 = [1358, 1453];
   export let dataLables = [$date, $CopmarsionDate];
   export let demandIsightsData = [79];
   export let insightsDataLables = [$date];
-  export let avgTempComparison = 65;
   export let thisMonthComparisonPercentage = 105;
   export let token;
   export let item = { name: "Item" };
@@ -45,20 +43,6 @@
     get($datatoken.token);
   }
 
-  $: if ($billNumber && $data && $data.y) {
-
-    let { x, y } = $data;
-    insightsDataLables = [$date];
-    dataLables = [$date];
-    options1 = renderBarChart(y, x);
-    options2 = renderRadialBar(
-      demandIsightsData,
-      insightsDataLables,
-      "#005FAA"
-    );
-    options3 = renderRadialBar(demandIsightsData, [$CopmarsionDate], "#B1DBFD");
-  }
-
   ///////// acordion functionality
   import { slide } from "svelte/transition";
   let isOpen = false;
@@ -68,7 +52,35 @@
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
   };
+  ////////// tabs functionality
+  let tab1 = "1";
+  let tab2 = "2";
+  const activateTab = (num1, num2) => {
+    tab2 = num2;
+    tab1 = num1;
+  };
+
   ////////////////////////
+
+  $: if ($billNumber && $data && $data.y) {
+    let { x, y } = $data;
+    insightsDataLables = [$date];
+    dataLables = [$date];
+    options1 = renderBarChart(
+      [y],
+      x,
+      ["#005FAA", "#B1DBFD"],
+      "100%",
+      250,
+      " kWh"
+    );
+    options2 = renderRadialBar(
+      demandIsightsData,
+      insightsDataLables,
+      "#005FAA"
+    );
+    options3 = renderRadialBar(demandIsightsData, [$CopmarsionDate], "#B1DBFD");
+  }
 </script>
 
 <!----------html----------->
@@ -91,25 +103,43 @@
     </div>
     {#if isOpen}
       <div transition:slide={{ duration: 300 }}>
-        <div id="tabs">
-          <h6 id="tab-title-active">Annual Comparison</h6>
-          <h6 id="tab-title-inactive">
-            Monthly Comparison <br />
-          </h6>
-        </div>
-        <div class="chart-container" transition:slide={{ duration: 300 }}>
-          {#key $billNumber}
-            <div use:chart={options1} />
-          {/key}
+        <div id="tab-container">
+          <div id="tabs">
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <h6 id={"btn" + tab1} on:click={() => activateTab("1", "2")}>
+              Annual Comparison
+            </h6>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <h6 id={"btn" + tab2} on:click={() => activateTab("2", "1")}>
+              Monthly Comparison
+            </h6>
+          </div>
+          <div id={"tab1" + tab1}>
+            <div class="chart-container" transition:slide={{ duration: 300 }}>
+              {#key $billNumber}
+                <div use:chart={options1} />
+              {/key}
+            </div>
+          </div>
+          <div id={"tab1" + tab2}>
+            <div class="chart-container" transition:slide={{ duration: 300 }}>
+              {#key $billNumber}
+                <div use:chart={options1} />
+              {/key}
+            </div>
+          </div>
         </div>
         <div class="content">
           <h6 class="label">THIS MONTH</h6>
           <div class="val-content">
             <p class="value">{$data.valueConsumption} {$data.unit}</p>
             <p class="percentage">
-              <img src={redArrow} class="arrow" alt="" />
-              <span class={avgClass} style="background-color:{$data.colorConsumption}"
-                >{thisMonthComparisonPercentage}% {$data.unit}</span
+              <span
+                class={avgClass}
+                style="background-color:{$data.colorConsumption}"
+              >
+                <img src={redArrow} class="arrow" alt="" />
+                {thisMonthComparisonPercentage}% {$data.unit}</span
               >
             </p>
           </div>
@@ -120,7 +150,9 @@
             <p class="value">{$data.valueTemp + "°"}</p>
             <p class="percentage">
               <img src={arrowUp} class="arrow" alt="" />
-              <span class="blue" style="background-color:{$data.colorTemp}">{$data.valueTemp + "°"}</span>
+              <span class="blue" style="background-color:{$data.colorTemp}"
+                >{$data.valueTemp + "°"}</span
+              >
             </p>
           </div>
         </div>
@@ -137,7 +169,11 @@
             <p class="value">{$data.valueConsumption}% {$data.unit}</p>
             <p class="percentage">
               <img src={redArrow} class="arrow" alt="" />
-              <span class={avgClass} style="background-color:{$data.colorConsumption}">{thisMonthComparisonPercentage}% {$data.unit}</span>
+              <span
+                class={avgClass}
+                style="background-color:{$data.colorConsumption}"
+                >{thisMonthComparisonPercentage}% {$data.unit}</span
+              >
             </p>
           </div>
         </div>
@@ -163,11 +199,15 @@
   }
 
   .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-items: center;
+    width: 30%;
+    padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
-    max-width: 60%;
-    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   }
   #header {
     position: relative;
@@ -176,8 +216,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px;
-    gap: 499px;
-    width: 25rem;
+    width: 100%;
     height: 40px;
     flex: none;
     order: 0;
@@ -199,49 +238,7 @@
     order: 0;
     flex-grow: 0;
   }
-  #tabs {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    width: 392px;
-    height: 65px;
-    border-bottom: 1px solid #f4f5f7;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-  }
-  #tab-title-active {
-    width: 195px;
-    height: 30px;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 30px;
-    display: flex;
-    align-items: center;
-    color: #000000;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-  }
-  #tab-title-inactive {
-    width: 195px;
-    height: 30px;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 30px;
-    color: #6c6c6c;
-  }
-  #active {
-    background-color: #005faa;
-    width: 80%;
-  }
-  #inactive {
-    display: none;
-  }
+
   .title-2 {
     width: 251px;
     height: 29px;
@@ -261,6 +258,7 @@
   .chart-container {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     width: 100%;
     height: 225px;
     background: #ffffff;
@@ -281,10 +279,8 @@
     align-items: flex-start;
     padding: 0px;
     gap: 4px;
-
-    width: 392px;
+    width: 100%;
     height: 134px;
-
     flex: none;
     order: 1;
     flex-grow: 1;
@@ -294,11 +290,10 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 0px;
     gap: 16px;
-
-    width: 392px;
+    width: 83%;
     height: 38px;
     flex: none;
     order: 1;
@@ -306,7 +301,6 @@
     flex-grow: 0;
   }
   .label {
-    width: 392px;
     height: 0;
     font-style: normal;
     font-weight: 400;
@@ -320,14 +314,14 @@
     flex-grow: 0;
   }
   .value {
-    width: 260px;
     height: 29px;
     font-style: normal;
     font-weight: 300;
     font-size: 24px;
     line-height: 29px;
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
     letter-spacing: -0.02em;
     color: #005faa;
     flex: none;
@@ -448,7 +442,7 @@
     flex-grow: 0;
   }
 
-  /*-----------------------*/
+  /*----------acordion-------------*/
   #rotate-svg-false {
     cursor: pointer;
     position: absolute;
@@ -462,5 +456,60 @@
     transform: rotate(0.5turn);
     position: absolute;
     right: 0;
+  }
+  /*tabs*/
+  #tab-container {
+    width:100%;
+  }
+  #tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  #btn1 {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    color: #000000;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    cursor: pointer;
+    border-bottom: solid #005faa;
+  }
+  #btn2 {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    color: #6c6c6c;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    cursor: pointer;
+  }
+  #tab11 {
+    display: none;
+  }
+  #tab12 {
+    display: flex;
+  }
+  /*--------*/
+  @media screen and (max-width: 1000px) {
+    .card {
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   }
 </style>

@@ -82,41 +82,47 @@
       />
     </div>
     {#if isOpen}
-    <h3 id="sectiontitle" transition:slide={{ duration: 300 }}>
-      <span><img src={electricityIcon} alt="" style="width: 15px;" /></span>
-      {$data.electricityCharges.BillsTitle}
-    </h3>
-    <p id="comment">Service Period: {$data.electricityCharges.servicePeriod}</p>
-    <div id="content" transition:slide={{ duration: 300 }}>
-      {#each keys as value, i}
-        {#if value != "energyCharge" && value != "fuelCharge"}
-          <div class="row" id="daily-basic-service-charge">
-            <p class="first-label">{getPropertyTitle(value)}</p>
-            <p class="sub-label">{billingData[value].consumption}</p>
-            <p class="value">${billingData[value].cost}</p>
-          </div>
-        {:else}
-          <div class="multi-row" id="EnergyCharge" >
-            <h5 class="bold-label">{getPropertyTitle(value)}</h5>
-            <div class="sub-row" id="energy-charge-on-peak">
-              <p class="first-label">On Peak</p>
-              <p class="sub-label">{billingData[value].onPeak.consumption}</p>
-              <p class="value">${billingData[value].onPeak.cost}</p>
+      <h3 id="sectiontitle" transition:slide={{ duration: 300 }}>
+        <span><img src={electricityIcon} alt="" style="width: 15px;" /></span>
+        {$data.electricityCharges.BillsTitle}
+      </h3>
+      <p id="comment">
+        Service Period: {$data.electricityCharges.servicePeriod}
+      </p>
+      <div id="content" transition:slide={{ duration: 300 }}>
+        {#each keys as value, i}
+          {#if value != "energyCharge" && value != "fuelCharge"}
+            <div class="row" id="daily-basic-service-charge">
+              <p class="first-label">{getPropertyTitle(value)}</p>
+              <p class="sub-label">{billingData[value].consumption}</p>
+              <p class="value">${billingData[value].cost}</p>
             </div>
-            <div class="sub-row" id="energy-charge-off-peak" transition:slide={{ duration: 300 }}>
-              <p class="first-label">Off Peak</p>
-              <p class="sub-label">{billingData[value].onPeak.consumption}</p>
-              <p class="value">${billingData[value].offPeak.cost}</p>
+          {:else}
+            <div class="multi-row" id="EnergyCharge">
+              <h5 class="bold-label">{getPropertyTitle(value)}</h5>
+              <div class="sub-row" id="energy-charge-on-peak">
+                <p class="first-label">On Peak</p>
+                <p class="sub-label">{billingData[value].onPeak.consumption}</p>
+                <p class="value">${billingData[value].onPeak.cost}</p>
+              </div>
+              <div
+                class="sub-row"
+                id="energy-charge-off-peak"
+                transition:slide={{ duration: 300 }}
+              >
+                <p class="first-label">Off Peak</p>
+                <p class="sub-label">{billingData[value].onPeak.consumption}</p>
+                <p class="value">${billingData[value].offPeak.cost}</p>
+              </div>
             </div>
-          </div>
-        {/if}
-      {/each}
-    </div>
-    <div class="sub-row total-row" id="electric-charges-subtotal" >
-      <p class="first-label">Electric Charges Subtotal</p>
-      <p class="value">${electricChargesSubtotal}</p>
-    </div>
-  {/if}
+          {/if}
+        {/each}
+      </div>
+      <div class="sub-row total-row" id="electric-charges-subtotal">
+        <p class="first-label">Electric Charges Subtotal</p>
+        <p class="value">${electricChargesSubtotal}</p>
+      </div>
+    {/if}
   {/if}
 </div>
 
@@ -134,14 +140,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px;
-    gap: 31.188rem;
     width: 100%;
     height: 40px;
     order: 0;
     flex-grow: 0;
   }
-    /*-----------------------*/
-    #rotate-svg-false {
+  /*-----------------------*/
+  #rotate-svg-false {
     cursor: pointer;
     transform: rotate(0.25turn);
     transition: transform 0.2s ease-in;
@@ -244,12 +249,16 @@
     width: 50%;
   }
 
-
   .value {
     padding: 5px 15px;
     margin: 0;
     font-size: 16px;
     width: 15%;
     text-align: right;
+  }
+  @media screen and (max-width: 1000px) {
+    .card {
+      width: 90%;
+    }
   }
 </style>

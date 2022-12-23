@@ -43,7 +43,6 @@
   }
 </script>
 
-<div id="balance-data" />
 <div id="card">
   <img src={groupVector} alt="" id="group" />
   {#if $data && $data.html_message}
@@ -57,7 +56,9 @@
         <span id="power">02</span>
       </div>
       <p id="due-date">Due Date: {$data.dueDate}</p>
-     <a href={$data.pay_now_link} target="_blank"> <button>PAY NOW</button></a>
+      <a href={$data.pay_now_link} target="_blank" rel="noreferrer">
+        <button>PAY NOW</button></a
+      >
     </div>
   {/if}
 </div>
@@ -72,7 +73,7 @@
   }
   #card {
     position: relative;
-    width: 46.875rem;
+    width: 60%;
     height: 25.188rem;
     border-radius: 16px;
     flex: none;
@@ -119,12 +120,13 @@
     height: 280px;
     left: 441px;
     top: 61px;
+    order: 0;
   }
-  #info-container2 a  {
+  #info-container2 a {
     order: 3;
     cursor: pointer;
   }
-  button{
+  button {
     padding: 10px 24px;
     gap: 10px;
     width: 137px;
@@ -136,7 +138,6 @@
     flex-grow: 0;
     color: #fff;
     cursor: pointer;
-
   }
   #label2 {
     width: 166px;
@@ -207,5 +208,18 @@
     flex: none;
     order: 2;
     flex-grow: 0;
+  }
+
+  @media screen and (max-width: 480px) {
+    #card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 90%;
+    }
+    #info-container2 {
+      width: 100%;
+    }
   }
 </style>

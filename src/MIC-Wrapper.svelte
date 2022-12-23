@@ -11,6 +11,8 @@
   import Insights from "./lib/Components/MIC-Insights.svelte";
   import MeterTable from "./lib/Components/MIC-MeterTable.svelte";
 
+  import MicTest from "./lib/Components/MIC-test.svelte";
+
   import { getToken } from "./js/store";
 
   let apiToken;
@@ -23,16 +25,18 @@
   }
 </script>
 
-<main>
+
   {#if $loading}
-    Loading: {$loading}
+  Loading: {$loading}
   {:else if $error}
-    Error: {$error}
+  Error: {$error}
   {:else}
-    <div class="Header"><HeaderInformation token={apiToken} /></div>
-    <div class="container">
-      <div class="Billing-message">
-        <BillsHistory token={apiToken} />
+
+  <div class="container">
+  <div class="Header"><HeaderInformation token={apiToken} /></div>
+  <div class="Billing-message">
+    <!-- <BillsHistory token={apiToken} /> -->
+    <MicTest token={apiToken} />
         <ImportantMessage token={apiToken} />
       </div>
       <div id="bill-selector">
@@ -47,36 +51,27 @@
       </div>
     </div>
   {/if}
-</main>
-
 <style>
-  main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0px;
-    gap: 20px;
-    width: 100%;
-    height: 2355.43px;
-  }
+
+
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0px;
     gap: 30px;
-    width: 1264px;
+    width: 80%;
     height: 2887.43px;
     flex: none;
     order: 0;
     flex-grow: 0;
   }
-  .Billing {
+   .Billing {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     padding: 0px;
-    gap: 32px;
+    gap: 2rem;
     width: 100%;
     height: fit-content;
     flex: none;
@@ -89,7 +84,7 @@
     align-items: center;
     justify-content: center;
     padding: 0px;
-    gap: 32px;
+    gap: 2rem;
     width: 100%;
     height: fit-content;
     flex: none;
@@ -103,22 +98,73 @@
     justify-content: space-between;
     padding: 0px;
     width: 100%;
+    gap: 20px;
     height: fit-content;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
   }
   #bill-selector {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     padding: 0px;
-    gap: 32px;
-    width: 1264px;
+    gap: 2rem;
+    width: 100%;
     height: fit-content;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
+  }
+  @media only screen and (max-width: 1000px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0px;
+      gap: 70px;
+      width: 100%;
+      height: 2887.43px;
+      flex: none;
+      order: 0;
+      flex-grow: 0;
+    }
+    .Billing {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+      gap: 2rem;
+      width: 100%;
+      height: fit-content;
+    }
+    .meter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0px;
+      gap: 2rem;
+      width: 100%;
+      height: fit-content;
+    }
+
+    .Billing-message {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+      width: 100%;
+      height: fit-content;
+      gap: 50px;
+      
+    }
+    #bill-selector {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+      gap: 2rem;
+      width: 100%;
+      height: fit-content;
+      flex: none;
+    }
   }
 </style>

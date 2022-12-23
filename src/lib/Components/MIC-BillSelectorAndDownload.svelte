@@ -2,73 +2,53 @@
 
 <script>
   // @ts-nocheck
-  import { slide } from "svelte/transition";
 
   // svg imports
   import downloadIcon from "../../assets/Icon-left.svg";
   import line from "../../assets/Line1812.svg";
-  import { date, billNumber } from "../../js/store";
+  import { billNumber } from "../../js/store";
 
   export let token;
   export let item = { name: "Item" };
 
-
   import { fetchstore } from "../../js/store";
 
-//mocking data
-const [data, loading, error, get] = fetchstore(
-  "../../../data/BillSelector.json",
-  token
-);
+  //mocking data
+  const [data, loading, error, get] = fetchstore(
+    "../../../data/BillSelector.json",
+    token
+  );
 
-// const handleBillChange = (e)=>{
-// console.log(e.target.value, 'event');
-// $date
-// }
+  
 </script>
 
 <div id="selector-card">
   <div id="selector-container">
-    <div id="sub-container">
-      <div id="date-container">
-        <!-- <label for="bill-selector">VIEW PRIOR STATEMENTS</label>
-        <input
-          type="date"
-          name="bill-selector"
-          bind:value={$date}
-          on:change={(event) => {
-            
-            let date1 = new Date(event.currentTarget.value)
-            let year = date1.getFullYear();
-            let month = date1.getMonth();
-            $date = month + 1 + " " + year;
-            $CopmarsionDate = yearComparsion(new Date($date));
-          }}
-          on:change={(event) => {handleBillChange(event)}}
-        /> -->
-        {#if $data && $data.bills}
-        <label for="bill-selector">VIEW PRIOR STATEMENTS</label>
-        <select name="bill-selector"
-        bind:value={$billNumber}
-        >
+    <div id="date-container">
+      {#if $data && $data.bills}
+      <label for="bill-selector">VIEW PRIOR STATEMENTS</label>
+      <select name="bill-selector" bind:value={$billNumber}>
           {#each $data.bills as billDate}
-          <option value={billDate.value}>{billDate.lable}</option>
-           {/each} 
+            <option value={billDate.value}>{billDate.lable}</option>
+          {/each}
         </select>
-        {/if}
-      </div>
-      <div id="btn-container">
-        <button id="btn-download">
-          <span>
-            <img src={downloadIcon} alt="download icon" />
-            Download Bill
-          </span>
-        </button>
-        <button id="show-btn">
-          <span> VIEW LATEST BILL </span>
-          <img src={line} alt="line icon" />
-        </button>
-      </div>
+      {/if}
+    </div>
+    <div id="btn-container">
+      <!-- svelte-ignore a11y-label-has-associated-control -->
+      <label>DOWNLOAD MY BILL</label>
+      <a id="btn-download" href={$data.download_link}>
+        <span>
+          <img src={downloadIcon} alt="download icon" />
+          Download Bill
+        </span>
+      </a>
+    </div>
+    <div>
+      <button id="show-btn">
+        <span> VIEW LATEST BILL </span>
+        <img src={line} alt="line icon" />
+      </button>
     </div>
   </div>
 </div>
@@ -81,107 +61,82 @@ const [data, loading, error, get] = fetchstore(
   * {
     font-family: "Interstate";
   }
-
   #selector-card {
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 0px;
     gap: 51px;
-    min-width: 50.125rem;
-    min-height: 3rem;
+    width: 100%;
+    min-height: 6rem;
     flex: none;
     order: 1;
     flex-grow: 0;
-  }
-  #selector-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-    height: 140px;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 1;
     box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
     border-radius: 16px;
+    background-color: #ffff;
   }
-
-  #sub-container {
+  #selector-container {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    justify-content: space-between;
+    align-items: center;
     padding: 0px 32px;
     gap: 41px;
-    position: absolute;
-    width: 100%;
-    height: 86px;
-    left: 0px;
-    top: 26px;
+    width: 1240px;
   }
-
   #date-container {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     padding: 0px;
-    gap: 8px;
-    width: 33%;
-    height: 88px;
+    gap: 24px;
+    width: 442px;
+    height: 50px;
     flex: none;
     order: 0;
-    align-self: stretch;
     flex-grow: 0;
   }
-
   label {
-    width: auto;
+    width: fit-content;
     height: 30px;
+    font-family: "Interstate";
     font-style: normal;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 20px;
     line-height: 30px;
     display: flex;
     align-items: center;
     text-align: center;
-    color: #000000;
+    color: #6c6c6c;
     flex: none;
     order: 0;
-    align-self: stretch;
     flex-grow: 0;
   }
   select {
-    font-family: 'Interstate';
-    box-sizing: border-box;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 15px 12px;
-    gap: 12px;
-    width: 100%;
+    padding: 0px;
+    width: 170px;
     height: 50px;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
-    border-radius: 6px;
+    font-size: 18px;
     flex: none;
     order: 1;
-    align-self: stretch;
     flex-grow: 0;
   }
   #btn-container {
-    padding-top: 36px;
     display: flex;
     flex-direction: row;
-    gap: 6%;
+    align-items: center;
+    padding: 0px;
+    gap: 24px;
+    width: 420px;
+    height: 48px;
     flex: none;
-    order: 3;
+    order: 0;
     flex-grow: 0;
-    width: 55%;
-    height: 0px;
-    align-self: stretch;
   }
   #btn-download {
     box-sizing: border-box;
@@ -191,70 +146,66 @@ const [data, loading, error, get] = fetchstore(
     align-items: center;
     padding: 10px 24px;
     gap: 10px;
-    width: 50%;
+    width: 200px;
     height: 48px;
     background: #ffffff;
-    border: 1px solid #d1d5db;
+    border: 1px solid #005faa;
     box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
     border-radius: 6px;
     flex: none;
     order: 0;
     flex-grow: 0;
-  }
-  #btn-download span {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    gap: 7px;
-    width: 100%;
-    height: 28px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    font-style: normal;
+    text-decoration: none;
+    color: #005faa;
   }
   #show-btn {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 5px 0px;
-    gap: 10px;
-    width: 33%;
+    align-items: flex-start;
+    padding: 0px;
+    width: 136px;
     height: 38px;
-    border: 1px solid #d1d5db17;
-    border-radius: 6px;
     flex: none;
-    order: 0;
+    order: 3;
     flex-grow: 0;
-    background: #ffffff;
-    order: 0;
-    flex-grow: 0;
+    background-color: #ffffff;
+    border: none;
+    gap: 10px;
+    cursor: pointer;
   }
-  #show-btn span {
-    width: 100%;
-    height: 28px;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 0.8rem;
-    line-height: 28px;
+  @media screen and (max-width: 1000px) {
+    #selector-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 90%;
+      height: fit-content;
+      padding: 1.4rem 1rem;
+    }
+    #selector-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0px 32px;
+      width: 100%;
+      padding: 1.4rem 1rem;
+    }
+    #date-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.4rem 1rem;
+    }
+    #btn-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    text-align: center;
-    text-transform: uppercase;
-    color: #000000;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+    justify-content: center;
+    padding: 1.4rem 1rem;
   }
-  #show-btn img {
-    width: 100%;
-    height: 0px;
-    border: 1px solid #005faa;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
   }
 </style>

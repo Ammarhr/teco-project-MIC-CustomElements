@@ -1,28 +1,29 @@
-export const renderBarChart = (dataArr, labels, colorsArr) => {
+export const renderBarChart = (data, labels, colorsArr, width, height, unit) => {
 
     let options = {
-        series: [
-            {
-                data: dataArr,
-            },
-        ],
+        series: data,
         fill: {
             opacity: 100,
-            colors: ['#005FAA', '#B1DBFD'],
         },
+        colors: colorsArr,
         chart: {
-            height: 250,
             type: "bar",
-            width: "350px",
+            height: height,
+            width: width,
             toolbar: {
                 show: false,
             },
         },
+        stroke: {
+            show: true,
+            width: 2,
+        },
         plotOptions: {
             bar: {
+                // columnWidth: '120px',
                 borderRadius: 10,
                 dataLabels: {
-                    position: "top", // top, center, bottom
+                    position: "top", // top, center, bottom,
                 },
                 distributed: true,
             },
@@ -30,19 +31,16 @@ export const renderBarChart = (dataArr, labels, colorsArr) => {
         dataLabels: {
             enabled: true,
             formatter: function (val) {
-                return val + " kWh";
+                return val + unit;
+
             },
             offsetY: -20,
             style: {
-                fontSize: "12px",
-                colors: ["#304758"],
+                fontSize: '14px',
+                fontFamily: 'Interstate',
+                colors: '#bbbb'
             },
-
         },
-        legend: {
-            show: false
-        },
-
         xaxis: {
             categories: labels,
             position: "bottom",
@@ -118,5 +116,88 @@ export const renderRadialBar = (seriesArr, labels, color) => {
         },
         labels: labels,
     };
+    return options;
+}
+
+
+export const renderMixChart = (data, labels, colorsArr, width, height, unit) => {
+
+    let options = {
+        series: data,
+        fill: {
+            opacity: 100,
+            colors: colorsArr,
+        },
+        chart: {
+            height: height,
+            width: width,
+            toolbar: {
+                show: false,
+            },
+        },
+        stroke: {
+            width: [0, 4],
+            curve: 'smooth',
+        },
+        markers: {
+            size: 5,
+            colors: "#fff",
+            strokeDashArray: 50,
+            strokeWidth: 3,
+            strokeColors: "#FF832B",
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                dataLabels: {
+                    position: "top", // top, center, bottom,
+                },
+                distributed: false,
+            },
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                if (unit) {
+                    return val + unit;
+                } else {
+                    return
+                }
+            },
+            offsetY: -20,
+        },
+        legend: {
+            show: true
+        },
+
+        xaxis: {
+            categories: labels,
+            position: "bottom",
+            axisBorder: {
+                show: false,
+            },
+            axisTicks: {
+                show: false,
+            },
+            crosshairs: {},
+            tooltip: {
+                enabled: false,
+            },
+        },
+        yaxis: {
+            axisBorder: {
+                show: false,
+            },
+            axisTicks: {
+                show: false,
+            },
+            labels: {
+                show: true,
+                formatter: function (val) {
+                    return val;
+                },
+            },
+        },
+    }
     return options;
 }

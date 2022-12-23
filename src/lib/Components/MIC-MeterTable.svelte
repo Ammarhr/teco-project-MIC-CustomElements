@@ -5,11 +5,17 @@
     import toggle from "../../assets/cr.svg";
     import { slide } from "svelte/transition";
     import { fetchstore } from "../../js/store";
+    import { chart } from "svelte-apexcharts";
+    import { renderMixChart } from "../../js/MIC-chart-bundle";
+    import { Tabs, Tab, TabContent } from "carbon-components-svelte";
 
     export let token;
+    let keys;
+    let tableData;
+    let options;
 
     const [data, loading, error, get] = fetchstore(
-        "../../../data/meterDataUsageChartDataMonthly.json",
+        "../../../data/meterDataUsage.json",
         token
     );
 
@@ -21,9 +27,26 @@
         isOpen = !isOpen;
         svgId = "rotate-svg-" + isOpen;
     };
+    ////////// tabs functionality
+    let tab1 = "1";
+    let tab2 = "2";
+    const activateTab = (num1, num2) => {
+        tab2 = num2;
+        tab1 = num1;
+    };
+    
     ////////////////////////
-    $: if ($data) {
-        console.log("data", $data);
+    $: if ($data && $data.meterTable) {
+        tableData = $data.meterTable;
+        keys = Object.keys(tableData);
+        let { gas, tempereature, x } = $data.settings;
+        options = renderMixChart(
+            [gas, tempereature],
+            x,
+            ["#044F8D"],
+            "1150px",
+            650
+        );
     }
 </script>
 
@@ -46,23 +69,53 @@
             />
         </div>
         {#if isOpen}
+            <div class="search">
+                <input type="text" placeholder="Search" />
+            </div>
             <div class="table-container" transition:slide={{ duration: 300 }}>
-                <table class="table">
-                    <tr><th>Name</th><th>Email</th><th>Country</th></tr>
-                    <tr class="table-row" data-href="http://tutorialsplane.com"
-                        ><td>Jhohn</td><td>jhone@gmail.com</td><td>USA</td></tr
-                    >
-                    <tr class="table-row" data-href="http://tutorialsplane.com"
-                        ><td>Kelly</td><td>kelly@gmail.com</td><td>USA</td></tr
-                    >
-                    <tr class="table-row" data-href="http://tutorialsplane.com"
-                        ><td>Kamana</td><td>kamna@gmail.com</td><td>India</td
-                        ></tr
-                    >
-                    <tr class="table-row" data-href="http://tutorialsplane.com"
-                        ><td>Anay</td><td>anay@gmail.com</td><td>Canada</td></tr
-                    >
-                </table>
+                {#if tableData}
+                    <table class="table">
+                        <tr>
+                            <th>Service</th>
+                            <th>Meter Number</th>
+                            <th>Read Date</th>
+                            <th>Biling Read</th>
+                            <th>Current Reading</th>
+                            <th>Previous Reading</th>
+                            <th>Total Used</th>
+                        </tr>
+                        <tr class="table-row">
+                            {#each keys as value}
+                                <td>{tableData[value]}</td>
+                            {/each}
+                        </tr>
+                    </table>
+                {/if}
+                <!---------tabs---------------->
+                <div id="tab-container">
+                    <div id="tabs">
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <h6
+                            id={"btn" + tab1}
+                            on:click={() => activateTab("1", "2")}
+                        >
+                            Daily
+                        </h6>
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <h6
+                            id={"btn" + tab2}
+                            on:click={() => activateTab("2", "1")}
+                        >
+                            Monthly
+                        </h6>
+                    </div>
+                    <div id={"tab1" + tab1}>
+                        <div class="chart" use:chart={options} />
+                    </div>
+                    <div id={"tab1" + tab2}>
+                        <div class="chart" use:chart={options} />
+                    </div>
+                </div>
             </div>
         {/if}
     </div>
@@ -84,10 +137,13 @@
         justify-content: space-between;
     }
     .card {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         transition: 0.3s;
         border-radius: 16px;
-        min-width: 100%;
+        min-width: 90%;
         padding: 20px;
     }
     #title {
@@ -124,7 +180,7 @@
         width: 100%;
         height: fit-content;
         flex: none;
-        order: 2;
+        order: 0;
         align-self: stretch;
         flex-grow: 0;
     }
@@ -156,17 +212,9 @@
         font-weight: 300;
         font-size: 18px;
         line-height: 22px;
-        /* identical to box height */
-
         text-align: center;
         letter-spacing: -0.02em;
-
-        /* TECO Black */
-
         color: #000000;
-
-        /* Inside auto layout */
-
         flex: none;
         order: 0;
         flex-grow: 0;
@@ -182,5 +230,101 @@
 
     td:hover {
         background-color: lightgrey;
+    }
+
+    .chart {
+        width: 100%;
+    }
+    .search {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .search input {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        display: flex;
+        align-items: center;
+        letter-spacing: -0.02em;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 10px 12px;
+        gap: 12px;
+        width: 280px;
+        height: 40px;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+        border-radius: 6px;
+        flex: none;
+        order: 1;
+        align-self: stretch;
+        flex-grow: 0;
+    }
+    /*tabs*/
+    #tab-container {
+        width: 80%;
+    }
+    #tabs {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 2%;
+        width: 100%;
+    }
+
+    #btn1{
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 30px;
+        display: flex;
+        align-items: center;
+        color: #000000;
+        flex: none;
+        order: 1;
+        flex-grow: 0;
+        cursor: pointer;
+        border-bottom: solid #005FAA;
+    }
+    #btn2{
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 30px;
+        display: flex;
+        align-items: center;
+        color: #6c6c6c;
+        flex: none;
+        order: 1;
+        flex-grow: 0;
+        cursor: pointer; 
+    }
+    #tab11 {
+        display: none;
+    }
+    #tab12 {
+        display: flex;
+    }
+    /*--------*/
+    @media screen and (max-width: 1000px) {
+        .card {
+            display: flex;
+            flex-direction: column;
+            row-gap: 2rem;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            border-radius: 16px;
+            width: 90%;
+            padding: 20px;
+        }
+        .table-container {
+            overflow-x: scroll;
+        }
     }
 </style>
