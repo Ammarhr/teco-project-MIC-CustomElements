@@ -15,8 +15,6 @@
   },
   "dependencies": {
     "@amcharts/amcharts5": "^5.2.35",
-    "apexcharts": "^3.36.3",
-    "carbon-components-svelte": "^0.70.13",
     "svelte-apexcharts": "^1.0.2",
     "svelte-dnd-action": "^0.9.22",
     "svelte-simple-modal": "^1.4.5"

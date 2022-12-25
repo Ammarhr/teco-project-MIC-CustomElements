@@ -22,7 +22,6 @@
     $: newElement = document.getElementById("info-container");
 
     $: if (newElement && $data && $data.html_message) {
-        console.log("this is the log:", $data);
         newElement.innerHTML = $data.html_message;
         if ($data.totalAmmount > 0) {
             color = $data.postive_color;

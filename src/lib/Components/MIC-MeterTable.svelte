@@ -7,18 +7,20 @@
     import { fetchstore } from "../../js/store";
     import { chart } from "svelte-apexcharts";
     import { renderMixChart } from "../../js/MIC-chart-bundle";
-    import { Tabs, Tab, TabContent } from "carbon-components-svelte";
 
     export let token;
-    let keys;
     let tableData;
     let options;
-
+    let selectedMeter;
     const [data, loading, error, get] = fetchstore(
         "../../../data/meterDataUsage.json",
         token
     );
-
+    //////// first render
+    $: if ($data && $data.results) {
+        tableData = $data.results;
+        selectedMeter = $data.results[0];
+    }
     ///////// acordion functionality
     let isOpen = false;
     let svgId = "rotate-svg-" + isOpen;
@@ -34,12 +36,29 @@
         tab2 = num2;
         tab1 = num1;
     };
-    
-    ////////////////////////
-    $: if ($data && $data.meterTable) {
-        tableData = $data.meterTable;
-        keys = Object.keys(tableData);
-        let { gas, tempereature, x } = $data.settings;
+    //////// change the selected meter
+    const handleSelectedMeter = (meterObject) => {
+        selectedMeter = meterObject;
+    };
+    ////// search & filter
+    const handleSearch = () => {
+        let str = event.target.value;
+        let searchArray;
+        console.log("any", str);
+        if (str == "") {
+            tableData = $data.results;
+            selectedMeter = $data.results[0];
+        }
+        searchArray = $data.results.filter((meter) => {
+            return meter.meterTable.meterNumbeR.includes(str);
+        });
+        if (searchArray[0]) {
+            tableData = searchArray;
+        }
+    };
+    ////// change the charts reference
+    $: if (selectedMeter) {
+        let { gas, tempereature, x } = selectedMeter.settings;
         options = renderMixChart(
             [gas, tempereature],
             x,
@@ -70,7 +89,11 @@
         </div>
         {#if isOpen}
             <div class="search">
-                <input type="text" placeholder="Search" />
+                <input
+                    type="text"
+                    placeholder="Search"
+                    on:change={handleSearch}
+                />
             </div>
             <div class="table-container" transition:slide={{ duration: 300 }}>
                 {#if tableData}
@@ -84,11 +107,26 @@
                             <th>Previous Reading</th>
                             <th>Total Used</th>
                         </tr>
-                        <tr class="table-row">
-                            {#each keys as value}
-                                <td>{tableData[value]}</td>
-                            {/each}
-                        </tr>
+                        {#each Object.values(tableData) as row}
+                            <tr
+                                class="table-row"
+                                on:click={() => {
+                                    handleSelectedMeter(row);
+                                }}
+                            >
+                                {#each Object.values(row.meterTable) as value}
+                                    <td>{value}</td>
+                                {/each}
+                            </tr>
+                        {/each}
+                        {#if $data.meterLocation}
+                            <div id="location">
+                                <span
+                                    ><strong> Meter Location:</strong>
+                                    {$data.meterLocation}</span
+                                >
+                            </div>
+                        {/if}
                     </table>
                 {/if}
                 <!---------tabs---------------->
@@ -143,7 +181,7 @@
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         transition: 0.3s;
         border-radius: 16px;
-        min-width: 90%;
+        min-width: 95%;
         padding: 20px;
     }
     #title {
@@ -205,15 +243,16 @@
         order: 0;
         flex-grow: 0;
     }
-    tr {
+    .table-row {
         width: 45px;
-        height: 22px;
-        font-style: normal;
+        height: 50px;
         font-weight: 300;
         font-size: 18px;
         line-height: 22px;
-        text-align: center;
         letter-spacing: -0.02em;
+        font-style: normal;
+        cursor: pointer;
+        text-align: center;
         color: #000000;
         flex: none;
         order: 0;
@@ -278,7 +317,7 @@
         width: 100%;
     }
 
-    #btn1{
+    #btn1 {
         font-style: normal;
         font-weight: 300;
         font-size: 20px;
@@ -290,9 +329,9 @@
         order: 1;
         flex-grow: 0;
         cursor: pointer;
-        border-bottom: solid #005FAA;
+        border-bottom: solid #005faa;
     }
-    #btn2{
+    #btn2 {
         font-style: normal;
         font-weight: 300;
         font-size: 20px;
@@ -303,7 +342,7 @@
         flex: none;
         order: 1;
         flex-grow: 0;
-        cursor: pointer; 
+        cursor: pointer;
     }
     #tab11 {
         display: none;
