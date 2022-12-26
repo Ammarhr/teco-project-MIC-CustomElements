@@ -10,8 +10,7 @@
   import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
   import MicInsights from "./lib/Components/MIC-Insights.svelte";
   import { getToken } from "./js/store";
-  import MicTabs from "./MIC-Tabs.svelte";
-
+  import MicPagination from "./lib/Components/mic-pagination.svelte";
   let apiToken;
 
   //mocking data
@@ -43,6 +42,7 @@
     <MicDraggableContainer itemData={items} {onDrop} />
   {/if} -->
   <MicWrapper />
+  <!-- <MicPagination /> -->
   <!-- <MicTabs /> -->
 </div>
 

@@ -17,6 +17,7 @@
     "@amcharts/amcharts5": "^5.2.35",
     "svelte-apexcharts": "^1.0.2",
     "svelte-dnd-action": "^0.9.22",
+    "svelte-paginate": "^0.1.0",
     "svelte-simple-modal": "^1.4.5"
   }
 }
