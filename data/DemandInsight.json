@@ -1,0 +1,11 @@
+{
+    "SelectedBill" : "1122332123312313",
+    "ComparedBill" : "112233212331222",
+     "CurrentFactorValue": " 70%",
+     "CurrentFactorDate": " March 22",
+     "PreviousFactorValue": "50%",
+     "PreviousFactorDate": "March 21",
+     "LoadFactorArrowComparison": "105%",
+     "ThiMonthValue": "1200 KW",
+     "Unit": "KWH"
+   }

@@ -1,8 +1,6 @@
 <script>
     // @ts-nocheck
 
-    // import { paginate, LightPaginationNav } from "svelte-paginate";
-
     let arr = [
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
         21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
@@ -14,11 +12,13 @@
     let activePageClass = "active";
     let deactivePageClass = "deactive";
     let activePageNumber = 0;
-    let pagesRange = [1, 2, 3, 4, 5];
+    let pagesRange = [];
 
     const pagination = (num, prev, next) => {
-      console.log( "math", Math.ceil((arr.length - 1)/5))
+        console.log("math", Math.ceil((arr.length - 1) / 5));
         if (!prev && !next && !num) {
+            // firtst range
+            range();
             activePageNumber += 1;
             num = pageNubmer;
             activePageNumber = 1;
@@ -26,18 +26,17 @@
             pageNubmer -= Math.floor(num % pageSize) + pageSize;
             console.log("here 1 prev", pageNubmer);
         } else if (prev) {
-            if (activePageNumber >= 5) {
-            console.log('here 2 prev');
-                activePageNumber -= 1;
-                range(prev);
+            if (pagesRange[0] > 1) {
+                console.log("here 2 prev");
+                range(prev, null);
             }
             pageNubmer -= 10;
             activePageNumber -= 1;
-            console.log("here 3 prev",pageNubmer,activePageNumber);
+            console.log("here 3 prev", pageNubmer, activePageNumber);
         } else if (next) {
             activePageNumber += 1;
             if (
-                activePageNumber >= 5 &&
+                activePageNumber >= pagesRange.length - 1 &&
                 activePageNumber != Math.floor(arr.length / 5)
             ) {
                 range(prev, next);
@@ -60,14 +59,17 @@
                 pageNubmer++;
             }
         }
-        // console.log("this is the page now", activePageNumber);
         page = page;
     };
 
     const range = (prev, next, page) => {
         if (next) {
-            pagesRange.shift();
-            pagesRange.push(parseInt(pagesRange[pagesRange.length - 1]) + 1);
+            if (activePageNumber < Math.floor((arr.length - 1) / 5) ) {
+                pagesRange.shift();
+                pagesRange.push(
+                    parseInt(pagesRange[pagesRange.length - 1]) + 1
+                );
+            }
         } else if (prev) {
             pagesRange.pop();
             pagesRange.unshift(parseInt(pagesRange[0]) - 1);
@@ -79,15 +81,13 @@
                 );
             }
         } else {
-            pagesRange = pagesRange;
+            for (let i = 0; i < Math.floor(arr.length / 5) - 1; i++) {
+                if (i + 1 > 5) break;
+                pagesRange.push(i + 1);
+            }
         }
-        console.log(pagesRange, "this is the range of active pages");
         pagesRange = pagesRange;
     };
-
-    // $: if (arr) {
-    //     // console.log("this is the page now", page);
-    // }
     $: if (!page[0]) {
         pagination(pageNubmer);
     }
@@ -124,7 +124,7 @@
                 >
             {/if}
         {/each}
-        {#if activePageNumber < Math.ceil((arr.length - 1)/5)}
+        {#if activePageNumber < Math.floor((arr.length - 1) / 5)}
             <button
                 class="next-prev"
                 on:click={() => {

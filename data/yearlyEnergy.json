@@ -1,0 +1,10 @@
+{
+    "YearlyValues": [
+      {
+        "Label": "Previous YTD Balance",
+        "Value": "250 kWh",
+        "SumFlag": true,
+        "YearlyTooltip": "At the end of each calendar year, your balance will be applied to your account on or around your February statement."
+      }
+    ]
+  }

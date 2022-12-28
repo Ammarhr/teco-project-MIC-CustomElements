@@ -16,11 +16,7 @@
         "../../../data/meterDataUsage.json",
         token
     );
-    //////// first render
-    $: if ($data && $data.results) {
-        tableData = $data.results;
-        selectedMeter = $data.results[0];
-    }
+
     ///////// acordion functionality
     let isOpen = false;
     let svgId = "rotate-svg-" + isOpen;
@@ -42,18 +38,22 @@
     };
     ////// search & filter
     const handleSearch = () => {
+        // console.log("searching...");
         let str = event.target.value;
         let searchArray;
-        console.log("any", str);
         if (str == "") {
-            tableData = $data.results;
+            // console.log("nothing catched");
+
+            items = $data.results;
             selectedMeter = $data.results[0];
         }
         searchArray = $data.results.filter((meter) => {
             return meter.meterTable.meterNumbeR.includes(str);
         });
+        // console.log("searching...---> step1", searchArray);
         if (searchArray[0]) {
-            tableData = searchArray;
+            items = searchArray;
+            // console.log("searching...---> step2", items);
         }
     };
     ////// change the charts reference
@@ -67,6 +67,21 @@
             650
         );
     }
+    ///////// pagination:
+    import { paginate, LightPaginationNav } from "svelte-paginate";
+    let items;
+    let currentPage = 1;
+    let pageSize = 5;
+    let paginatedItems;
+    //////// first render
+    $: if ($data && $data.results) {
+        tableData = $data.results;
+        selectedMeter = $data.results[0];
+        items = $data.results;
+    }
+    $: if (items) {
+        paginatedItems = paginate({ items, pageSize, currentPage });
+    }
 </script>
 
 <!------ html ------->
@@ -76,16 +91,14 @@
     <h1>{error}</h1>
 {:else if $data}
     <div class="card">
-        <div id="meter-header">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div
+            id="meter-header"
+            on:click={toggleContainer}
+            aria-expanded={isOpen}
+        >
             <h4 id="title">Usage Details</h4>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <img
-                src={toggle}
-                alt=""
-                id={svgId}
-                on:click={toggleContainer}
-                aria-expanded={isOpen}
-            />
+            <img src={toggle} alt="" id={svgId} />
         </div>
         {#if isOpen}
             <div class="search">
@@ -96,7 +109,53 @@
                 />
             </div>
             <div class="table-container" transition:slide={{ duration: 300 }}>
-                {#if tableData}
+                {#if items[0]}
+                    {#if tableData}
+                        <table class="table">
+                            <tr>
+                                <th>Service</th>
+                                <th>Meter Number</th>
+                                <th>Read Date</th>
+                                <th>Biling Read</th>
+                                <th>Current Reading</th>
+                                <th>Previous Reading</th>
+                                <th>Total Used</th>
+                            </tr>
+                            {#each Object.values(paginatedItems) as row}
+                                <!-- {#each Object.values(tableData) as row} -->
+                                <tr
+                                    class="table-row"
+                                    on:click={() => {
+                                        handleSelectedMeter(row);
+                                    }}
+                                >
+                                    {#each Object.values(row.meterTable) as value}
+                                        <td>{value}</td>
+                                    {/each}
+                                </tr>
+                            {/each}
+                            <!-- {/each} -->
+                            {#if $data.meterLocation}
+                                <div id="location">
+                                    <span
+                                        ><strong> Meter Location:</strong>
+                                        {$data.meterLocation}</span
+                                    >
+                                </div>
+                            {/if}
+                        </table>
+                    {/if}
+
+                    <LightPaginationNav
+                        totalItems={items.length}
+                        {pageSize}
+                        {currentPage}
+                        limit={1}
+                        showStepOptions={true}
+                        on:setPage={(e) => (currentPage = e.detail.page)}
+                    />
+                {/if}
+                <!-- {#if tableData}
                     <table class="table">
                         <tr>
                             <th>Service</th>
@@ -128,7 +187,7 @@
                             </div>
                         {/if}
                     </table>
-                {/if}
+                {/if} -->
                 <!---------tabs---------------->
                 <div id="tab-container">
                     <div id="tabs">

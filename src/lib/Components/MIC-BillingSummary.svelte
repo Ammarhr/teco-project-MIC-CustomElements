@@ -89,7 +89,7 @@
       <p id="comment">
         Service Period: {$data.electricityCharges.servicePeriod}
       </p>
-      <div id="content" transition:slide={{ duration: 300 }}>
+      <div id="content" transition:slide={{ duration: 300 }}>   
         {#each keys as value, i}
           {#if value != "energyCharge" && value != "fuelCharge"}
             <div class="row" id="daily-basic-service-charge">

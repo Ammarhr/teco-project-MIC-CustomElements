@@ -1,0 +1,20 @@
+{
+    "services": [
+        {
+            "icon": "<font-awsome>/<material_icon>",
+            "AccountNumber": "#123456711",
+            "serviceAddress": "123 Main St, Tampa, FL",
+            "Usage": 30,
+            "CurrentCharges": 3506,
+            "Status": "Active"
+        },
+        {
+            "icon": "<font-awsome>/<material_icon>",
+            "AccountNumber": "#55555",
+            "serviceAddress": "123 Main St, Tampa, FL",
+            "Usage": 30,
+            "CurrentCharges": 3206,
+            "Status": "Inactive"
+        }
+    ]
+}
