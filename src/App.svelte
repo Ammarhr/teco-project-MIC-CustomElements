@@ -41,12 +41,13 @@
     <MicHeaderInformation token={apiToken} />
     <MicDraggableContainer itemData={items} {onDrop} />
   {/if} -->
-  <MicWrapper />
-  <!-- <MicPagination /> -->
+  <!-- <MicWrapper /> -->
+  <MicPagination />
   <!-- <MicTabs /> -->
 </div>
 
 <style>
+
   .app-container {
     display: flex;
     flex-direction: column;

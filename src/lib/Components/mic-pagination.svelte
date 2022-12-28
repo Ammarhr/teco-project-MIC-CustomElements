@@ -1,92 +1,175 @@
 <script>
     // @ts-nocheck
 
-    import { paginate, LightPaginationNav } from "svelte-paginate";
+    // import { paginate, LightPaginationNav } from "svelte-paginate";
 
     let arr = [
-        1, 21, 65, 46, 84, 96847, 98, 749, 874, 65, 46, 46, 54, 684, 84, 84,
-        684, 65, 4, 1, 3, 21, 354, 8, 486, 4, 64, 864, 68, 46, 84, 684, 864,
-        684, 68, 468, 4, 684, 64, 5, 43, 21, 31, 4, 5, 46, 4, 684, 684, 68, 46,
-        84, 684, 684, 8, 468, 468, 4, 684, 6, 46, 84, 564, 68, 465, 4, 31, 6,
-        51, 354, 6, 4,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+        39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
     ];
     let page = [];
     let pageNubmer = 0;
+    let pageSize = 5;
+    let activePageClass = "active";
+    let deactivePageClass = "deactive";
+    let activePageNumber = 0;
+    let pagesRange = [1, 2, 3, 4, 5];
 
-    const pagination = (num, prev) => {
-        if (prev && num % 5 != 0) {
-            console.log("it is not mod of 5", Math.floor(num % 5));
-            pageNubmer -= Math.floor(num % 5) + 5;
+    const pagination = (num, prev, next) => {
+      console.log( "math", Math.ceil((arr.length - 1)/5))
+        if (!prev && !next && !num) {
+            activePageNumber += 1;
+            num = pageNubmer;
+            activePageNumber = 1;
+        } else if (prev && num % pageSize != 0) {
+            pageNubmer -= Math.floor(num % pageSize) + pageSize;
+            console.log("here 1 prev", pageNubmer);
         } else if (prev) {
+            if (activePageNumber >= 5) {
+            console.log('here 2 prev');
+                activePageNumber -= 1;
+                range(prev);
+            }
             pageNubmer -= 10;
+            activePageNumber -= 1;
+            console.log("here 3 prev",pageNubmer,activePageNumber);
+        } else if (next) {
+            activePageNumber += 1;
+            if (
+                activePageNumber >= 5 &&
+                activePageNumber != Math.floor(arr.length / 5)
+            ) {
+                range(prev, next);
+            }
         }
-
-        console.log(pageNubmer, "this is the page number");
-        num = pageNubmer;
         page = [];
-        for (let i = num; i < num + 5; i++) {
-            console.log("this is the i", i);
+        if (!prev && !next && num) {
+            activePageNumber = num;
+            num = activePageNumber * pageSize - 5;
+            if (
+                activePageNumber >= 5 &&
+                activePageNumber != Math.floor(arr.length / 5)
+            ) {
+                range(prev, next, activePageNumber);
+            }
+        }
+        for (let i = num; i < num + pageSize; i++) {
             if (arr[i]) {
                 page.push(arr[i]);
                 pageNubmer++;
             }
         }
+        // console.log("this is the page now", activePageNumber);
         page = page;
     };
-    $: if (arr) {
-        console.log("this is the page now", page);
-    }
+
+    const range = (prev, next, page) => {
+        if (next) {
+            pagesRange.shift();
+            pagesRange.push(parseInt(pagesRange[pagesRange.length - 1]) + 1);
+        } else if (prev) {
+            pagesRange.pop();
+            pagesRange.unshift(parseInt(pagesRange[0]) - 1);
+        } else if (page) {
+            if (page >= 5) {
+                pagesRange.shift();
+                pagesRange.push(
+                    parseInt(pagesRange[pagesRange.length - 1]) + 1
+                );
+            }
+        } else {
+            pagesRange = pagesRange;
+        }
+        console.log(pagesRange, "this is the range of active pages");
+        pagesRange = pagesRange;
+    };
+
+    // $: if (arr) {
+    //     // console.log("this is the page now", page);
+    // }
     $: if (!page[0]) {
         pagination(pageNubmer);
     }
     //////////
-
-    let items = arr;
-    let currentPage = 1;
-    let pageSize = 5;
-    $: paginatedItems = paginate({ items, pageSize, currentPage });
 </script>
-
-<ul class="items">
-    {#each paginatedItems as item}
-        <li class="item">
-            {item}
-        </li>
-    {/each}
-</ul>
-
-<!-- <LightPaginationNav
-    totalItems={items.length}
-    {pageSize}
-    {currentPage}
-    limit={1}
-    showStepOptions={true}
-    on:setPage={(e) => (currentPage = e.detail.page)}
-/> -->
 
 <div id="tess-pagination">
     <ul>
         {#each page as val, i}
             <li>{val}</li>
         {/each}
-        {#if pageNubmer > 5}
+        {#if activePageNumber > 1}
             <button
+                class="next-prev"
                 on:click={() => {
-                    pagination(pageNubmer, true);
-                }}>pre</button
+                    pagination(pageNubmer, true, null);
+                }}>Previous</button
             >
         {/if}
-        {#each arr as val, i}
-            {#if i % 5 == 0}
-                <button>{i / 5 + 1}</button>
+        {#each pagesRange as val, i}
+            {#if val == activePageNumber}
+                <button
+                    class="page-btn {activePageClass}"
+                    on:click={() => {
+                        pagination(val);
+                    }}>{val}</button
+                >
+            {:else}
+                <button
+                    class="page-btn {deactivePageClass}"
+                    on:click={() => {
+                        pagination(val);
+                    }}>{val}</button
+                >
             {/if}
         {/each}
-        {#if pageNubmer < arr.length - 1}
+        {#if activePageNumber < Math.ceil((arr.length - 1)/5)}
             <button
+                class="next-prev"
                 on:click={() => {
-                    pagination(pageNubmer);
-                }}>next</button
+                    pagination(pageNubmer, null, true);
+                }}>Next</button
             >
         {/if}
     </ul>
 </div>
+
+<style>
+    @font-face {
+        font-family: "Interstate";
+        src: url("../../assets/fonts/Interstate.ttf") format("truetype");
+    }
+    * {
+        font-family: "Interstate";
+    }
+    .next-prev {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 19px;
+        color: #3c4043;
+        background-color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+    .page-btn {
+        margin-left: 1%;
+        border-radius: 5px;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        background: #005faa;
+        color: #fff;
+        border: none;
+    }
+    .deactive {
+        background: #fff;
+        color: rgb(0, 0, 0);
+        border: none;
+    }
+    .active {
+        background: #005faa;
+        color: #fff;
+    }
+</style>
