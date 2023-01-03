@@ -3,11 +3,11 @@
 <script>
   // @ts-nocheck
 
+  // @ts-ignore
   //svg imports
   import arrowUp from "../../assets/arrowUp.svg";
   import dropDown from "../../assets/cr.svg";
   import redArrow from "../../assets/redArrow.svg";
-  // @ts-ignore
   import { chart } from "svelte-apexcharts";
   import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
   import {
@@ -17,7 +17,8 @@
     billNumber,
     getToken,
   } from "../../js/store";
-
+  import MicSunSelect from "./MIC-SunSelect.svelte";
+  import { slide } from "svelte/transition";
   //state
   export let dataLables = [$date, $CopmarsionDate];
   export let demandIsightsData = [79];
@@ -44,7 +45,6 @@
   }
 
   ///////// acordion functionality
-  import { slide } from "svelte/transition";
   let isOpen = false;
   let svgId = "rotate-svg-" + isOpen;
 
@@ -89,101 +89,104 @@
 {:else if $error}
   <h1>{$error}</h1>
 {:else if $data.VisibilityTab == true}
-  <div class="card">
-    <div id="header">
-      <h5 class="title">MY BILLING INSIGHTS</h5>
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <img
-        src={dropDown}
-        alt=""
-        id={svgId}
-        on:click={toggle}
-        aria-expanded={isOpen}
-      />
-    </div>
-    {#if isOpen}
-      <div transition:slide={{ duration: 300 }}>
-        <div id="tab-container">
-          <div id="tabs">
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <h6 id={"btn" + tab1} on:click={() => activateTab("1", "2")}>
-              Annual Comparison
-            </h6>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <h6 id={"btn" + tab2} on:click={() => activateTab("2", "1")}>
-              Monthly Comparison
-            </h6>
-          </div>
-          <div id={"tab1" + tab1}>
-            <div class="chart-container" transition:slide={{ duration: 300 }}>
-              {#key $billNumber}
-                <div use:chart={options1} />
-              {/key}
-            </div>
-          </div>
-          <div id={"tab1" + tab2}>
-            <div class="chart-container" transition:slide={{ duration: 300 }}>
-              {#key $billNumber}
-                <div use:chart={options1} />
-              {/key}
-            </div>
-          </div>
-        </div>
-        <div class="content">
-          <h6 class="label">THIS MONTH</h6>
-          <div class="val-content">
-            <p class="value">{$data.valueConsumption} {$data.unit}</p>
-            <p class="percentage">
-              <span
-                class={avgClass}
-                style="background-color:{$data.colorConsumption}"
-              >
-                <img src={redArrow} class="arrow" alt="" />
-                {thisMonthComparisonPercentage}% {$data.unit}</span
-              >
-            </p>
-          </div>
-        </div>
-        <div class="content">
-          <h6 class="label">Avg. Temp.</h6>
-          <div class="val-content">
-            <p class="value">{$data.valueTemp + "°"}</p>
-            <p class="percentage">
-              <img src={arrowUp} class="arrow" alt="" />
-              <span class="blue" style="background-color:{$data.colorTemp}"
-                >{$data.valueTemp + "°"}</span
-              >
-            </p>
-          </div>
-        </div>
-        <h4 class="title-2">MY Demand INSIGHTS</h4>
-        <div class="chart-container">
-          {#key $date}
-            <div class="sub-container"><div use:chart={options2} /></div>
-            <div class="sub-container"><div use:chart={options3} /></div>
-          {/key}
-        </div>
-        <div class="content">
-          <h6 class="label">THIS MONTH</h6>
-          <div class="val-content">
-            <p class="value">{$data.valueConsumption}% {$data.unit}</p>
-            <p class="percentage">
-              <img src={redArrow} class="arrow" alt="" />
-              <span
-                class={avgClass}
-                style="background-color:{$data.colorConsumption}"
-                >{thisMonthComparisonPercentage}% {$data.unit}</span
-              >
-            </p>
-          </div>
-        </div>
-        <hr id="hr-footer" />
-        <div id="footer">
-          <p>Insight title here</p>
-          <button>VIEW</button>
-        </div>
+  <div class="insights-container">
+    <div class="card">
+      <div id="header">
+        <h5 class="title">MY BILLING INSIGHTS</h5>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <img
+          src={dropDown}
+          alt=""
+          id={svgId}
+          on:click={toggle}
+          aria-expanded={isOpen}
+        />
       </div>
-    {/if}
+      {#if isOpen}
+        <div transition:slide={{ duration: 300 }}>
+          <div id="tab-container">
+            <div id="tabs">
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <h6 id={"btn" + tab1} on:click={() => activateTab("1", "2")}>
+                Annual Comparison
+              </h6>
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <h6 id={"btn" + tab2} on:click={() => activateTab("2", "1")}>
+                Monthly Comparison
+              </h6>
+            </div>
+            <div id={"tab1" + tab1}>
+              <div class="chart-container" transition:slide={{ duration: 300 }}>
+                {#key $billNumber}
+                  <div use:chart={options1} />
+                {/key}
+              </div>
+            </div>
+            <div id={"tab1" + tab2}>
+              <div class="chart-container" transition:slide={{ duration: 300 }}>
+                {#key $billNumber}
+                  <div use:chart={options1} />
+                {/key}
+              </div>
+            </div>
+          </div>
+          <div class="content">
+            <h6 class="label">THIS MONTH</h6>
+            <div class="val-content">
+              <p class="value">{$data.valueConsumption} {$data.unit}</p>
+              <p class="percentage">
+                <span
+                  class={avgClass}
+                  style="background-color:{$data.colorConsumption}"
+                >
+                  <img src={redArrow} class="arrow" alt="" />
+                  {thisMonthComparisonPercentage}% {$data.unit}</span
+                >
+              </p>
+            </div>
+          </div>
+          <div class="content">
+            <h6 class="label">Avg. Temp.</h6>
+            <div class="val-content">
+              <p class="value">{$data.valueTemp + "°"}</p>
+              <p class="percentage">
+                <img src={arrowUp} class="arrow" alt="" />
+                <span class="blue" style="background-color:{$data.colorTemp}"
+                  >{$data.valueTemp + "°"}</span
+                >
+              </p>
+            </div>
+          </div>
+          <h4 class="title-2">MY Demand INSIGHTS</h4>
+          <div class="chart-container">
+            {#key $date}
+              <div class="sub-container"><div use:chart={options2} /></div>
+              <div class="sub-container"><div use:chart={options3} /></div>
+            {/key}
+          </div>
+          <div class="content">
+            <h6 class="label">THIS MONTH</h6>
+            <div class="val-content">
+              <p class="value">{$data.valueConsumption}% {$data.unit}</p>
+              <p class="percentage">
+                <img src={redArrow} class="arrow" alt="" />
+                <span
+                  class={avgClass}
+                  style="background-color:{$data.colorConsumption}"
+                  >{thisMonthComparisonPercentage}% {$data.unit}</span
+                >
+              </p>
+            </div>
+          </div>
+          <hr id="hr-footer" />
+          <div id="footer">
+            <p>Insight title here</p>
+            <button>VIEW</button>
+          </div>
+        </div>
+      {/if}
+    </div>
+    <MicSunSelect {token} />
   </div>
 {:else}
   <h1>error</h1>
@@ -197,17 +200,24 @@
   * {
     font-family: "Interstate";
   }
-
+  .insights-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+  }
   .card {
     display: flex;
     flex-direction: column;
     align-items: center;
     align-items: center;
-    width: 30%;
+    width: 100%;
     padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
   }
   #header {
     position: relative;
@@ -459,7 +469,7 @@
   }
   /*tabs*/
   #tab-container {
-    width:100%;
+    width: 100%;
   }
   #tabs {
     display: flex;

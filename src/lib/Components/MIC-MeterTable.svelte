@@ -3,6 +3,8 @@
 <script>
     // @ts-nocheck
     import toggle from "../../assets/cr.svg";
+    import toolTip from "../../assets/toolTip.svg";
+    import verticalLine from "../../assets/vertical-line.svg";
     import { slide } from "svelte/transition";
     import { fetchstore } from "../../js/store";
     import { chart } from "svelte-apexcharts";
@@ -63,7 +65,7 @@
             [gas, tempereature],
             x,
             ["#044F8D"],
-            "1150px",
+            "1210px",
             650
         );
     }
@@ -145,73 +147,59 @@
                             {/if}
                         </table>
                     {/if}
-
-                    <LightPaginationNav
-                        totalItems={items.length}
-                        {pageSize}
-                        {currentPage}
-                        limit={1}
-                        showStepOptions={true}
-                        on:setPage={(e) => (currentPage = e.detail.page)}
-                    />
                 {/if}
-                <!-- {#if tableData}
-                    <table class="table">
-                        <tr>
-                            <th>Service</th>
-                            <th>Meter Number</th>
-                            <th>Read Date</th>
-                            <th>Biling Read</th>
-                            <th>Current Reading</th>
-                            <th>Previous Reading</th>
-                            <th>Total Used</th>
-                        </tr>
-                        {#each Object.values(tableData) as row}
-                            <tr
-                                class="table-row"
-                                on:click={() => {
-                                    handleSelectedMeter(row);
-                                }}
-                            >
-                                {#each Object.values(row.meterTable) as value}
-                                    <td>{value}</td>
-                                {/each}
-                            </tr>
-                        {/each}
-                        {#if $data.meterLocation}
-                            <div id="location">
-                                <span
-                                    ><strong> Meter Location:</strong>
-                                    {$data.meterLocation}</span
-                                >
-                            </div>
-                        {/if}
-                    </table>
-                {/if} -->
-                <!---------tabs---------------->
-                <div id="tab-container">
-                    <div id="tabs">
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <h6
-                            id={"btn" + tab1}
-                            on:click={() => activateTab("1", "2")}
-                        >
-                            Daily
-                        </h6>
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <h6
-                            id={"btn" + tab2}
-                            on:click={() => activateTab("2", "1")}
-                        >
-                            Monthly
-                        </h6>
-                    </div>
-                    <div id={"tab1" + tab1}>
-                        <div class="chart" use:chart={options} />
-                    </div>
-                    <div id={"tab1" + tab2}>
-                        <div class="chart" use:chart={options} />
-                    </div>
+            </div>
+            <div class="options">
+                <LightPaginationNav
+                    totalItems={items.length}
+                    {pageSize}
+                    {currentPage}
+                    limit={1}
+                    showStepOptions={true}
+                    on:setPage={(e) => (currentPage = e.detail.page)}
+                />
+            </div>
+            <div id="tab-container">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div id="tabs">
+                    <h6
+                        id={"btn" + tab1}
+                        on:click={() => activateTab("1", "2")}
+                    >
+                        Daily
+                    </h6>
+                    <h6
+                        id={"btn" + tab2}
+                        on:click={() => activateTab("2", "1")}
+                    >
+                        Monthly
+                    </h6>
+                </div>
+                <div class="options">
+                    <input type="checkbox" name="trmprature" id="temp" />
+                    <span>Temperature</span>
+                    <img
+                        src={toolTip}
+                        alt="usage chart tool tip"
+                        class="tool-tip"
+                    />
+                </div>
+                <div id={"tab1" + tab1}>
+                    <div class="chart" use:chart={options} />
+                </div>
+                <div id={"tab1" + tab2}>
+                    <div class="chart" use:chart={options} />
+                </div>
+            </div>
+            <div class="information-box">
+                <div>
+                    <h6>AVG. COST PER DAY</h6>
+                    <h4>$11,098.98</h4>
+                </div>
+                <img src={verticalLine} alt="" />
+                <div>
+                    <h6>AVG. TEMP PER DAY</h6>
+                    <h4>65°</h4>
                 </div>
             </div>
         {/if}
@@ -280,6 +268,26 @@
         order: 0;
         align-self: stretch;
         flex-grow: 0;
+    }
+    .options {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+    .options span {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 22px;
+    }
+    .tool-tip {
+        cursor: pointer;
+    }
+    #temp {
+        width: 19px;
+        height: 19px;
     }
     table {
         border-collapse: collapse;
@@ -366,7 +374,7 @@
     }
     /*tabs*/
     #tab-container {
-        width: 80%;
+        width: 93%;
     }
     #tabs {
         display: flex;
@@ -410,6 +418,54 @@
         display: flex;
     }
     /*--------*/
+    .information-box {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 16px;
+        gap: 16px;
+        max-width: 500px;
+        height: 97px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+    }
+
+    .information-box div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 8px;
+        max-width: 300px;
+        height: 65px;
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+    }
+    .information-box div h6 {
+        display: inline-block;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 19px;
+        letter-spacing: -0.02em;
+        color: #6c6c6c;
+        margin: 0;
+    }
+    .information-box div h4 {
+        display: inline-block;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 32px;
+        line-height: 38px;
+        color: #000000;
+        margin: 0;
+    }
     @media screen and (max-width: 1000px) {
         .card {
             display: flex;
@@ -423,6 +479,10 @@
         }
         .table-container {
             overflow-x: scroll;
+        }
+        #tab12 {
+            display: flex;
+            overflow-x: auto;
         }
     }
 </style>

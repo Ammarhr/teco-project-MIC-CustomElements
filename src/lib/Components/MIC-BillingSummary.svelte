@@ -2,28 +2,27 @@
 
 <script>
   // @ts-nocheck
-
   //svg imports
   import toggle from "../../assets/cr.svg";
-  // import toggle from "../../assets/Icon.svg";
+  import breakdownToggle from "../../assets/breakdown-drop-icon.svg";
   import electricityIcon from "../../assets/Iconawesome-bolt.svg";
-  //state
-  // export let servicePeriod = "November 25, 2021 - December 28, 2022";
-  // export let dailyBasicServiceCharge = 36.38;
-  // export let billingDemandCharge = 387.2;
-  // export let peakDemandCharge = 91.12;
-  // export let energyCharge = { onPeak: 156.16, offPeak: 243.61 };
-  // export let fuelCharge = { onPeak: 437.98, offPeak: 1267.1 };
-  // export let capacityCharge = 7.92;
-  // export let stormProtectionCharge = 51.92;
-  // export let energyConservationCharge = 71.28;
-  // export let environmentalCostRecovery = 73.11;
-  // export let cleanEnergyTransitionMechanism = 96.8;
-  export let electricChargesSubtotal = 3638.58;
+  import toolTip from "../../assets/tool-tip-icon.svg";
   export let item = { name: "Item" };
   export let token;
-  let keys;
   let billingData;
+  let toggleArray = [];
+
+  class BillingSummary {
+    constructor(service) {
+      this.isOpen = true;
+      this.service = service;
+    }
+    toggleContainer(card, breakDown) {
+      if (card) this.isOpen = !this.isOpen;
+      if (breakDown) subIsOpen = !subIsOpen;
+      svgId = "rotate-svg-" + this.isOpen;
+    }
+  }
 
   import { fetchstore } from "../../js/store";
 
@@ -32,99 +31,136 @@
     "../../../data/ChargeDetails.json",
     token
   );
-  const getPropertyTitle = (str) => {
-    return (
-      str
-        .split(/(?=[A-Z])/)
-        .join(" ")
-        .charAt(0)
-        .toUpperCase() +
-      str
-        .split(/(?=[A-Z])/)
-        .join(" ")
-        .slice(1)
-    );
-  };
+  // const getPropertyTitle = (str) => {
+  //   return (
+  //     str
+  //       .split(/(?=[A-Z])/)
+  //       .join(" ")
+  //       .charAt(0)
+  //       .toUpperCase() +
+  //     str
+  //       .split(/(?=[A-Z])/)
+  //       .join(" ")
+  //       .slice(1)
+  //   );
+  // };
   ///////// acordion functionality
 
   import { slide } from "svelte/transition";
   let isOpen = false;
+  let subIsOpen = true;
   let svgId = "rotate-svg-" + isOpen;
 
-  const toggleContainer = () => {
-    isOpen = !isOpen;
-    svgId = "rotate-svg-" + isOpen;
+  const toggleContainer = (i) => {
+    toggleArray[i] = !toggleArray[i];
+    svgId = "rotate-svg-" + this.isOpen;
   };
-
   ////////////////////////
 
-  $: if ($data && $data.electricityCharges) {
-    billingData = $data.electricityCharges.billSummary;
-    keys = Object.keys(billingData);
+  $: if ($data && $data.services) {
+    for (let i = 0; i > toggleArray.length; i++) {
+      toggleArray.push(false);
+      // arr.push(new BillingSummary({ service }));
+    }
+    billingData = $data.services;
   }
 </script>
 
-<div class="card">
-  {#if $loading}
-    Loading: {$loading}
-  {:else if $error}
-    Error: {$error}
-  {:else}
-    <div id="bills-header">
-      <h4 id="title">BILLING SUMMARY</h4>
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <img
-        src={toggle}
-        alt=""
-        id={svgId}
-        on:click={toggleContainer}
-        aria-expanded={isOpen}
-      />
-    </div>
-    {#if isOpen}
-      <h3 id="sectiontitle" transition:slide={{ duration: 300 }}>
-        <span><img src={electricityIcon} alt="" style="width: 15px;" /></span>
-        {$data.electricityCharges.BillsTitle}
-      </h3>
-      <p id="comment">
-        Service Period: {$data.electricityCharges.servicePeriod}
-      </p>
-      <div id="content" transition:slide={{ duration: 300 }}>   
-        {#each keys as value, i}
-          {#if value != "energyCharge" && value != "fuelCharge"}
-            <div class="row" id="daily-basic-service-charge">
-              <p class="first-label">{getPropertyTitle(value)}</p>
-              <p class="sub-label">{billingData[value].consumption}</p>
-              <p class="value">${billingData[value].cost}</p>
-            </div>
-          {:else}
-            <div class="multi-row" id="EnergyCharge">
-              <h5 class="bold-label">{getPropertyTitle(value)}</h5>
-              <div class="sub-row" id="energy-charge-on-peak">
-                <p class="first-label">On Peak</p>
-                <p class="sub-label">{billingData[value].onPeak.consumption}</p>
-                <p class="value">${billingData[value].onPeak.cost}</p>
-              </div>
-              <div
-                class="sub-row"
-                id="energy-charge-off-peak"
-                transition:slide={{ duration: 300 }}
-              >
-                <p class="first-label">Off Peak</p>
-                <p class="sub-label">{billingData[value].onPeak.consumption}</p>
-                <p class="value">${billingData[value].offPeak.cost}</p>
-              </div>
-            </div>
-          {/if}
-        {/each}
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+{#if $loading}
+  Loading: {$loading}
+{:else if $error}
+  Error: {$error}
+{:else}
+  <div class="billing-container">
+    {#each $data.services as billService, i}
+      <div class="card">
+        <div id="bills-header">
+          <h4 id="title">BILLING SUMMARY</h4>
+          <img
+            src={toggle}
+            alt=""
+            id={svgId}
+            on:click={() => toggleContainer(i)}
+            aria-expanded={isOpen}
+          />
+        </div>
+        {#if toggleArray[i]}
+          <h3 id="sectiontitle" transition:slide={{ duration: 300 }}>
+            <span
+              ><img src={electricityIcon} alt="" style="width: 15px;" /></span
+            >
+            {billService.title}
+          </h3>
+          <p id="comment">
+            Service Period: {billService.servicePeriod}
+          </p>
+          <div id="content" transition:slide={{ duration: 300 }}>
+            {#each billService.sections as section}
+              <img src="" alt="{section.title} icon" />
+              <p>{section.title}</p>
+              {#if section.controls}
+                {#each section.controls as control}
+                  <div class="row-container">
+                    <div class="row" id="daily-basic-service-charge">
+                      <p class="first-label">
+                        {control.label}
+                        {#if control.tooltip}
+                          <img src={toolTip} alt="" />
+                        {/if}
+                      </p>
+                      <p class="sub-label">{control.description}</p>
+                      <p class="value">{control.value}</p>
+                    </div>
+                    {#if control.breakdown}
+                      <div class="breakdown-header">
+                        <h6>View Breakdown</h6>
+                        <img
+                          src={breakdownToggle}
+                          on:click={() => toggleContainer(false, true)}
+                          id={svgId}
+                          alt=""
+                          aria-expanded={isOpen}
+                        />
+                      </div>
+                      {#if subIsOpen}
+                        <div
+                          class="break-down"
+                          transition:slide={{ duration: 300 }}
+                        >
+                          {#each control.breakdown as breakdown}
+                            <div class="sub-container">
+                              <h6 class="breakdown-label">{breakdown.label}</h6>
+                              <h6 class="breakdown-description">
+                                {breakdown.description}
+                              </h6>
+                              <h6 class="breakdown-values">
+                                {breakdown.value}
+                              </h6>
+                            </div>
+                          {/each}
+                        </div>
+                      {/if}
+                      {#if control.isTotal}
+                        <div
+                          class="sub-row total-row"
+                          id="electric-charges-subtotal"
+                        >
+                          <p class="first-label">{control.totalTitle}</p>
+                          <p class="value">${control.totalValue}</p>
+                        </div>
+                      {/if}
+                    {/if}
+                  </div>
+                {/each}
+              {/if}
+            {/each}
+          </div>
+        {/if}
       </div>
-      <div class="sub-row total-row" id="electric-charges-subtotal">
-        <p class="first-label">Electric Charges Subtotal</p>
-        <p class="value">${electricChargesSubtotal}</p>
-      </div>
-    {/if}
-  {/if}
-</div>
+    {/each}
+  </div>
+{/if}
 
 <style>
   @font-face {
@@ -133,6 +169,85 @@
   }
   * {
     font-family: "Interstate";
+  }
+  .billing-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 60%;
+  }
+  .breakdown-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+  }
+  .breakdown-header h6 {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 17px;
+    display: flex;
+    align-items: center;
+    color: #005faa;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    padding: 10px;
+    margin: 0;
+  }
+  .break-down {
+    padding: 16px 0px;
+    gap: 16px;
+    max-width: 100%;
+    max-height: 242px;
+    background: #f4f5f7;
+    border-radius: 6px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
+  .sub-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 15px;
+  }
+  .breakdown-label {
+    font-family: "Interstate";
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 28px;
+    color: #000000;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0;
+  }
+  .breakdown-description {
+    font-family: "Interstate";
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    color: #005faa;
+    margin: 0;
+  }
+  .breakdown-values {
+    font-family: "Interstate";
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: right;
+    color: #000000;
+    margin: 0;
   }
   #bills-header {
     display: flex;
@@ -160,25 +275,20 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 16px;
-    min-width: 60%;
+    min-width: 90%;
     padding: 20px;
+    margin-bottom: 5%;
   }
-
-  .row {
-    margin-bottom: 10px;
+  .row-container {
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(150, 150, 150, 0.3);
+  }
+  .row {
+    /* margin-bottom: 10px;
+    padding-bottom: 10px; */
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  .multi-row {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(150, 150, 150, 0.3);
-    display: flex;
-    flex-direction: column;
   }
 
   .sub-row {
@@ -218,23 +328,13 @@
   }
 
   .sub-label {
-    font-weight: 400;
-    padding: 5px 15px;
-    margin: 0;
-    text-align: left;
     color: #005faa;
-    width: 38%;
     font-style: italic;
-  }
-
-  .bold-label {
-    color: #4b4b4b;
-    font-weight: 500;
-    padding: 5px 0;
+    font-weight: 400;
     margin: 0;
-    font-size: 17px;
-    text-align: left;
-    width: 100%;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 28px;
   }
 
   .total-row {
@@ -242,7 +342,10 @@
   }
 
   .first-label {
-    color: #4b4b4b;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    color: #000000;
     padding: 5px 0;
     margin: 0;
     text-align: left;
@@ -250,11 +353,24 @@
   }
 
   .value {
-    padding: 5px 15px;
-    margin: 0;
-    font-size: 16px;
-    width: 15%;
-    text-align: right;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+  }
+  #electric-charges-subtotal {
+    margin-top: 10px;
+    border-top: 2px solid #bbb;
+  }
+  #electric-charges-subtotal p {
+    font-family: "Interstate";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    color: #005faa;
   }
   @media screen and (max-width: 1000px) {
     .card {

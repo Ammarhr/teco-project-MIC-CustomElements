@@ -167,7 +167,15 @@ export const renderMixChart = (data, labels, colorsArr, width, height, unit) => 
             offsetY: -20,
         },
         legend: {
-            show: true
+            show: true,
+            horizontalAlign: 'right', 
+            markers: {
+                width: 12,
+                height: 2,
+                strokeWidth: 0,
+                strokeColor: '#fff',
+                radius: 0,
+            },
         },
 
         xaxis: {
