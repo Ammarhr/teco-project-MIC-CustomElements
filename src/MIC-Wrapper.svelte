@@ -10,9 +10,8 @@
   import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import Insights from "./lib/Components/MIC-Insights.svelte";
   import MeterTable from "./lib/Components/MIC-MeterTable.svelte";
-
   import MicTest from "./lib/Components/MIC-test.svelte";
-
+  import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
   import { getToken } from "./js/store";
 
   let apiToken;
@@ -25,35 +24,32 @@
   }
 </script>
 
-
-  {#if $loading}
+{#if $loading}
   Loading: {$loading}
-  {:else if $error}
+{:else if $error}
   Error: {$error}
-  {:else}
-
+{:else}
   <div class="container">
-  <div class="Header"><HeaderInformation token={apiToken} /></div>
-  <div class="Billing-message">
-    <!-- <BillsHistory token={apiToken} /> -->
-    <MicTest token={apiToken} />
-        <ImportantMessage token={apiToken} />
-      </div>
-      <div id="bill-selector">
-        <BillSelector token={apiToken} />
-      </div>
-      <div class="Billing">
-        <BillingSummary token={apiToken} />
-        <Insights token={apiToken} />
-      </div>
-      <div class="meter">
-        <MeterTable token={apiToken}/>
-      </div>
+    <div class="Header"><HeaderInformation token={apiToken} /></div>
+    <div class="Billing-message">
+      <!-- <BillsHistory token={apiToken} /> -->
+      <MicTest token={apiToken} />
+      <ImportantMessage token={apiToken} />
     </div>
-  {/if}
+    <div id="bill-selector">
+      <BillSelector token={apiToken} />
+    </div>
+    <div class="Billing">
+      <BillingSummary token={apiToken} />
+      <Insights token={apiToken} />
+    </div>
+    <div class="meter">
+      <MeterTable token={apiToken} />
+    </div>
+  </div>
+{/if}
+
 <style>
-
-
   .container {
     display: flex;
     flex-direction: column;
@@ -66,7 +62,7 @@
     order: 0;
     flex-grow: 0;
   }
-   .Billing {
+  .Billing {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -153,7 +149,6 @@
       width: 100%;
       height: fit-content;
       gap: 50px;
-      
     }
     #bill-selector {
       display: flex;

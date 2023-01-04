@@ -31,19 +31,6 @@
     "../../../data/ChargeDetails.json",
     token
   );
-  // const getPropertyTitle = (str) => {
-  //   return (
-  //     str
-  //       .split(/(?=[A-Z])/)
-  //       .join(" ")
-  //       .charAt(0)
-  //       .toUpperCase() +
-  //     str
-  //       .split(/(?=[A-Z])/)
-  //       .join(" ")
-  //       .slice(1)
-  //   );
-  // };
   ///////// acordion functionality
 
   import { slide } from "svelte/transition";

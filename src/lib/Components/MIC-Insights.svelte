@@ -2,12 +2,13 @@
 
 <script>
   // @ts-nocheck
-
   // @ts-ignore
+
   //svg imports
   import arrowUp from "../../assets/arrowUp.svg";
   import dropDown from "../../assets/cr.svg";
   import redArrow from "../../assets/redArrow.svg";
+  //////
   import { chart } from "svelte-apexcharts";
   import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
   import {
@@ -18,6 +19,8 @@
     getToken,
   } from "../../js/store";
   import MicSunSelect from "./MIC-SunSelect.svelte";
+  import MicYearlyEnergy from "./MIC-YearlyEnergy.svelte";
+  import MicBulkDownload from "./MIC-BulkDownload.svelte";
   import { slide } from "svelte/transition";
   //state
   export let dataLables = [$date, $CopmarsionDate];
@@ -187,6 +190,9 @@
       {/if}
     </div>
     <MicSunSelect {token} />
+    <MicYearlyEnergy {token} />
+    <MicBulkDownload {token}/>
+
   </div>
 {:else}
   <h1>error</h1>
