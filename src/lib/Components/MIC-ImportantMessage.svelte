@@ -19,7 +19,7 @@
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "../../../data/messages.json",
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/messages.json",
     token
   );
 
@@ -91,6 +91,7 @@
                 Width: "30rem",
                 overflow: "hidden",
               }}
+            token={token}
             >
               <button on:click={showModal}><span>View</span></button>
             </Modal>

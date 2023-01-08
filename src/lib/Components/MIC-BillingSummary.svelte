@@ -28,7 +28,7 @@
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "../../../data/ChargeDetails.json",
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/ChargeDetails.json",
     token
   );
   ///////// acordion functionality
@@ -143,6 +143,12 @@
               {/if}
             {/each}
           </div>
+          {#if billService.total}
+            <div class="total">
+              <h6 class="total-label">Total Current Charges</h6>
+              <h6 class="total-value">${billService.total}</h6>
+            </div>
+          {/if}
         {/if}
       </div>
     {/each}
@@ -358,6 +364,49 @@
     display: flex;
     align-items: center;
     color: #005faa;
+  }
+  .total {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    max-width: 710px;
+    max-height: 92px;
+    background: #005faa;
+    border-radius: 6px;
+    flex: none;
+    order: 4;
+    flex-grow: 0;
+  }
+  .total-label {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 29px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0;
+  }
+  .total-value {
+    font-family: "Interstate";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 35px;
+    line-height: 42px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #ffffff;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0;
   }
   @media screen and (max-width: 1000px) {
     .card {

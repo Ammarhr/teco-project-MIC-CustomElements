@@ -1,3 +1,5 @@
+<svelte:options tag="mic-messagesdetails" />
+
 <script>
     // @ts-nocheck
 
@@ -12,7 +14,7 @@
 
     //mocking data
     const [data, loading, error, get] = fetchstore(
-        "../../../data/messages.json",
+        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/messages.json",
         "token 2022"
     );
 

@@ -1,4 +1,6 @@
+<svelte:options tag="mic-bulkdownload" />
 <script>
+
     // @ts-nocheck
     import backgroundPattern from "../../assets/background-pattern.svg";
     import { fetchstore } from "../../js/store";
@@ -6,7 +8,7 @@
 
     //mocking data
     const [data, loading, error, get] = fetchstore(
-        "../../../data/ChargeDetails.json",
+        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/ChargeDetails.json",
         token
     );
 </script>

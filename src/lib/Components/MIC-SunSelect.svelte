@@ -1,3 +1,5 @@
+<svelte:options tag="mic-sunSelect" />
+
 <script>
     // @ts-nocheck
 
@@ -16,7 +18,7 @@
     };
     ////////////////////////
     const [data, loading, error, get] = fetchstore(
-        "../../../data/sunSelect.json",
+        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/sunSelect.json",
         token
     );
     $: if ($data) {

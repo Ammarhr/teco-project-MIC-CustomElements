@@ -31,18 +31,24 @@
   export let item = { name: "Item" };
   let avgClass = "red"; //toggle style class (complete it later)
 
+  ///////// modal pop up dunctionality
+  import { writable } from "svelte/store";
+  import Modal from "svelte-simple-modal";
+  import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
+  const modal = writable(null);
+  const showModal = () => modal.set(MicInsightsRecomendation);
   //charts renderer
   let options1;
   let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
   let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
 
-  const [datatoken] = getToken("../../../data/Token.json", "Ammar");
+  const [datatoken] = getToken("https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Token.json", "Ammar");
 
   const [data, loading, error, get] = fetchstore(
-    "../../../data/Insights.json",
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json",
     token
   );
-  const [servicesData] = fetchstore("../../../data/Insights.json", token);
+  const [servicesData] = fetchstore("https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json", token);
   $: if ($billNumber) {
     get($datatoken.token);
   }
@@ -54,6 +60,7 @@
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
+    modal.set(null);
   };
   ////////// tabs functionality
   let tab1 = "1";
@@ -184,15 +191,24 @@
           <hr id="hr-footer" />
           <div id="footer">
             <p>Insight title here</p>
-            <button>VIEW</button>
+            <Modal
+            show={$modal}
+            styleWindow={{
+              boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.15)",
+              maxHeight: "62rem",
+              maxWidth: "50rem",
+              overflow: "hidden",
+            }}
+          >
+            <button on:click={showModal}>VIEW</button>
+          </Modal>
           </div>
         </div>
       {/if}
     </div>
     <MicSunSelect {token} />
     <MicYearlyEnergy {token} />
-    <MicBulkDownload {token}/>
-
+    <MicBulkDownload {token} />
   </div>
 {:else}
   <h1>error</h1>

@@ -10,7 +10,7 @@
   import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import Insights from "./lib/Components/MIC-Insights.svelte";
   import MeterTable from "./lib/Components/MIC-MeterTable.svelte";
-  import MicTest from "./lib/Components/MIC-test.svelte";
+  import MicTest from "./lib/Components/MIC-BalanceDetails.svelte";
   import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
   import { getToken } from "./js/store";
 

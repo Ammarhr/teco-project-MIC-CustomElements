@@ -15,7 +15,7 @@
     let options;
     let selectedMeter;
     const [data, loading, error, get] = fetchstore(
-        "../../../data/meterDataUsage.json",
+        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/meterDataUsage.json",
         token
     );
 

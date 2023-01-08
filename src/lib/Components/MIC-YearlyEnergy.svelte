@@ -1,3 +1,5 @@
+<svelte:options tag="mic-yearlyenergy" />
+
 <script>
     // @ts-nocheck
 
@@ -16,7 +18,7 @@
     };
     ////////////////////////
     const [data, loading, error, get] = fetchstore(
-        "../../../data/yearlyEnergy.json",
+        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/yearlyEnergy.json",
         token
     );
     $: if ($data && $data.YearlyValues) {

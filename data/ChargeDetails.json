@@ -9,6 +9,7 @@
       "rateSchadule": "General Service",
       "icon": "<font-awsome>/<material_icon>",
       "color": "#1112313",
+      "total": 1142.02,
       "sections": [
         {
           "title": "",
@@ -45,7 +46,7 @@
               "value": 36.38,
               "isTotal": true,
               "totalValue": 108.5,
-              "totalTitle":"Electric Charges Subtotal",
+              "totalTitle": "Electric Charges Subtotal",
               "breakdown": [
                 {
                   "label": "Supplemental Billing Demand",
@@ -142,7 +143,7 @@
               "label": "Capacity Charge",
               "tooltip": "Description",
               "description": "26 days @ $1.07000",
-              "value": 36.38,
+              "value": 22.38,
               "isTotal": false,
               "breakdown": [
                 {
@@ -181,6 +182,17 @@
               "description": "26 days @ $1.07000",
               "value": 36.38,
               "isTotal": false,
+              "totalValue": 108.5,
+              "totalTitle": "Gas Charges Subtotal"
+            },
+            {
+              "label": "Billing Demand Charge",
+              "tooltip": "Description",
+              "description": "26 days @ $1.07000",
+              "value": 36.38,
+              "isTotal": true,
+              "totalValue": 108.5,
+              "totalTitle": "Gas Charges Subtotal",
               "breakdown": [
                 {
                   "label": "Capacity Charge",

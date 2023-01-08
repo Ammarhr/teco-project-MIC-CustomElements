@@ -1,3 +1,4 @@
+
 <script>
     // @ts-nocheck
 
@@ -13,7 +14,7 @@
 
     //mocking data
     const [data, loading, error, get] = fetchstore(
-        "../../../data/AccountBalanceData.json",
+        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json",
         token
     );
 
