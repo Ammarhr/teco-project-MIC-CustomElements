@@ -1,0 +1,20 @@
+.tecoBillBanner {
+    // image and color
+
+    background-image: url('assets/Mask1.svg');
+    background-size: cover;
+    background-color: #005faa;
+    color: white;
+
+    .tecoBillBannerBody {
+        min-height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        >a {
+            text-align: left;
+            color: white;
+        }
+    }
+}

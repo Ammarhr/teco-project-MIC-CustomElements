@@ -18,21 +18,11 @@
     "Ammar"
   );
 
-  // $: if ($apiToken) {
-  // }
   $: if ($apiToken && $apiToken.token) {
     console.log("hapipi", $apiToken.token);
     token1 = $apiToken.token;
-    
   }
   $: token1 = token1;
-  // import "./lib/Components/MIC-HeaderInformation-style.css";
-  // import "./lib/Components/MIC-MeterTable-style.css";
-  // import "./lib/Components/MIC-Insights-style.css";
-  // import "./lib/Components/MIC-BillingSummary-style.css";
-  // import "./lib/Components/MIC-BillSelectorAndDownload-style.css";
-  // import "./lib/Components/MIC-ImportantMessage-style.css";
-  // import "./lib/Components/MIC-BalanceSummary-style.css";
 </script>
 
 {#if $loading && token1}
@@ -42,9 +32,10 @@
 {:else if token1}
   <div class="container">
     <div class="Header">
-      <mic-headerinformation token={token1}></mic-headerinformation>
+      <!-- <mic-headerinformation token={token1}></mic-headerinformation> -->
+      <MicHeaderInformation token={token1} />
     </div>
-    <div class="Billing-message">
+    <!-- <div class="Billing-message">
       <mic-balancesummary token={token1}></mic-balancesummary>
       <mic-importentmessage token={token1} ></mic-importentmessage>
     </div>
@@ -57,13 +48,13 @@
     </div>
     <div class="meter">
       <mic-metertable token={token1} ></mic-metertable>
-    </div>
+    </div> -->
   </div>
 {:else}
   <h1>no load</h1>
 {/if}
 
-<style> 
+<style>
   .container {
     display: flex;
     flex-direction: column;

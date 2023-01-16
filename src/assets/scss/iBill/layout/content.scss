@@ -1,0 +1,10 @@
+.tecoLayout {
+    .tecoBill-region-content {
+        padding: 25px 60px;
+
+
+        @media screen and (max-width: $screen-sm-max) {
+            padding: 25px 20px;
+        }
+    }
+}

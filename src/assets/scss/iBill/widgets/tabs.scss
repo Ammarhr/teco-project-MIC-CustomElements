@@ -1,0 +1,26 @@
+.tecoLayout {
+    .mx-tabcontainer-tabs {
+        justify-content: space-between;
+
+        > li {
+            float: none;
+            width: 100%;
+            text-align: center;
+            border: none;
+            border-bottom: 2px solid #ced0d3;
+        }
+
+        > li.active {
+                color: #0a1325;
+                border: none;
+                border-bottom: 2px solid $teco-primary-blue;
+                border-bottom-color: $teco-primary-blue !important;
+                > a {
+                    border: none;
+            }
+        }
+        a:focus {
+            outline: none;
+        }
+    }
+}

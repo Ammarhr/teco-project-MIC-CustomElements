@@ -1,0 +1,36 @@
+.tecoLayout {
+    .widget-accordion-group-header-button {
+        padding: 0!important;
+        color: $teco-primary-blue !important;
+
+        h2 {
+            color: $teco-primary-blue !important;
+            font-size: 18px !important;
+        }
+
+        h4 {
+            color: $teco-primary-blue !important;
+            font-size: 12px !important;
+        }
+
+        svg {
+            padding: 8px;
+            background-color: #ecf7ff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            color: white;
+            fill: #005faa;
+            stroke: #005faa;
+        }
+
+        &:focus, &:hover, &:active {
+            background: revert !important;
+            
+        }
+    }
+    .widget-accordion-group-content {
+        padding: 0 !important;
+        margin-top: 16px;
+    }
+}

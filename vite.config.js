@@ -29,22 +29,19 @@ export default defineConfig({
     //     }
     //   },
     // },
-    compilerOptions: {
-      customElement: true,
-      // enableSourcemap: true,
-      // sourcemap: true,
-    },
-    preprocess: sveltePreprocess({
-      sourceMap: true,
-    }),
+    // compilerOptions: {
+    //   customElement: true,
+    //   // enableSourcemap: true,
+    //   // sourcemap: true,
+    // },
+    // preprocess: sveltePreprocess({
+    //   sourceMap: true,
+    // }),
   }),
   ],
-  // preprocess: sveltePreprocess({
-  //   scss: {
-  //     includePaths: ['src'],
-  //   },
-  //   postcss: {
-  //     plugins: [],
-  //   },
-  // }),
+  preprocess: sveltePreprocess({
+    scss: {
+      includePaths: ['src'],
+    },
+  }),
 })

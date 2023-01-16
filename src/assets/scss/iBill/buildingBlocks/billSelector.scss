@@ -1,0 +1,124 @@
+.tecoLayout {
+    .tecoBillSelector-v2 {
+        font-weight: 400;
+
+        .tecoInfoLabel h4 {
+            font-weight: 400;
+            color: $teco-primary-blue;
+            width: max-content;
+            display: block;
+        }
+
+        .tecobillSelectorDetailRow {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tecoBillSelect {
+            width: 250px;
+            flex: revert;
+            select {
+                border-color: $teco-primary-blue;
+                text-align: center;
+                // padding-left: 30px;
+
+                // option {
+                //     padding: 8px;
+                // }
+                // option:hover, option:checked {
+                //     background-color: $teco-primary-blue;
+                // }
+            }
+ 
+        }
+
+        .tecoBillSelectorSmallText {
+            border-bottom: 2px solid $teco-primary-blue;
+        }
+
+        .tecoBillSelectorDownloadContainer {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+
+            > .tecoInfoLabel {
+                > h4 {
+                    display: none;
+                }
+            } 
+        }
+
+        .tecoBillSelectorDownloadButton {
+            &>span {
+                color: $teco-primary-blue;
+            }
+
+            color: $teco-primary-blue;
+            border-color: $teco-primary-blue;
+        }
+
+        // small container
+        @container (inline-size < 550px) {
+            text-align: center !important;
+            gap: 10px;
+
+            .tecoInfoLabel h4 {
+                color: $teco-dark-grey;
+                text-align: center;
+                width: 100%;
+                display: block !important;
+                margin: 0;
+            }
+
+            .tecobillSelectorDetailRow {
+                gap: 20px !important;
+                margin-top: 20px;
+                flex-direction: column;
+            }
+
+            .tecoBillSelectorSmallText {
+                width: fit-content;
+                margin: auto;
+            }
+
+            .tecoBillSelectorDownloadContainer {
+                flex-direction: column;
+            }
+
+            .tecoBillSelectorDownloadButton {
+                width: 100%;
+                &>span {
+                    display: none;
+                }
+
+            }
+        }
+
+        // too large
+        @container (inline-size > 990px) {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+            .tecoInfoLabel {
+                margin-right: 4%;
+                
+                h4 {
+                    color: $teco-dark-grey;
+                    display: block !important;
+                    margin: 0;
+                }
+            }
+
+            .tecobillSelectorDetailRow {
+                flex-grow: 2;
+            }
+
+        }
+    }
+}

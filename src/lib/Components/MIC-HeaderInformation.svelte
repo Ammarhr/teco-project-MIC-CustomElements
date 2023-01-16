@@ -30,6 +30,7 @@
       statusClass = "Inactive";
     }
   }
+  import '../../assets/scss/iBill/buildingBlocks/infoBar.scss'
   //mocking data
 </script>
 
@@ -39,6 +40,68 @@
   {:else if $error}
     Error: {$error}
   {:else if account}
+    <div
+      class="mx-name-layoutGrid2 mx-layoutgrid mx-layoutgrid-fluid container-fluid tecoInfoBar tecoGenericShadow marginReset paddingReset"
+    >
+      <div class="row marginReset paddingReset">
+        <div class="col-lg col-md col tecoInfoBarCol tecoPrimaryBG roundedTop">
+          <div class="mx-name-container1 tecoInfoLabel">
+            <span class="mx-text mx-name-text2">Account Details</span>
+          </div>
+          <div class="mx-name-container2 oneLined">
+            <button
+              type="button"
+              class="btn mx-button mx-name-actionButton1 btn-default"
+              title=""
+              data-button-id="68.Teco.BuildingBlocksShowcase.actionButton1"
+              data-disabled="false"
+            >
+              Change Account</button
+            ><img
+              class="mx-image mx-name-staticImage1 spacing-outer-left-medium"
+              src="http://localhost:8081/img/Teco$Icons$Star.png?638094750197721508"
+              role="presentation"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row marginReset paddingReset">
+        <div
+          class="col-lg col-md col tecoInfoBarCol roundedBottom tecoWhiteBG tecoInfoBarDetails"
+        >
+          <div class="mx-name-container3">
+            <img
+              class="mx-image mx-name-staticImage2 spacing-outer-right-medium hide-phone"
+              src="http://localhost:8081/img/Teco$Icons$Liquid.png?638094750197721508"
+              role="presentation"
+            /><label
+              id="68.Teco.BuildingBlocksShowcase.label1_pkj_41"
+              class="mx-name-label1 spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
+              >Account #:
+            </label><span class="mx-text mx-name-text3"> 1234567890</span>
+          </div>
+          <div class="mx-name-container4">
+            <label
+              id="68.Teco.BuildingBlocksShowcase.label2_pkj_42"
+              class="mx-name-label2 spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
+              >Address:
+            </label><span class="mx-text mx-name-text4">
+              123 Main St, Tampa FL</span
+            >
+          </div>
+          <div class="mx-name-container5">
+            <label
+              id="68.Teco.BuildingBlocksShowcase.label3_pkj_43"
+              class="mx-name-label3 spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
+              >Status:
+            </label><span class="mx-text mx-name-text6 tecoRedColor tecoBolder">
+              Inactive</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- 
     <header>
       <nav>
         <div class="header-container">
@@ -64,7 +127,7 @@
           >
         </div>
       </nav>
-    </header>
+    </header> -->
   {:else}
     <div>
       <p>Failed to load header</p>
@@ -72,7 +135,7 @@
   {/if}
 </div>
 
-<style scoped>
+<!-- <style scoped>
   @font-face {
     font-family: "Interstate";
     src: url("../../assets/fonts/Interstate.ttf") format("truetype");
@@ -201,4 +264,4 @@
   .Inactive {
     color: #a12424;
   }
-</style>
+</style> -->

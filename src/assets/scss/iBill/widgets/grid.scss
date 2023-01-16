@@ -1,0 +1,82 @@
+.tecoLayout {
+    .mx-grid-content {
+        overflow: auto;
+        & table {
+            min-width: 1100px;
+            border-collapse: separate; 
+            border: none;
+
+
+            & thead {
+                background-color: $teco-primary-blue;
+                color: $teco-white;
+
+                tr {
+                    th {
+                        font-weight: 400;
+                        text-align: center;
+                        border: none;
+                        border-right: 1px solid #bebebe;
+                        &:first-child {
+                            border-radius: 6px 0px 0px 0px;
+                        }
+
+                        &:last-child {
+                            border-radius: 0px 6px 0px 0px;
+                            border-right: none;
+                        }
+                    }
+                }
+            }
+
+            & tbody {
+                tr .selected {
+                    background-color: #FFF9CE; 
+                }
+                tr {
+                    td {
+                        text-align: center;
+                        border: none;
+                        border-right: 1px solid #bebebe;
+                        border-bottom: 1px solid #e9ebed;
+
+                        &:last-child {
+                            border-right: none;
+                        }
+                    }
+
+                    td[title="Active"] {
+                        padding: 12px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        div {
+                            border: 1px solid $teco-green;
+                            padding: 5px 10px;
+                            border-radius: 24px;
+                        }
+                    }
+
+                    td[title="Inactive"] {
+                        padding: 12px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        div {
+                            border: 1px solid $teco-red;
+                            padding: 5px 10px;
+                            border-radius: 24px;
+                        }
+                    }
+                }
+                img {
+                    max-width: unset;
+                    max-height: unset;
+                    height: 24px;
+                }
+            }
+        }
+    }
+}

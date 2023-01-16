@@ -1,0 +1,57 @@
+
+    .tecoInfoBar {
+        border-radius: 7px;
+        container-type: inline-size;
+        container-name: infoBar;
+
+        .tecoInfoBarCol {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 32px;
+            // font-size: $teco-font-size-smaller;
+
+            // @media screen and (max-width: $screen-sm-min) {
+            //     padding: 10px;
+            // }
+            
+            @container infoBar (max-width: 600px) {
+                padding: 10px;
+            }
+        }
+
+        .tecoInfoLabel {
+            font-weight: 700;
+            // font-size: $teco-font-size-large;
+            color: white;
+
+            @container infoBar (max-width: 600px) {
+                padding: 10px;
+            }
+        }
+
+        .tecoInfoBarDetails {
+            // @media screen and (max-width: $screen-sm-min) {
+            //     flex-direction: column;
+            //     align-items: flex-start;
+            // }
+
+            @container infoBar (max-width: 600px) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .oneLined {
+            @container infoBar (min-width: 601px) {
+                min-width: 175px;
+            }
+
+            > img {
+                @container infoBar (max-width: 600px) {
+                    display: none;
+                }
+            }
+        }
+    }

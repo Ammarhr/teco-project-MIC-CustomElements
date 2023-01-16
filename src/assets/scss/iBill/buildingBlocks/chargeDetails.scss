@@ -1,0 +1,257 @@
+.tecoLayout {
+    .chargeDetails {
+        .txtWImage {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .grayedOut {
+            margin: 20px 0;
+        }
+
+        .stdChargeTotal, .stdChargeSubTotal, .stdChargeLastRow, .stdChargeRow, .stdChargeRowNoBorder {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 5px;
+            .txtWImage {
+                gap: 5px;
+                img {
+                    width: 14px;
+                    height: 14px;
+                }
+            }
+        }
+        .stdChargeTotal {
+            background: $teco-primary-blue;
+            color: $teco-white;
+            border-radius: 6px;
+            align-items: center;
+            padding: 10px;
+
+            .stdChargeRevenue {
+                font-size: 20px;
+            }
+        }
+
+        .stdChargeSubTotal {
+            color: $teco-primary-blue;
+        }
+        .stdChargeRow {
+            border-bottom: 1px solid #EAECEE;       
+        }
+
+        .stdChargeLastRow {
+            border-bottom: 1px solid black;
+        }
+
+        .stdChargeLabelUnite {
+            display: flex;
+            flex: 2;
+            justify-content: space-between;
+            > span {
+                color: $teco-primary-blue;
+                font-weight: 400 !important;
+                font-style: italic;
+            }
+        }
+        .stdChargeRevenue {
+            flex: 1;
+            text-align: right;
+        }
+        .minimalAccord {
+            padding: 0 5px;
+            h2, h4 {
+                flex: revert !important;
+                font-weight: 400 !important;
+                font-style: italic;
+            }
+            svg {
+                background: revert !important;
+                margin: revert !important;
+            }
+            
+            table {
+                border-collapse: collapse;
+                background: #f4f5f7;
+                border-radius: 6px;
+                overflow-x: scroll;
+                
+                tbody {
+                    min-width: 700px;
+                    
+                    tr{
+                        border-bottom: 1px solid #EAECEE;
+    
+                        &:last-child{
+                            border-bottom: 0 !important;
+                        }
+                        td:nth-child(2) {
+                            color: $teco-primary-blue;
+                            font-weight: 400 !important;
+                            font-style: italic;
+                        }
+                    }
+                }
+            }
+        }
+        @container (inline-size < 570px) {
+            .stdChargeLabelUnite {
+                flex-direction: column;
+            }
+            .stdChargeSubTotal, .stdChargeLastRow, .stdChargeRow, .stdChargeRowNoBorder {
+                padding: 10px 0;
+            }
+            .minimalAccord {
+                padding: 0;
+            }
+        }
+    }
+
+
+
+    .chargeDetailsGrid {
+        .col-lg, .col-md, .col, .col-lg-auto, .col-md-auto, .col-auto {
+            padding: 0;
+        }
+        .txtWImage {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .revDetails {
+            margin: 20px 0;
+        }
+
+        .stdChargeTotal, .stdChargeSubTotal, .stdChargeRow {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 5px;
+            position: relative;
+            width: 100%;
+            margin: 0;
+            min-height: 1px;
+            .txtWImage {
+                gap: 5px;
+                img {
+                    width: 14px;
+                    height: 14px;
+                }
+            }
+            .stdChargeUnite {
+                color: $teco-primary-blue;
+                font-weight: 400 !important;
+                font-style: italic;
+            }
+        }
+        .stdChargeTotal {
+            background: $teco-primary-blue;
+            color: $teco-white;
+            border-radius: 6px;
+            align-items: center;
+            padding: 10px;
+
+            .stdChargeRevenue {
+                font-size: 20px;
+            }
+        }
+
+        .stdChargeSubTotal {
+            color: $teco-primary-blue;
+        }
+
+        .lightBorder {
+            border-bottom: 1px solid #EAECEE;       
+        }
+
+        .blackBorder {
+            border-bottom: 1px solid black;       
+        }
+
+        .stdChargeRevenue {
+            flex: 1;
+            text-align: right;
+        }
+        .minimalAccord {
+            padding: 0 5px;
+            h2, h4 {
+                flex: revert !important;
+                font-weight: 400 !important;
+                font-style: italic;
+            }
+            svg {
+                background: revert !important;
+                margin: revert !important;
+            }
+            
+            table {
+                border-collapse: collapse;
+                background: #f4f5f7;
+                border-radius: 6px;
+                overflow-x: scroll;
+                
+                tbody {
+                    min-width: 700px;
+                    
+                    tr{
+                        border-bottom: 1px solid #EAECEE;
+    
+                        &:last-child{
+                            border-bottom: 0 !important;
+                        }
+                        td:nth-child(2) {
+                            color: $teco-primary-blue;
+                            font-weight: 400 !important;
+                            font-style: italic;
+                        }
+                    }
+                }
+            }
+        }
+        @container (inline-size >= 570px) {
+            .stdChargeRow.responsiveOrder {
+                > div:nth-child(1)  {
+                    flex: 41.66666666666667%;
+                    max-width: 41.66666666666667%;
+                }
+                > div:nth-child(2)  {
+                    flex: 33.333333%;
+                    max-width: 33.333333%;
+                }
+                > div:nth-child(3)  {
+                    flex: 25%;
+                    max-width: 25%;
+                }
+            }
+        }
+        
+        @container (inline-size < 570px) {
+            .stdChargeRow.responsiveOrder {
+                    > div:nth-child(1)  {
+                        flex: 0 0 66.666666%;
+                        max-width: 66.666666%;
+                    }
+                    > div:nth-child(2)  {
+                        order: 3;
+                        flex: 0 0 50%;
+                        max-width: 50%;
+                    }
+                    > div:nth-child(3)  {
+                        order: 2;
+                        flex: 0 0 auto;
+                        width: auto;
+                        max-width: 100%;
+                    }
+            }
+            
+            .stdChargeLabelUnite {
+                flex-direction: column;
+            }
+            .stdChargeSubTotal, .stdChargeLastRow, .stdChargeRow, .stdChargeRowNoBorder {
+                padding: 10px 0;
+            }
+            .minimalAccord {
+                padding: 0;
+            }
+        }
+    }
+}

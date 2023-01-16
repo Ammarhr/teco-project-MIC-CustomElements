@@ -1,0 +1,77 @@
+.tecoLayout {
+
+    .mx-groupbox .mx-groupbox-header {
+        background-color: white;
+        // font-size: $teco-font-size-regular;
+        color: $teco-primary-blue;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row-reverse;
+        align-items: center;
+    }
+    .mx-groupbox {
+        .mx-groupbox-body {
+            transition: 0.25s ease-out;
+            max-height: 100vh;
+            margin-top: 16px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+    }
+
+    .mx-groupbox-collapse-icon {
+        transition: 0.25s linear;
+        display: flex;
+        width: 40px;
+        font-size: 14px;
+        min-width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: $teco-baby-blue;
+        border-radius: 50%;
+        margin: 0 !important;
+        transform: scale(0.8);
+
+        // font-family: monospace;
+    }
+    
+
+    .glyphicon-minus:before {
+        content: "\e113";
+    }
+
+    .glyphicon-plus:before {
+        content: "\e113";
+    }
+
+    .glyphicon-plus {
+        transform: rotate(180deg) scale(0.8);
+    }
+
+
+    .mx-groupbox > .mx-groupbox-header {
+        margin: 0;
+        border-radius: 4px 4px 0 0;
+        padding: 0;
+        border: none;
+    }
+
+    .mx-groupbox.collapsed>.mx-groupbox-body {
+        display: inherit;
+        max-height: 0 !important;
+        overflow: hidden;
+        padding-top: 0;
+        padding-bottom: 0;
+        opacity: 0;
+        margin: 0;
+    }
+
+    .mx-groupbox > .mx-groupbox-body {
+        padding: 0;
+        border-radius: 4px;
+        border: none;
+    }
+}
