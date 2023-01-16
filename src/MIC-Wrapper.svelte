@@ -2,54 +2,68 @@
 
 <script>
   // @ts-nocheck
-  //svg imports
-  import HeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
+  import MicHeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
   import ImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
-  import BillsHistory from "./lib/Components/MIC-AccountBalance-DS.svelte";
   import BillSelector from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
   import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import Insights from "./lib/Components/MIC-Insights.svelte";
   import MeterTable from "./lib/Components/MIC-MeterTable.svelte";
-  import MicTest from "./lib/Components/MIC-BalanceDetails.svelte";
-  import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
-  import { getToken } from "./js/store";
-
-  let apiToken;
+  import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
+  import { getToken, apiToken } from "./js/store";
+  let token1;
 
   //mocking data
-  const [token, loading, error, get] = getToken("data/Token.json", "Ammar");
+  const [token, loading, error, get] = getToken(
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Token.json",
+    "Ammar"
+  );
 
-  $: if ($token) {
-    apiToken = $token.token;
+  // $: if ($apiToken) {
+  // }
+  $: if ($apiToken && $apiToken.token) {
+    console.log("hapipi", $apiToken.token);
+    token1 = $apiToken.token;
+    
   }
+  $: token1 = token1;
+  // import "./lib/Components/MIC-HeaderInformation-style.css";
+  // import "./lib/Components/MIC-MeterTable-style.css";
+  // import "./lib/Components/MIC-Insights-style.css";
+  // import "./lib/Components/MIC-BillingSummary-style.css";
+  // import "./lib/Components/MIC-BillSelectorAndDownload-style.css";
+  // import "./lib/Components/MIC-ImportantMessage-style.css";
+  // import "./lib/Components/MIC-BalanceSummary-style.css";
 </script>
 
-{#if $loading}
+{#if $loading && token1}
   Loading: {$loading}
 {:else if $error}
   Error: {$error}
-{:else}
+{:else if token1}
   <div class="container">
-    <div class="Header"><HeaderInformation token={apiToken} /></div>
+    <div class="Header">
+      <mic-headerinformation token={token1}></mic-headerinformation>
+    </div>
     <div class="Billing-message">
-      <!-- <BillsHistory token={apiToken} /> -->
-      <MicTest token={apiToken} />
-      <ImportantMessage token={apiToken} />
+      <mic-balancesummary token={token1}></mic-balancesummary>
+      <mic-importentmessage token={token1} ></mic-importentmessage>
     </div>
     <div id="bill-selector">
-      <BillSelector token={apiToken} />
+      <mic-billselector token={token1} ></mic-billselector>
     </div>
-    <div class="Billing">
-      <BillingSummary token={apiToken} />
-      <Insights token={apiToken} />
+    <div class="Billing" >
+      <mic-billingsummary token={token1}></mic-billingsummary>
+      <mic-insights token={token1}></mic-insights>
     </div>
     <div class="meter">
-      <MeterTable token={apiToken} />
+      <mic-metertable token={token1} ></mic-metertable>
     </div>
   </div>
+{:else}
+  <h1>no load</h1>
 {/if}
 
-<style>
+<style> 
   .container {
     display: flex;
     flex-direction: column;

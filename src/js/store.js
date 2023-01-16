@@ -2,9 +2,11 @@
 
 import { writable, derived } from 'svelte/store';
 
-
-let token = "55555";
-
+export const showMessagesModal = writable(false);
+export function showmodal() {
+    showMessagesModal.set(!showMessagesModal)
+}
+export const apiToken = writable('')
 export function fetchstore(url, token) {
     const loading = writable(false)
     const error = writable(false)
@@ -18,6 +20,19 @@ export function fetchstore(url, token) {
                 data.set({ errrorMessage: "No Token provided!" })
             } else if (token && token == 'token 2022') {
                 const response = await fetch(url)
+                //* real api hit with jwt token:
+                // const Publishresponse = await fetch(url,{
+                //     method: 'POST', 
+                //     mode: 'cors', 
+                //     cache: 'no-cache', 
+                //     credentials: 'same-origin', 
+                //     headers: {
+                //       'Content-Type': 'application/json',
+                //       "AuthenticationToken" : JWTToken
+                //       // 'Content-Type': 'application/x-www-form-urlencoded',
+                //     },
+                //       body: JSON.stringify(data) /
+                // })
                 data.set(await response.json())
             } else {
                 data.set({ errrorMessage: "Invalid Token" })
@@ -47,7 +62,9 @@ export function getToken(url, user) {
                 token.set({ errrorMessage: "No user provided!" })
             } else if (user && user == 'Ammar') {
                 const response = await fetch(url)
-                token.set(await response.json())
+                // token.set(await response.json())
+                // console.log('hello from token thing', await response.json());
+                apiToken.set(await response.json())
             } else {
                 token.set({ errrorMessage: "Invalid user" })
             }
@@ -70,7 +87,7 @@ let month = newDate.getMonth();
 
 export const date = writable(month + 1 + ' ' + year);
 export const CopmarsionDate = writable(month + 1 + ' ' + (year - 1));
-export const billNumber =writable('4646868477');
+export const billNumber = writable('4646868477');
 
 export const getDate = derived(
     date,

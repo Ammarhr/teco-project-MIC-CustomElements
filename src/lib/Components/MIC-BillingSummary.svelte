@@ -7,7 +7,7 @@
   import breakdownToggle from "../../assets/breakdown-drop-icon.svg";
   import electricityIcon from "../../assets/Iconawesome-bolt.svg";
   import toolTip from "../../assets/tool-tip-icon.svg";
-  export let item = { name: "Item" };
+  // export let item = { name: "Item" };
   export let token;
   let billingData;
   let toggleArray = [];
@@ -31,6 +31,9 @@
     "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/ChargeDetails.json",
     token
   );
+  $: if (token && !$data.services) {
+    get(token);
+  }
   ///////// acordion functionality
 
   import { slide } from "svelte/transition";
@@ -40,25 +43,37 @@
 
   const toggleContainer = (i) => {
     toggleArray[i] = !toggleArray[i];
-    svgId = "rotate-svg-" + this.isOpen;
+    svgId = "rotate-svg-" + isOpen;
   };
   ////////////////////////
 
-  $: if ($data && $data.services) {
+  $: if ($data && $data.services && token) {
     for (let i = 0; i > toggleArray.length; i++) {
       toggleArray.push(false);
       // arr.push(new BillingSummary({ service }));
     }
     billingData = $data.services;
+    console.log("details", $data.services);
   }
+  // $: if ($data && $data.services) {
+  //   $data.services.map((item, i) => {
+  //     console.log(item);
+  //     item.sections[0].forEach(controls=>{
+  //       // controls.forEach(breakdown=>{
+  //       //   console.log(breakdown);
+
+  //       // })
+  //     })
+  //   })
+  // }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-{#if $loading}
+{#if $loading && !token}
   Loading: {$loading}
 {:else if $error}
   Error: {$error}
-{:else}
+{:else if $data.services}
   <div class="billing-container">
     {#each $data.services as billService, i}
       <div class="card">
@@ -100,7 +115,10 @@
                       <p class="value">{control.value}</p>
                     </div>
                     {#if control.breakdown}
-                      <div class="breakdown-header">
+                      <div
+                        class="breakdown-header"
+                        on:click={console.log("hide")}
+                      >
                         <h6>View Breakdown</h6>
                         <img
                           src={breakdownToggle}
@@ -153,9 +171,11 @@
       </div>
     {/each}
   </div>
+{:else}
+  <h5>failed in billing summaty</h5>
 {/if}
 
-<style>
+<style scoped>
   @font-face {
     font-family: "Interstate";
     src: url("../../assets/fonts/Interstate.ttf") format("truetype");

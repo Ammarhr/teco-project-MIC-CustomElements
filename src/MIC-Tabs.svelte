@@ -1,3 +1,4 @@
+<svelte:options tag={null}/>
 <script>
     let tab1 = "1";
     let tab2 = "2";

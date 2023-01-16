@@ -1,72 +1,4 @@
-<svelte:options tag={"mic-sunselect"} />
-
-<script>
-    // @ts-nocheck
-
-    import dropDown from "../../assets/cr.svg";
-    import { slide } from "svelte/transition";
-    import { fetchstore } from "../../js/store";
-    export let token;
-    let sunSelectData;
-    ///////// acordion functionality
-    let isOpen = false;
-    let svgId = "rotate-svg-" + isOpen;
-
-    const toggle = () => {
-        isOpen = !isOpen;
-        svgId = "rotate-svg-" + isOpen;
-    };
-    ////////////////////////
-    const [data, loading, error, get] = fetchstore(
-        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/sunSelect.json",
-        token
-    );
-    $: if (token && !sunSelectData) {
-       get(token)
-    }
-    $: if ($data) {
-        sunSelectData = $data;
-    }
-    
-</script>
-
-{#if $loading && !token}
-<h1>loading...</h1>
-{:else if $error}
-    <h1>{$error}</h1>
-{:else if sunSelectData}
-    <div class="sun-Select-card">
-        <div class="sun-select-card-header">
-            <h5 class="title">SUN SELECT</h5>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <img
-                src={dropDown}
-                alt=""
-                id={svgId}
-                on:click={toggle}
-                aria-expanded={isOpen}
-            />
-        </div>
-        {#if isOpen}
-            <div class="sun-select-content" transition:slide={{ duration: 300 }}>
-                <h2 id="percentage">{sunSelectData.SubSelectValue}%</h2>
-                <p>{sunSelectData.SubSelectMessage}</p>
-            </div>
-            <div class="sub-content" transition:slide={{ duration: 300 }}>
-                <p>
-                    {sunSelectData.SubSelectTooltip}
-                    <!-- As a Sun Select customer you <span>DO NOT</span> pay fuel cost
-                    for the energy you consume from solar. -->
-                </p>
-            </div>
-        {/if}
-    </div>
-    {:else}
-    <h1>failed to load</h1>
-{/if}
-
-<style scoped>
-    @font-face {
+@font-face {
     font-family: "Interstate";
     src: url("../../assets/fonts/Interstate.ttf") format("truetype");
 }
@@ -169,4 +101,3 @@
     order: 4;
     flex-grow: 0;
 }
-</style>

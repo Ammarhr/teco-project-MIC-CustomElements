@@ -1,6 +1,6 @@
+<svelte:options tag={null}/>
 <script>
   // @ts-nocheck
-
   export let itemData;
   export let onDrop;
   export let idPropertyName = "id";

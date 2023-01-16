@@ -1,6 +1,6 @@
 <svelte:options tag="mic-bulkdownload" />
-<script>
 
+<script>
     // @ts-nocheck
     import backgroundPattern from "../../assets/background-pattern.svg";
     import { fetchstore } from "../../js/store";
@@ -11,11 +11,14 @@
         "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/ChargeDetails.json",
         token
     );
+    // $: if (token && !$data) {
+    //     get(token);
+    // }
 </script>
 
-<div class="card">
+<div class="bulck-card">
     <img src={backgroundPattern} alt="" />
-    <div class="content">
+    <div class="bulk-content ">
         <p>
             Looking to download more than one bill? Click here to download
             multiple bills
@@ -26,7 +29,7 @@
     </div>
 </div>
 
-<style>
+<style scoped>
     @font-face {
         font-family: "Interstate";
         src: url("../../assets/fonts/Interstate.ttf");
@@ -34,7 +37,7 @@
     * {
         font-family: "Interstate";
     }
-    .card {
+    .bulck-card {
         max-width: 463px;
         height: 192px;
         filter: drop-shadow(0px 0px 10px rgba(34, 34, 34, 0.25));
@@ -43,15 +46,15 @@
         position: relative;
         margin-top: 10px;
     }
-    .card img {
+    .bulck-card img {
         border-radius: 16px;
     }
-    .content {
+    .bulk-content {
         position: absolute;
         top: 0;
         padding: 13px;
     }
-    .content p {
+    .bulk-content p {
         font-style: normal;
         font-weight: 400;
         font-size: 25px;

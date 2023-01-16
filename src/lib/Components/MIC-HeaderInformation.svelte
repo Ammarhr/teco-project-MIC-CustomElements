@@ -5,33 +5,36 @@
 
   import star from "../../assets/Vector.svg";
   import fire from "../../assets/Fire.svg";
-  import { fetchstore } from "../../js/store";
+  import { fetchstore, apiToken } from "../../js/store";
   export let token;
-  export let item = { name: "Item" };
+  // export let item = { name: "Item" };
   let account;
   let statusClass = "Inactive";
 
-  //mocking data
   const [data, loading, error, get] = fetchstore(
     "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json",
     token
   );
-
+  $: if (token && !$data.account) {
+    get(token);
+  }
   $: if ($data) {
     account = $data.account;
   }
 
   $: if (account) {
+    account = account;
     if (account.status == "Active") {
       statusClass = "Active";
     } else {
       statusClass = "Inactive";
     }
   }
+  //mocking data
 </script>
 
 <div>
-  {#if $loading}
+  {#if $loading && !token}
     Loading: {$loading}
   {:else if $error}
     Error: {$error}
@@ -64,12 +67,12 @@
     </header>
   {:else}
     <div>
-      <p>{$data.errrorMessage}</p>
+      <p>Failed to load header</p>
     </div>
   {/if}
 </div>
 
-<style>
+<style scoped>
   @font-face {
     font-family: "Interstate";
     src: url("../../assets/fonts/Interstate.ttf") format("truetype");

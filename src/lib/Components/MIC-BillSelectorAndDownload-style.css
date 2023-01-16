@@ -1,72 +1,4 @@
-<svelte:options tag="mic-billselector" />
-
-<script>
-  // @ts-nocheck
-
-  // svg imports
-  import downloadIcon from "../../assets/Icon-left.svg";
-  import line from "../../assets/Line1812.svg";
-  import { billNumber } from "../../js/store";
-
-  export let token;
-  // export let item = { name: "Item" };
-
-  import { fetchstore } from "../../js/store";
-
-  //mocking data
-  const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json",
-    token
-  );
-
-  $: if (token && !$data.bills) {
-    get(token);
-  }
-</script>
-
-{#if $loading && !token}
-  Loading: {$loading}
-{:else if $error}
-  Error: {$error}
-{:else if $data && $data.bills}
-  <div id="selector-card">
-    <div id="selector-container">
-      <div id="date-container">
-        {#if $data && $data.bills}
-          <label for="bill-selector">VIEW PRIOR STATEMENTS</label>
-          <select name="bill-selector" bind:value={$billNumber}>
-            {#each $data.bills as billDate}
-              <option value={billDate.value}>{billDate.lable}</option>
-            {/each}
-          </select>
-        {:else}
-          <h1>failed to load</h1>
-        {/if}
-      </div>
-      <div id="btn-container">
-        <!-- svelte-ignore a11y-label-has-associated-control -->
-        <label>DOWNLOAD MY BILL</label>
-        <a id="btn-download" href={$data.download_link}>
-          <span>
-            <img src={downloadIcon} alt="download icon" />
-            Download Bill
-          </span>
-        </a>
-      </div>
-      <div>
-        <button id="show-btn">
-          <span> VIEW LATEST BILL </span>
-          <img src={line} alt="line icon" />
-        </button>
-      </div>
-    </div>
-  </div>
-{:else}
-  <h3>failed in bill selector</h3>
-{/if}
-
-<style scoped>
-  @font-face {
+@font-face {
     font-family: "Interstate";
     src: url("../../assets/fonts/Interstate.ttf") format("truetype");
   }
@@ -213,11 +145,10 @@
       padding: 1.4rem 1rem;
     }
     #btn-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1.4rem 1rem;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.4rem 1rem;
   }
-</style>
+  }

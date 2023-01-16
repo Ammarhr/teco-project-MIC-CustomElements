@@ -1,4 +1,4 @@
-<svelte:options tag="mic-yearlyenergy" />
+<svelte:options tag={"mic-yearlyenergy"} />
 
 <script>
     // @ts-nocheck
@@ -21,17 +21,20 @@
         "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/yearlyEnergy.json",
         token
     );
+    $: if (token && !$data.YearlyValues) {
+       get(token)
+    }
     $: if ($data && $data.YearlyValues) {
         yearlyEnergyData = $data.YearlyValues;
     }
 </script>
 
-{#if $loading}
+{#if $loading && !token}
     <h1>loading...</h1>
 {:else if $error}
     <h1>{$error}</h1>
 {:else if yearlyEnergyData}
-    <div class="card">
+    <div class="yearly-energy-card">
         <div class="card-header">
             <h5 class="title">YOUR GENERATED ENERGY SUMMARY</h5>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -46,8 +49,11 @@
         {#if isOpen}
             {#each yearlyEnergyData as YearlyValue}
                 {#if !YearlyValue.SumFlag}
-                    <div class="content" transition:slide={{ duration: 300 }}>
-                        <h2 class="label">{YearlyValue.Label}</h2>
+                    <div
+                        class="yearly-content"
+                        transition:slide={{ duration: 300 }}
+                    >
+                        <h2 class="yearly-label">{YearlyValue.Label}</h2>
                         <p>{YearlyValue.Value}</p>
                     </div>
                 {:else}
@@ -65,9 +71,11 @@
             </div>
         {/if}
     </div>
+{:else}
+    <h1>failed to load</h1>
 {/if}
 
-<style>
+<style scoped>
     @font-face {
         font-family: "Interstate";
         src: url("../../assets/fonts/Interstate.ttf") format("truetype");
@@ -75,7 +83,7 @@
     * {
         font-family: "Interstate";
     }
-    .card {
+    .yearly-energy-card {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -132,7 +140,7 @@
         right: 0;
     }
     /*------------------*/
-    .content {
+    .yearly-content {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -140,7 +148,7 @@
         padding: 5px;
         border-bottom: 1px solid #eaecee;
     }
-    .label {
+    .yearly-label {
         font-weight: 300;
         font-size: 20px;
         line-height: 30px;
@@ -150,7 +158,7 @@
         margin: 0;
     }
 
-    .content p {
+    .yearly-content p {
         font-style: normal;
         font-weight: 400;
         font-size: 20px;

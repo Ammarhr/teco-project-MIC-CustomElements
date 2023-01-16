@@ -1,0 +1,78 @@
+@font-face {
+    font-family: "Interstate";
+    src: url("../../assets/fonts/Interstate.ttf") format("truetype");
+}
+* {
+    font-family: "Interstate";
+}
+.container {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: hidden;
+}
+.message-header {
+    font-family: "Interstate";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.02em;
+    color: #005faa;
+    display: flex;
+    width: 100%;
+}
+#notification {
+    position: absolute;
+    left: 5.71%;
+    left: 25.71%;
+    right: 0;
+    top: -7px;
+}
+h4 {
+    font-family: "Interstate";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: #005faa;
+    height: 1.5rem;
+}
+#unreaded-msgs {
+    position: absolute;
+    left: 1.4rem;
+    top: -0.4rem;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    font-feature-settings: "salt" on;
+    color: #ffffff;
+}
+.message-body {
+    grid-area: message-body;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    width: 392px;
+    height: 80%;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.msg-data {
+    font-family: "Interstate";
+    font-style: normal;
+    font-size: 18px;
+    line-height: 30px;
+}
+
+.message-logo {
+    grid-area: message-logo;
+    position: relative;
+    width: 58px;
+}

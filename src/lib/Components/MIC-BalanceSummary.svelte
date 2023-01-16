@@ -1,29 +1,43 @@
+<svelte:options tag="mic-balancesummary" />
 
 <script>
     // @ts-nocheck
 
     import culLine from "../../assets/Vector 550.svg";
     import rowLine from "../../assets/Vector 549.svg";
-    import groupVector from "../../assets/balance-summary-svgs.svg";
 
     //state
     export let token;
 
     // store
     import { fetchstore } from "../../js/store";
-
+    // let DomianName;
+    // let url = `${DomianName}/api/ibill/webcomponents/v1/Post/BalanceSummary`;
     //mocking data
     const [data, loading, error, get] = fetchstore(
-        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json",
+        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BalanceSummaryData.json",
         token
     );
 
     var newElement;
     let color; // this change the charge color depend in the its value
-    $: newElement = document.getElementById("info-container");
 
-    $: if (newElement && $data && $data.html_message) {
-        newElement.innerHTML = $data.html_message;
+    $: if (token && !$data.html_masseges) {
+        get(token);
+        console.log("token from balance summary", token, $data);
+    }
+    $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
+    $: if (newElement && $data && $data.html_masseges) {
+        for (let i = 0; i < $data.html_masseges.length; i++) {
+            let subEle = document.createElement("div");
+            if (i > 0)
+                subEle.setAttribute(
+                    "style",
+                    "color: #015faa;border-top: solid 1px #015faa; padding-top:20px;"
+                );
+            subEle.innerHTML = $data.html_masseges[i].message;
+            newElement.appendChild(subEle);
+        }
         if ($data.totalAmmount > 0) {
             color = $data.postive_color;
         } else {
@@ -33,8 +47,12 @@
 </script>
 
 <div id="card">
-    <!-- <img src={groupVector} alt="" id="group" /> -->
-    {#if $data && $data.html_message}
+    {#if $loading && !token}
+        Loading: {$loading}
+    {:else if $error}
+        Error: {$error}
+        <!-- <img src={groupVector} alt="" id="group" /> -->
+    {:else if $data && $data.html_masseges}
         <div id="info-container" bind:this={newElement} />
         <img src={culLine} alt="" id="cul-line" />
         <img src={rowLine} alt="" id="row-line" />
@@ -50,10 +68,12 @@
                 <button>PAY NOW</button></a
             >
         </div>
+    {:else}
+        <h1>failed to load balance summary</h1>
     {/if}
 </div>
 
-<style>
+<style scoped>
     @font-face {
         font-family: "Interstate";
         src: url("../../assets/fonts/Interstate.ttf") format("truetype");
