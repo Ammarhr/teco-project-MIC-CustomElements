@@ -53,7 +53,7 @@
           <div class="oneLined">
             <button
               type="button"
-              class="change-btn"
+              class="change-btn btn"
             >
               Change Account</button
             ><img

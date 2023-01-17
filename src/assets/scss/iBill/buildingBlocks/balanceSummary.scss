@@ -5,7 +5,7 @@
 
 
     .tecoBalanceSum {
-        background-image: url(assets/Mask2.svg);
+        background-image: url(../../../Mask2.svg);
         background-position: 98%;
         background-repeat: no-repeat;
         background-size: cover;
@@ -40,6 +40,9 @@
                 color: $teco-white;
                 background-color: #005FAA;
                 width: 145px;
+                border: none;
+                padding: 8px 18px;
+                border-radius: 6px;
             }
         }
 

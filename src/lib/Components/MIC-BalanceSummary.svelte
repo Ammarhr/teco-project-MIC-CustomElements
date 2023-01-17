@@ -1,108 +1,99 @@
 <svelte:options tag="mic-balancesummary" />
 
 <script>
-    // @ts-nocheck
+  // @ts-nocheck
 
-    import culLine from "../../assets/Vector 550.svg";
-    import rowLine from "../../assets/Vector 549.svg";
+  import culLine from "../../assets/Vector 550.svg";
+  import rowLine from "../../assets/Vector 549.svg";
 
-    //state
-    export let token;
+  //state
+  export let token;
 
-    // store
-    import { fetchstore } from "../../js/store";
-    // let DomianName;
-    // let url = `${DomianName}/api/ibill/webcomponents/v1/Post/BalanceSummary`;
-    //mocking data
-    const [data, loading, error, get] = fetchstore(
-        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BalanceSummaryData.json",
-        token
-    );
+  // store
+  import { fetchstore } from "../../js/store";
+  // let DomianName;
+  // let url = `${DomianName}/api/ibill/webcomponents/v1/Post/BalanceSummary`;
+  //mocking data
+  const [data, loading, error, get] = fetchstore(
+    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BalanceSummaryData.json",
+    token
+  );
 
-    var newElement;
-    let color; // this change the charge color depend in the its value
+  var newElement;
+  let color; // this change the charge color depend in the its value
 
-    $: if (token && !$data.html_masseges) {
-        get(token);
-        console.log("token from balance summary", token, $data);
+  $: if (token && !$data.html_masseges) {
+    get(token);
+    console.log("token from balance summary", token, $data);
+  }
+  $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
+  $: if (newElement && $data && $data.html_masseges) {
+    for (let i = 0; i < $data.html_masseges.length; i++) {
+      let subEle = document.createElement("div");
+      if (i > 0)
+        subEle.setAttribute(
+          "style",
+          "color: #015faa;border-top: solid 1px #015faa; padding-top:20px;"
+        );
+      subEle.innerHTML = $data.html_masseges[i].message;
+      newElement.appendChild(subEle);
     }
-    $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
-    $: if (newElement && $data && $data.html_masseges) {
-        for (let i = 0; i < $data.html_masseges.length; i++) {
-            let subEle = document.createElement("div");
-            if (i > 0)
-                subEle.setAttribute(
-                    "style",
-                    "color: #015faa;border-top: solid 1px #015faa; padding-top:20px;"
-                );
-            subEle.innerHTML = $data.html_masseges[i].message;
-            newElement.appendChild(subEle);
-        }
-        if ($data.totalAmmount > 0) {
-            color = $data.postive_color;
-        } else {
-            color = $data.negative_color;
-        }
+    if ($data.totalAmmount > 0) {
+      color = $data.postive_color;
+    } else {
+      color = $data.negative_color;
     }
-    import "../../assets/scss/iBill/buildingBlocks/balanceSummary.scss";
+  }
+  import "../../assets/scss/iBill/buildingBlocks/balanceSummary.scss";
 </script>
 
 <!-- <div id="card"> -->
-    {#if $loading && !token}
-        Loading: {$loading}
-    {:else if $error}
-        Error: {$error}
-        <!-- <img src={groupVector} alt="" id="group" /> -->
-    {:else if $data && $data.html_masseges}
-        <div
-            class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
-        >
-            <div class="tecoBalanceSum roundedRadius20">
-                <div class="mx-name-container55 tecoBalanceSection">
-                    <span class="mx-text mx-name-text43">Total Amount Due</span>
-                    <div class="mx-name-container56 amount">
-                        <span class="mx-text mx-name-text44">$</span><span
-                            class="mx-text mx-name-text45">4,530</span
-                        ><span class="mx-text mx-name-text46">51</span>
-                    </div>
-                    <div class="mx-name-container57">
-                        <span class="mx-text mx-name-text47 dueLabel"
-                            >Due Date:
-                        </span><span class="mx-text mx-name-text48"
-                            >Jan 25, 2022</span
-                        >
-                    </div>
-                    <div class="mx-name-container60">
-                        <button
-                            type="button"
-                            class="btn mx-button mx-name-actionButton12 payBtn btn-default"
-                            title=""
-                            data-button-id="68.Teco.BuildingBlocksShowcase.actionButton12"
-                            data-disabled="false"
-                        >
-                            PAY NOW</button
-                        >
-                    </div>
-                </div>
-                <div class="mx-name-container68 tecoMessagesSection">
-                    <div class="mx-name-container69 messageBox">
-                        <h3 class="mx-text mx-name-text53 messageLabel">
-                            AutoPay
-                        </h3>
-                        <span class="mx-text mx-name-text59"
-                            >You have a positive account balance - DO not pay,</span
-                        >
-                    </div>
-                    <div class="mx-name-container70 messageBox">
-                        <span class="mx-text mx-name-text60"
-                            >Your previous payment of $5,558.28 was received on
-                            Nov 25, 2021</span
-                        >
-                    </div>
-                </div>
-            </div>
+{#if $loading && !token}
+  Loading: {$loading}
+{:else if $error}
+  Error: {$error}
+  <!-- <img src={groupVector} alt="" id="group" /> -->
+{:else if $data && $data.html_masseges}
+  <div
+    class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
+  >
+    <div class="tecoBalanceSum roundedRadius20">
+      <div class="tecoBalanceSection">
+        <span>Total Amount Due</span>
+        <div class="amount">
+          <span>$</span>
+          <span>4,530</span>
+          <span>51</span>
         </div>
-        <!-- <div id="info-container" bind:this={newElement} />
+        <div>
+          <span class="dueLabel">Due Date: </span>
+          <span>Jan 25, 2022</span>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="payBtn btn"
+          >
+            PAY NOW</button
+          >
+        </div>
+      </div>
+      <div class="tecoMessagesSection">
+        <div class="messageBox">
+          <h3 class="messageLabel">AutoPay</h3>
+          <span>
+            You have a positive account balance - DO not pay,
+            </span>
+        </div>
+        <div class="messageBox">
+          <span>
+            Your previous payment of $5,558.28 was received on Nov 25, 2021
+        </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div id="info-container" bind:this={newElement} />
         <img src={culLine} alt="" id="cul-line" />
         <img src={rowLine} alt="" id="row-line" />
         <div id="info-container2">
@@ -117,9 +108,9 @@
                 <button>PAY NOW</button></a
             >
         </div> -->
-    {:else}
-        <h1>failed to load balance summary</h1>
-    {/if}
+{:else}
+  <h1>failed to load balance summary</h1>
+{/if}
 <!-- </div> -->
 
 <!-- <style scoped>

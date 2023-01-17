@@ -4,9 +4,10 @@
   // @ts-nocheck
 
   // svg imports
-  import downloadIcon from "../../assets/Icon-left.svg";
+  // import downloadIcon from "../../assets/Icon-left.svg";
   import line from "../../assets/Line1812.svg";
   import { billNumber } from "../../js/store";
+  import downloadIcon from "../../assets/DownloadIcon.svg";
 
   export let token;
   // export let item = { name: "Item" };
@@ -30,43 +31,35 @@
 {:else if $error}
   Error: {$error}
 {:else if $data && $data.bills}
-  <div
-    class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard"
-  >
-    <div class="mx-name-container24 tecoBillSelector-v2">
-      <div class="mx-name-container25 tecoInfoLabel">
-        <h4 class="mx-text mx-name-text13">VIEW PRIOR STATEMENTS</h4>
+  <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
+    <div class="tecoBillSelector-v2">
+      <div class="tecoInfoLabel">
+        <h4>VIEW PRIOR STATEMENTS</h4>
       </div>
-      <div class="mx-name-container26 tecobillSelectorDetailRow">
+      <div class="tecobillSelectorDetailRow">
         <div
-          class="mx-name-referenceSelector1 tecoBillSelect spacing-outer-bottom-none mx-referenceselector form-group no-columns"
+          class="tecoBillSelect spacing-outer-bottom-none form-group no-columns"
         >
-          <div class="mx-compound-control" data-focusindex="0">
-            <select
-              class="form-control"
-              id="68.Teco.BuildingBlocksShowcase.referenceSelector1_pkj_53"
-              aria-label=""><option value="">Select Bill</option></select
-            >
-          </div>
+          <select
+            class="form-control"
+            id="68.Teco.BuildingBlocksShowcase.referenceSelector1_pkj_53"
+            aria-label=""><option value="">Select Bill</option></select
+          >
         </div>
-        <div class="mx-name-container27 tecoBillSelectorDownloadContainer">
-          <div class="mx-name-container28 tecoInfoLabel">
-            <h4 class="mx-text mx-name-text5">DOWNLOAD MY BILL</h4>
+        <div class="tecoBillSelectorDownloadContainer">
+          <div class="tecoInfoLabel">
+            <h4>DOWNLOAD MY BILL</h4>
           </div>
           <button
             type="button"
-            class="btn mx-button mx-name-actionButton5 tecoBillSelectorDownloadButton btn-default"
-            title=""
-            data-button-id="68.Teco.BuildingBlocksShowcase.actionButton5"
-            data-disabled="false"
-            ><span
-              class="glyphicon glyphicon-download-alt"
-              aria-hidden="true"
-            /> DOWNLOAD BILL</button
-          >
+            class="btn tecoBillSelectorDownloadButton">
+            
+            <img src={downloadIcon} alt="DI" />
+              DOWNLOAD BILL
+          </button>
         </div>
-        <div class="mx-name-container29 tecoBillSelectorSmallText">
-          <span class="mx-text mx-name-text16">View Latest Bill</span>
+        <div class="tecoBillSelectorSmallText">
+          <span>View Latest Bill</span>
         </div>
       </div>
     </div>
