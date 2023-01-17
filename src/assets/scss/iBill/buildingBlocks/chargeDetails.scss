@@ -1,3 +1,8 @@
+@import "../../base/teco_custom.scss";
+@import "../../base/tecoVariables.scss";
+@import "../../base/fonts.scss";
+@import "../../base/globals.scss";
+
 .tecoLayout {
     .chargeDetails {
         .txtWImage {
@@ -22,7 +27,7 @@
             }
         }
         .stdChargeTotal {
-            background: $teco-primary-blue;
+            background: #005FAA;
             color: $teco-white;
             border-radius: 6px;
             align-items: center;
@@ -34,7 +39,7 @@
         }
 
         .stdChargeSubTotal {
-            color: $teco-primary-blue;
+            color: #005FAA;
         }
         .stdChargeRow {
             border-bottom: 1px solid #EAECEE;       
@@ -49,7 +54,7 @@
             flex: 2;
             justify-content: space-between;
             > span {
-                color: $teco-primary-blue;
+                color: #005FAA;
                 font-weight: 400 !important;
                 font-style: italic;
             }
@@ -86,7 +91,7 @@
                             border-bottom: 0 !important;
                         }
                         td:nth-child(2) {
-                            color: $teco-primary-blue;
+                            color: #005FAA;
                             font-weight: 400 !important;
                             font-style: italic;
                         }
@@ -138,13 +143,13 @@
                 }
             }
             .stdChargeUnite {
-                color: $teco-primary-blue;
+                color: #005FAA;
                 font-weight: 400 !important;
                 font-style: italic;
             }
         }
         .stdChargeTotal {
-            background: $teco-primary-blue;
+            background: #005FAA;
             color: $teco-white;
             border-radius: 6px;
             align-items: center;
@@ -156,7 +161,7 @@
         }
 
         .stdChargeSubTotal {
-            color: $teco-primary-blue;
+            color: #005FAA;
         }
 
         .lightBorder {
@@ -199,7 +204,7 @@
                             border-bottom: 0 !important;
                         }
                         td:nth-child(2) {
-                            color: $teco-primary-blue;
+                            color: #005FAA;
                             font-weight: 400 !important;
                             font-style: italic;
                         }

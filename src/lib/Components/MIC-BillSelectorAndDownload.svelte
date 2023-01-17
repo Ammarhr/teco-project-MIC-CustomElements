@@ -22,6 +22,7 @@
   $: if (token && !$data.bills) {
     get(token);
   }
+  import "../../assets/scss/iBill/buildingBlocks/billSelector.scss";
 </script>
 
 {#if $loading && !token}
@@ -29,7 +30,48 @@
 {:else if $error}
   Error: {$error}
 {:else if $data && $data.bills}
-  <div id="selector-card">
+  <div
+    class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard"
+  >
+    <div class="mx-name-container24 tecoBillSelector-v2">
+      <div class="mx-name-container25 tecoInfoLabel">
+        <h4 class="mx-text mx-name-text13">VIEW PRIOR STATEMENTS</h4>
+      </div>
+      <div class="mx-name-container26 tecobillSelectorDetailRow">
+        <div
+          class="mx-name-referenceSelector1 tecoBillSelect spacing-outer-bottom-none mx-referenceselector form-group no-columns"
+        >
+          <div class="mx-compound-control" data-focusindex="0">
+            <select
+              class="form-control"
+              id="68.Teco.BuildingBlocksShowcase.referenceSelector1_pkj_53"
+              aria-label=""><option value="">Select Bill</option></select
+            >
+          </div>
+        </div>
+        <div class="mx-name-container27 tecoBillSelectorDownloadContainer">
+          <div class="mx-name-container28 tecoInfoLabel">
+            <h4 class="mx-text mx-name-text5">DOWNLOAD MY BILL</h4>
+          </div>
+          <button
+            type="button"
+            class="btn mx-button mx-name-actionButton5 tecoBillSelectorDownloadButton btn-default"
+            title=""
+            data-button-id="68.Teco.BuildingBlocksShowcase.actionButton5"
+            data-disabled="false"
+            ><span
+              class="glyphicon glyphicon-download-alt"
+              aria-hidden="true"
+            /> DOWNLOAD BILL</button
+          >
+        </div>
+        <div class="mx-name-container29 tecoBillSelectorSmallText">
+          <span class="mx-text mx-name-text16">View Latest Bill</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div id="selector-card">
     <div id="selector-container">
       <div id="date-container">
         {#if $data && $data.bills}
@@ -44,7 +86,6 @@
         {/if}
       </div>
       <div id="btn-container">
-        <!-- svelte-ignore a11y-label-has-associated-control -->
         <label>DOWNLOAD MY BILL</label>
         <a id="btn-download" href={$data.download_link}>
           <span>
@@ -60,11 +101,12 @@
         </button>
       </div>
     </div>
-  </div>
+  </div> -->
 {:else}
   <h3>failed in bill selector</h3>
 {/if}
 
+<!-- 
 <style scoped>
   @font-face {
     font-family: "Interstate";
@@ -220,4 +262,4 @@
       padding: 1.4rem 1rem;
     }
   }
-</style>
+</style> -->

@@ -44,16 +44,65 @@
             color = $data.negative_color;
         }
     }
+    import "../../assets/scss/iBill/buildingBlocks/balanceSummary.scss";
 </script>
 
-<div id="card">
+<!-- <div id="card"> -->
     {#if $loading && !token}
         Loading: {$loading}
     {:else if $error}
         Error: {$error}
         <!-- <img src={groupVector} alt="" id="group" /> -->
     {:else if $data && $data.html_masseges}
-        <div id="info-container" bind:this={newElement} />
+        <div
+            class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
+        >
+            <div class="tecoBalanceSum roundedRadius20">
+                <div class="mx-name-container55 tecoBalanceSection">
+                    <span class="mx-text mx-name-text43">Total Amount Due</span>
+                    <div class="mx-name-container56 amount">
+                        <span class="mx-text mx-name-text44">$</span><span
+                            class="mx-text mx-name-text45">4,530</span
+                        ><span class="mx-text mx-name-text46">51</span>
+                    </div>
+                    <div class="mx-name-container57">
+                        <span class="mx-text mx-name-text47 dueLabel"
+                            >Due Date:
+                        </span><span class="mx-text mx-name-text48"
+                            >Jan 25, 2022</span
+                        >
+                    </div>
+                    <div class="mx-name-container60">
+                        <button
+                            type="button"
+                            class="btn mx-button mx-name-actionButton12 payBtn btn-default"
+                            title=""
+                            data-button-id="68.Teco.BuildingBlocksShowcase.actionButton12"
+                            data-disabled="false"
+                        >
+                            PAY NOW</button
+                        >
+                    </div>
+                </div>
+                <div class="mx-name-container68 tecoMessagesSection">
+                    <div class="mx-name-container69 messageBox">
+                        <h3 class="mx-text mx-name-text53 messageLabel">
+                            AutoPay
+                        </h3>
+                        <span class="mx-text mx-name-text59"
+                            >You have a positive account balance - DO not pay,</span
+                        >
+                    </div>
+                    <div class="mx-name-container70 messageBox">
+                        <span class="mx-text mx-name-text60"
+                            >Your previous payment of $5,558.28 was received on
+                            Nov 25, 2021</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div id="info-container" bind:this={newElement} />
         <img src={culLine} alt="" id="cul-line" />
         <img src={rowLine} alt="" id="row-line" />
         <div id="info-container2">
@@ -67,13 +116,13 @@
             <a href={$data.pay_now_link} target="_blank" rel="noreferrer">
                 <button>PAY NOW</button></a
             >
-        </div>
+        </div> -->
     {:else}
         <h1>failed to load balance summary</h1>
     {/if}
-</div>
+<!-- </div> -->
 
-<style scoped>
+<!-- <style scoped>
     @font-face {
         font-family: "Interstate";
         src: url("../../assets/fonts/Interstate.ttf") format("truetype");
@@ -209,4 +258,4 @@
             gap: 10px;
         }
     }
-</style>
+</style> -->

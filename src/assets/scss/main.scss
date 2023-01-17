@@ -1,11 +1,8 @@
-@import '../../../theme/web/custom-variables';
+// @import '../../../theme/web/custom-variables';
 
 @import './base/fonts.scss';
 @import './base/tecoVariables';
 @import './base/globals.scss';
 
 // iBill
-@import './ibill/iBillMain.scss';
-
-// MiLine
-@import './MiLine/miLineMain.scss';
+@import './iBill/iBillMain.scss';

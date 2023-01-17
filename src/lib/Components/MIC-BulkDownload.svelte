@@ -14,9 +14,27 @@
     // $: if (token && !$data) {
     //     get(token);
     // }
+    import "../../assets/scss/iBill/buildingBlocks/billBanner.scss";
 </script>
 
-<div class="bulck-card">
+<div
+    class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
+>
+    <div class="tecoBillBannerBody">
+        <p>
+            Looking to download more than one bill? Click here to download
+            multiple bills
+        </p>
+        <a class="reverseOrder m_1" href="#" role="button"
+            ><span
+                class="glyphicon glyphicon-chevron-right"
+                aria-hidden="true"
+            /> DOWNLOAD BILLS</a
+        >
+    </div>
+</div>
+
+<!-- <div class="bulck-card">
     <img src={backgroundPattern} alt="" />
     <div class="bulk-content ">
         <p>
@@ -27,8 +45,8 @@
             <a href="#as">Download BILLS ></a>
         </div>
     </div>
-</div>
-
+</div> -->
+<!-- 
 <style scoped>
     @font-face {
         font-family: "Interstate";
@@ -70,4 +88,4 @@
         text-transform: uppercase;
         color: #ffffff;
     }
-</style>
+</style> -->

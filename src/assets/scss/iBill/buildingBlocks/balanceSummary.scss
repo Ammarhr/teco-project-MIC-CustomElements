@@ -1,4 +1,9 @@
-.tecoLayout {
+@import "../../base/teco_custom.scss";
+@import "../../base/tecoVariables.scss";
+@import "../../base/fonts.scss";
+@import "../../base/globals.scss";
+
+
     .tecoBalanceSum {
         background-image: url(assets/Mask2.svg);
         background-position: 98%;
@@ -18,8 +23,8 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            color: $teco-primary-blue;
-            border-left: 2px solid $teco-primary-blue;
+            color: #005FAA;
+            border-left: 2px solid #005FAA;
 
             .amount {
                 display: flex;
@@ -33,7 +38,7 @@
 
             .payBtn {
                 color: $teco-white;
-                background-color: $teco-primary-blue;
+                background-color: #005FAA;
                 width: 145px;
             }
         }
@@ -49,14 +54,14 @@
                 padding: 15px 0;
                 // quantity query to apply the style in case of 2 or more messages present
                 &:nth-last-child(n+2), &:nth-last-child(n+2) ~ .messageBox { 
-                    border-top: 2px solid $teco-primary-blue;
+                    border-top: 2px solid #005FAA;
                 }
                 &:nth-last-child(n+2), &:nth-last-child(n+2) ~ .messageBox:first-child  { 
                     border-top: none;
                 }
                 // end of quantity query
                 .messageLabel {
-                    color: $teco-primary-blue;
+                    color: #005FAA;
                     font-weight: 400;
                 }
 
@@ -70,7 +75,7 @@
 
             .tecoBalanceSection {
                 width: 100%;
-                border-bottom: 2px solid $teco-primary-blue;
+                border-bottom: 2px solid #005FAA;
                 border-left: none;
                 padding-bottom: 20px;
 
@@ -92,4 +97,3 @@
             
         }
     }
-}

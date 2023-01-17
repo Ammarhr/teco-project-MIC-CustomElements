@@ -1,10 +1,15 @@
-.tecoLayout {
+@import "../../base/teco_custom.scss";
+@import "../../base/tecoVariables.scss";
+@import "../../base/fonts.scss";
+@import "../../base/globals.scss";
+
+
     .tecoBillSelector-v2 {
         font-weight: 400;
 
         .tecoInfoLabel h4 {
             font-weight: 400;
-            color: $teco-primary-blue;
+            color: #005FAA;
             width: max-content;
             display: block;
         }
@@ -20,7 +25,7 @@
             width: 250px;
             flex: revert;
             select {
-                border-color: $teco-primary-blue;
+                border-color: #005FAA;
                 text-align: center;
                 // padding-left: 30px;
 
@@ -28,14 +33,14 @@
                 //     padding: 8px;
                 // }
                 // option:hover, option:checked {
-                //     background-color: $teco-primary-blue;
+                //     background-color: #005FAA;
                 // }
             }
  
         }
 
         .tecoBillSelectorSmallText {
-            border-bottom: 2px solid $teco-primary-blue;
+            border-bottom: 2px solid #005FAA;
         }
 
         .tecoBillSelectorDownloadContainer {
@@ -55,11 +60,11 @@
 
         .tecoBillSelectorDownloadButton {
             &>span {
-                color: $teco-primary-blue;
+                color: #005FAA;
             }
 
-            color: $teco-primary-blue;
-            border-color: $teco-primary-blue;
+            color: #005FAA;
+            border-color: #005FAA;
         }
 
         // small container
@@ -121,4 +126,3 @@
 
         }
     }
-}

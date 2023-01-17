@@ -10,6 +10,7 @@
   import MeterTable from "./lib/Components/MIC-MeterTable.svelte";
   import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
   import { getToken, apiToken } from "./js/store";
+  import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
   let token1;
 
   //mocking data
@@ -35,26 +36,35 @@
       <!-- <mic-headerinformation token={token1}></mic-headerinformation> -->
       <MicHeaderInformation token={token1} />
     </div>
-    <!-- <div class="Billing-message">
-      <mic-balancesummary token={token1}></mic-balancesummary>
-      <mic-importentmessage token={token1} ></mic-importentmessage>
+    <div class="Billing-message">
+      <MicBalanceSummary token={token1} />
+      <!-- <mic-balancesummary token={token1} /> -->
+      <!-- <mic-importentmessage token={token1} /> -->
     </div>
     <div id="bill-selector">
-      <mic-billselector token={token1} ></mic-billselector>
+      <BillSelector token={token1} />
+      <!-- <mic-billselector token={token1} /> -->
     </div>
-    <div class="Billing" >
-      <mic-billingsummary token={token1}></mic-billingsummary>
-      <mic-insights token={token1}></mic-insights>
+    <div class="Billing">
+      <mic-billingsummary token={token1} />
+      <Insights token={token1} />
+      <mic-insights token={token1} />
     </div>
     <div class="meter">
-      <mic-metertable token={token1} ></mic-metertable>
-    </div> -->
+      <mic-metertable token={token1} />
+    </div>
   </div>
 {:else}
   <h1>no load</h1>
 {/if}
 
 <style>
+  .Header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   .container {
     display: flex;
     flex-direction: column;

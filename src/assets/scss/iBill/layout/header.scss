@@ -11,12 +11,12 @@
             font-style: normal;
             // font-size: $teco-font-size-small;
 
-            @media screen and (max-width: $screen-sm-max) {
+            @media screen and (max-width: 769px) {
                 // font-size: $teco-font-size-smaller;
             }
         }
 
-        @media screen and (max-width: $screen-sm-max) {
+        @media screen and (max-width: 769px) {
             padding: 10px 15px;
         }
 
@@ -36,7 +36,7 @@
 
         label {
             font-weight: 300;
-            color: $teco-primary-blue;
+            color: #005FAA;
         }
     }
 
@@ -67,7 +67,7 @@
             justify-content: center;
 
             .label {
-                @media screen and (max-width: $screen-sm-max) {
+                @media screen and (max-width: 769px) {
                     font-weight: 300;
                     // font-size: $teco-font-size-smaller;
                     color: black !important;
@@ -92,23 +92,23 @@
         justify-content: end;
 
         label {
-            color: $teco-primary-blue;
+            color: #005FAA;
         }
 
         .tecoHelpLeft {
 
             .tecoUserName {
-                @media screen and (max-width: $screen-sm-max) {
+                @media screen and (max-width: 769px) {
                     color: black !important;
                 }
             }
         }
 
         .tecoHelpRight {
-            border-left: 2px solid $teco-primary-blue;
+            border-left: 2px solid #005FAA;
 
             .tecoLogOff {
-                @media screen and (max-width: $screen-sm-max) {
+                @media screen and (max-width: 769px) {
                     font-weight: 700 !important;
                 }
             }
@@ -122,15 +122,15 @@
         font-weight: 700;
         // font-size: 32px;
 
-        @media screen and (max-width: $screen-sm-max) {
-            color: $teco-primary-blue;
+        @media screen and (max-width: 769px) {
+            color: #005FAA;
             // font-size: $teco-font-size-regular;
             // font-size: 16px;
         }
     }
 
 
-    @media screen and (min-width: $screen-sm-min) {
+    @media screen and (min-width: 768px) {
         .phoneShow {
             display: none;
             padding: 0;

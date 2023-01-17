@@ -1,6 +1,8 @@
+@import "./teco_custom.scss";
+@import "./tecoVariables.scss";
+@import "./fonts.scss";
+@import "./layout.scss";
 
-$screen-sm-min: 768px;
-$screen-sm-max: 767px;
 $screen-md-min: 991px;
 $screen-custom-md-min: 1024px;
 $screen-lg-min: 1200px;
@@ -10,6 +12,7 @@ $screen-lg-min: 1200px;
     box-sizing: border-box;
 
 }
+
 .tecoLayout {
     font-family: $teco-font-family;
     background-color: whitesmoke;
@@ -18,27 +21,27 @@ $screen-lg-min: 1200px;
         width: 7px;
         height: 7px;
     }
-      
-      /* Track */
+
+    /* Track */
     ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
+        background: #f1f1f1;
     }
-       
-      /* Handle */
+
+    /* Handle */
     ::-webkit-scrollbar-thumb {
         background: rgb(187, 187, 187);
         border-radius: 3px;
     }
-      
-      /* Handle on hover */
+
+    /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-        background: #888; 
+        background: #888;
     }
 
 }
 
 .tecoPrimaryBG {
-    background-color: $teco-primary-blue;
+    background-color: #005FAA;
 }
 
 .tecoYellowBG {
@@ -50,7 +53,7 @@ $screen-lg-min: 1200px;
 }
 
 .tecoPrimaryColor {
-    color: $teco-primary-blue;
+    color: #005FAA;
 }
 
 .tecoOceanBlue {
@@ -109,80 +112,11 @@ $screen-lg-min: 1200px;
     border-radius: 20px;
 }
 
-.tecoRowGapper {
-    @media screen and(max-width: 767px) {
-        gap: 16px;
-    }
-}
 
 .reverseOrder {
     direction: rtl;
 }
 
-// .row, .mx-layoutgrid, .col {
-//     margin: 0;
-//     padding: 0;
-// }
-
-// Desktop
-// @media screen and (min-width: 1024px) {
-//     .mobileOnly {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-    
-//     .tabletOnly {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-
-//     .hideOnDesktop {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-// }
-
-// // Tablet
-// @media screen and (max-width: 1024px) and (min-width: 768px) {
-//     .desktopOnly {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-
-//     .mobileOnly {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-
-//     .hideOnTablet {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-// }
-
-// // mobile
-// @media screen and(max-width: 768px) {
-//     .desktopOnly {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-
-//     .tabletOnly {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-
-//     .hideOnPhone {
-//         display: none;
-//         padding: 0;
-//         margin: 0;
-//     }
-// }
+.m_1 {
+    margin-top: 10px;
+}

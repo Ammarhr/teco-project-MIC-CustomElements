@@ -20,6 +20,7 @@
     apiToken,
   } from "../../js/store";
   import { slide } from "svelte/transition";
+  import MicBulkDownload from "./MIC-BulkDownload.svelte";
   //state
   export let dataLables = [$date, $CopmarsionDate];
   export let demandIsightsData = [79];
@@ -219,6 +220,7 @@
                   <div class="modal-content">
                     <button on:click={toggleModal}>X</button>
                     <mic-recomendation token={token}></mic-recomendation>
+                    <MicInsightsRecomendation  token={token}/>
                   </div>
                 </div>
               {/if}
@@ -229,7 +231,7 @@
           </div>
         {/if}
       </div>
-      <slot />
+     <MicBulkDownload />
       <mic-sunselect {token} ></mic-sunselect>
       <mic-yearlyenergy {token} ></mic-yearlyenergy>
       <mic-bulkdownload {token} ></mic-bulkdownload>

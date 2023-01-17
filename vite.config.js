@@ -39,9 +39,9 @@ export default defineConfig({
     // }),
   }),
   ],
-  preprocess: sveltePreprocess({
-    scss: {
-      includePaths: ['src'],
-    },
-  }),
+  // preprocess: sveltePreprocess({
+  //   scss: {
+  //     includePaths: ['src'],
+  //   },
+  // }),
 })
