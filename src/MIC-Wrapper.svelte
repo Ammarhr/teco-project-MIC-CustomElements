@@ -3,16 +3,16 @@
 <script>
   // @ts-nocheck
   import MicHeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
-  import ImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
   import BillSelector from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
-  import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
-  import Insights from "./lib/Components/MIC-Insights.svelte";
-  import MeterTable from "./lib/Components/MIC-MeterTable.svelte";
   import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
-  import { getToken, apiToken } from "./js/store";
   import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
-  let token1;
+  // import Insights from "./lib/Components/MIC-Insights.svelte";
+  // import ImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
+  // import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
+  // import MeterTable from "./lib/Components/MIC-MeterTable.svelte";
+  import { getToken, apiToken } from "./js/store";
 
+  let token1;
   //mocking data
   const [token, loading, error, get] = getToken(
     "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Token.json",
@@ -22,36 +22,39 @@
   $: if ($apiToken && $apiToken.token) {
     console.log("hapipi", $apiToken.token);
     token1 = $apiToken.token;
+    
   }
   $: token1 = token1;
 </script>
 
-{#if $loading && token1}
+{#if $loading && token1 }
   Loading: {$loading}
 {:else if $error}
   Error: {$error}
 {:else if token1}
-  <div class="container">
+  <div class="container" style="width: 100%;">
     <div class="Header">
-      <!-- <mic-headerinformation token={token1}></mic-headerinformation> -->
-      <MicHeaderInformation token={token1} />
+      <!-- <mic-headerinformation url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json" token={token1} ></mic-headerinformation> -->
+      <MicHeaderInformation token={null}  url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json" />
     </div>
     <div class="Billing-message">
-      <MicBalanceSummary token={token1} />
-      <!-- <mic-balancesummary token={token1} /> -->
+      <MicBalanceSummary token={token1} url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@style-adjustment/data/AccountBalanceData.json"/>
+      <!-- <mic-balancesummary url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@style-adjustment/data/AccountBalanceData.json" token={token1}></mic-balancesummary> -->
       <!-- <mic-importentmessage token={token1} /> -->
     </div>
     <div id="bill-selector">
-      <BillSelector token={token1} />
+      <BillSelector token={token1} url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json" />
+      <!-- <mic-billselector url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json" token={token1} ></mic-billselector> -->
       <!-- <mic-billselector token={token1} /> -->
     </div>
     <div class="Billing">
-      <mic-billingsummary token={token1} />
-      <Insights token={token1} />
-      <mic-insights token={token1} />
+      <!-- <mic-billingsummary token={token1} /> -->
+      <!-- <Insights token={token1} /> -->
+      <!-- <mic-insights token={token1} /> -->
+      <mic-bulkdownload token={token1}></mic-bulkdownload>
     </div>
     <div class="meter">
-      <mic-metertable token={token1} />
+      <!-- <mic-metertable token={token1} /> -->
     </div>
   </div>
 {:else}
@@ -71,7 +74,7 @@
     align-items: center;
     padding: 0px;
     gap: 30px;
-    width: 80%;
+    width: 100%;
     height: 2887.43px;
     flex: none;
     order: 0;

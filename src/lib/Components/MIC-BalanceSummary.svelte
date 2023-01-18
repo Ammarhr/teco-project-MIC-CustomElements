@@ -1,252 +1,373 @@
 <svelte:options tag="mic-balancesummary" />
 
 <script>
-  // @ts-nocheck
+    // @ts-nocheck
 
-  import culLine from "../../assets/Vector 550.svg";
-  import rowLine from "../../assets/Vector 549.svg";
+    import culLine from "../../assets/Vector 550.svg";
+    import rowLine from "../../assets/Vector 549.svg";
+    import mask from "../../assets/mask-bs.svg";
 
-  //state
-  export let token;
+    //state
+    export let token;
+    // export let url;
 
-  // store
-  import { fetchstore } from "../../js/store";
-  // let DomianName;
-  // let url = `${DomianName}/api/ibill/webcomponents/v1/Post/BalanceSummary`;
-  //mocking data
-  const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BalanceSummaryData.json",
-    token
-  );
+    // store
+    import { fetchstore } from "../../js/store";
+    // let DomianName;
+    // let url = `${DomianName}/api/ibill/webcomponents/v1/Post/BalanceSummary`;
+    //mocking data
+    const [data, loading, error, get] = fetchstore(
+        "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary",
+        token
+    );
 
-  var newElement;
-  let color; // this change the charge color depend in the its value
+    var newElement;
+    let color; // this change the charge color depend in the its value
 
-  $: if (token && !$data.html_masseges) {
-    get(token);
-    console.log("token from balance summary", token, $data);
-  }
-  $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
-  $: if (newElement && $data && $data.html_masseges) {
-    for (let i = 0; i < $data.html_masseges.length; i++) {
-      let subEle = document.createElement("div");
-      if (i > 0)
-        subEle.setAttribute(
-          "style",
-          "color: #015faa;border-top: solid 1px #015faa; padding-top:20px;"
-        );
-      subEle.innerHTML = $data.html_masseges[i].message;
-      newElement.appendChild(subEle);
+    $: if (token && !$data.html_masseges) {
+        get(token);
     }
-    if ($data.totalAmmount > 0) {
-      color = $data.postive_color;
-    } else {
-      color = $data.negative_color;
+    $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
+    $: if (newElement && $data && $data.html_masseges) {
+        for (let i = 0; i < $data.html_masseges.length; i++) {
+            let subEle = document.createElement("div");
+            if (i > 0)
+                subEle.setAttribute(
+                    "style",
+                    "color: #015faa;border-top: solid 1px #015faa; padding-top:20px;"
+                );
+            subEle.innerHTML = $data.html_masseges[i].message;
+            newElement.appendChild(subEle);
+        }
+        if ($data.totalAmmount > 0) {
+            color = $data.postive_color;
+        } else {
+            color = $data.negative_color;
+        }
     }
-  }
-  import "../../assets/scss/iBill/buildingBlocks/balanceSummary.scss";
 </script>
 
 <!-- <div id="card"> -->
 {#if $loading && !token}
-  Loading: {$loading}
+    Loading: {$loading}
 {:else if $error}
-  Error: {$error}
-  <!-- <img src={groupVector} alt="" id="group" /> -->
+    Error: {$error}
 {:else if $data && $data.html_masseges}
-  <div
-    class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
-  >
-    <div class="tecoBalanceSum roundedRadius20">
-      <div class="tecoBalanceSection">
-        <span>Total Amount Due</span>
-        <div class="amount">
-          <span>$</span>
-          <span>4,530</span>
-          <span>51</span>
-        </div>
-        <div>
-          <span class="dueLabel">Due Date: </span>
-          <span>Jan 25, 2022</span>
-        </div>
-        <div>
-          <button
-            type="button"
-            class="payBtn btn"
-          >
-            PAY NOW</button
-          >
-        </div>
-      </div>
-      <div class="tecoMessagesSection">
-        <div class="messageBox">
-          <h3 class="messageLabel">AutoPay</h3>
-          <span>
-            You have a positive account balance - DO not pay,
-            </span>
-        </div>
-        <div class="messageBox">
-          <span>
-            Your previous payment of $5,558.28 was received on Nov 25, 2021
-        </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- <div id="info-container" bind:this={newElement} />
-        <img src={culLine} alt="" id="cul-line" />
-        <img src={rowLine} alt="" id="row-line" />
-        <div id="info-container2">
-            <span id="label2">{$data.title}</span>
-            <div id="total" style="color:{color};">
-                <sup id="coin">$</sup>
-                <span id="ammount">{$data.totalAmmount}</span>
-                <sup>02</sup>
+    <div
+        class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
+    >
+        <div
+            class="tecoBalanceSum roundedRadius20"
+            style="background-image:url({mask});"
+        >
+            <div class="tecoBalanceSection">
+                <span>{$data.title}</span>
+                <div class="amount">
+                    <span style="color: {color};">$</span>
+                    <span style="color: {color};">{$data.totalAmmount}</span>
+                    <span style="color: {color};">51</span>
+                </div>
+                <div>
+                    <span class="dueLabel">Due Date: </span>
+                    <span>{$data.dueDate}</span>
+                </div>
+                <div>
+                    <button type="button" class="payBtn btn"
+                        ><a
+                            href={$data.pay_now_link}
+                            target="_blank"
+                            rel="noreferrer">PAY NOW</a
+                        ></button
+                    >
+                </div>
             </div>
-            <p id="due-date">Due Date: {$data.dueDate}</p>
-            <a href={$data.pay_now_link} target="_blank" rel="noreferrer">
-                <button>PAY NOW</button></a
-            >
-        </div> -->
+            <div
+                id="info-container"
+                bind:this={newElement}
+                class="tecoMessagesSection"
+            />
+        </div>
+    </div>
 {:else}
-  <h1>failed to load balance summary</h1>
+    <h1>failed to load balance summary</h1>
 {/if}
-<!-- </div> -->
 
-<!-- <style scoped>
-    @font-face {
-        font-family: "Interstate";
-        src: url("../../assets/fonts/Interstate.ttf") format("truetype");
-    }
+<!-- </div> -->
+<style lang="scss">
+    // Colors
+    $teco-white: #ffffff;
+    $teco-background-color: #f4f5f7;
+
+    $teco-light-blue: #e6eff7;
+    $teco-baby-blue: #b1dbfd;
+
+    $teco-midnigh-blue: #00294a;
+    $teco-sky-blue: #00b6f0;
+    $teco-ocean-blue: #5eb0f4;
+
+    $teco-yellow: #ffdc00;
+    $teco-green: #24a148;
+    $teco-red: #da1e28;
+
+    $teco-yellow-shade: rgba(255, 210, 0, 0.15);
+
+    // Typography
+    $teco-font-family: "Interstate";
+    $teco-header1: 32px;
+
+    $teco-font-size-xxs: 12px;
+    $teco-font-size-xs: 14px;
+    $teco-font-size-smaller: 16px;
+    $teco-font-size-small: 18px;
+    $teco-font-size-regular: 20px;
+    $teco-font-size-large: 24px;
+    $teco-font-size-larger: 36px;
+    $teco-font-size-xl: 52px;
+    $teco-font-size-xxl: 82px;
+
+    // Colors
+    $teco-white: #ffffff;
+    $teco-background-color: #f4f5f7;
+    $teco-light-gray: #eaecee;
+    $teco-light-blue: #e6eff7;
+    $teco-baby-blue: #b1dbfd;
+
+    $teco-midnight-blue: #00294a;
+    $teco-sky-blue: #00b6f0;
+    $teco-ocean-blue: #5eb0f4;
+
+    $teco-yellow: #ffdc00;
+    $teco-orange: #ff832b;
+    $teco-green: #24a148;
+    $teco-red: #da1e28;
+    $teco-dark-grey: #6c6c6c;
+
+    $teco-yellow-shade: rgba(255, 210, 0, 0.15);
+    $teco-red-shade: rgba(218, 30, 40, 0.03);
+
+    $screen-md-min: 991px;
+    $screen-custom-md-min: 1024px;
+    $screen-lg-min: 1200px;
+
     * {
-        font-family: "Interstate";
+        margin: 0;
+        box-sizing: border-box;
     }
-    #card {
-        display: flex;
-        flex: auto;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-start;
-        height: fit-content;
-        background-color: #ffff;
-        gap: 1rem;
-        width: 60%;
-        border-radius: 16px;
-        padding: 3rem 1rem;
-        box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
+
+    .tecoLayout {
+        font-family: $teco-font-family;
+        background-color: whitesmoke;
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: rgb(187, 187, 187);
+            border-radius: 3px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
     }
-    #info-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 45%;
-        height: 280px;
-        gap: 24px;
+
+    .tecoPrimaryBG {
+        background-color: #005faa;
     }
-    #row-line {
-        display: none;
+
+    .tecoYellowBG {
+        background-color: $teco-yellow;
     }
-    #info-container2 {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 48%;
-        height: fit-content;
-        gap: 22px;
+
+    .tecoWhiteBG {
+        background-color: $teco-white;
     }
-    #info-container2 a {
-        order: 3;
+
+    .tecoPrimaryColor {
+        color: #005faa;
+    }
+
+    .tecoOceanBlue {
+        color: $teco-ocean-blue;
+    }
+
+    .tecoMidnightBlue {
+        color: $teco-midnight-blue;
+    }
+
+    .tecoGreenColor {
+        color: $teco-green;
+    }
+
+    .tecoRedColor {
+        color: $teco-red;
+    }
+
+    .tecoGrayColor {
+        color: grey;
+    }
+
+    .tecoGrayedLabel {
+        color: grey;
+    }
+
+    .pointer {
         cursor: pointer;
     }
-    button {
-        padding: 10px 24px;
-        gap: 10px;
-        width: 197px;
-        height: 50px;
-        background: #005faa;
-        border-radius: 6px;
-        flex: none;
-        order: 3;
-        flex-grow: 0;
-        color: #fff;
+
+    .tecoBolder {
+        font-weight: 600 !important;
+    }
+
+    .marginReset {
+        margin: 0 !important;
+    }
+
+    .paddingReset {
+        padding: 0 !important;
+    }
+
+    .roundedTop {
+        border-radius: 7px 7px 0 0;
+    }
+
+    .roundedBottom {
+        border-radius: 0 0 7px 7px;
+    }
+
+    .tecoGenericShadow {
+        box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
+    }
+
+    .roundedRadius20 {
+        border-radius: 20px;
+    }
+
+    .reverseOrder {
+        direction: rtl;
+    }
+
+    .m_1 {
+        margin-top: 10px;
+    }
+
+    .btn {
         cursor: pointer;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 30px;
     }
-    #label2 {
-        width: 90%;
-        height: 30px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 1.5rem;
-        line-height: 30px;
-        color: #005faa;
-        align-items: center;
+    .tecoCard {
+        margin: 0 !important;
+        margin-top: 15px;
+        padding: 15px;
+
+        container-type: inline-size;
+        width: 100%;
+    }
+
+    .tecoBalanceSum {
+        // background-image: url(../../assets/mask-bs.png);
+        background-position: 98%;
+        background-repeat: no-repeat;
+        background-size: cover;
         display: flex;
-        flex-direction: column;
-    }
-    #total {
-        font-size: 3rem;
-    }
-    #ammount {
-        width: 90%;
-        height: 98px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 82px;
-        line-height: 98px;
-        text-align: center;
-        flex: none;
-        order: 1;
-        flex-grow: 0;
-    }
-    #due-date {
-        width: 15rem;
-        height: 20px;
-        font-style: normal;
-        font-weight: 300;
-        font-size: 20px;
-        line-height: 30px;
-        color: #005faa;
-        flex: none;
-        order: 2;
-        flex-grow: 0;
-    }
-    @media screen and (max-width: 1000px) {
-        #card {
+        justify-content: space-around;
+        flex-direction: row-reverse;
+        align-items: center;
+        min-height: 275px;
+        padding: 30px 15px;
+
+        .tecoBalanceSection {
+            width: 50%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 90%;
-            height: fit-content;
-            gap: 30px;
-            padding: 20px 10px;
+            gap: 10px;
+            color: #005faa;
+            border-left: 2px solid #005faa;
+
+            .amount {
+                display: flex;
+                & :nth-child(1),
+                & :nth-child(3) {
+                    font-size: 32px;
+                }
+                & :nth-child(2) {
+                    font-size: 64px;
+                }
+            }
+
+            .payBtn {
+                color: $teco-white;
+                background-color: #005faa;
+                width: 145px;
+                border: none;
+                padding: 8px 18px;
+                border-radius: 6px;
+            }
         }
-        #cul-line {
-            display: none;
-        }
-        #row-line {
-            width: 90%;
+
+        .tecoMessagesSection {
+            width: 50%;
             display: flex;
-            order: 1;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 20px;
+
+            .messageBox {
+                padding: 15px 0;
+                // quantity query to apply the style in case of 2 or more messages present
+                &:nth-last-child(n + 2),
+                &:nth-last-child(n + 2) ~ .messageBox {
+                    border-top: 2px solid #005faa;
+                }
+                &:nth-last-child(n + 2),
+                &:nth-last-child(n + 2) ~ .messageBox:first-child {
+                    border-top: none;
+                }
+                // end of quantity query
+                .messageLabel {
+                    color: #005faa;
+                    font-weight: 400;
+                }
+            }
         }
-        #info-container {
-            order: 2;
-            gap: 5px;
-            width: 100%;
-            height: fit-content;
-            gap: 10px;
+        a {
+            text-decoration: none;
+            color: $teco-white;
         }
-        #info-container2 {
-            order: 0;
-            gap: 5px;
-            width: 100%;
-            height: fit-content;
-            gap: 10px;
+        // small
+        @media (max-width: 600px) {
+            flex-direction: column;
+
+            .tecoBalanceSection {
+                width: 100%;
+                border-bottom: 2px solid #005faa;
+                border-left: none;
+                padding-bottom: 20px;
+
+                .amount {
+                    & :nth-child(2) {
+                        line-height: 1;
+                    }
+                }
+            }
+
+            .tecoMessagesSection {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 0 20px;
+            }
         }
     }
-</style> -->
+</style>

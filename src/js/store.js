@@ -17,23 +17,22 @@ export function fetchstore(url, token) {
         error.set(false)
         try {
             if (!token) {
-                data.set({ errrorMessage: "No Token provided!" })
-            } else if (token && token == 'token 2022') {
+                throw new Error( "No Token provided!" )
+                // data.set({ errrorMessage: "No Token provided!" })
+            } else if (token) {
                 const response = await fetch(url)
                 //* real api hit with jwt token:
-                // const Publishresponse = await fetch(url,{
-                //     method: 'POST', 
-                //     mode: 'cors', 
-                //     cache: 'no-cache', 
-                //     credentials: 'same-origin', 
-                //     headers: {
-                //       'Content-Type': 'application/json',
-                //       "AuthenticationToken" : JWTToken
-                //       // 'Content-Type': 'application/x-www-form-urlencoded',
-                //     },
-                //       body: JSON.stringify(data) /
-                // })
-                data.set(await response.json())
+                const Publishresponse = await fetch(url,{
+                    method: 'POST', 
+                    cache: 'no-cache', 
+                    credentials: 'same-origin', 
+                    headers: {
+                      'Content-Type': 'application/json',
+                      "AuthenticationToken" : token
+                    },
+                      body: {}.json()
+                })
+                data.set(await Publishresponse.json())
             } else {
                 data.set({ errrorMessage: "Invalid Token" })
 

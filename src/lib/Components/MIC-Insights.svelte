@@ -231,9 +231,10 @@
           </div>
         {/if}
       </div>
-     <MicBulkDownload />
+      <MicBulkDownload />
+     <!-- 
       <mic-sunselect {token} ></mic-sunselect>
-      <mic-yearlyenergy {token} ></mic-yearlyenergy>
+      <mic-yearlyenergy {token} ></mic-yearlyenergy> -->
       <mic-bulkdownload {token} ></mic-bulkdownload>
     </div>
   {/key}

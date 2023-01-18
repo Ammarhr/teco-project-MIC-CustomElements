@@ -1,106 +1,106 @@
-// Adding custom font not included in Mendix
-//  interstate font
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate.ttf') format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
+// // Adding custom font not included in Mendix
+// //  interstate font
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate.ttf') format("truetype");
+//     font-style: normal;
+//     font-weight: normal;
+// }
 
-// Interstate_Thin
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_Hairline.ttf') format("truetype");
-    font-weight: 50;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_Hairline_Italic.ttf') format("truetype");
-    font-weight: 50;
-    font-style: italic;
-}
+// // Interstate_Thin
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_Hairline.ttf') format("truetype");
+//     font-weight: 50;
+//     font-style: normal;
+// }
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_Hairline_Italic.ttf') format("truetype");
+//     font-weight: 50;
+//     font-style: italic;
+// }
 
-// Interstate_Thin
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_Thin.ttf') format("truetype");
-    font-weight: 100;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_Thin_Italic.ttf') format("truetype");
-    font-weight: 100;
-    font-style: italic;
-}
+// // Interstate_Thin
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_Thin.ttf') format("truetype");
+//     font-weight: 100;
+//     font-style: normal;
+// }
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_Thin_Italic.ttf') format("truetype");
+//     font-weight: 100;
+//     font-style: italic;
+// }
 
-// Interstate_ExLight
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_ExLight.ttf') format("truetype");
-    font-weight: 200;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_ExLight_Italic.ttf') format("truetype");
-    font-weight: 200;
-    font-style: italic;
-}
+// // Interstate_ExLight
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_ExLight.ttf') format("truetype");
+//     font-weight: 200;
+//     font-style: normal;
+// }
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_ExLight_Italic.ttf') format("truetype");
+//     font-weight: 200;
+//     font-style: italic;
+// }
 
-// Interstate_Light
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_Light.ttf') format("truetype");
-    font-weight: 300;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_Light_Italic.ttf') format("truetype");
-    font-weight: 300;
-    font-style: italic;
-}
+// // Interstate_Light
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_Light.ttf') format("truetype");
+//     font-weight: 300;
+//     font-style: normal;
+// }
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_Light_Italic.ttf') format("truetype");
+//     font-weight: 300;
+//     font-style: italic;
+// }
 
-// Interstate_Bold
-@font-face {
-    font-family: 'Interstate';
-    src: url('Interstate_Family/Interstate_Bold.ttf') format("truetype");
-    font-weight: 700;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Interstate'; 
-    src: url('Interstate_Family/Interstate_Bold_Italic.ttf');
-    font-weight: 700;
-    font-style: italic;
-}
+// // Interstate_Bold
+// @font-face {
+//     font-family: 'Interstate';
+//     src: url('Interstate_Family/Interstate_Bold.ttf') format("truetype");
+//     font-weight: 700;
+//     font-style: normal;
+// }
+// @font-face {
+//     font-family: 'Interstate'; 
+//     src: url('Interstate_Family/Interstate_Bold_Italic.ttf');
+//     font-weight: 700;
+//     font-style: italic;
+// }
 
-// Interstate_Black
-@font-face {
-    font-family: 'Interstate'; 
-    src: url('Interstate_Family/Interstate_Black.ttf');
-    font-weight: 800;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Interstate'; 
-    src: url('Interstate_Family/Interstate_Black_Italic.ttf');
-    font-weight: 800;
-    font-style: italic;
-}
+// // Interstate_Black
+// @font-face {
+//     font-family: 'Interstate'; 
+//     src: url('Interstate_Family/Interstate_Black.ttf');
+//     font-weight: 800;
+//     font-style: normal;
+// }
+// @font-face {
+//     font-family: 'Interstate'; 
+//     src: url('Interstate_Family/Interstate_Black_Italic.ttf');
+//     font-weight: 800;
+//     font-style: italic;
+// }
 
-// Interstate_UltraBlack
-@font-face {
-    font-family: 'Interstate'; 
-    src: url('Interstate_Family/Interstate_UltraBlack.ttf');
-    font-weight: 900;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Interstate'; 
-    src: url('Interstate_Family/Interstate_UltraBlack_Italic.ttf');
-    font-weight: 900;
-    font-style: italic;
-}
+// // Interstate_UltraBlack
+// @font-face {
+//     font-family: 'Interstate'; 
+//     src: url('Interstate_Family/Interstate_UltraBlack.ttf');
+//     font-weight: 900;
+//     font-style: normal;
+// }
+// @font-face {
+//     font-family: 'Interstate'; 
+//     src: url('Interstate_Family/Interstate_UltraBlack_Italic.ttf');
+//     font-weight: 900;
+//     font-style: italic;
+// }

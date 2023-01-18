@@ -4,19 +4,10 @@
   // @ts-nocheck
   import MicWrapper from "./MIC-Wrapper.svelte";
   import "./app.css";
-  // import MicBalanceDetails from "./lib/Components/MIC-BalanceDetails.svelte";
-  // import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
-  // import MicBillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
-  // import MicDraggableContainer from "./lib/Components/MIC-DraggableContainer.svelte";
-  // import MicHeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
-  // import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
-  // import MicImportantMessagesDetails from "./lib/Components/MIC-ImportantMessagesDetails.svelte";
-  // import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
-  // import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
-  // import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
-  // import MicSunSelect from "./lib/Components/MIC-SunSelect.svelte";
-  // import MicYearlyEnergy from "./lib/Components/MIC-YearlyEnergy.svelte";
-  // import MicInsights from "./lib/Components/MIC-Insights.svelte";
+  import MicHeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
+  import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
+  import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
+  import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
   // import { getToken ,apiToken } from "./js/store";
 
   // import MicPagination from "./lib/Components/mic-pagination.svelte";
@@ -46,6 +37,7 @@
 </script>
 
 <div class="app-container">
+  <!-- <mic-wrapper></mic-wrapper> -->
   <MicWrapper />
   <!-- {#if $loading}
   Loading: {$loading}
@@ -59,13 +51,6 @@
 </div>
 
 <style>
-  :global(.insight-card) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 30%;
-  }
   .app-container {
     display: flex;
     flex-direction: column;
