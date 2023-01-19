@@ -4,20 +4,16 @@
   // @ts-nocheck
 
   // svg imports
-  // import line from "../../assets/Line1812.svg";
   import { billNumber } from "../../js/store";
   import downloadIcon from "../../assets/DownloadIcon.svg";
-
-  export let token;
-  // export let url;
-  // export let item = { name: "Item" };
-
   import { fetchstore } from "../../js/store";
 
+  // state
+  export let token;
+ 
   //mocking data
   const [data, loading, error, get] = fetchstore(
     "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BillSelector",
-    // url,
     token
   );
 
@@ -26,9 +22,12 @@
   }
 </script>
 
+<!--TO_DO-->
+<!--Create web component for error messages & loading-->
 {#if $loading && !token}
   Loading: {$loading}
 {:else if $error}
+<!--error regarding to fetch-->
   Error: {$error}
 {:else if $data && $data.bills}
   <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
@@ -73,58 +72,18 @@
 {/if}
 
 <style lang="scss">
-  $teco-font-family: "";
-
-  // Colors
-  $teco-white: #ffffff;
-  $teco-background-color: #f4f5f7;
-
-  $teco-light-blue: #e6eff7;
-  $teco-baby-blue: #b1dbfd;
-
-  $teco-midnigh-blue: #00294a;
-  $teco-sky-blue: #00b6f0;
-  $teco-ocean-blue: #5eb0f4;
-
-  $teco-yellow: #ffdc00;
-  $teco-green: #24a148;
-  $teco-red: #da1e28;
-
-  $teco-yellow-shade: rgba(255, 210, 0, 0.15);
 
   // Typography
   $teco-font-family: "Interstate";
-  $teco-header1: 32px;
-
-  $teco-font-size-xxs: 12px;
-  $teco-font-size-xs: 14px;
-  $teco-font-size-smaller: 16px;
-  $teco-font-size-small: 18px;
-  $teco-font-size-regular: 20px;
-  $teco-font-size-large: 24px;
-  $teco-font-size-larger: 36px;
-  $teco-font-size-xl: 52px;
-  $teco-font-size-xxl: 82px;
 
   // Colors
   $teco-white: #ffffff;
-  $teco-background-color: #f4f5f7;
-  $teco-light-gray: #eaecee;
-  $teco-light-blue: #e6eff7;
-  $teco-baby-blue: #b1dbfd;
-
   $teco-midnight-blue: #00294a;
-  $teco-sky-blue: #00b6f0;
   $teco-ocean-blue: #5eb0f4;
-
   $teco-yellow: #ffdc00;
-  $teco-orange: #ff832b;
   $teco-green: #24a148;
   $teco-red: #da1e28;
   $teco-dark-grey: #6c6c6c;
-
-  $teco-yellow-shade: rgba(255, 210, 0, 0.15);
-  $teco-red-shade: rgba(218, 30, 40, 0.03);
 
   $screen-md-min: 991px;
   $screen-custom-md-min: 1024px;
@@ -244,6 +203,7 @@
   .btn {
     cursor: pointer;
   }
+  // teco cards
   .tecoCard {
     margin: 0 !important;
     padding: 15px;
@@ -251,6 +211,8 @@
     container-type: inline-size;
     width: 100%;
   }
+
+  // web component "tecoBillSelector" style
   .tecoBillSelector-v2 {
     font-weight: 400;
     display: flex;

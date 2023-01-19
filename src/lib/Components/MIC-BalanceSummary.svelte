@@ -2,36 +2,33 @@
 
 <script>
     // @ts-nocheck
-
-    import culLine from "../../assets/Vector 550.svg";
-    import rowLine from "../../assets/Vector 549.svg";
     import mask from "../../assets/mask-bs.svg";
+    import { fetchstore } from "../../js/store";
 
     //state
     export let token;
-    // export let url;
+    var newElement;
+    let color; // this change the charge color depend in the its value
 
-    // store
-    import { fetchstore } from "../../js/store";
-    // let DomianName;
-    // let url = `${DomianName}/api/ibill/webcomponents/v1/Post/BalanceSummary`;
     //mocking data
     const [data, loading, error, get] = fetchstore(
         "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary",
         token
     );
 
-    var newElement;
-    let color; // this change the charge color depend in the its value
-
+    // trigger token existence
     $: if (token && !$data.html_masseges) {
         get(token);
     }
+
     $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
+
     $: if (newElement && $data && $data.html_masseges) {
+        // create elements fro html_masseges
         for (let i = 0; i < $data.html_masseges.length; i++) {
             let subEle = document.createElement("div");
             if (i > 0)
+                // add border
                 subEle.setAttribute(
                     "style",
                     "color: #015faa;border-top: solid 1px #015faa; padding-top:20px;"
@@ -39,6 +36,7 @@
             subEle.innerHTML = $data.html_masseges[i].message;
             newElement.appendChild(subEle);
         }
+        // dynamic totalAmmount colors
         if ($data.totalAmmount > 0) {
             color = $data.postive_color;
         } else {
@@ -47,11 +45,13 @@
     }
 </script>
 
-<!-- <div id="card"> -->
+<!--TO_DO-->
+<!--Create web component for error messages & loading-->
 {#if $loading && !token}
-    Loading: {$loading}
+    Loading...
 {:else if $error}
-    Error: {$error}
+<!--error regarding to fetch-->
+    Error: {$error} 
 {:else if $data && $data.html_masseges}
     <div
         class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
@@ -92,38 +92,9 @@
     <h1>failed to load balance summary</h1>
 {/if}
 
-<!-- </div> -->
 <style lang="scss">
-    // Colors
-    $teco-white: #ffffff;
-    $teco-background-color: #f4f5f7;
-
-    $teco-light-blue: #e6eff7;
-    $teco-baby-blue: #b1dbfd;
-
-    $teco-midnigh-blue: #00294a;
-    $teco-sky-blue: #00b6f0;
-    $teco-ocean-blue: #5eb0f4;
-
-    $teco-yellow: #ffdc00;
-    $teco-green: #24a148;
-    $teco-red: #da1e28;
-
-    $teco-yellow-shade: rgba(255, 210, 0, 0.15);
-
     // Typography
     $teco-font-family: "Interstate";
-    $teco-header1: 32px;
-
-    $teco-font-size-xxs: 12px;
-    $teco-font-size-xs: 14px;
-    $teco-font-size-smaller: 16px;
-    $teco-font-size-small: 18px;
-    $teco-font-size-regular: 20px;
-    $teco-font-size-large: 24px;
-    $teco-font-size-larger: 36px;
-    $teco-font-size-xl: 52px;
-    $teco-font-size-xxl: 82px;
 
     // Colors
     $teco-white: #ffffff;
@@ -131,20 +102,16 @@
     $teco-light-gray: #eaecee;
     $teco-light-blue: #e6eff7;
     $teco-baby-blue: #b1dbfd;
-
     $teco-midnight-blue: #00294a;
     $teco-sky-blue: #00b6f0;
     $teco-ocean-blue: #5eb0f4;
-
     $teco-yellow: #ffdc00;
     $teco-orange: #ff832b;
     $teco-green: #24a148;
     $teco-red: #da1e28;
     $teco-dark-grey: #6c6c6c;
-
     $teco-yellow-shade: rgba(255, 210, 0, 0.15);
     $teco-red-shade: rgba(218, 30, 40, 0.03);
-
     $screen-md-min: 991px;
     $screen-custom-md-min: 1024px;
     $screen-lg-min: 1200px;
@@ -273,7 +240,6 @@
     }
 
     .tecoBalanceSum {
-        // background-image: url(../../assets/mask-bs.png);
         background-position: 98%;
         background-repeat: no-repeat;
         background-size: cover;

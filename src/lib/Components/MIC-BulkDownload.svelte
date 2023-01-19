@@ -34,52 +34,14 @@
 
 <style lang="scss">
     // Typography
-    $teco-font-family: "";
-
-    // Colors
-    $teco-white: #ffffff;
-    $teco-background-color: #f4f5f7;
-
-    $teco-light-blue: #e6eff7;
-    $teco-baby-blue: #b1dbfd;
-
-    $teco-midnigh-blue: #00294a;
-    $teco-sky-blue: #00b6f0;
-    $teco-ocean-blue: #5eb0f4;
-
-    $teco-yellow: #ffdc00;
-    $teco-green: #24a148;
-    $teco-red: #da1e28;
-
-    $teco-yellow-shade: rgba(255, 210, 0, 0.15);
-
-    // Typography
     $teco-font-family: "Interstate";
-    $teco-header1: 32px;
-
-    $teco-font-size-xxs: 12px;
-    $teco-font-size-xs: 14px;
-    $teco-font-size-smaller: 16px;
-    $teco-font-size-small: 18px;
-    $teco-font-size-regular: 20px;
-    $teco-font-size-large: 24px;
-    $teco-font-size-larger: 36px;
-    $teco-font-size-xl: 52px;
-    $teco-font-size-xxl: 82px;
 
     // Colors
     $teco-white: #ffffff;
-    $teco-background-color: #f4f5f7;
-    $teco-light-gray: #eaecee;
-    $teco-light-blue: #e6eff7;
-    $teco-baby-blue: #b1dbfd;
-
     $teco-midnight-blue: #00294a;
-    $teco-sky-blue: #00b6f0;
     $teco-ocean-blue: #5eb0f4;
 
     $teco-yellow: #ffdc00;
-    $teco-orange: #ff832b;
     $teco-green: #24a148;
     $teco-red: #da1e28;
     $teco-dark-grey: #6c6c6c;
@@ -215,7 +177,6 @@
 
     .tecoBillBanner {
         // image and color
-
         background-size: cover;
         background-color: #005faa;
         color: white;

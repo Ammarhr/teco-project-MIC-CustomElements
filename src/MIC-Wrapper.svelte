@@ -24,7 +24,7 @@
     token1 = $apiToken.token;
     
   }
-  $: token1 = token1;
+  $: token1 = token1; // trigger token existence
 </script>
 
 {#if $loading && token1 }
@@ -35,15 +35,15 @@
   <div class="container" style="width: 100%;">
     <div class="Header">
       <!-- <mic-headerinformation url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json" token={token1} ></mic-headerinformation> -->
-      <MicHeaderInformation token={null}  url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json" />
+      <MicHeaderInformation token={token1} />
     </div>
     <div class="Billing-message">
-      <MicBalanceSummary token={token1} url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@style-adjustment/data/AccountBalanceData.json"/>
+      <MicBalanceSummary token={token1} />
       <!-- <mic-balancesummary url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@style-adjustment/data/AccountBalanceData.json" token={token1}></mic-balancesummary> -->
       <!-- <mic-importentmessage token={token1} /> -->
     </div>
     <div id="bill-selector">
-      <BillSelector token={token1} url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json" />
+      <BillSelector token={token1} />
       <!-- <mic-billselector url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json" token={token1} ></mic-billselector> -->
       <!-- <mic-billselector token={token1} /> -->
     </div>
@@ -51,8 +51,8 @@
       <!-- <mic-billingsummary token={token1} /> -->
       <!-- <Insights token={token1} /> -->
       <!-- <mic-insights token={token1} /> -->
-      <mic-bulkdownload token={token1}></mic-bulkdownload>
-    </div>
+      <MicBulkDownload token={token1} />
+      </div>
     <div class="meter">
       <!-- <mic-metertable token={token1} /> -->
     </div>
@@ -124,6 +124,8 @@
     width: 100%;
     height: fit-content;
   }
+
+  /**small screen**/
   @media only screen and (max-width: 1000px) {
     .container {
       display: flex;

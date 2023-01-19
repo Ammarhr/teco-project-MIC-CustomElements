@@ -5,27 +5,28 @@
 
   import star from "../../assets/Vector.svg";
   import fire from "../../assets/Fire.svg";
-  import { fetchstore, apiToken } from "../../js/store";
+  import { fetchstore } from "../../js/store";
+
+  //state
   export let token;
-  // export let url;
-  // export let item = { name: "Item" };
   let account;
   let statusClass = "Inactive";
 
-  // "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json",
   const [data, loading, error, get] = fetchstore(
-    // url
-    "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/AccountDetails"
-  , token);
+    "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/AccountDetails",
+    token
+  );
 
-  $: if (token &&  !$data.account) {
+  $: if (token && !$data.account) {
     get(token);
   }
+
   $: if ($data) {
     account = $data.account;
   }
 
   $: if (account) {
+    // Active & Inactive status text & color
     account = account;
     if (account.status == "Active") {
       statusClass = "Active";
@@ -35,13 +36,16 @@
   }
 </script>
 
+<!--TO_DO-->
+<!--Create web component for error messages & loading-->
 <div>
   {#if $loading}
-    Loading: {$loading}
+  Loading: {$loading}
   {:else if $error}
-    Error: {$error}
+  <!--error regarding to fetch-->
+  Error: {$error}
   {:else if account}
-    <div class="tecoInfoBar tecoGenericShadow">
+  <div class="tecoInfoBar tecoGenericShadow">
       <div class="row">
         <div class="col-lg col-md col tecoInfoBarCol tecoPrimaryBG roundedTop">
           <div class="tecoInfoLabel">
@@ -50,7 +54,7 @@
           <div class="oneLined">
             <button type="button" class="change-btn btn">
               Change Account</button
-            ><img class="spacing-outer-left-medium" src={star} />
+            ><img class="spacing-outer-left-medium" src={star} alt="favorite logo" />
           </div>
         </div>
       </div>
@@ -89,38 +93,9 @@
 </div>
 
 <style lang="scss">
-  $teco-font-family: "";
-
-  // Colors
-  $teco-white: #ffffff;
-  $teco-background-color: #f4f5f7;
-
-  $teco-light-blue: #e6eff7;
-  $teco-baby-blue: #b1dbfd;
-
-  $teco-midnigh-blue: #00294a;
-  $teco-sky-blue: #00b6f0;
-  $teco-ocean-blue: #5eb0f4;
-
-  $teco-yellow: #ffdc00;
-  $teco-green: #24a148;
-  $teco-red: #da1e28;
-
-  $teco-yellow-shade: rgba(255, 210, 0, 0.15);
-
+  
   // Typography
   $teco-font-family: "Interstate";
-  $teco-header1: 32px;
-
-  $teco-font-size-xxs: 12px;
-  $teco-font-size-xs: 14px;
-  $teco-font-size-smaller: 16px;
-  $teco-font-size-small: 18px;
-  $teco-font-size-regular: 20px;
-  $teco-font-size-large: 24px;
-  $teco-font-size-larger: 36px;
-  $teco-font-size-xl: 52px;
-  $teco-font-size-xxl: 82px;
 
   // Colors
   $teco-white: #ffffff;
