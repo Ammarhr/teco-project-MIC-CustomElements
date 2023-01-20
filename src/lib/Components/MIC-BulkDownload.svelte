@@ -5,14 +5,16 @@
     import backgroundPattern from "../../assets/mask-bd.svg";
     import { fetchstore } from "../../js/store";
     export let token;
+    export let url;
 
     //mocking data
     const [data, loading, error, get] = fetchstore(
-        "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BulkDownload",
+        // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BulkDownload",
+        url,
         token
     );
-    $: if (token && !$data) {
-        get(token);
+    $: if (token && url && !$data) {
+        get(token, url);
     }
 </script>
 

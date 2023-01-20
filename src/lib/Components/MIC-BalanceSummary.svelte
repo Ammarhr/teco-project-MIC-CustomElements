@@ -7,18 +7,23 @@
 
     //state
     export let token;
+    export let url;
     var newElement;
     let color; // this change the charge color depend in the its value
+    let tries = 3;
 
     //mocking data
     const [data, loading, error, get] = fetchstore(
-        "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary",
+        // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary",
+        url,
         token
     );
 
     // trigger token existence
-    $: if (token && !$data.html_masseges) {
-        get(token);
+    $: if (token && url && !$data.html_masseges && tries > 0) {
+        console.info("this is url", url, "loading", $loading);
+        get(token, url);
+        tries--;
     }
 
     $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
@@ -46,13 +51,13 @@
 </script>
 
 <!--TO_DO-->
-<!--Create web component for error messages & loading-->
-{#if $loading && !token}
-    Loading...
+<!--Create web component for loading-->
+{#if $loading}
+    Loading...{$loading}
 {:else if $error}
-<!--error regarding to fetch-->
-    Error: {$error} 
-{:else if $data && $data.html_masseges}
+    <!--error regarding to fetch-->
+    <mic-render-error err= {$error}></mic-render-error>
+    {:else if $data.html_masseges}
     <div
         class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
     >
@@ -89,7 +94,7 @@
         </div>
     </div>
 {:else}
-    <h1>failed to load balance summary</h1>
+<mic-render-error err= {"failed to load balance summary"}></mic-render-error>
 {/if}
 
 <style lang="scss">

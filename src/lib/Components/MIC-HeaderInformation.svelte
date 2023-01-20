@@ -9,16 +9,18 @@
 
   //state
   export let token;
+  export let url;
   let account;
   let statusClass = "Inactive";
 
   const [data, loading, error, get] = fetchstore(
-    "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/AccountDetails",
+    // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary",
+    url,
     token
   );
 
-  $: if (token && !$data.account) {
-    get(token);
+  $: if (token && url && !$data.account) {
+    get(token, url);
   }
 
   $: if ($data) {
@@ -37,15 +39,15 @@
 </script>
 
 <!--TO_DO-->
-<!--Create web component for error messages & loading-->
+<!--Create web component for loading-->
 <div>
   {#if $loading}
-  Loading: {$loading}
+    Loading: {$loading}
   {:else if $error}
-  <!--error regarding to fetch-->
-  Error: {$error}
+    <!--error regarding to fetch-->
+    <mic-render-error err= {$error}></mic-render-error>
   {:else if account}
-  <div class="tecoInfoBar tecoGenericShadow">
+    <div class="tecoInfoBar tecoGenericShadow">
       <div class="row">
         <div class="col-lg col-md col tecoInfoBarCol tecoPrimaryBG roundedTop">
           <div class="tecoInfoLabel">
@@ -54,7 +56,11 @@
           <div class="oneLined">
             <button type="button" class="change-btn btn">
               Change Account</button
-            ><img class="spacing-outer-left-medium" src={star} alt="favorite logo" />
+            ><img
+              class="spacing-outer-left-medium"
+              src={star}
+              alt="favorite logo"
+            />
           </div>
         </div>
       </div>
@@ -86,14 +92,11 @@
       </div>
     </div>
   {:else}
-    <div>
-      <p>Failed to load header</p>
-    </div>
+  <mic-render-error err= {"Failed to load header"}></mic-render-error>
   {/if}
 </div>
 
 <style lang="scss">
-  
   // Typography
   $teco-font-family: "Interstate";
 

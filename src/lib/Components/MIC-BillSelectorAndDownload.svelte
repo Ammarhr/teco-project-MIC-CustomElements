@@ -10,25 +10,27 @@
 
   // state
   export let token;
+  export let url;
  
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BillSelector",
+    // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BillSelector",
+    url,
     token
   );
 
-  $: if (token && !$data.bills) {
-    get(token);
+  $: if (token && url && !$data.bills) {
+    get(token, url);
   }
 </script>
 
 <!--TO_DO-->
-<!--Create web component for error messages & loading-->
-{#if $loading && !token}
+<!--Create web component for loading-->
+{#if $loading}
   Loading: {$loading}
 {:else if $error}
 <!--error regarding to fetch-->
-  Error: {$error}
+<mic-render-error err= {$error}></mic-render-error>
 {:else if $data && $data.bills}
   <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
     <div class="tecoBillSelector-v2">
@@ -68,7 +70,7 @@
     </div>
   </div>
 {:else}
-  <h3>failed in bill selector</h3>
+<mic-render-error err= {"failed in bill selector"}></mic-render-error>
 {/if}
 
 <style lang="scss">

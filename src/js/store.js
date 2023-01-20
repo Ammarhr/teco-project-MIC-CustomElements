@@ -30,7 +30,7 @@ export function fetchstore(url, token) {
     const error = writable(false)
     const data = writable({})
 
-    async function get(token) {
+    async function get(token, url) {
         loading.set(true)
         error.set(false)
         try {
@@ -39,6 +39,7 @@ export function fetchstore(url, token) {
                 throw new Error("No Token provided!")
             } else if (token) {
                 //* real api hit with jwt token:
+                console.log('url', url, 'tpken', token);
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
@@ -47,6 +48,7 @@ export function fetchstore(url, token) {
                         'Content-Type': 'application/json',
                         "AuthenticationToken": token
                     },
+                    body: JSON.stringify({}),
                 })
                 data.set(await Publishresponse.json())
             } else {
@@ -55,11 +57,12 @@ export function fetchstore(url, token) {
             }
         } catch (e) {
             error.set(e)
+            console.info('error', e);
         }
         loading.set(false)
     }
 
-    get(token)
+    // get(token)
 
     return [data, loading, error, get]
 }

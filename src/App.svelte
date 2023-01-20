@@ -7,11 +7,12 @@
   import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
   import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
   import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
+  import MicRenderError from "./lib/Components/MIC-RenderError.svelte";
   import "./app.css";
 </script>
 
 <div class="app-container">
-  <MicWrapper />
+  
 </div>
 
 <style>
@@ -22,3 +23,4 @@
     align-items: center;
   }
 </style>
+
