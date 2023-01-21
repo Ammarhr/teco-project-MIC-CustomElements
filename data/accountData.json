@@ -1,10 +1,13 @@
 {
   "account": {
-    "accountNumber": 6484884,
-    "status": "Active",
-    "adress": "Daraa 152 Main St, Tampa FL",
-    "multiAccountsFlag": true,
-    "redirectChangeAccount": "https://www.tecoenergy.com",
-    "favorite": false
+      "accountNumber": 6484884,
+      "status": "Active",
+      "adress": "Daraa 152 Main St, Tampa FL",
+      "multiAccountsFlag": true,
+      "IsElectric": true,
+      "IsGas": true,
+      "IsLighting": true,
+      "redirectChangeAccount": "https://www.tecoenergy.com",
+      "favorite": false
   }
 }

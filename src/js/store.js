@@ -59,7 +59,9 @@ export function fetchstore(url, token) {
             error.set(e)
             console.info('error', e);
         }
-        loading.set(false)
+        setTimeout(() => {
+            loading.set(false)
+        }, 2000)
     }
 
     // get(token)

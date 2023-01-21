@@ -38,14 +38,12 @@
   }
 </script>
 
-<!--TO_DO-->
-<!--Create web component for loading-->
 <div>
   {#if $loading}
-    Loading: {$loading}
+    <mic-loading />
   {:else if $error}
     <!--error regarding to fetch-->
-    <mic-render-error err= {$error}></mic-render-error>
+    <mic-render-error err={$error} />
   {:else if account}
     <div class="tecoInfoBar tecoGenericShadow">
       <div class="row">
@@ -92,7 +90,7 @@
       </div>
     </div>
   {:else}
-  <mic-render-error err= {"Failed to load header"}></mic-render-error>
+    <mic-render-error err={"Failed to load header"} />
   {/if}
 </div>
 
