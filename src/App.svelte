@@ -1,53 +1,21 @@
+<svelte:options tag={"my-app"} />
+
 <script>
   // @ts-nocheck
-
   import MicWrapper from "./MIC-Wrapper.svelte";
-  import MicAccountBalanceDs from "./lib/Components/MIC-AccountBalance-DS.svelte";
-  import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
-  import MicBillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
-  import MicDraggableContainer from "./lib/Components/MIC-DraggableContainer.svelte";
   import MicHeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
-  import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
-  import MicInsights from "./lib/Components/MIC-Insights.svelte";
-  import { getToken } from "./js/store";
-  import MicPagination from "./lib/Components/mic-pagination.svelte";
-  let apiToken;
-
-  //mocking data
-  const [token, loading, error, get] = getToken("data/Token.json", "Ammar");
-
-  $: if ($token) {
-    apiToken = $token.token;
-  }
-  let items = [
-    // {id: 1, name: MicHeaderInformation},
-    { id: 1, name: MicAccountBalanceDs },
-    { id: 2, name: MicImportantMessage },
-    { id: 3, name: MicInsights },
-    { id: 4, name: MicBillingSummary },
-    { id: 5, name: MicBillSelectorAndDownload },
-  ];
-  function onDrop(newItems) {
-    items = newItems;
-  }
+  import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
+  import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
+  import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
+  import MicRenderError from "./lib/Components/MIC-RenderError.svelte";
+  import "./app.css";
 </script>
 
 <div class="app-container">
-  <!-- {#if $loading}
-    Loading: {$loading}
-  {:else if $error}
-    Error: {$error}
-  {:else}
-    <MicHeaderInformation token={apiToken} />
-    <MicDraggableContainer itemData={items} {onDrop} />
-  {/if} -->
-  <MicWrapper />
-  <!-- <MicPagination /> -->
-  <!-- <MicTabs /> -->
+  
 </div>
 
 <style>
-
   .app-container {
     display: flex;
     flex-direction: column;
@@ -55,3 +23,4 @@
     align-items: center;
   }
 </style>
+

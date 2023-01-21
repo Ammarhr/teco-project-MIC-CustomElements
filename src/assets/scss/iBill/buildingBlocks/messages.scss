@@ -1,0 +1,48 @@
+@import "../../base/teco_custom.scss";
+@import "../../base/tecoVariables.scss";
+@import "../../base/fonts.scss";
+@import "../../base/globals.scss";
+
+.tecoLayout {
+
+    .tecoImportantMessages {
+        position: relative;
+
+        .mx-groupbox-header {
+            margin-left: 50px !important;
+        }
+
+
+        .envelopsCountIcon {
+            position: absolute;
+            top: 10px;
+            left: 5px;
+
+            >div {
+                position: relative;
+
+                span {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    transform: translate(50%, -40%);
+                    background-color: red;
+                    color: white;
+                    border-radius: 50%;
+                    width: 17px;
+                    height: 17px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-size: 10px;
+                    margin: 0;
+                    padding: 0;
+                    line-height: 0;
+                }
+            }
+
+
+        }
+    }
+}

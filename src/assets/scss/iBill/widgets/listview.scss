@@ -1,0 +1,60 @@
+.tecoLayout {
+
+    .mx-listview-searchbar {
+        border-bottom: none;
+        button {
+            right: 10px;
+            position: absolute;
+            border: unset;
+            background: unset;
+        }
+    }
+
+    .mx-listview > ul > li {
+        border-color: #EAECEE !important;
+    }
+
+    .mx-listview-loadMore {
+        margin: 0;
+    }
+    // overrides bordered list
+
+    // overrides lined list
+    .listview-lined > ul > li:last-child {
+        border-bottom: 1px solid #000000 !important;
+    }
+    .listview-lined.mx-listview > ul > li:first-child {
+        border-top: none
+    }
+
+
+    // Design Properties
+    .mx-listview.listHideSearchBar {
+        > .mx-listview-searchbar {
+            display: none;
+        }
+    }
+
+    .mx-listview.listHideLoadMore {
+        > ul {
+            margin-bottom: 0;
+        }
+        > .mx-listview-loadMore {
+            display: none;
+        }
+    }
+
+
+    .mx-listview.listColLike {
+        > ul {
+            display: flex;
+            flex-direction: column;
+            width: fit-content;
+        }
+    }
+
+    .mx-listview.removeBottomBorder > ul > li:last-child {
+        border-bottom: none;
+    }
+
+}

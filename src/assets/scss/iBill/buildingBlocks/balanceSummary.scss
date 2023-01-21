@@ -1,0 +1,102 @@
+@import "../../base/teco_custom.scss";
+@import "../../base/tecoVariables.scss";
+@import "../../base/fonts.scss";
+@import "../../base/globals.scss";
+
+
+    .tecoBalanceSum {
+        background-image: url(../../../Mask2.svg);
+        background-position: 98%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row-reverse;
+        align-items: center;
+        min-height: 275px;
+        padding: 30px 15px;
+        
+        .tecoBalanceSection {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: #005FAA;
+            border-left: 2px solid #005FAA;
+
+            .amount {
+                display: flex;
+                & :nth-child(1), & :nth-child(3){
+                    font-size: 32px;
+                }
+                & :nth-child(2){
+                    font-size: 64px;
+                }
+            }
+
+            .payBtn {
+                color: $teco-white;
+                background-color: #005FAA;
+                width: 145px;
+                border: none;
+                padding: 8px 18px;
+                border-radius: 6px;
+            }
+        }
+
+        .tecoMessagesSection {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 20px;
+
+            .messageBox {
+                padding: 15px 0;
+                // quantity query to apply the style in case of 2 or more messages present
+                &:nth-last-child(n+2), &:nth-last-child(n+2) ~ .messageBox { 
+                    border-top: 2px solid #005FAA;
+                }
+                &:nth-last-child(n+2), &:nth-last-child(n+2) ~ .messageBox:first-child  { 
+                    border-top: none;
+                }
+                // end of quantity query
+                .messageLabel {
+                    color: #005FAA;
+                    font-weight: 400;
+                }
+
+            }
+        }
+
+
+        // small
+        @container (inline-size < 600px) {
+            flex-direction: column;
+
+            .tecoBalanceSection {
+                width: 100%;
+                border-bottom: 2px solid #005FAA;
+                border-left: none;
+                padding-bottom: 20px;
+
+                .amount {
+                    & :nth-child(2){
+                        line-height: 1;
+                    }
+                }
+            }
+
+            .tecoMessagesSection {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 0 20px;
+    
+            }
+            
+        }
+    }

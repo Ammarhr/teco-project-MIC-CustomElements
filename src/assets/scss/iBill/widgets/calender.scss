@@ -1,0 +1,16 @@
+.mx-calendar {
+    .mx-calendar-month-header {
+        .glyphicon {
+            color: $teco-yellow;
+        }
+    }
+
+    th,
+    .mx-calendar-year-switcher span.mx-calendar-year-selected {
+        color: #005FAA;
+    }
+
+    .mx-calendar-day-selected {
+        background-color: #005FAA;
+    }
+}

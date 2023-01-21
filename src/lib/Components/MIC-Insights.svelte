@@ -17,40 +17,47 @@
     CopmarsionDate,
     billNumber,
     getToken,
+    apiToken,
   } from "../../js/store";
-  import MicSunSelect from "./MIC-SunSelect.svelte";
-  import MicYearlyEnergy from "./MIC-YearlyEnergy.svelte";
-  import MicBulkDownload from "./MIC-BulkDownload.svelte";
   import { slide } from "svelte/transition";
+  import MicBulkDownload from "./MIC-BulkDownload.svelte";
   //state
   export let dataLables = [$date, $CopmarsionDate];
   export let demandIsightsData = [79];
   export let insightsDataLables = [$date];
   export let thisMonthComparisonPercentage = 105;
   export let token;
-  export let item = { name: "Item" };
+  let show = false;
+  // export let item = { name: "Item" };
   let avgClass = "red"; //toggle style class (complete it later)
 
   ///////// modal pop up dunctionality
-  import { writable } from "svelte/store";
-  import Modal from "svelte-simple-modal";
+  // import { writable } from "svelte/store";
+  // import Modal from "svelte-simple-modal";
   import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
-  const modal = writable(null);
-  const showModal = () => modal.set(MicInsightsRecomendation);
+  // const modal = writable(null);
+  // const showModal = () => modal.set(MicInsightsRecomendation);
   //charts renderer
   let options1;
   let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
   let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
 
-  const [datatoken] = getToken("https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Token.json", "Ammar");
+  // const [datatoken] = getToken(
+  //   "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Token.json",
+  //   "Ammar"
+  // );
 
   const [data, loading, error, get] = fetchstore(
     "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json",
     token
   );
-  const [servicesData] = fetchstore("https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json", token);
+  // const [servicesData] = fetchstore(
+  //   "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json",
+  //   token
+  // );
+
   $: if ($billNumber) {
-    get($datatoken.token);
+    get(token);
   }
 
   ///////// acordion functionality
@@ -60,7 +67,6 @@
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
-    modal.set(null);
   };
   ////////// tabs functionality
   let tab1 = "1";
@@ -91,130 +97,152 @@
     );
     options3 = renderRadialBar(demandIsightsData, [$CopmarsionDate], "#B1DBFD");
   }
+  let showModal = false;
+
+  function toggleModal() {
+    showModal = !showModal;
+  }
 </script>
 
 <!----------html----------->
-{#if $loading}
+{#if $loading && !token}
   <h1>loading...</h1>
 {:else if $error}
   <h1>{$error}</h1>
 {:else if $data.VisibilityTab == true}
-  <div class="insights-container">
-    <div class="card">
-      <div id="header">
-        <h5 class="title">MY BILLING INSIGHTS</h5>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <img
-          src={dropDown}
-          alt=""
-          id={svgId}
-          on:click={toggle}
-          aria-expanded={isOpen}
-        />
-      </div>
-      {#if isOpen}
-        <div transition:slide={{ duration: 300 }}>
-          <div id="tab-container">
-            <div id="tabs">
-              <!-- svelte-ignore a11y-click-events-have-key-events -->
-              <h6 id={"btn" + tab1} on:click={() => activateTab("1", "2")}>
-                Annual Comparison
-              </h6>
-              <!-- svelte-ignore a11y-click-events-have-key-events -->
-              <h6 id={"btn" + tab2} on:click={() => activateTab("2", "1")}>
-                Monthly Comparison
-              </h6>
-            </div>
-            <div id={"tab1" + tab1}>
-              <div class="chart-container" transition:slide={{ duration: 300 }}>
-                {#key $billNumber}
-                  <div use:chart={options1} />
-                {/key}
-              </div>
-            </div>
-            <div id={"tab1" + tab2}>
-              <div class="chart-container" transition:slide={{ duration: 300 }}>
-                {#key $billNumber}
-                  <div use:chart={options1} />
-                {/key}
-              </div>
-            </div>
-          </div>
-          <div class="content">
-            <h6 class="label">THIS MONTH</h6>
-            <div class="val-content">
-              <p class="value">{$data.valueConsumption} {$data.unit}</p>
-              <p class="percentage">
-                <span
-                  class={avgClass}
-                  style="background-color:{$data.colorConsumption}"
-                >
-                  <img src={redArrow} class="arrow" alt="" />
-                  {thisMonthComparisonPercentage}% {$data.unit}</span
-                >
-              </p>
-            </div>
-          </div>
-          <div class="content">
-            <h6 class="label">Avg. Temp.</h6>
-            <div class="val-content">
-              <p class="value">{$data.valueTemp + "°"}</p>
-              <p class="percentage">
-                <img src={arrowUp} class="arrow" alt="" />
-                <span class="blue" style="background-color:{$data.colorTemp}"
-                  >{$data.valueTemp + "°"}</span
-                >
-              </p>
-            </div>
-          </div>
-          <h4 class="title-2">MY Demand INSIGHTS</h4>
-          <div class="chart-container">
-            {#key $date}
-              <div class="sub-container"><div use:chart={options2} /></div>
-              <div class="sub-container"><div use:chart={options3} /></div>
-            {/key}
-          </div>
-          <div class="content">
-            <h6 class="label">THIS MONTH</h6>
-            <div class="val-content">
-              <p class="value">{$data.valueConsumption}% {$data.unit}</p>
-              <p class="percentage">
-                <img src={redArrow} class="arrow" alt="" />
-                <span
-                  class={avgClass}
-                  style="background-color:{$data.colorConsumption}"
-                  >{thisMonthComparisonPercentage}% {$data.unit}</span
-                >
-              </p>
-            </div>
-          </div>
-          <hr id="hr-footer" />
-          <div id="footer">
-            <p>Insight title here</p>
-            <Modal
-            show={$modal}
-            styleWindow={{
-              boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.15)",
-              maxHeight: "62rem",
-              maxWidth: "50rem",
-              overflow: "hidden",
-            }}
-          >
-            <button on:click={showModal}>VIEW</button>
-          </Modal>
-          </div>
+  {#key $billNumber}
+    <div class="insights-container">
+      <div class="insight-card">
+        <div id="header">
+          <h5 class="insights-title">MY BILLING INSIGHTS</h5>
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <img
+            src={dropDown}
+            alt=""
+            id={svgId}
+            on:click={toggle}
+            aria-expanded={isOpen}
+          />
         </div>
-      {/if}
+        {#if isOpen}
+          <div transition:slide={{ duration: 300 }}>
+            <div id="insights-tab-container">
+              <div id="insights-tabs">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <h6 id={"btn" + tab1} on:click={() => activateTab("1", "2")}>
+                  Annual Comparison
+                </h6>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <h6 id={"btn" + tab2} on:click={() => activateTab("2", "1")}>
+                  Monthly Comparison
+                </h6>
+              </div>
+              <div id={"tab1" + tab1}>
+                <div
+                  class="chart-container"
+                  transition:slide={{ duration: 300 }}
+                >
+                  <div use:chart={options1} />
+                </div>
+              </div>
+              <div id={"tab1" + tab2}>
+                <div
+                  class="chart-container"
+                  transition:slide={{ duration: 300 }}
+                >
+                  <div use:chart={options1} />
+                </div>
+              </div>
+            </div>
+            <div class="content">
+              <h6 class="insights-label">THIS MONTH</h6>
+              <div class="val-content">
+                <p class="insights-value">
+                  {$data.valueConsumption}
+                  {$data.unit}
+                </p>
+                <p class="percentage">
+                  <span
+                    class={avgClass}
+                    style="background-color:{$data.colorConsumption}"
+                  >
+                    <img src={redArrow} class="arrow" alt="" />
+                    {thisMonthComparisonPercentage}% {$data.unit}</span
+                  >
+                </p>
+              </div>
+            </div>
+            <div class="content">
+              <h6 class="insights-label">Avg. Temp.</h6>
+              <div class="val-content">
+                <p class="insights-value">{$data.valueTemp + "°"}</p>
+                <p class="percentage">
+                  <img src={arrowUp} class="arrow" alt="" />
+                  <span class="blue" style="background-color:{$data.colorTemp}"
+                    >{$data.valueTemp + "°"}</span
+                  >
+                </p>
+              </div>
+            </div>
+            <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
+            <div class="chart-container">
+              {#key $date}
+                <div class="insights-sub-container">
+                  <div use:chart={options2} />
+                </div>
+                <div class="insights-sub-container">
+                  <div use:chart={options3} />
+                </div>
+              {/key}
+            </div>
+            <div class="insights-content">
+              <h6 class="insights-label">THIS MONTH</h6>
+              <div class="val-content">
+                <p class="insights-value">
+                  {$data.valueConsumption}% {$data.unit}
+                </p>
+                <p class="percentage">
+                  <img src={redArrow} class="arrow" alt="" />
+                  <span
+                    class={avgClass}
+                    style="background-color:{$data.colorConsumption}"
+                    >{thisMonthComparisonPercentage}% {$data.unit}</span
+                  >
+                </p>
+              </div>
+            </div>
+            <hr id="hr-footer" />
+            <div id="footer">
+              <p>Insight title here</p>
+              <button class="" on:click={toggleModal}> VIEW</button>
+              {#if showModal}
+                <div class="modal-container">
+                  <div class="modal-content">
+                    <button on:click={toggleModal}>X</button>
+                    <mic-recomendation token={token}></mic-recomendation>
+                    <MicInsightsRecomendation  token={token}/>
+                  </div>
+                </div>
+              {/if}
+              {#if show}
+                <div />
+              {/if}
+            </div>
+          </div>
+        {/if}
+      </div>
+      <MicBulkDownload />
+     <!-- 
+      <mic-sunselect {token} ></mic-sunselect>
+      <mic-yearlyenergy {token} ></mic-yearlyenergy> -->
+      <mic-bulkdownload {token} ></mic-bulkdownload>
     </div>
-    <MicSunSelect {token} />
-    <MicYearlyEnergy {token} />
-    <MicBulkDownload {token} />
-  </div>
+  {/key}
 {:else}
   <h1>error</h1>
 {/if}
 
-<style>
+<style scoped>
   @font-face {
     font-family: "Interstate";
     src: url("../../assets/fonts/Interstate.ttf") format("truetype");
@@ -222,6 +250,26 @@
   * {
     font-family: "Interstate";
   }
+  .modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+  }
+  .modal-content {
+    position: fixed;
+    top: 0;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  /*...........................**/
   .insights-container {
     display: flex;
     flex-direction: column;
@@ -229,7 +277,7 @@
     align-items: center;
     width: 30%;
   }
-  .card {
+  .insight-card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -255,7 +303,7 @@
     flex-grow: 0;
   }
 
-  .title {
+  .insights-title {
     width: 242px;
     height: 29px;
     font-style: normal;
@@ -271,7 +319,7 @@
     flex-grow: 0;
   }
 
-  .title-2 {
+  .insights-title-2 {
     width: 251px;
     height: 29px;
     font-style: normal;
@@ -298,14 +346,14 @@
     order: 2;
     flex-grow: 0;
   }
-  .sub-container {
+  .insights-sub-container {
     width: 185.85px;
     height: 184.4px;
     flex: none;
     order: 0;
     flex-grow: 0;
   }
-  .content {
+  .insights-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -332,7 +380,7 @@
     align-self: stretch;
     flex-grow: 0;
   }
-  .label {
+  .insights-label {
     height: 0;
     font-style: normal;
     font-weight: 400;
@@ -345,7 +393,7 @@
     align-self: stretch;
     flex-grow: 0;
   }
-  .value {
+  .insights-value {
     height: 29px;
     font-style: normal;
     font-weight: 300;
@@ -490,15 +538,15 @@
     right: 0;
   }
   /*tabs*/
-  #tab-container {
+  #insights-tab-container {
     width: 100%;
   }
-  #tabs {
+  #insights-tabs {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     justify-content: space-between;
-    width: 100%;
+    /* width: 100%; */
   }
 
   #btn1 {
@@ -536,7 +584,7 @@
   }
   /*--------*/
   @media screen and (max-width: 1000px) {
-    .card {
+    .insight-card {
       width: 90%;
       display: flex;
       flex-direction: column;

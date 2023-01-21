@@ -1,0 +1,129 @@
+@import "../../base/teco_custom.scss";
+@import "../../base/tecoVariables.scss";
+@import "../../base/fonts.scss";
+@import "../../base/globals.scss";
+
+.tecoBillSelector-v2 {
+  font-weight: 400;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  gap: 10px;
+
+  .tecoInfoLabel h4 {
+    font-weight: 400;
+    color: #005faa;
+    width: max-content;
+    display: block;
+  }
+
+  .tecobillSelectorDetailRow {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .tecoBillSelect {
+    width: 250px;
+    flex: revert;
+    select {
+        font-size: 15px;
+        border: 2px solid #005faa;
+      width: 100%;
+    padding: 6px 10px;
+    border-radius: 6px;
+    }
+  }
+
+  .tecoBillSelectorSmallText {
+    border-bottom: 2px solid #005faa;
+  }
+
+  .tecoBillSelectorDownloadContainer {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+
+    > .tecoInfoLabel {
+      > h4 {
+        display: none;
+      }
+    }
+  }
+
+  .tecoBillSelectorDownloadButton {
+    & > span {
+      color: #005faa;
+        }
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #005faa;
+    border-color: #005faa;
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    min-width: max-content;
+  }
+
+  // small container
+  @container (inline-size < 590px) {
+    text-align: center !important;
+    gap: 10px;
+    align-items: center;
+    .tecoInfoLabel h4 {
+      color: $teco-dark-grey;
+      text-align: center;
+      width: 100%;
+      display: block !important;
+      margin: 0;
+    }
+
+    .tecobillSelectorDetailRow {
+      gap: 20px !important;
+      margin-top: 20px;
+      flex-direction: column;
+    }
+
+    .tecoBillSelectorSmallText {
+      width: fit-content;
+      margin: auto;
+    }
+
+    .tecoBillSelectorDownloadContainer {
+      flex-direction: column;
+    }
+
+    .tecoBillSelectorDownloadButton {
+      width: 100%;
+      & > span {
+        display: none;
+      }
+    }
+  }
+
+  // too large
+  @container (inline-size > 960px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .tecoInfoLabel {
+      margin-right: 4%;
+
+      h4 {
+        color: $teco-dark-grey;
+        display: block !important;
+        margin: 0;
+      }
+    }
+
+    .tecobillSelectorDetailRow {
+      flex-grow: 2;
+    }
+  }
+}

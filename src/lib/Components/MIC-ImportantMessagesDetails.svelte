@@ -5,26 +5,26 @@
 
     import messageLogo from "../../assets/envelope-solid.svg";
     import notification from "../../assets/notification.svg";
-
+    export let token;
     //state
     let state = {};
-    export let token;
     //unreaded messages counter
     import { fetchstore } from "../../js/store";
 
     //mocking data
     const [data, loading, error, get] = fetchstore(
         "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/messages.json",
-        "token 2022"
+        token
     );
-
+    $: if (token && !state) {
+       get(token)
+    }
     $: if ($data) {
         state = $data;
     }
-    
 </script>
 
-{#if $loading}
+{#if $loading & !token}
     Loading: {$loading}
 {:else if $error}
     Error: {$error}
@@ -58,7 +58,7 @@
     </div>
 {/if}
 
-<style>
+<style scoped>
     @font-face {
         font-family: "Interstate";
         src: url("../../assets/fonts/Interstate.ttf") format("truetype");

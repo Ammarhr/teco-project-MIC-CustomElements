@@ -1,5 +1,4 @@
-<svelte:options tag="mic-accountbalance" />
-
+<svelte:options tag={null}/>
 <script>
   // @ts-nocheck
 
@@ -8,7 +7,7 @@
   import groupVector from "../../assets/balance-summary-svgs.svg";
 
   //state
-  export let item = { name: "Item" };
+  // export let item = { name: "Item" };
   export let token;
 
   // store

@@ -10,20 +10,24 @@
 
   //state
   let state = {};
-  export let item = { name: "Item" };
+  // export let item = { name: "Item" };
   export let token;
-
+  let show = false;
   let message;
   //unreaded messages counter
-  import { fetchstore } from "../../js/store";
+  import { fetchstore, apiToken } from "../../js/store";
+  import ImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
 
   //mocking data
+
   const [data, loading, error, get] = fetchstore(
     "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/messages.json",
     token
   );
-
-  $: if ($data) {
+  $: if (token && !$data.messages) {
+    get(token)
+  }
+  $: if ($data && $data.messages) {
     state = $data;
   }
 
@@ -40,24 +44,18 @@
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
-    modal.set(null);
   };
-  ////////////////////////
 
-  ///////// modal pop up dunctionality
-  import { writable } from "svelte/store";
-  import Modal from "svelte-simple-modal";
-  import ImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
-  const modal = writable(null);
-  const showModal = () => modal.set(ImportantMessagesDetails);
-  /////////////////////////
+  const showMessages = () => {
+    show = !show;
+  };
 </script>
 
-{#if $loading}
-  Loading: {$loading}
+{#if $loading && !token}
+Loading: {$loading}
 {:else if $error}
   Error: {$error}
-{:else}
+{:else if state.messages}
   <div class="message-container">
     <div class="container">
       <div id="message-header">
@@ -83,27 +81,25 @@
             <p class="msg-data">{message}...</p>
           </div>
           <div class="message-footer" transition:slide={{ duration: 300 }}>
-            <Modal
-              show={$modal}
-              styleWindow={{
-                boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.15)",
-                minHeight: "62rem",
-                Width: "30rem",
-                overflow: "hidden",
-              }}
-            token={token}
-            >
-              <button on:click={showModal}><span>View</span></button>
-            </Modal>
+            <button on:click={showMessages}><span>View</span></button>
           </div>
+          {#if show}
+            <div>
+              <mic-messagesdetails token={token}></mic-messagesdetails>
+            </div>
+          {/if}
         {/if}
+      {:else}
+        <h1>no messages to load</h1>
       {/if}
     </div>
   </div>
+{:else}
+  <h1>failed to load in messages</h1>
 {/if}
 
-<style>
-  @font-face {
+<style scoped>
+@font-face {
     font-family: "Interstate";
     src: url("../../assets/fonts/InterstateThin.ttf") format("truetype");
   }

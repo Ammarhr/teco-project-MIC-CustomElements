@@ -1,0 +1,98 @@
+.tecoLayout {
+
+    .tecoFooter {
+        background-color: #005FAA;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 50px 32px;
+        color: $teco-white;
+        // font-size: $teco-font-size-smaller;
+        font-weight: 400;
+
+    }
+
+    .tecoYellowHighlight {
+        color: $teco-yellow;
+    }
+
+    .tecoFooterListsRow {
+
+        .tecoFooterListBorder {
+            height: 220px;
+            border-right: 1px solid $teco-yellow;
+            padding-left: 24px;
+
+        }
+
+        .tecoFooterList {
+            margin-bottom: 50px;
+
+            li {
+                padding: 5px 0;
+                border: none;
+                border-bottom: 1px solid transparent;
+
+                &:hover {
+                    border-bottom: 1px solid $teco-white;
+                }
+            }
+        }
+
+
+    }
+
+
+    .mx-navigationlist {
+
+        li.mx-navigationlist-item {
+
+            &:hover {
+                background-color: unset;
+                color: unset;
+            }
+
+            &:focus {
+                background-color: unset;
+                color: unset;
+            }
+
+            &.active {
+                background-color: unset;
+                color: unset;
+            }
+        }
+    }
+
+
+    .tecoFooterSeconedLayer {
+        display: flex;
+        width: 100%;
+        gap: 15px;
+
+        .tecoFooterCopyrights {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tecoFooterSocialGrid {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: end;
+
+            .topRow {
+                display: flex;
+                gap: 15px;
+            }
+
+            .bottomRow {
+                margin: 16px 4px 0;
+            }
+        }
+    }
+
+}

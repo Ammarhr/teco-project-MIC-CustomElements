@@ -1,0 +1,62 @@
+@import "../../base/teco_custom.scss";
+@import "../../base/tecoVariables.scss";
+@import "../../base/fonts.scss";
+@import "../../base/globals.scss";
+
+.tecoInfoBar {
+    border-radius: 7px;
+    container-type: inline-size;
+    container-name: infoBar;
+
+    .tecoInfoBarCol {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 32px;
+        
+        @container infoBar (max-width: 600px) {
+            padding: 10px;
+        }
+    }
+
+    .tecoInfoLabel {
+        font-weight: 700;
+        color: white;
+
+        @container infoBar (max-width: 600px) {
+            padding: 10px;
+        }
+    }
+
+    .tecoInfoBarDetails {
+        @container infoBar (max-width: 600px) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    .oneLined {
+        justify-content: end;
+        align-items: center;
+        display: flex;
+        gap: 10px;
+
+        .change-btn {
+            padding: 6px 15px;
+            background: white;
+            border: none;
+            border-radius: 6px;
+        }
+
+        @container infoBar (min-width: 601px) {
+            min-width: 175px;
+        }
+
+        > img {
+            @container infoBar (max-width: 600px) {
+                display: none;
+            }
+        }
+    }
+}

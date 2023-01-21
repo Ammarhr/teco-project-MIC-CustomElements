@@ -1,0 +1,140 @@
+.tecoLayout {
+
+    .tecoHeaderLayer {
+        padding: 16px 32px;
+        // font-size: $teco-font-size-small;
+        align-items: center;
+
+        label {
+            cursor: pointer;
+            font-weight: 300;
+            font-style: normal;
+            // font-size: $teco-font-size-small;
+
+            @media screen and (max-width: 769px) {
+                // font-size: $teco-font-size-smaller;
+            }
+        }
+
+        @media screen and (max-width: 769px) {
+            padding: 10px 15px;
+        }
+
+    }
+
+    .tecoTopBarFirstLevel {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .tecoTopBarFirstLevelMenu {
+        display: flex;
+        align-items: center;
+        gap: 10%;
+        width: 100%;
+        justify-content: flex-end;
+
+        label {
+            font-weight: 300;
+            color: #005FAA;
+        }
+    }
+
+    .tecoTopBarSeconedLevelMenu {
+        display: flex;
+        align-items: center;
+        gap: 10%;
+        width: 100%;
+
+        label {
+            font-weight: 300;
+            color: $teco-white;
+        }
+    }
+
+    .tecoHelpCenter {
+        justify-content: end;
+
+        label {
+            color: $teco-white;
+            font-weight: 300;
+        }
+
+        .tecoHelpContainer {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+
+            .label {
+                @media screen and (max-width: 769px) {
+                    font-weight: 300;
+                    // font-size: $teco-font-size-smaller;
+                    color: black !important;
+                }
+            }
+        }
+
+        .tecoHelpLeft {
+            border-right: 1px solid $teco-white;
+            padding: 0 12px;
+
+        }
+
+        .tecoHelpRight {
+            border-left: 1px solid $teco-white;
+            padding: 0 12px;
+        }
+    }
+
+
+    .tecoTopBarThirdLevel {
+        justify-content: end;
+
+        label {
+            color: #005FAA;
+        }
+
+        .tecoHelpLeft {
+
+            .tecoUserName {
+                @media screen and (max-width: 769px) {
+                    color: black !important;
+                }
+            }
+        }
+
+        .tecoHelpRight {
+            border-left: 2px solid #005FAA;
+
+            .tecoLogOff {
+                @media screen and (max-width: 769px) {
+                    font-weight: 700 !important;
+                }
+            }
+        }
+
+    }
+
+    .tecoPageTitle {
+        padding: 0;
+        margin: 0;
+        font-weight: 700;
+        // font-size: 32px;
+
+        @media screen and (max-width: 769px) {
+            color: #005FAA;
+            // font-size: $teco-font-size-regular;
+            // font-size: 16px;
+        }
+    }
+
+
+    @media screen and (min-width: 768px) {
+        .phoneShow {
+            display: none;
+            padding: 0;
+            margin: 0;
+        }
+    }
+}

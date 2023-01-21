@@ -4,208 +4,343 @@
   // @ts-nocheck
 
   // svg imports
-  import downloadIcon from "../../assets/Icon-left.svg";
-  import line from "../../assets/Line1812.svg";
   import { billNumber } from "../../js/store";
-
-  export let token;
-  export let item = { name: "Item" };
-
+  import downloadIcon from "../../assets/DownloadIcon.svg";
   import { fetchstore } from "../../js/store";
 
+  // state
+  export let token;
+  export let url;
+ 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json",
+    // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BillSelector",
+    url,
     token
   );
 
-  
+  $: if (token && url && !$data.bills) {
+    get(token, url);
+  }
 </script>
 
-<div id="selector-card">
-  <div id="selector-container">
-    <div id="date-container">
-      {#if $data && $data.bills}
-      <label for="bill-selector">VIEW PRIOR STATEMENTS</label>
-      <select name="bill-selector" bind:value={$billNumber}>
-          {#each $data.bills as billDate}
-            <option value={billDate.value}>{billDate.lable}</option>
-          {/each}
-        </select>
-      {/if}
-    </div>
-    <div id="btn-container">
-      <!-- svelte-ignore a11y-label-has-associated-control -->
-      <label>DOWNLOAD MY BILL</label>
-      <a id="btn-download" href={$data.download_link}>
-        <span>
-          <img src={downloadIcon} alt="download icon" />
-          Download Bill
-        </span>
-      </a>
-    </div>
-    <div>
-      <button id="show-btn">
-        <span> VIEW LATEST BILL </span>
-        <img src={line} alt="line icon" />
-      </button>
+<!--TO_DO-->
+<!--Create web component for loading-->
+{#if $loading}
+  Loading: {$loading}
+{:else if $error}
+<!--error regarding to fetch-->
+<mic-render-error err= {$error}></mic-render-error>
+{:else if $data && $data.bills}
+  <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
+    <div class="tecoBillSelector-v2">
+      <div class="tecoInfoLabel">
+        <h4>VIEW PRIOR STATEMENTS</h4>
+      </div>
+      <div class="tecobillSelectorDetailRow">
+        <div
+          class="tecoBillSelect spacing-outer-bottom-none form-group no-columns"
+        >
+          {#if $data && $data.bills}
+            <select
+              class="form-control"
+              id="68.Teco.BuildingBlocksShowcase.referenceSelector1_pkj_53"
+              aria-label=""
+              bind:value={$billNumber}
+            >
+              {#each $data.bills as billDate}
+                <option name="bill-selector">{billDate.lable}</option>
+              {/each}
+            </select>
+          {/if}
+        </div>
+        <div class="tecoBillSelectorDownloadContainer">
+          <div class="tecoInfoLabel">
+            <h4>DOWNLOAD MY BILL</h4>
+          </div>
+          <button type="button" class="btn tecoBillSelectorDownloadButton">
+            <img src={downloadIcon} alt="DI" />
+            <a id="btn-download" href={$data.download_link}> DOWNLOAD BILL </a>
+          </button>
+        </div>
+        <div class="tecoBillSelectorSmallText">
+          <span>View Latest Bill</span>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+{:else}
+<mic-render-error err= {"failed in bill selector"}></mic-render-error>
+{/if}
 
-<style>
-  @font-face {
-    font-family: "Interstate";
-    src: url("../../assets/fonts/Interstate.ttf") format("truetype");
-  }
+<style lang="scss">
+
+  // Typography
+  $teco-font-family: "Interstate";
+
+  // Colors
+  $teco-white: #ffffff;
+  $teco-midnight-blue: #00294a;
+  $teco-ocean-blue: #5eb0f4;
+  $teco-yellow: #ffdc00;
+  $teco-green: #24a148;
+  $teco-red: #da1e28;
+  $teco-dark-grey: #6c6c6c;
+
+  $screen-md-min: 991px;
+  $screen-custom-md-min: 1024px;
+  $screen-lg-min: 1200px;
+
   * {
-    font-family: "Interstate";
-  }
-  #selector-card {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 51px;
-    width: 100%;
-    min-height: 6rem;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-    box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
-    border-radius: 16px;
-    background-color: #ffff;
-  }
-  #selector-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 32px;
-    gap: 41px;
-    width: 1240px;
-  }
-  #date-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 24px;
-    width: 442px;
-    height: 50px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-  }
-  label {
-    width: fit-content;
-    height: 30px;
-    font-family: "Interstate";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 30px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: #6c6c6c;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-  }
-  select {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    width: 170px;
-    height: 50px;
-    font-size: 18px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-  }
-  #btn-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 24px;
-    width: 420px;
-    height: 48px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-  }
-  #btn-download {
+    margin: 0;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 24px;
-    gap: 10px;
-    width: 200px;
-    height: 48px;
-    background: #ffffff;
-    border: 1px solid #005faa;
-    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
-    border-radius: 6px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    font-style: normal;
-    text-decoration: none;
+  }
+
+  .tecoLayout {
+    font-family: $teco-font-family;
+    background-color: whitesmoke;
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: rgb(187, 187, 187);
+      border-radius: 3px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #888;
+    }
+  }
+
+  .tecoPrimaryBG {
+    background-color: #005faa;
+  }
+
+  .tecoYellowBG {
+    background-color: $teco-yellow;
+  }
+
+  .tecoWhiteBG {
+    background-color: $teco-white;
+  }
+
+  .tecoPrimaryColor {
     color: #005faa;
   }
-  #show-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    width: 136px;
-    height: 38px;
-    flex: none;
-    order: 3;
-    flex-grow: 0;
-    background-color: #ffffff;
-    border: none;
-    gap: 10px;
+
+  .tecoOceanBlue {
+    color: $teco-ocean-blue;
+  }
+
+  .tecoMidnightBlue {
+    color: $teco-midnight-blue;
+  }
+
+  .tecoGreenColor {
+    color: $teco-green;
+  }
+
+  .tecoRedColor {
+    color: $teco-red;
+  }
+
+  .tecoGrayColor {
+    color: grey;
+  }
+
+  .tecoGrayedLabel {
+    color: grey;
+  }
+
+  .pointer {
     cursor: pointer;
   }
-  @media screen and (max-width: 1000px) {
-    #selector-card {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 90%;
-      height: fit-content;
-      padding: 1.4rem 1rem;
-    }
-    #selector-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 0px 32px;
-      width: 100%;
-      padding: 1.4rem 1rem;
-    }
-    #date-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1.4rem 1rem;
-    }
-    #btn-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1.4rem 1rem;
+
+  .tecoBolder {
+    font-weight: 600 !important;
   }
+
+  .marginReset {
+    margin: 0 !important;
+  }
+
+  .paddingReset {
+    padding: 0 !important;
+  }
+
+  .roundedTop {
+    border-radius: 7px 7px 0 0;
+  }
+
+  .roundedBottom {
+    border-radius: 0 0 7px 7px;
+  }
+
+  .tecoGenericShadow {
+    box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
+  }
+
+  .roundedRadius20 {
+    border-radius: 20px;
+  }
+
+  .reverseOrder {
+    direction: rtl;
+  }
+
+  .m_1 {
+    margin-top: 10px;
+  }
+
+  .btn {
+    cursor: pointer;
+  }
+  // teco cards
+  .tecoCard {
+    margin: 0 !important;
+    padding: 15px;
+
+    container-type: inline-size;
+    width: 100%;
+  }
+
+  // web component "tecoBillSelector" style
+  .tecoBillSelector-v2 {
+    font-weight: 400;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 10px;
+
+    .tecoInfoLabel h4 {
+      font-weight: 400;
+      color: #005faa;
+      width: max-content;
+      display: block;
+    }
+
+    .tecobillSelectorDetailRow {
+      display: flex;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .tecoBillSelect {
+      width: 250px;
+      flex: revert;
+      select {
+        font-size: 15px;
+        border: 2px solid #005faa;
+        width: 100%;
+        padding: 6px 10px;
+        border-radius: 6px;
+      }
+    }
+
+    .tecoBillSelectorSmallText {
+      border-bottom: 2px solid #005faa;
+    }
+
+    .tecoBillSelectorDownloadContainer {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+
+      > .tecoInfoLabel {
+        > h4 {
+          display: none;
+        }
+      }
+    }
+
+    .tecoBillSelectorDownloadButton {
+      & > span {
+        color: #005faa;
+      }
+      padding: 6px 10px;
+      border-radius: 6px;
+      color: #005faa;
+      border-color: #005faa;
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      align-items: center;
+      background: white;
+      min-width: max-content;
+    }
+
+    // small container
+    @media (max-width: 590px) {
+      text-align: center !important;
+      gap: 10px;
+      align-items: center;
+      .tecoInfoLabel h4 {
+        color: $teco-dark-grey;
+        text-align: center;
+        width: 100%;
+        display: block !important;
+        margin: 0;
+      }
+
+      .tecobillSelectorDetailRow {
+        gap: 20px !important;
+        margin-top: 20px;
+        flex-direction: column;
+      }
+
+      .tecoBillSelectorSmallText {
+        width: fit-content;
+        margin: auto;
+      }
+
+      .tecoBillSelectorDownloadContainer {
+        flex-direction: column;
+      }
+
+      .tecoBillSelectorDownloadButton {
+        width: 100%;
+        & > span {
+          display: none;
+        }
+      }
+    }
+
+    // too large
+    @media (max-width: 960px) {
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      .tecoInfoLabel {
+        margin-right: 4%;
+
+        h4 {
+          color: $teco-dark-grey;
+          display: block !important;
+          margin: 0;
+        }
+      }
+
+      .tecobillSelectorDetailRow {
+        flex-grow: 2;
+      }
+    }
+    a {
+      text-decoration: none;
+      color: $teco-dark-grey;
+    }
   }
 </style>

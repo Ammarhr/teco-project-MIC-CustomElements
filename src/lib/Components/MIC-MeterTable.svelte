@@ -1,4 +1,4 @@
-<svelte:options tag="mic-meterTable" />
+<svelte:options tag="mic-metertable" />
 
 <script>
     // @ts-nocheck
@@ -9,7 +9,7 @@
     import { fetchstore } from "../../js/store";
     import { chart } from "svelte-apexcharts";
     import { renderMixChart } from "../../js/MIC-chart-bundle";
-
+    
     export let token;
     let tableData;
     let options;
@@ -19,7 +19,7 @@
         token
     );
 
-    ///////// acordion functionality
+    // acordion functionality
     let isOpen = false;
     let svgId = "rotate-svg-" + isOpen;
 
@@ -40,22 +40,17 @@
     };
     ////// search & filter
     const handleSearch = () => {
-        // console.log("searching...");
         let str = event.target.value;
         let searchArray;
         if (str == "") {
-            // console.log("nothing catched");
-
             items = $data.results;
             selectedMeter = $data.results[0];
         }
         searchArray = $data.results.filter((meter) => {
             return meter.meterTable.meterNumbeR.includes(str);
         });
-        // console.log("searching...---> step1", searchArray);
         if (searchArray[0]) {
             items = searchArray;
-            // console.log("searching...---> step2", items);
         }
     };
     ////// change the charts reference
@@ -76,7 +71,12 @@
     let pageSize = 5;
     let paginatedItems;
     //////// first render
+    $: if (token && !$data.results) {
+        get(token);
+        console.log("token from meter", token, $data);
+    }
     $: if ($data && $data.results) {
+        console.log("data in meter", $data.results);
         tableData = $data.results;
         selectedMeter = $data.results[0];
         items = $data.results;
@@ -87,128 +87,134 @@
 </script>
 
 <!------ html ------->
-{#if $loading}
+{#if $loading && !token}
     <h1>loading..</h1>
 {:else if $error}
     <h1>{error}</h1>
 {:else if $data}
-    <div class="card">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div
-            id="meter-header"
-            on:click={toggleContainer}
-            aria-expanded={isOpen}
-        >
-            <h4 id="title">Usage Details</h4>
-            <img src={toggle} alt="" id={svgId} />
-        </div>
-        {#if isOpen}
-            <div class="search">
-                <input
-                    type="text"
-                    placeholder="Search"
-                    on:change={handleSearch}
-                />
+    {#key token}
+        <div class="meter-card">
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div
+                id="meter-header"
+                on:click={toggleContainer}
+                aria-expanded={isOpen}
+            >
+                <h4 id="title">Usage Details</h4>
+                <img src={toggle} alt="" id={svgId} />
             </div>
-            <div class="table-container" transition:slide={{ duration: 300 }}>
-                {#if items[0]}
-                    {#if tableData}
-                        <table class="table">
-                            <tr>
-                                <th>Service</th>
-                                <th>Meter Number</th>
-                                <th>Read Date</th>
-                                <th>Biling Read</th>
-                                <th>Current Reading</th>
-                                <th>Previous Reading</th>
-                                <th>Total Used</th>
-                            </tr>
-                            {#each Object.values(paginatedItems) as row}
-                                <!-- {#each Object.values(tableData) as row} -->
-                                <tr
-                                    class="table-row"
-                                    on:click={() => {
-                                        handleSelectedMeter(row);
-                                    }}
-                                >
-                                    {#each Object.values(row.meterTable) as value}
-                                        <td>{value}</td>
-                                    {/each}
+            {#if isOpen}
+                <div class="search">
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        on:change={handleSearch}
+                    />
+                </div>
+                <div
+                    class="table-container"
+                    transition:slide={{ duration: 300 }}
+                >
+                    {#if items}
+                        {#if tableData}
+                            <table class="table">
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Meter Number</th>
+                                    <th>Read Date</th>
+                                    <th>Biling Read</th>
+                                    <th>Current Reading</th>
+                                    <th>Previous Reading</th>
+                                    <th>Total Used</th>
                                 </tr>
-                            {/each}
-                            <!-- {/each} -->
-                            {#if $data.meterLocation}
-                                <div id="location">
-                                    <span
-                                        ><strong> Meter Location:</strong>
-                                        {$data.meterLocation}</span
+                                {#each Object.values(paginatedItems) as row}
+                                    <!-- {#each Object.values(tableData) as row} -->
+                                    <tr
+                                        class="table-row"
+                                        on:click={() => {
+                                            handleSelectedMeter(row);
+                                        }}
                                     >
-                                </div>
-                            {/if}
-                        </table>
+                                        {#each Object.values(row.meterTable) as value}
+                                            <td>{value}</td>
+                                        {/each}
+                                    </tr>
+                                {/each}
+                                <!-- {/each} -->
+                                {#if $data.meterLocation}
+                                    <div id="location">
+                                        <span
+                                            ><strong> Meter Location:</strong>
+                                            {$data.meterLocation}</span
+                                        >
+                                    </div>
+                                {/if}
+                            </table>
+                        {/if}
                     {/if}
-                {/if}
-            </div>
-            <div class="options">
-                <LightPaginationNav
+                </div>
+                <div class="options">
+                    <!-- <LightPaginationNav
                     totalItems={items.length}
                     {pageSize}
                     {currentPage}
                     limit={1}
                     showStepOptions={true}
                     on:setPage={(e) => (currentPage = e.detail.page)}
-                />
-            </div>
-            <div id="tab-container">
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div id="tabs">
-                    <h6
-                        id={"btn" + tab1}
-                        on:click={() => activateTab("1", "2")}
-                    >
-                        Daily
-                    </h6>
-                    <h6
-                        id={"btn" + tab2}
-                        on:click={() => activateTab("2", "1")}
-                    >
-                        Monthly
-                    </h6>
+                /> -->
                 </div>
-                <div class="options">
-                    <input type="checkbox" name="trmprature" id="temp" />
-                    <span>Temperature</span>
-                    <img
-                        src={toolTip}
-                        alt="usage chart tool tip"
-                        class="tool-tip"
-                    />
+                <div
+                    id="meter-tab-container"
+                    transition:slide={{ duration: 300 }}
+                >
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div id="meter-tabs">
+                        <h6
+                            id={"meter-btn" + tab1}
+                            on:click={() => activateTab("1", "2")}
+                        >
+                            Daily
+                        </h6>
+                        <h6
+                            id={"meter-btn" + tab2}
+                            on:click={() => activateTab("2", "1")}
+                        >
+                            Monthly
+                        </h6>
+                    </div>
+                    <div class="options">
+                        <input type="checkbox" name="trmprature" id="temp" />
+                        <span>Temperature</span>
+                        <img
+                            src={toolTip}
+                            alt="usage chart tool tip"
+                            class="tool-tip"
+                        />
+                    </div>
+                    <div id={"meter-tab1" + tab1}>
+                        <div class="chart" use:chart={options} />
+                    </div>
+                    <div id={"meter-tab1" + tab2}>
+                        <div class="chart" use:chart={options} />
+                    </div>
                 </div>
-                <div id={"tab1" + tab1}>
-                    <div class="chart" use:chart={options} />
+                <div class="information-box">
+                    <div>
+                        <h6>AVG. COST PER DAY</h6>
+                        <h4>$11,098.98</h4>
+                    </div>
+                    <img src={verticalLine} alt="" />
+                    <div>
+                        <h6>AVG. TEMP PER DAY</h6>
+                        <h4>65°</h4>
+                    </div>
                 </div>
-                <div id={"tab1" + tab2}>
-                    <div class="chart" use:chart={options} />
-                </div>
-            </div>
-            <div class="information-box">
-                <div>
-                    <h6>AVG. COST PER DAY</h6>
-                    <h4>$11,098.98</h4>
-                </div>
-                <img src={verticalLine} alt="" />
-                <div>
-                    <h6>AVG. TEMP PER DAY</h6>
-                    <h4>65°</h4>
-                </div>
-            </div>
-        {/if}
-    </div>
-{:else}
-    <h1>somthing went wrong</h1>
+            {/if}
+        </div>
+    {/key}
 {/if}
 
-<style>
+<style scoped>
     @font-face {
         font-family: "Interstate";
         src: url("../../assets/fonts/Interstate.ttf") format("truetype");
@@ -221,7 +227,7 @@
         flex-direction: row;
         justify-content: space-between;
     }
-    .card {
+    .meter-card {
         display: flex;
         flex-direction: column;
         row-gap: 2rem;
@@ -373,10 +379,10 @@
         flex-grow: 0;
     }
     /*tabs*/
-    #tab-container {
+    #meter-tab-container {
         width: 93%;
     }
-    #tabs {
+    #meter-tabs {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
@@ -384,7 +390,7 @@
         width: 100%;
     }
 
-    #btn1 {
+    #meter-btn1 {
         font-style: normal;
         font-weight: 300;
         font-size: 20px;
@@ -398,7 +404,7 @@
         cursor: pointer;
         border-bottom: solid #005faa;
     }
-    #btn2 {
+    #meter-btn2 {
         font-style: normal;
         font-weight: 300;
         font-size: 20px;
@@ -411,10 +417,10 @@
         flex-grow: 0;
         cursor: pointer;
     }
-    #tab11 {
+    #meter-tab11 {
         display: none;
     }
-    #tab12 {
+    #meter-tab12 {
         display: flex;
     }
     /*--------*/
@@ -467,7 +473,7 @@
         margin: 0;
     }
     @media screen and (max-width: 1000px) {
-        .card {
+        .mwter-card {
             display: flex;
             flex-direction: column;
             row-gap: 2rem;

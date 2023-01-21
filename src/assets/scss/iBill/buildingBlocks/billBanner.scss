@@ -1,0 +1,27 @@
+@import "../../base/teco_custom.scss";
+@import "../../base/tecoVariables.scss";
+@import "../../base/fonts.scss";
+@import "../../base/globals.scss";
+@import "./card.scss";
+
+
+.tecoBillBanner {
+    // image and color
+
+    background-image: url('../../../background-pattern.svg');
+    background-size: cover;
+    background-color: #005faa;
+    color: white;
+
+    .tecoBillBannerBody {
+        min-height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        >a {
+            text-align: left;
+            color: white;
+        }
+    }
+}
