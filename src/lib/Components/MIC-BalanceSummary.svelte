@@ -50,10 +50,9 @@
     }
 </script>
 
-<!--TO_DO-->
-<!--Create web component for loading-->
+
 {#if $loading}
-    Loading...{$loading}
+    <mic-loading></mic-loading>
 {:else if $error}
     <!--error regarding to fetch-->
     <mic-render-error err= {$error}></mic-render-error>

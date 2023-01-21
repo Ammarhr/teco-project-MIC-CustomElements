@@ -8,19 +8,20 @@
   import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
   import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
   import MicRenderError from "./lib/Components/MIC-RenderError.svelte";
+  import MicLoading from "./lib/Components/MIC-Loading.svelte";
   import "./app.css";
 </script>
 
 <div class="app-container">
-  
+
 </div>
 
 <style>
-  .app-container {
+  /* .app-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
+  } */
 </style>
 

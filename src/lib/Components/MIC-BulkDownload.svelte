@@ -18,21 +18,33 @@
     }
 </script>
 
-<div class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner" style="background-image:url({backgroundPattern});">
-    <div class="tecoBillBannerBody" > 
-        <p>
-            Looking to download more than one bill? Click here to download
-            multiple bills
-        </p>
-        <!-- svelte-ignore a11y-invalid-attribute -->
-        <a class="reverseOrder m_1" href="#" role="button"
-            ><span
-                class="glyphicon glyphicon-chevron-right"
-                aria-hidden="true"
-            /> DOWNLOAD BILLS</a
-        >
+{#if $loading}
+    <mic-loading />
+{:else if $error}
+    <!--error regarding to fetch-->
+    <mic-render-error err={$error} />
+{:else if $data}
+    <div
+        class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
+        style="background-image:url({backgroundPattern});"
+    >
+        <div class="tecoBillBannerBody">
+            <p>
+                Looking to download more than one bill? Click here to download
+                multiple bills
+            </p>
+            <!-- svelte-ignore a11y-invalid-attribute -->
+            <a class="reverseOrder m_1" href="#" role="button"
+                ><span
+                    class="glyphicon glyphicon-chevron-right"
+                    aria-hidden="true"
+                /> DOWNLOAD BILLS</a
+            >
+        </div>
     </div>
-</div>
+{:else}
+    <mic-render-error err={"failed in bill selector"} />
+{/if}
 
 <style lang="scss">
     // Typography
