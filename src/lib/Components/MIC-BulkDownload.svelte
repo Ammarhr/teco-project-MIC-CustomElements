@@ -6,14 +6,11 @@
     import { fetchstore } from "../../js/store";
     export let token;
     export let url;
-
     //mocking data
-    const [data, loading, error, get] = fetchstore(
-        // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BulkDownload",
-        url,
-        token
-    );
-    $: if (token && url && !$data) {
+    const [data, loading, error, get] =
+        fetchstore();
+
+    $: if (token && url && !$data.BlkDownload) {
         get(token, url);
     }
 </script>
@@ -22,8 +19,8 @@
     <mic-loading />
 {:else if $error}
     <!--error regarding to fetch-->
-    <mic-render-error err={$error} />
-{:else if $data}
+    <mic-render-error err={"failed to load regarding server issues"} />
+{:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
         style="background-image:url({backgroundPattern});"
@@ -34,7 +31,7 @@
                 multiple bills
             </p>
             <!-- svelte-ignore a11y-invalid-attribute -->
-            <a class="reverseOrder m_1" href="#" role="button"
+            <a class="reverseOrder m_1" href={$data.BlkDownload} role="button"
                 ><span
                     class="glyphicon glyphicon-chevron-right"
                     aria-hidden="true"
@@ -43,7 +40,7 @@
         </div>
     </div>
 {:else}
-    <mic-render-error err={"failed in bill selector"} />
+    <h1 />
 {/if}
 
 <style lang="scss">

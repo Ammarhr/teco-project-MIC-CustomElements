@@ -4,7 +4,6 @@
     // @ts-nocheck
     import mask from "../../assets/mask-bs.svg";
     import { fetchstore } from "../../js/store";
-
     //state
     export let token;
     export let url;
@@ -13,15 +12,12 @@
     let tries = 3;
 
     //mocking data
-    const [data, loading, error, get] = fetchstore(
-        // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary",
-        url,
-        token
-    );
+    const [data, loading, error, get] =
+        fetchstore();
 
     // trigger token existence
     $: if (token && url && !$data.html_masseges && tries > 0) {
-        console.info("this is url", url, "loading", $loading);
+        // console.info("this is url", url, "loading", $loading);
         get(token, url);
         tries--;
     }
@@ -36,7 +32,7 @@
                 // add border
                 subEle.setAttribute(
                     "style",
-                    "color: #015faa;border-top: solid 1px #015faa; padding-top:20px;"
+                    "border-top: solid 1px #015faa; padding-top:20px;"
                 );
             subEle.innerHTML = $data.html_masseges[i].message;
             newElement.appendChild(subEle);
@@ -50,13 +46,12 @@
     }
 </script>
 
-
 {#if $loading}
-    <mic-loading></mic-loading>
+    <mic-loading />
 {:else if $error}
     <!--error regarding to fetch-->
-    <mic-render-error err= {$error}></mic-render-error>
-    {:else if $data.html_masseges}
+    <mic-render-error err={"failed to load regarding server issues"} />
+{:else if $data.html_masseges}
     <div
         class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
     >
@@ -68,8 +63,14 @@
                 <span>{$data.title}</span>
                 <div class="amount">
                     <span style="color: {color};">$</span>
-                    <span style="color: {color};">{$data.totalAmmount}</span>
-                    <span style="color: {color};">51</span>
+                    <span style="color: {color};"
+                        >{$data.totalAmmount.toString().split(".")[0]}</span
+                    >
+                    {#if $data.totalAmmount.toString().split(".")[1]}
+                        <span style="color: {color};"
+                            >{$data.totalAmmount.toString().split(".")[1]}</span
+                        >
+                    {/if}
                 </div>
                 <div>
                     <span class="dueLabel">Due Date: </span>
@@ -93,7 +94,7 @@
         </div>
     </div>
 {:else}
-<mic-render-error err= {"failed to load balance summary"}></mic-render-error>
+<h1></h1>
 {/if}
 
 <style lang="scss">

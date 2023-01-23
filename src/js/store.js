@@ -5,41 +5,46 @@ import { writable, derived } from 'svelte/store';
 // modal hide/show
 export const showMessagesModal = writable(false);
 export function showmodal() {
-    showMessagesModal.set(!showMessagesModal)
+    showMessagesModal.set(!showMessagesModal);
 }
 
-export const apiToken = writable('')
+
 
 // date for bill selector
 let newDate = new Date();
 let year = newDate.getFullYear();
 let month = newDate.getMonth();
-
-
 export const date = writable(month + 1 + ' ' + year);
 export const CopmarsionDate = writable(month + 1 + ' ' + (year - 1));
-export const billNumber = writable('4646868477'); // billNimber
+
+
+//* bill nubmer
+export const billNumber = writable(''); // billNimber
+
+export const changeBillNumber = (num) => {
+    billNumber.set(num);
+}
 
 export const getDate = derived(
     date,
     $date => $date
 );
 
-export function fetchstore(url, token) {
-    const loading = writable(false)
-    const error = writable(false)
-    const data = writable({})
+//* fetch function
+export function fetchstore() {
+    const loading = writable(false);
+    const error = writable(false);
+    const data = writable({});
 
     async function get(token, url) {
-        loading.set(true)
-        error.set(false)
+        loading.set(true);
+        error.set(false);
         try {
             if (!token) {
-                data.set({ errrorMessage: "No Token provided!" })
-                throw new Error("No Token provided!")
+                data.set({ errrorMessage: "No Token provided!" });
+                throw new Error("No Token provided!");
             } else if (token) {
                 //* real api hit with jwt token:
-                console.log('url', url, 'tpken', token);
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
@@ -50,49 +55,45 @@ export function fetchstore(url, token) {
                     },
                     body: JSON.stringify({}),
                 })
-                data.set(await Publishresponse.json())
+                data.set(await Publishresponse.json());
             } else {
-                data.set({ errrorMessage: "Invalid Token" })
+                data.set({ errrorMessage: "Invalid Token" });
 
             }
         } catch (e) {
-            error.set(e)
-            console.info('error', e);
+            error.set(e);
         }
-        setTimeout(() => {
-            loading.set(false)
-        }, 2000)
+            loading.set(false);
     }
-
-    // get(token)
 
     return [data, loading, error, get]
 }
 
+export const apiToken = writable('');
 // grtting the token:
 export function getToken(url, user) {
-    const loading = writable(false)
-    const error = writable(false)
-    const token = writable({})
+    const loading = writable(false);
+    const error = writable(false);
+    const token = writable({});
     async function get() {
-        loading.set(true)
-        error.set(false)
+        loading.set(true);
+        error.set(false);
         try {
             if (!user) {
-                token.set({ errrorMessage: "No user provided!" })
+                token.set({ errrorMessage: "No user provided!" });
             } else if (user && user == 'Ammar') {
-                const response = await fetch(url)
-                apiToken.set(await response.json())
+                const response = await fetch(url);
+                apiToken.set(await response.json());
             } else {
-                token.set({ errrorMessage: "Invalid user" })
+                token.set({ errrorMessage: "Invalid user" });
             }
         } catch (e) {
-            error.set(e)
+            error.set(e);
         }
-        loading.set(false)
+        loading.set(false);
     }
 
-    get()
+    get();
 
     return [token, loading, error, get]
 }
