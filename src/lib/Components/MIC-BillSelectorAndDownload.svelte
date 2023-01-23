@@ -6,21 +6,27 @@
   // svg imports
   import { billNumber } from "../../js/store";
   import downloadIcon from "../../assets/DownloadIcon.svg";
-  import { fetchstore } from "../../js/store";
+  import { fetchstore, changeBillNumber } from "../../js/store";
 
   // state
   export let token;
   export let url;
+  let selectedBill;
 
   //mocking data
   const [data, loading, error, get] = fetchstore(
-    // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BillSelector",
-    url,
-    token
   );
 
   $: if (token && url && !$data.bills) {
     get(token, url);
+  }
+  const handleChange = (e) => {
+    changeBillNumber(e.target.value);
+  };
+  $: if ($data.bills) {
+    if (!selectedBill) {
+      changeBillNumber($data.bills[0].value);
+    }
   }
 </script>
 
@@ -28,7 +34,7 @@
   <mic-loading />
 {:else if $error}
   <!--error regarding to fetch-->
-  <mic-render-error err={$error} />
+  <mic-render-error err={"failed to load regarding server issues"} />
 {:else if $data && $data.bills}
   <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
     <div class="tecoBillSelector-v2">
@@ -45,9 +51,12 @@
               id="68.Teco.BuildingBlocksShowcase.referenceSelector1_pkj_53"
               aria-label=""
               bind:value={$billNumber}
+              on:change={(e) => handleChange(e)}
             >
               {#each $data.bills as billDate}
-                <option name="bill-selector">{billDate.lable}</option>
+                <option name="bill-selector" value={billDate.value}
+                  >{billDate.lable}</option
+                >
               {/each}
             </select>
           {/if}
@@ -58,7 +67,9 @@
           </div>
           <button type="button" class="btn tecoBillSelectorDownloadButton">
             <img src={downloadIcon} alt="DI" />
-            <a id="btn-download" href={$data.download_link}> DOWNLOAD BILL </a>
+            <a id="btn-download" href={`${$data.download_link}${$billNumber}`}>
+              DOWNLOAD BILL
+            </a>
           </button>
         </div>
         <div class="tecoBillSelectorSmallText">
@@ -68,7 +79,8 @@
     </div>
   </div>
 {:else}
-  <mic-render-error err={"failed in bill selector"} />
+<h1></h1>
+  <!-- <mic-render-error err={"failed in bill selector no Token provided"} /> -->
 {/if}
 
 <style lang="scss">
@@ -235,7 +247,8 @@
     }
 
     .tecoBillSelect {
-      width: 250px;
+      max-width: 250px;
+      width: 100%;
       flex: revert;
       select {
         font-size: 15px;
@@ -280,7 +293,7 @@
     }
 
     // small container
-    @media (max-width: 590px) {
+    @media screen and (max-width: 590px) {
       text-align: center !important;
       gap: 10px;
       align-items: center;
@@ -316,10 +329,14 @@
     }
 
     // too large
-    @media (max-width: 960px) {
-      flex-direction: column;
+    @media screen and (min-width: 1024px) {
+      flex-direction: row;
       justify-content: space-between;
       align-items: center;
+
+      .tecoBillSelect {
+        width: 250px;
+      }
 
       .tecoInfoLabel {
         margin-right: 4%;

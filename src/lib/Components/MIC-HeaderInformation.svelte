@@ -5,6 +5,8 @@
 
   import star from "../../assets/Vector.svg";
   import fire from "../../assets/Fire.svg";
+  import electric from "../../assets/electric.svg";
+  import lighting from "../../assets/lighting.svg";
   import { fetchstore } from "../../js/store";
 
   //state
@@ -13,11 +15,7 @@
   let account;
   let statusClass = "Inactive";
 
-  const [data, loading, error, get] = fetchstore(
-    // "https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary",
-    url,
-    token
-  );
+  const [data, loading, error, get] = fetchstore();
 
   $: if (token && url && !$data.account) {
     get(token, url);
@@ -43,7 +41,7 @@
     <mic-loading />
   {:else if $error}
     <!--error regarding to fetch-->
-    <mic-render-error err={$error} />
+    <mic-render-error err={"failed to load regarding server issues"} />
   {:else if account}
     <div class="tecoInfoBar tecoGenericShadow">
       <div class="row">
@@ -67,10 +65,20 @@
           class="col-lg col-md col tecoInfoBarCol roundedBottom tecoWhiteBG tecoInfoBarDetails"
         >
           <div class="oneLined">
-            <img class="spacing-outer-right-medium" src={fire} /><label
+            {#if !account.IsElectric}
+              <img class="spacing-outer-right-medium" src={electric} />
+            {/if}
+            {#if !account.IsGas}
+              <img class="spacing-outer-right-medium" src={fire} />
+            {/if}
+            {#if !account.IsLighting}
+              <img class="lighting" src={lighting} />
+            {/if}
+            <label
               class="spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
-              >Account:
-            </label><span> #{account.accountNumber}</span>
+              >Account:</label
+            >
+            <span> #{account.accountNumber}</span>
           </div>
           <div>
             <label
@@ -90,7 +98,8 @@
       </div>
     </div>
   {:else}
-    <mic-render-error err={"Failed to load header"} />
+  <h1></h1>
+    <!-- <mic-render-error err={"Failed to load header"} /> -->
   {/if}
 </div>
 
@@ -236,6 +245,7 @@
   }
 
   //component style
+
   .Active {
     color: $teco-green;
   }
@@ -280,7 +290,14 @@
       align-items: center;
       display: flex;
       gap: 10px;
-
+      .spacing-outer-right-medium {
+        width: 19px;
+        height: 28px;
+      }
+      .lighting {
+        width: 25px;
+        height: 29px;
+      }
       .change-btn {
         padding: 6px 15px;
         background: white;
