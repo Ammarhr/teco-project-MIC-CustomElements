@@ -12,7 +12,7 @@
   export let token;
   export let url;
   let selectedBill;
-  let selectedDate;
+  let selectedLabelBill;
   //mocking data
   const [data, loading, error, get] = fetchstore();
 
@@ -26,10 +26,14 @@
   };
   $: if ($data.bills) {
     if (!selectedBill) {
-      selectedDate = $data.bills.filter(
-        (bill) => bill.value == $data.selectedBill
-      )[0];
-      changeBillNumber($data.selectedBill);
+      if ($data.bills.filter((bill) => bill.value == $data.selectedBill)[0]) {
+        selectedLabelBill = $data.bills.filter(
+          (bill) => bill.value == $data.selectedBill
+        )[0];
+        changeBillNumber($data.selectedBill);
+      }else{
+        changeBillNumber($data.bills[0].value);
+      }
     }
   }
 </script>
@@ -57,9 +61,11 @@
               on:change={(e) => handleChange(e)}
               bind:value={$billNumber}
             >
-              <option name="bill-selector" selected value={$data.selectedBill}
-                >{selectedDate.lable}</option
-              >
+              {#if selectedLabelBill}
+                <option name="bill-selector" selected value={$data.selectedBill}
+                  >{selectedLabelBill.lable}</option
+                >
+              {/if}
               {#each $data.bills as billDate}
                 <option name="bill-selector" value={billDate.value}
                   >{billDate.lable}</option

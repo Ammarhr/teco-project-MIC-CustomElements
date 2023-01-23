@@ -18,7 +18,7 @@
   const [data, loading, error, get] = fetchstore();
 
   $: if (token && url && !$data.account) {
-    get(token, url);
+    get(token, "../../../data/accountData.json");
   }
 
   $: if ($data) {
