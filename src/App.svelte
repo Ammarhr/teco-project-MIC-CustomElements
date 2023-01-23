@@ -13,6 +13,7 @@
 </script>
 
 <div class="app-container">
+  <MicHeaderInformation token="jkaksd" url="wtf" />
 </div>
 
 <style>
