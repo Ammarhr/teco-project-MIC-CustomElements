@@ -12,20 +12,24 @@
   export let token;
   export let url;
   let selectedBill;
-
+  let selectedDate;
   //mocking data
-  const [data, loading, error, get] = fetchstore(
-  );
+  const [data, loading, error, get] = fetchstore();
 
+  //../../../data/BillSelector.json
   $: if (token && url && !$data.bills) {
     get(token, url);
   }
   const handleChange = (e) => {
+    selectedBill = e.target.value;
     changeBillNumber(e.target.value);
   };
   $: if ($data.bills) {
     if (!selectedBill) {
-      changeBillNumber($data.bills[0].value);
+      selectedDate = $data.bills.filter(
+        (bill) => bill.value == $data.selectedBill
+      )[0];
+      changeBillNumber($data.selectedBill);
     }
   }
 </script>
@@ -50,9 +54,12 @@
               class="form-control"
               id="68.Teco.BuildingBlocksShowcase.referenceSelector1_pkj_53"
               aria-label=""
-              bind:value={$billNumber}
               on:change={(e) => handleChange(e)}
+              bind:value={$billNumber}
             >
+              <option name="bill-selector" selected value={$data.selectedBill}
+                >{selectedDate.lable}</option
+              >
               {#each $data.bills as billDate}
                 <option name="bill-selector" value={billDate.value}
                   >{billDate.lable}</option
@@ -79,7 +86,7 @@
     </div>
   </div>
 {:else}
-<h1></h1>
+  <h1 />
   <!-- <mic-render-error err={"failed in bill selector no Token provided"} /> -->
 {/if}
 

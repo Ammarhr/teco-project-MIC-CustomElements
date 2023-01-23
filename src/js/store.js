@@ -1,5 +1,6 @@
 'use strict';
 
+import { Logger } from 'sass';
 import { writable, derived } from 'svelte/store';
 
 // modal hide/show
@@ -63,7 +64,9 @@ export function fetchstore() {
         } catch (e) {
             error.set(e);
         }
+        setTimeout(() => {
             loading.set(false);
+        }, 500)
     }
 
     return [data, loading, error, get]

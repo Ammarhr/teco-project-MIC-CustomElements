@@ -65,13 +65,13 @@
           class="col-lg col-md col tecoInfoBarCol roundedBottom tecoWhiteBG tecoInfoBarDetails"
         >
           <div class="oneLined">
-            {#if !account.IsElectric}
+            {#if account.IsElectric}
               <img class="spacing-outer-right-medium" src={electric} />
             {/if}
-            {#if !account.IsGas}
+            {#if account.IsGas}
               <img class="spacing-outer-right-medium" src={fire} />
             {/if}
-            {#if !account.IsLighting}
+            {#if account.IsLighting}
               <img class="lighting" src={lighting} />
             {/if}
             <label
@@ -87,18 +87,34 @@
               >Address:
             </label><span>{account.adress}</span>
           </div>
-          <div>
+          <div class="statuses">
             <label
               id="68.Teco.BuildingBlocksShowcase.label3_pkj_43"
               class="spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
               >Status:
-            </label><span class="tecoBolder {statusClass}"> {statusClass}</span>
+            </label>
+            {#if account.IsElectric && account.IsGas}
+              <div class="status-con">
+                <div>
+                  Elictric: <span class="tecoBolder {statusClass}">
+                    {statusClass}</span
+                  >
+                </div>
+                <div>
+                  Gas: <span class="tecoBolder {statusClass}">
+                    {statusClass}</span
+                  >
+                </div>
+              </div>
+            {:else}
+              <span class="tecoBolder {statusClass}"> {statusClass}</span>
+            {/if}
           </div>
         </div>
       </div>
     </div>
   {:else}
-  <h1></h1>
+    <h1 />
     <!-- <mic-render-error err={"Failed to load header"} /> -->
   {/if}
 </div>
@@ -252,6 +268,19 @@
   .Inactive {
     color: $teco-red;
   }
+  .statuses {
+    display: flex;
+    gap: 10px;
+    .status-con {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      @media (max-width: 767px) {
+        flex-direction:row;
+        gap: 15px;
+      }
+    }
+  }
   .tecoInfoBar {
     border-radius: 7px;
     container-type: inline-size;
@@ -264,7 +293,7 @@
       align-items: center;
       padding: 10px 32px;
 
-      @media (max-width: 600px) {
+      @media (max-width: 767px) {
         padding: 10px;
       }
     }
@@ -273,13 +302,13 @@
       font-weight: 700;
       color: white;
 
-      @media (max-width: 600px) {
+      @media (max-width: 767px) {
         padding: 10px;
       }
     }
 
     .tecoInfoBarDetails {
-      @media (max-width: 600px) {
+      @media (max-width: 767px) {
         flex-direction: column;
         align-items: flex-start;
       }
@@ -305,12 +334,12 @@
         border-radius: 6px;
       }
 
-      @media (min-width: 601px) {
+      @media (min-width: 767px) {
         min-width: 175px;
       }
 
       > img {
-        @media (max-width: 600px) {
+        @media (max-width: 767px) {
           display: none;
         }
       }
