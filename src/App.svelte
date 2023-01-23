@@ -13,7 +13,6 @@
 </script>
 
 <div class="app-container">
-
 </div>
 
 <style>
