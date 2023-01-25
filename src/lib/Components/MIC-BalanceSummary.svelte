@@ -12,12 +12,11 @@
     let tries = 3;
 
     //mocking data
-    const [data, loading, error, get] =
-        fetchstore();
-
+    const [data, loading, error, get] = fetchstore();
+    
+    // "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json"
     // trigger token existence
     $: if (token && url && !$data.html_masseges && tries > 0) {
-        // console.info("this is url", url, "loading", $loading);
         get(token, url);
         tries--;
     }
@@ -32,13 +31,14 @@
                 // add border
                 subEle.setAttribute(
                     "style",
-                    "border-top: solid 1px #015faa; padding-top:20px;"
+                    "border-top: solid 2px #015faa; padding-top:20px;  margin-top:20px;",
+                    
                 );
             subEle.innerHTML = $data.html_masseges[i].message;
             newElement.appendChild(subEle);
         }
         // dynamic totalAmmount colors
-        if ($data.totalAmmount > 0) {
+        if ($data.totalAmmount >= 0) {
             color = $data.postive_color;
         } else {
             color = $data.negative_color;
@@ -64,12 +64,14 @@
                 <div class="amount">
                     <span style="color: {color};">$</span>
                     <span style="color: {color};"
-                        >{$data.totalAmmount.toString().split(".")[0]}</span
+                        >{$data.totalAmmount.toLocaleString().split(".")[0]}</span
                     >
                     {#if $data.totalAmmount.toString().split(".")[1]}
                         <span style="color: {color};"
                             >{$data.totalAmmount.toString().split(".")[1]}</span
                         >
+                    {:else}
+                        <span style="color: {color};">00</span>
                     {/if}
                 </div>
                 <div>
@@ -94,13 +96,10 @@
         </div>
     </div>
 {:else}
-<h1></h1>
+    <h1 />
 {/if}
 
 <style lang="scss">
-    // Typography
-    $teco-font-family: "Interstate";
-
     // Colors
     $teco-white: #ffffff;
     $teco-background-color: #f4f5f7;
@@ -127,7 +126,7 @@
     }
 
     .tecoLayout {
-        font-family: $teco-font-family;
+        // font-family: $teco-font-family;
         background-color: whitesmoke;
 
         ::-webkit-scrollbar {

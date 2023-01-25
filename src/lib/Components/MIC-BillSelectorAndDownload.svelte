@@ -12,24 +12,30 @@
   export let token;
   export let url;
   let selectedBill;
-  let selectedDate;
+  let selectedLabelBill;
   //mocking data
   const [data, loading, error, get] = fetchstore();
 
-  //../../../data/BillSelector.json
+  //"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json"
   $: if (token && url && !$data.bills) {
     get(token, url);
   }
+
   const handleChange = (e) => {
     selectedBill = e.target.value;
     changeBillNumber(e.target.value);
   };
+
   $: if ($data.bills) {
     if (!selectedBill) {
-      selectedDate = $data.bills.filter(
-        (bill) => bill.value == $data.selectedBill
-      )[0];
-      changeBillNumber($data.selectedBill);
+      if ($data.bills.filter((bill) => bill.value == $data.selectedBill)[0]) {
+        selectedLabelBill = $data.bills.filter(
+          (bill) => bill.value == $data.selectedBill
+        )[0];
+        changeBillNumber($data.selectedBill);
+      } else {
+        changeBillNumber($data.bills[0].value);
+      }
     }
   }
 </script>
@@ -57,9 +63,11 @@
               on:change={(e) => handleChange(e)}
               bind:value={$billNumber}
             >
-              <option name="bill-selector" selected value={$data.selectedBill}
-                >{selectedDate.lable}</option
-              >
+              {#if selectedLabelBill}
+                <option name="bill-selector" selected value={$data.selectedBill}
+                  >{selectedLabelBill.lable}</option
+                >
+              {/if}
               {#each $data.bills as billDate}
                 <option name="bill-selector" value={billDate.value}
                   >{billDate.lable}</option
@@ -80,7 +88,7 @@
           </button>
         </div>
         <div class="tecoBillSelectorSmallText">
-          <span>View Latest Bill</span>
+          <span><a href="#">View Latest Bill</a> </span>
         </div>
       </div>
     </div>
@@ -97,6 +105,7 @@
   // Colors
   $teco-white: #ffffff;
   $teco-midnight-blue: #00294a;
+  $teco-blue: #005faa;
   $teco-ocean-blue: #5eb0f4;
   $teco-yellow: #ffdc00;
   $teco-green: #24a148;
@@ -139,7 +148,7 @@
   }
 
   .tecoPrimaryBG {
-    background-color: #005faa;
+    background-color: $teco-blue;
   }
 
   .tecoYellowBG {
@@ -151,7 +160,7 @@
   }
 
   .tecoPrimaryColor {
-    color: #005faa;
+    color: $teco-blue;
   }
 
   .tecoOceanBlue {
@@ -240,7 +249,7 @@
 
     .tecoInfoLabel h4 {
       font-weight: 400;
-      color: #005faa;
+      color: $teco-blue;
       width: max-content;
       display: block;
     }
@@ -259,7 +268,7 @@
       flex: revert;
       select {
         font-size: 15px;
-        border: 2px solid #005faa;
+        border: 2px solid $teco-blue;
         width: 100%;
         padding: 6px 10px;
         border-radius: 6px;
@@ -267,7 +276,11 @@
     }
 
     .tecoBillSelectorSmallText {
-      border-bottom: 2px solid #005faa;
+      a{
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+      border-bottom: 2px solid $teco-blue;
     }
 
     .tecoBillSelectorDownloadContainer {
@@ -284,13 +297,20 @@
     }
 
     .tecoBillSelectorDownloadButton {
+      #btn-download {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        color: $teco-blue;
+      }
       & > span {
-        color: #005faa;
+        color: $teco-blue;
       }
       padding: 6px 10px;
       border-radius: 6px;
-      color: #005faa;
-      border-color: #005faa;
+      color: $teco-blue;
+      border-color: $teco-blue;
       display: flex;
       gap: 4px;
       justify-content: center;
@@ -311,7 +331,11 @@
         display: block !important;
         margin: 0;
       }
-
+      .tecoBillSelectorDownloadButton {
+        img {
+          display: none;
+        }
+      }
       .tecobillSelectorDetailRow {
         gap: 20px !important;
         margin-top: 20px;

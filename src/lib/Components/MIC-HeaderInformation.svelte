@@ -16,7 +16,7 @@
   let statusClass = "Inactive";
 
   const [data, loading, error, get] = fetchstore();
-
+  // "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json"
   $: if (token && url && !$data.account) {
     get(token, url);
   }
@@ -49,7 +49,7 @@
           <div class="tecoInfoLabel">
             <span>Account Details</span>
           </div>
-          <div class="oneLined">
+          <div class="oneLined hide">
             <button type="button" class="change-btn btn">
               Change Account</button
             ><img
@@ -276,7 +276,7 @@
       flex-direction: column;
       gap: 5px;
       @media (max-width: 767px) {
-        flex-direction:row;
+        flex-direction: row;
         gap: 15px;
       }
     }
@@ -343,6 +343,9 @@
           display: none;
         }
       }
+    }
+    .hide {
+      display: none;
     }
   }
 </style>

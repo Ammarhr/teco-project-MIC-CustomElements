@@ -13,16 +13,13 @@
 </script>
 
 <div class="app-container">
-  <MicHeaderInformation token="jkaksd" url="wtf" />
+
 </div>
 
-<style>
-  /* .app-container {
+<style lang="scss">
+  .app-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  } */
+    gap: 30px;
+  }
 </style>
-

@@ -46,13 +46,14 @@ export function fetchstore() {
                 throw new Error("No Token provided!");
             } else if (token) {
                 //* real api hit with jwt token:
+                // const Publishresponse = await fetch(url)
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
                     credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
-                        "AuthenticationToken": token
+                        "Authorization": `Bearer ${token}`
                     },
                     body: JSON.stringify({}),
                 })
@@ -64,9 +65,9 @@ export function fetchstore() {
         } catch (e) {
             error.set(e);
         }
-        setTimeout(() => {
+        // setTimeout(() => {
             loading.set(false);
-        }, 500)
+        // }, 500)
     }
 
     return [data, loading, error, get]
