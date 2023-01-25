@@ -11,7 +11,7 @@
   // import BillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   // import MeterTable from "./lib/Components/MIC-MeterTable.svelte";
   import { getToken, apiToken } from "./js/store";
-
+  // export let token2
   let token1;
   //mocking data
   const [token, loading, error, get] = getToken(
@@ -34,16 +34,16 @@
 {:else if token1}
   <div class="container" style="width: 100%;">
     <div class="Header">
-      <!-- <mic-headerinformation url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json" token={token1} ></mic-headerinformation> -->
-      <MicHeaderInformation token={token1} />
+      <!-- <mic-headerinformation url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json" token={token2} ></mic-headerinformation> -->
+      <!-- <MicHeaderInformation token={token1} /> -->
     </div>
     <div class="Billing-message">
-      <MicBalanceSummary token={token1} />
+      <!-- <MicBalanceSummary token={token1} /> -->
       <!-- <mic-balancesummary url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@style-adjustment/data/AccountBalanceData.json" token={token1}></mic-balancesummary> -->
       <!-- <mic-importentmessage token={token1} /> -->
     </div>
     <div id="bill-selector">
-      <BillSelector token={token1} />
+      <!-- <BillSelector token={token1} /> -->
       <!-- <mic-billselector url="https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json" token={token1} ></mic-billselector> -->
       <!-- <mic-billselector token={token1} /> -->
     </div>
@@ -51,7 +51,7 @@
       <!-- <mic-billingsummary token={token1} /> -->
       <!-- <Insights token={token1} /> -->
       <!-- <mic-insights token={token1} /> -->
-      <MicBulkDownload token={token1} />
+      <!-- <MicBulkDownload token={token1} /> -->
       </div>
     <div class="meter">
       <!-- <mic-metertable token={token1} /> -->

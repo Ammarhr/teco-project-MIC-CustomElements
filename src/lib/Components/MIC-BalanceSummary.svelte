@@ -12,12 +12,10 @@
     let tries = 3;
 
     //mocking data
-    const [data, loading, error, get] =
-        fetchstore();
-
+    const [data, loading, error, get] = fetchstore();
+    // "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json"
     // trigger token existence
     $: if (token && url && !$data.html_masseges && tries > 0) {
-        // console.info("this is url", url, "loading", $loading);
         get(token, url);
         tries--;
     }
@@ -94,13 +92,10 @@
         </div>
     </div>
 {:else}
-<h1></h1>
+    <h1 />
 {/if}
 
 <style lang="scss">
-    // Typography
-    $teco-font-family: "Interstate";
-
     // Colors
     $teco-white: #ffffff;
     $teco-background-color: #f4f5f7;
@@ -127,7 +122,7 @@
     }
 
     .tecoLayout {
-        font-family: $teco-font-family;
+        // font-family: $teco-font-family;
         background-color: whitesmoke;
 
         ::-webkit-scrollbar {

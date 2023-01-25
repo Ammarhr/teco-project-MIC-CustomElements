@@ -1,3 +1,108 @@
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Hairline.ttf") format("truetype");
+    font-weight: 50;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Hairline_Italic.ttf") format("truetype");
+    font-weight: 50;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Thin_Italic.ttf") format("truetype");
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_ExLight.ttf") format("truetype");
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_ExLight_Italic.ttf") format("truetype");
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Light_Italic.ttf") format("truetype");
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Bold_Italic.ttf");
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Black.ttf");
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_Black_Italic.ttf");
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_UltraBlack.ttf");
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Interstate";
+    src: url("https://tecocdn.azureedge.net/files/fonts/Interstate_UltraBlack_Italic.ttf");
+    font-weight: 900;
+    font-style: italic;
+}
+
 * {
-    font-family: 'Interstate';
+    font-family: "Interstate";
 }
