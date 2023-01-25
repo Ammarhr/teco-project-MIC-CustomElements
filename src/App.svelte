@@ -13,7 +13,7 @@
 </script>
 
 <div class="app-container">
-  
+
 </div>
 
 <style lang="scss">
