@@ -3,22 +3,26 @@
 <script>
   // @ts-nocheck
 
-  import star from "../../assets/Vector.svg";
-  import fire from "../../assets/Fire.svg";
-  import electric from "../../assets/electric.svg";
-  import lighting from "../../assets/lighting.svg";
-  import { fetchstore } from "../../js/store";
+  // import star from "https://tecocdn.azureedge.net/files/micwc/assets/Vector.3d07a0fc.svg";
+  // import fire from "https://tecocdn.azureedge.net/files/micwc/assets/Fire.f0f8bb01.svg";
+  // import electric from "https://tecocdn.azureedge.net/files/micwc/assets/electric.a02f37b0.svg";
+  // import lighting from "https://tecocdn.azureedge.net/files/micwc/assets/lighting.0131cc59.svg";
+  import { fetchstore, apiDomain, apiToken } from "../../js/store";
 
   //state
-  export let token;
-  export let url;
   let account;
   let statusClass = "Inactive";
 
   const [data, loading, error, get] = fetchstore();
-  // "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json"
-  $: if (token && url && !$data.account) {
-    get(token, url);
+
+  // testing url:"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json"
+  // dev url:"https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/AccountDetails"
+  $: if ($apiDomain && $apiToken && !$data.account) {
+    get(
+      $apiToken,
+      `https://miportaldev.${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`
+      // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json`
+    );
   }
 
   $: if ($data) {
@@ -54,7 +58,7 @@
               Change Account</button
             ><img
               class="spacing-outer-left-medium"
-              src={star}
+              src={"https://tecocdn.azureedge.net/files/micwc/assets/Vector.3d07a0fc.svg"}
               alt="favorite logo"
             />
           </div>
@@ -66,26 +70,32 @@
         >
           <div class="oneLined">
             {#if account.IsElectric}
-              <img class="spacing-outer-right-medium" src={electric} />
+              <img class="spacing-outer-right-medium" src={"https://tecocdn.azureedge.net/files/micwc/assets/electric.a02f37b0.svg"} />
             {/if}
             {#if account.IsGas}
-              <img class="spacing-outer-right-medium" src={fire} />
+              <img class="spacing-outer-right-medium" src={"https://tecocdn.azureedge.net/files/micwc/assets/Fire.f0f8bb01.svg"} />
             {/if}
             {#if account.IsLighting}
-              <img class="lighting" src={lighting} />
+              <img class="lighting" src={"https://tecocdn.azureedge.net/files/micwc/assets/lighting.0131cc59.svg"} />
             {/if}
-            <label
-              class="spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
-              >Account:</label
-            >
-            <span> #{account.accountNumber}</span>
+            <div>
+              <div class="account-id">
+                <label
+                  class="spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
+                  >Account:</label
+                >
+                <span> #{account.accountNumber}</span>
+              </div>
+            </div>
           </div>
           <div>
-            <label
-              id="68.Teco.BuildingBlocksShowcase.label2_pkj_42"
-              class="spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
-              >Address:
-            </label><span>{account.adress}</span>
+            <div class="account-id">
+              <label
+                id="68.Teco.BuildingBlocksShowcase.label2_pkj_42"
+                class="spacing-outer-top-none spacing-outer-bottom-none spacing-outer-left-none spacing-outer-right-none"
+                >Address:
+              </label><span>{account.adress}</span>
+            </div>
           </div>
           <div class="statuses">
             <label
@@ -96,7 +106,7 @@
             {#if account.IsElectric && account.IsGas}
               <div class="status-con">
                 <div>
-                  Elictric: <span class="tecoBolder {statusClass}">
+                  Electric: <span class="tecoBolder {statusClass}">
                     {statusClass}</span
                   >
                 </div>
@@ -271,6 +281,7 @@
   .statuses {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
     .status-con {
       display: flex;
       flex-direction: column;
@@ -290,8 +301,8 @@
       display: flex;
       width: 100%;
       justify-content: space-between;
-      align-items: center;
       padding: 10px 32px;
+      gap: 15px;
 
       @media (max-width: 767px) {
         padding: 10px;
@@ -316,9 +327,9 @@
 
     .oneLined {
       justify-content: end;
-      align-items: center;
       display: flex;
       gap: 10px;
+
       .spacing-outer-right-medium {
         width: 19px;
         height: 28px;
@@ -343,6 +354,11 @@
           display: none;
         }
       }
+    }
+    .account-id {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     .hide {
       display: none;

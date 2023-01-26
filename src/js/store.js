@@ -1,6 +1,5 @@
 'use strict';
 
-import { Logger } from 'sass';
 import { writable, derived } from 'svelte/store';
 
 // modal hide/show
@@ -18,12 +17,20 @@ let month = newDate.getMonth();
 export const date = writable(month + 1 + ' ' + year);
 export const CopmarsionDate = writable(month + 1 + ' ' + (year - 1));
 
-
 //* bill nubmer
 export const billNumber = writable(''); // billNimber
-
 export const changeBillNumber = (num) => {
     billNumber.set(num);
+}
+//* Domain changing
+export const apiDomain = writable('')
+export const setDomain = (domain) => {
+    apiDomain.set(domain);
+}
+//* api token
+export const apiToken = writable('');
+export const setToken = (token) => {
+    apiToken.set(token);
 }
 
 export const getDate = derived(
@@ -73,33 +80,33 @@ export function fetchstore() {
     return [data, loading, error, get]
 }
 
-export const apiToken = writable('');
+
 // grtting the token:
-export function getToken(url, user) {
-    const loading = writable(false);
-    const error = writable(false);
-    const token = writable({});
-    async function get() {
-        loading.set(true);
-        error.set(false);
-        try {
-            if (!user) {
-                token.set({ errrorMessage: "No user provided!" });
-            } else if (user && user == 'Ammar') {
-                const response = await fetch(url);
-                apiToken.set(await response.json());
-            } else {
-                token.set({ errrorMessage: "Invalid user" });
-            }
-        } catch (e) {
-            error.set(e);
-        }
-        loading.set(false);
-    }
+// export function getToken(url, user) {
+//     const loading = writable(false);
+//     const error = writable(false);
+//     const token = writable({});
+//     async function get() {
+//         loading.set(true);
+//         error.set(false);
+//         try {
+//             if (!user) {
+//                 token.set({ errrorMessage: "No user provided!" });
+//             } else if (user && user == 'Ammar') {
+//                 const response = await fetch(url);
+//                 apiToken.set(await response.json());
+//             } else {
+//                 token.set({ errrorMessage: "Invalid user" });
+//             }
+//         } catch (e) {
+//             error.set(e);
+//         }
+//         loading.set(false);
+//     }
 
-    get();
+//     get();
 
-    return [token, loading, error, get]
-}
+//     return [token, loading, error, get]
+// }
 
 

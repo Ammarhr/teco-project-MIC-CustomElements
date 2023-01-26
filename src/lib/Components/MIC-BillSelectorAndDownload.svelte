@@ -4,21 +4,30 @@
   // @ts-nocheck
 
   // svg imports
-  import { billNumber } from "../../js/store";
-  import downloadIcon from "../../assets/DownloadIcon.svg";
-  import { fetchstore, changeBillNumber } from "../../js/store";
+  // import downloadIcon from "https://tecocdn.azureedge.net/files/micwc/assets/DownloadIcon.9e9f8186.svg";
+  import {
+    billNumber,
+    fetchstore,
+    changeBillNumber,
+    apiDomain,
+    apiToken,
+  } from "../../js/store";
 
   // state
-  export let token;
-  export let url;
   let selectedBill;
   let selectedLabelBill;
+
   //mocking data
   const [data, loading, error, get] = fetchstore();
 
-  //"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json"
-  $: if (token && url && !$data.bills) {
-    get(token, url);
+  //testing url: "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json"
+  //dev url: `https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BillSelector`
+  $: if ($apiDomain && $apiToken && !$data.bills) {
+    get(
+      $apiToken,
+      `https://miportaldev.${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`
+      // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json`
+    );
   }
 
   const handleChange = (e) => {
@@ -81,7 +90,7 @@
             <h4>DOWNLOAD MY BILL</h4>
           </div>
           <button type="button" class="btn tecoBillSelectorDownloadButton">
-            <img src={downloadIcon} alt="DI" />
+            <img src={"https://tecocdn.azureedge.net/files/micwc/assets/DownloadIcon.9e9f8186.svg"} alt="DI" />
             <a id="btn-download" href={`${$data.download_link}${$billNumber}`}>
               DOWNLOAD BILL
             </a>
@@ -276,7 +285,7 @@
     }
 
     .tecoBillSelectorSmallText {
-      a{
+      a {
         text-decoration: none;
         text-transform: uppercase;
       }

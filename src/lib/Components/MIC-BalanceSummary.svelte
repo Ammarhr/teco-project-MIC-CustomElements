@@ -2,22 +2,25 @@
 
 <script>
     // @ts-nocheck
-    import mask from "../../assets/mask-bs.svg";
-    import { fetchstore } from "../../js/store";
+    // import mask from "https://tecocdn.azureedge.net/files/micwc/assets/mask-bs.db60226b.svg";
+    import { fetchstore, apiDomain, apiToken } from "../../js/store";
+
     //state
-    export let token;
-    export let url;
     var newElement;
     let color; // this change the charge color depend in the its value
     let tries = 3;
 
     //mocking data
     const [data, loading, error, get] = fetchstore();
-    
-    // "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json"
+    //testing url:"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json"
+    //dev url:https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary
     // trigger token existence
-    $: if (token && url && !$data.html_masseges && tries > 0) {
-        get(token, url);
+    $: if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
+        get(
+            $apiToken,
+            `https://miportaldev.${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
+        );
         tries--;
     }
 
@@ -31,8 +34,7 @@
                 // add border
                 subEle.setAttribute(
                     "style",
-                    "border-top: solid 2px #015faa; padding-top:20px;  margin-top:20px;",
-                    
+                    "border-top: solid 2px #015faa; padding-top:20px;  margin-top:20px;"
                 );
             subEle.innerHTML = $data.html_masseges[i].message;
             newElement.appendChild(subEle);
@@ -57,14 +59,16 @@
     >
         <div
             class="tecoBalanceSum roundedRadius20"
-            style="background-image:url({mask});"
+            style="background-image:url({"https://tecocdn.azureedge.net/files/micwc/assets/mask-bs.db60226b.svg"});"
         >
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>
                 <div class="amount">
                     <span style="color: {color};">$</span>
                     <span style="color: {color};"
-                        >{$data.totalAmmount.toLocaleString().split(".")[0]}</span
+                        >{$data.totalAmmount
+                            .toLocaleString()
+                            .split(".")[0]}</span
                     >
                     {#if $data.totalAmmount.toString().split(".")[1]}
                         <span style="color: {color};"

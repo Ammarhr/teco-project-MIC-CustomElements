@@ -2,16 +2,20 @@
 
 <script>
     // @ts-nocheck
-    import backgroundPattern from "../../assets/mask-bd.svg";
-    import { fetchstore } from "../../js/store";
-    export let token;
-    export let url;
-    //mocking data
-    const [data, loading, error, get] =
-        fetchstore();
+    // import backgroundPattern from "../../assets/mask-bd.svg";
+    import { fetchstore, apiDomain, apiToken } from "../../js/store";
 
-    $: if (token && url && !$data.BlkDownload) {
-        get(token, url);
+    //mocking data
+    const [data, loading, error, get] = fetchstore();
+
+    //testing url:`https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/bulkDownload.json`
+    //dev url:`https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BulkDownload`
+    $: if ($apiDomain && $apiToken && !$data.BlkDownload) {
+        get(
+            $apiToken,
+            `https://miportaldev.${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`
+            // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/bulkDownload.json`
+        );
     }
 </script>
 
@@ -23,7 +27,7 @@
 {:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
-        style="background-image:url({backgroundPattern});"
+        style="background-image:url({"https://tecocdn.azureedge.net/files/micwc/assets/mask-bd.db60226b.svg"});"
     >
         <div class="tecoBillBannerBody">
             <p>
