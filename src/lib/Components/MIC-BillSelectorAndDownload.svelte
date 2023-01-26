@@ -18,7 +18,7 @@
 
   //"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json"
   $: if (token && url && !$data.bills) {
-    get(token, url);
+    get(token, 'https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json');
   }
 
   const handleChange = (e) => {
@@ -246,6 +246,7 @@
     align-items: start;
     flex-direction: column;
     gap: 10px;
+    flex-wrap: wrap;
 
     .tecoInfoLabel h4 {
       font-weight: 400;
@@ -320,7 +321,7 @@
     }
 
     // small container
-    @media screen and (max-width: 590px) {
+    @media screen and (max-width: 767px) {
       text-align: center !important;
       gap: 10px;
       align-items: center;
@@ -339,7 +340,7 @@
       .tecobillSelectorDetailRow {
         gap: 20px !important;
         margin-top: 20px;
-        flex-direction: column;
+        flex-direction: column;   
       }
 
       .tecoBillSelectorSmallText {
@@ -381,6 +382,7 @@
 
       .tecobillSelectorDetailRow {
         flex-grow: 2;
+        width: unset;
       }
     }
     a {
