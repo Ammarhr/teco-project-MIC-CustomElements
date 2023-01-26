@@ -17,7 +17,7 @@
     // "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json"
     // trigger token existence
     $: if (token && url && !$data.html_masseges && tries > 0) {
-        get(token, url);
+        get(token, "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json");
         tries--;
     }
 
@@ -125,30 +125,25 @@
         box-sizing: border-box;
     }
 
-    .tecoLayout {
-        // font-family: $teco-font-family;
-        background-color: whitesmoke;
+    ::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
 
-        ::-webkit-scrollbar {
-            width: 7px;
-            height: 7px;
-        }
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
 
-        /* Track */
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: rgb(187, 187, 187);
+        border-radius: 3px;
+    }
 
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: rgb(187, 187, 187);
-            border-radius: 3px;
-        }
-
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #888;
-        }
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #888;
     }
 
     .tecoPrimaryBG {
@@ -289,8 +284,9 @@
             width: 50%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             padding: 0 20px;
+            max-height: 275px;
+            overflow-y: auto;
 
             .messageBox {
                 padding: 15px 0;
@@ -335,8 +331,6 @@
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
-                padding: 0 20px;
             }
         }
     }
