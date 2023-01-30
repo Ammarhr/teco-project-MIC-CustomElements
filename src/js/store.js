@@ -72,41 +72,35 @@ export function fetchstore() {
         } catch (e) {
             error.set(e);
         }
-        // setTimeout(() => {
-            loading.set(false);
-        // }, 500)
+        loading.set(false);
     }
 
     return [data, loading, error, get]
 }
 
 
-// grtting the token:
-// export function getToken(url, user) {
-//     const loading = writable(false);
-//     const error = writable(false);
-//     const token = writable({});
-//     async function get() {
-//         loading.set(true);
-//         error.set(false);
-//         try {
-//             if (!user) {
-//                 token.set({ errrorMessage: "No user provided!" });
-//             } else if (user && user == 'Ammar') {
-//                 const response = await fetch(url);
-//                 apiToken.set(await response.json());
-//             } else {
-//                 token.set({ errrorMessage: "Invalid user" });
-//             }
-//         } catch (e) {
-//             error.set(e);
-//         }
-//         loading.set(false);
-//     }
-
-//     get();
-
-//     return [token, loading, error, get]
-// }
-
+export const fetchAndRedirect = (token, fetchUrl, redirectUrl) => {
+    fetch(fetchUrl, {
+        method: "GET",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    if (redirectUrl) {
+        window.open(
+            redirectUrl,
+            "_blank" // <- This is what makes it open in a new window.
+        );
+    }
+};
 

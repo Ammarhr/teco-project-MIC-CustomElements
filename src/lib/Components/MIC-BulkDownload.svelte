@@ -27,7 +27,7 @@
 {:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
-        style="background-image:url({"https://tecocdn.azureedge.net/files/micwc/assets/mask-bd.db60226b.svg"});"
+        style="background-image:url({"https://tecocdn.azureedge.net/files/micwc/assets/mask-bd.78a6b58f.svg"});"
     >
         <div class="tecoBillBannerBody">
             <p>

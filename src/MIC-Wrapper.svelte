@@ -4,7 +4,7 @@
   // @ts-nocheck
   import {setDomain, setToken} from './js/store'
   export let token;
-  export let domain
+  export let domain;
 
   
   $: if (token || domain) {

@@ -11,6 +11,7 @@
     changeBillNumber,
     apiDomain,
     apiToken,
+    fetchAndRedirect,
   } from "../../js/store";
 
   // state
@@ -69,7 +70,13 @@
               class="form-control"
               id="68.Teco.BuildingBlocksShowcase.referenceSelector1_pkj_53"
               aria-label=""
-              on:change={(e) => handleChange(e)}
+              on:change={(e) => {
+                handleChange(e);
+                fetchAndRedirect(
+                  $apiToken,
+                  `https://miportaldev.${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Select_New_Bill`
+                );
+              }}
               bind:value={$billNumber}
             >
               {#if selectedLabelBill}
@@ -89,15 +96,35 @@
           <div class="tecoInfoLabel">
             <h4>DOWNLOAD MY BILL</h4>
           </div>
-          <button type="button" class="btn tecoBillSelectorDownloadButton">
-            <img src={"https://tecocdn.azureedge.net/files/micwc/assets/DownloadIcon.9e9f8186.svg"} alt="DI" />
-            <a id="btn-download" href={`${$data.download_link}${$billNumber}`}>
-              DOWNLOAD BILL
-            </a>
+          <button
+            type="button"
+            class="btn tecoBillSelectorDownloadButton"
+            id="btn-download"
+            on:click={() =>
+              fetchAndRedirect(
+                $apiToken,
+                `https://miportaldev.${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Bill_Download`,
+                `${$data.download_link}${$billNumber}`
+              )}
+          >
+            <img
+              src={"https://tecocdn.azureedge.net/files/micwc/assets/DownloadIcon.9e9f8186.svg"}
+              alt="DI"
+            />DOWNLOAD BILL
           </button>
         </div>
         <div class="tecoBillSelectorSmallText">
-          <span><a href="#">View Latest Bill</a> </span>
+          <span>
+            <!-- svelte-ignore a11y-missing-attribute -->
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <a
+              on:click={() =>
+                fetchAndRedirect(
+                  $apiToken,
+                  `https://miportaldev.${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Select_Latest_Bill`
+                )}>View Latest Bill</a
+            >
+          </span>
         </div>
       </div>
     </div>
@@ -110,7 +137,6 @@
 <style lang="scss">
   // Typography
   $teco-font-family: "Interstate";
-
   // Colors
   $teco-white: #ffffff;
   $teco-midnight-blue: #00294a;
@@ -120,122 +146,94 @@
   $teco-green: #24a148;
   $teco-red: #da1e28;
   $teco-dark-grey: #6c6c6c;
-
   $screen-md-min: 991px;
   $screen-custom-md-min: 1024px;
   $screen-lg-min: 1200px;
-
   * {
     margin: 0;
     box-sizing: border-box;
   }
-
   .tecoLayout {
     font-family: $teco-font-family;
     background-color: whitesmoke;
-
     ::-webkit-scrollbar {
       width: 7px;
       height: 7px;
     }
-
     /* Track */
     ::-webkit-scrollbar-track {
       background: #f1f1f1;
     }
-
     /* Handle */
     ::-webkit-scrollbar-thumb {
       background: rgb(187, 187, 187);
       border-radius: 3px;
     }
-
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
       background: #888;
     }
   }
-
   .tecoPrimaryBG {
     background-color: $teco-blue;
   }
-
   .tecoYellowBG {
     background-color: $teco-yellow;
   }
-
   .tecoWhiteBG {
     background-color: $teco-white;
   }
-
   .tecoPrimaryColor {
     color: $teco-blue;
   }
-
   .tecoOceanBlue {
     color: $teco-ocean-blue;
   }
-
   .tecoMidnightBlue {
     color: $teco-midnight-blue;
   }
-
   .tecoGreenColor {
     color: $teco-green;
   }
-
   .tecoRedColor {
     color: $teco-red;
   }
-
   .tecoGrayColor {
     color: grey;
   }
-
   .tecoGrayedLabel {
     color: grey;
   }
-
   .pointer {
     cursor: pointer;
   }
-
   .tecoBolder {
     font-weight: 600 !important;
   }
-
   .marginReset {
     margin: 0 !important;
   }
-
   .paddingReset {
     padding: 0 !important;
   }
-
   .roundedTop {
     border-radius: 7px 7px 0 0;
   }
-
   .roundedBottom {
     border-radius: 0 0 7px 7px;
   }
-
   .tecoGenericShadow {
     box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
   }
-
   .roundedRadius20 {
     border-radius: 20px;
   }
-
   .reverseOrder {
     direction: rtl;
   }
-
   .m_1 {
     margin-top: 10px;
   }
-
   .btn {
     cursor: pointer;
   }
@@ -243,11 +241,9 @@
   .tecoCard {
     margin: 0 !important;
     padding: 15px;
-
     container-type: inline-size;
     width: 100%;
   }
-
   // web component "tecoBillSelector" style
   .tecoBillSelector-v2 {
     font-weight: 400;
@@ -255,14 +251,13 @@
     align-items: start;
     flex-direction: column;
     gap: 10px;
-
+    flex-wrap: wrap;
     .tecoInfoLabel h4 {
       font-weight: 400;
       color: $teco-blue;
       width: max-content;
       display: block;
     }
-
     .tecobillSelectorDetailRow {
       display: flex;
       gap: 15px;
@@ -270,7 +265,6 @@
       align-items: center;
       width: 100%;
     }
-
     .tecoBillSelect {
       max-width: 250px;
       width: 100%;
@@ -283,28 +277,25 @@
         border-radius: 6px;
       }
     }
-
     .tecoBillSelectorSmallText {
       a {
         text-decoration: none;
         text-transform: uppercase;
       }
+      cursor: pointer;
       border-bottom: 2px solid $teco-blue;
     }
-
     .tecoBillSelectorDownloadContainer {
       display: flex;
       gap: 10px;
       justify-content: center;
       align-items: center;
-
       > .tecoInfoLabel {
         > h4 {
           display: none;
         }
       }
     }
-
     .tecoBillSelectorDownloadButton {
       #btn-download {
         font-style: normal;
@@ -327,9 +318,8 @@
       background: white;
       min-width: max-content;
     }
-
     // small container
-    @media screen and (max-width: 590px) {
+    @media screen and (max-width: 767px) {
       text-align: center !important;
       gap: 10px;
       align-items: center;
@@ -350,16 +340,13 @@
         margin-top: 20px;
         flex-direction: column;
       }
-
       .tecoBillSelectorSmallText {
         width: fit-content;
         margin: auto;
       }
-
       .tecoBillSelectorDownloadContainer {
         flex-direction: column;
       }
-
       .tecoBillSelectorDownloadButton {
         width: 100%;
         & > span {
@@ -367,29 +354,25 @@
         }
       }
     }
-
     // too large
     @media screen and (min-width: 1024px) {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-
       .tecoBillSelect {
         width: 250px;
       }
-
       .tecoInfoLabel {
         margin-right: 4%;
-
         h4 {
           color: $teco-dark-grey;
           display: block !important;
           margin: 0;
         }
       }
-
       .tecobillSelectorDetailRow {
         flex-grow: 2;
+        width: unset;
       }
     }
     a {

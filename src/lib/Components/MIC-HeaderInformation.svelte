@@ -41,6 +41,7 @@
 </script>
 
 <div>
+
   {#if $loading}
     <mic-loading />
   {:else if $error}
