@@ -74,7 +74,7 @@
                 handleChange(e);
                 fetchAndRedirect(
                   $apiToken,
-                  `https://miportaldev.${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Select_New_Bill`
+                  `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Select_New_Bill`
                 );
               }}
               bind:value={$billNumber}
@@ -103,7 +103,7 @@
             on:click={() =>
               fetchAndRedirect(
                 $apiToken,
-                `https://miportaldev.${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Bill_Download`,
+                `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Bill_Download`,
                 `${$data.download_link}${$billNumber}`
               )}
           >
@@ -121,7 +121,7 @@
               on:click={() =>
                 fetchAndRedirect(
                   $apiToken,
-                  `https://miportaldev.${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Select_Latest_Bill`
+                  `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Select_Latest_Bill`
                 )}>View Latest Bill</a
             >
           </span>

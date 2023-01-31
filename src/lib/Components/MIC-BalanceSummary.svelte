@@ -94,7 +94,7 @@
                         on:click={() =>
                             fetchAndRedirect(
                                 $apiToken,
-                                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Payment`,
+                                `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Payment`,
                                 $data.pay_now_link
                             )}>PAY NOW</button
                     >

@@ -78,7 +78,6 @@ export function fetchstore() {
     return [data, loading, error, get]
 }
 
-
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl) => {
     fetch(fetchUrl, {
         method: "GET",
