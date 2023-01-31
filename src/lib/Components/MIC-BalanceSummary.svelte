@@ -23,7 +23,7 @@
     $: if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
         get(
             $apiToken,
-            `https://miportaldev.${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
             // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
         );
         tries--;
@@ -94,7 +94,7 @@
                         on:click={() =>
                             fetchAndRedirect(
                                 $apiToken,
-                                `https://miportaldev.${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Payment`,
+                                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event?Event=Payment`,
                                 $data.pay_now_link
                             )}>PAY NOW</button
                     >

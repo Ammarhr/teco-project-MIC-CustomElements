@@ -12,60 +12,57 @@
   import { chart } from "svelte-apexcharts";
   import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
   import {
+    billNumber,
     fetchstore,
+    apiDomain,
+    apiToken,
     date,
     CopmarsionDate,
-    billNumber,
-    getToken,
-    apiToken,
   } from "../../js/store";
-  import { slide } from "svelte/transition";
-  import MicBulkDownload from "./MIC-BulkDownload.svelte";
+
   //state
-  export let dataLables = [$date, $CopmarsionDate];
-  export let demandIsightsData = [79];
-  export let insightsDataLables = [$date];
-  export let thisMonthComparisonPercentage = 105;
-  export let token;
+  let dataLables = [$date, $CopmarsionDate];
+  let demandIsightsData = [79];
+  let insightsDataLables = [$date];
+  let thisMonthComparisonPercentage = 105;
+
   let show = false;
-  // export let item = { name: "Item" };
   let avgClass = "red"; //toggle style class (complete it later)
 
   ///////// modal pop up dunctionality
-  // import { writable } from "svelte/store";
-  // import Modal from "svelte-simple-modal";
+  import MicLoading from "./MIC-Loading.svelte";
+  import MicRenderError from "./MIC-RenderError.svelte";
   import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
-  // const modal = writable(null);
-  // const showModal = () => modal.set(MicInsightsRecomendation);
-  //charts renderer
+
   let options1;
   let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
   let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
+  let chartWidth = 400;
+  const [data, loading, error, get] = fetchstore();
 
-  // const [datatoken] = getToken(
-  //   "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Token.json",
-  //   "Ammar"
-  // );
+  // test url: https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json
+  // dev url:
+  $: if ($apiDomain && $apiToken && !$data.SelectedBill) {
+    console.log("this is data.VisibilityTab:==>", $data.SelectedBill);
 
-  const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json",
-    token
-  );
-  // const [servicesData] = fetchstore(
-  //   "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json",
-  //   token
-  // );
-
-  $: if ($billNumber) {
-    get(token);
+    get(
+      $apiToken,
+      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`
+      `${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json`
+    );
   }
 
   ///////// acordion functionality
-  let isOpen = false;
+  let isOpen = true;
   let svgId = "rotate-svg-" + isOpen;
-
+  let toggleClass = "opacity: 1;max-height: 200vh; transition:200ms;";
   const toggle = () => {
     isOpen = !isOpen;
+    if (isOpen) {
+      toggleClass = "max-height: 200vh;opacity: 1;transition:200ms;";
+    } else {
+      toggleClass = "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
+    }
     svgId = "rotate-svg-" + isOpen;
   };
   ////////// tabs functionality
@@ -75,7 +72,8 @@
     tab2 = num2;
     tab1 = num1;
   };
-
+  $: if (options1) {
+  }
   ////////////////////////
 
   $: if ($billNumber && $data && $data.y) {
@@ -87,162 +85,154 @@
       x,
       ["#005FAA", "#B1DBFD"],
       "100%",
-      250,
+      300,
       " kWh"
     );
     options2 = renderRadialBar(
       demandIsightsData,
       insightsDataLables,
+      "230%",
       "#005FAA"
     );
-    options3 = renderRadialBar(demandIsightsData, [$CopmarsionDate], "#B1DBFD");
+    options3 = renderRadialBar(
+      demandIsightsData,
+      [$CopmarsionDate],
+      "230%",
+      "#B1DBFD"
+    );
   }
   let showModal = false;
 
   function toggleModal() {
     showModal = !showModal;
   }
+  // let chartContainer = document.getElementById
+  window.addEventListener("resize", function () {
+    if (window.innerWidth < 650) {
+      chartWidth = window.innerWidth - 75;
+    }
+  });
 </script>
 
 <!----------html----------->
-{#if $loading && !token}
-  <h1>loading...</h1>
+{#if $loading}
+  <MicLoading />
 {:else if $error}
-  <h1>{$error}</h1>
+  <MicRenderError />
 {:else if $data.VisibilityTab == true}
   {#key $billNumber}
-    <div class="insights-container">
-      <div class="insight-card">
-        <div id="header">
-          <h5 class="insights-title">MY BILLING INSIGHTS</h5>
+    <div class="insight-card">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div id="header" on:click={toggle} aria-expanded={isOpen}>
+        <h5 class="insights-title">MY BILLING INSIGHTS</h5>
+        <img src={dropDown} alt="" id={svgId} />
+      </div>
+      <div
+        class="content-container"
+        style={toggleClass}
+      >
+        <div id="insights-tab-container">
           <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <img
-            src={dropDown}
-            alt=""
-            id={svgId}
-            on:click={toggle}
-            aria-expanded={isOpen}
-          />
-        </div>
-        {#if isOpen}
-          <div transition:slide={{ duration: 300 }}>
-            <div id="insights-tab-container">
-              <div id="insights-tabs">
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <h6 id={"btn" + tab1} on:click={() => activateTab("1", "2")}>
-                  Annual Comparison
-                </h6>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <h6 id={"btn" + tab2} on:click={() => activateTab("2", "1")}>
-                  Monthly Comparison
-                </h6>
-              </div>
-              <div id={"tab1" + tab1}>
-                <div
-                  class="chart-container"
-                  transition:slide={{ duration: 300 }}
-                >
-                  <div use:chart={options1} />
-                </div>
-              </div>
-              <div id={"tab1" + tab2}>
-                <div
-                  class="chart-container"
-                  transition:slide={{ duration: 300 }}
-                >
-                  <div use:chart={options1} />
-                </div>
-              </div>
-            </div>
-            <div class="content">
-              <h6 class="insights-label">THIS MONTH</h6>
-              <div class="val-content">
-                <p class="insights-value">
-                  {$data.valueConsumption}
-                  {$data.unit}
-                </p>
-                <p class="percentage">
-                  <span
-                    class={avgClass}
-                    style="background-color:{$data.colorConsumption}"
-                  >
-                    <img src={redArrow} class="arrow" alt="" />
-                    {thisMonthComparisonPercentage}% {$data.unit}</span
-                  >
-                </p>
-              </div>
-            </div>
-            <div class="content">
-              <h6 class="insights-label">Avg. Temp.</h6>
-              <div class="val-content">
-                <p class="insights-value">{$data.valueTemp + "°"}</p>
-                <p class="percentage">
-                  <img src={arrowUp} class="arrow" alt="" />
-                  <span class="blue" style="background-color:{$data.colorTemp}"
-                    >{$data.valueTemp + "°"}</span
-                  >
-                </p>
-              </div>
-            </div>
-            <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
+          <div id="insights-tabs">
+            <h6 id={"btn" + tab1} on:click={() => activateTab("1", "2")}>
+              Annual Comparison
+            </h6>
+            <h6 id={"btn" + tab2} on:click={() => activateTab("2", "1")}>
+              Monthly Comparison
+            </h6>
+          </div>
+          <div id={"tab1" + tab1}>
             <div class="chart-container">
-              {#key $date}
-                <div class="insights-sub-container">
-                  <div use:chart={options2} />
-                </div>
-                <div class="insights-sub-container">
-                  <div use:chart={options3} />
-                </div>
-              {/key}
-            </div>
-            <div class="insights-content">
-              <h6 class="insights-label">THIS MONTH</h6>
-              <div class="val-content">
-                <p class="insights-value">
-                  {$data.valueConsumption}% {$data.unit}
-                </p>
-                <p class="percentage">
-                  <img src={redArrow} class="arrow" alt="" />
-                  <span
-                    class={avgClass}
-                    style="background-color:{$data.colorConsumption}"
-                    >{thisMonthComparisonPercentage}% {$data.unit}</span
-                  >
-                </p>
-              </div>
-            </div>
-            <hr id="hr-footer" />
-            <div id="footer">
-              <p>Insight title here</p>
-              <button class="" on:click={toggleModal}> VIEW</button>
-              {#if showModal}
-                <div class="modal-container">
-                  <div class="modal-content">
-                    <button on:click={toggleModal}>X</button>
-                    <mic-recomendation token={token}></mic-recomendation>
-                    <MicInsightsRecomendation  token={token}/>
-                  </div>
-                </div>
-              {/if}
-              {#if show}
-                <div />
-              {/if}
+              <div use:chart={options1} />
             </div>
           </div>
-        {/if}
+          <div id={"tab1" + tab2}>
+            <div class="chart-container">
+              <div use:chart={options1} />
+            </div>
+          </div>
+        </div>
+        <div class="content">
+          <h6 class="insights-label">THIS MONTH</h6>
+          <div class="val-content">
+            <p class="insights-value">
+              {$data.valueConsumption}
+              {$data.unit}
+            </p>
+            <p class="percentage">
+              <span
+                class={avgClass}
+                style="background-color:{$data.colorConsumption}"
+              >
+                <img src={redArrow} class="arrow" alt="" />
+                {thisMonthComparisonPercentage}% {$data.unit}</span
+              >
+            </p>
+          </div>
+        </div>
+        <div class="content">
+          <h6 class="insights-label">Avg. Temp.</h6>
+          <div class="val-content">
+            <p class="insights-value">{$data.valueTemp + "°"}</p>
+            <p class="percentage">
+              <img src={arrowUp} class="arrow" alt="" />
+              <span class="blue" style="background-color:{$data.colorTemp}"
+                >{$data.valueTemp + "°"}</span
+              >
+            </p>
+          </div>
+        </div>
+        <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
+        <div class="chart-container flex-center-items">
+          {#key $date}
+            <div class="insights-sub-container">
+              <div use:chart={options2} />
+            </div>
+            <div class="insights-sub-container">
+              <div use:chart={options3} />
+            </div>
+          {/key}
+        </div>
+        <div class="insights-content">
+          <h6 class="insights-label">THIS MONTH</h6>
+          <div class="val-content">
+            <p class="insights-value">
+              {$data.valueConsumption}% {$data.unit}
+            </p>
+            <p class="percentage">
+              <img src={redArrow} class="arrow" alt="" />
+              <span
+                class={avgClass}
+                style="background-color:{$data.colorConsumption}"
+                >{thisMonthComparisonPercentage}% {$data.unit}</span
+              >
+            </p>
+          </div>
+        </div>
+        <hr id="hr-footer" />
+        <div id="footer">
+          <p>Insight title here</p>
+          <button class="" on:click={toggleModal}> VIEW</button>
+          {#if showModal}
+            <div class="modal-container">
+              <div class="modal-content">
+                <button on:click={toggleModal}>X</button>
+                <MicInsightsRecomendation token={$apiToken} />
+              </div>
+            </div>
+          {/if}
+          {#if show}
+            <div />
+          {/if}
+        </div>
       </div>
-      <MicBulkDownload />
-     <!-- 
-      <mic-sunselect {token} ></mic-sunselect>
-      <mic-yearlyenergy {token} ></mic-yearlyenergy> -->
-      <mic-bulkdownload {token} ></mic-bulkdownload>
     </div>
   {/key}
 {:else}
   <h1>error</h1>
 {/if}
 
-<style scoped>
+<style lang="scss">
   @font-face {
     font-family: "Interstate";
     src: url("../../assets/fonts/Interstate.ttf") format("truetype");
@@ -270,27 +260,19 @@
     border-radius: 10px;
   }
   /*...........................**/
-  .insights-container {
+  .insight-card {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 30%;
-  }
-  .insight-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-items: center;
-    width: 100%;
+    width: fit-content;
+    max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    margin-top: 10px;
+    box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
   }
   #header {
-    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -298,60 +280,44 @@
     padding: 0px;
     width: 100%;
     height: 40px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    cursor: pointer;
   }
 
   .insights-title {
-    width: 242px;
-    height: 29px;
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
-    line-height: 29px;
     display: flex;
     align-items: center;
-    letter-spacing: -0.02em;
     color: #005faa;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    margin: 0;
   }
 
   .insights-title-2 {
-    width: 251px;
-    height: 29px;
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
-    line-height: 29px;
     display: flex;
     align-items: center;
-    letter-spacing: -0.02em;
     text-transform: uppercase;
     color: #005faa;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+  }
+  .content-container {
+    margin-top: 20px;
+    width: calc(100% - 20px);
   }
   .chart-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
     width: 100%;
-    height: 225px;
-    background: #ffffff;
-    flex: none;
-    order: 2;
-    flex-grow: 0;
+    margin-bottom: 15px;
+  }
+  .flex-center-items {
+    display: flex;
+    justify-content: space-around;
   }
   .insights-sub-container {
-    width: 185.85px;
-    height: 184.4px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    max-width: 185.85px;
+    display: flex;
+    justify-content: center;
   }
   .insights-content {
     display: flex;
@@ -360,65 +326,34 @@
     padding: 0px;
     gap: 4px;
     width: 100%;
-    height: 134px;
-    flex: none;
-    order: 1;
-    flex-grow: 1;
   }
-
+  .content {
+    margin-bottom: 15px;
+  }
   .val-content {
     display: flex;
-    flex-direction: row;
+    width: 100%;
     justify-content: space-between;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 16px;
-    width: 83%;
-    height: 38px;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
+    align-items: center;
   }
   .insights-label {
-    height: 0;
-    font-style: normal;
     font-weight: 400;
     font-size: 18px;
-    line-height: 28px;
     text-transform: uppercase;
-    color: #000000;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
+    margin: 0 0 10px 0;
   }
   .insights-value {
-    height: 29px;
-    font-style: normal;
+    font-size: 22px;
     font-weight: 300;
-    font-size: 24px;
-    line-height: 29px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    letter-spacing: -0.02em;
+    margin: 0;
     color: #005faa;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
   }
   .percentage {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0px;
-    width: 113px;
-    height: 38px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+    margin: 0;
   }
   .blue {
     box-sizing: border-box;
@@ -433,9 +368,6 @@
     background: #e6eff7;
     border: 1px solid #1e5dda;
     border-radius: 24px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
   }
   .red {
     box-sizing: border-box;
@@ -450,9 +382,6 @@
     background: #f7e6e6;
     border: 1px solid #da1e1e;
     border-radius: 24px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
   }
   .arrow {
     position: absolute;
@@ -475,11 +404,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px;
-    width: 392px;
+    width: 100%;
     height: 50px;
-    flex: none;
-    order: 9;
-    flex-grow: 0;
   }
   #footer p {
     width: 239px;
@@ -491,89 +417,68 @@
     display: flex;
     align-items: center;
     color: #6c6c6c;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
   }
   #footer button {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 24px;
-    gap: 10px;
-    width: 98px;
-    height: 50px;
+    padding: 8px 20px;
     background: #005faa;
     border-radius: 6px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
     color: white;
+    border: none;
     font-weight: 400;
-    font-size: 20px;
-    line-height: 30px;
+    font-size: 18px;
+    cursor: pointer;
   }
   #hr-footer {
     margin: 5%;
     border: 1px solid #eaecee;
-    flex: none;
-    order: 8;
-    flex-grow: 0;
   }
 
   /*----------acordion-------------*/
   #rotate-svg-false {
     cursor: pointer;
-    position: absolute;
     transform: rotate(0.25turn);
     transition: transform 0.2s ease-in;
-    right: 0;
   }
   #rotate-svg-true {
     cursor: pointer;
     transition: transform 0.2s ease-in;
     transform: rotate(0.5turn);
-    position: absolute;
-    right: 0;
   }
   /*tabs*/
   #insights-tab-container {
     width: 100%;
   }
   #insights-tabs {
+    border-bottom: 1px solid #808080b5;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     justify-content: space-between;
-    /* width: 100%; */
+    h6 {
+      margin: 0;
+    }
   }
 
   #btn1 {
     font-style: normal;
-    font-weight: 300;
+    font-weight: 700;
     font-size: 18px;
     line-height: 30px;
     display: flex;
     align-items: center;
     color: #000000;
-    flex: none;
     order: 1;
-    flex-grow: 0;
-    cursor: pointer;
     border-bottom: solid #005faa;
+    cursor: pointer;
   }
   #btn2 {
     font-style: normal;
     font-weight: 300;
     font-size: 18px;
     line-height: 30px;
+    order: 1;
     display: flex;
     align-items: center;
     color: #6c6c6c;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
     cursor: pointer;
   }
   #tab11 {
@@ -581,15 +486,5 @@
   }
   #tab12 {
     display: flex;
-  }
-  /*--------*/
-  @media screen and (max-width: 1000px) {
-    .insight-card {
-      width: 90%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
   }
 </style>
