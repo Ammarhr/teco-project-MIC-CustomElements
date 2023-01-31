@@ -23,7 +23,7 @@
     $: if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
         get(
             $apiToken,
-            `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            `https://miportaldev.${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
             // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
         );
         tries--;

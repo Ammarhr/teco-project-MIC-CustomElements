@@ -47,8 +47,8 @@
 
     get(
       $apiToken,
-      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`
-      `${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json`
+      `https://miadmindev.${$apiDomain}/api/ibill/webcomponents/v1/Post/Insights`
+      // `${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json`
     );
   }
 
