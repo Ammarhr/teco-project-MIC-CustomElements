@@ -3,10 +3,10 @@
 <script>
   // @ts-nocheck
 
-  // import star from "https://tecocdn.azureedge.net/files/micwc/assets/Vector.3d07a0fc.svg";
-  // import fire from "https://tecocdn.azureedge.net/files/micwc/assets/Fire.f0f8bb01.svg";
-  // import electric from "https://tecocdn.azureedge.net/files/micwc/assets/electric.a02f37b0.svg";
-  // import lighting from "https://tecocdn.azureedge.net/files/micwc/assets/lighting.0131cc59.svg";
+  // import star from "https://miportaldev.tecoenergy.com/files/micwc/assets/Vector.3d07a0fc.svg";
+  // import fire from "https://miportaldev.tecoenergy.com/files/micwc/assets/Fire.f0f8bb01.svg";
+  // import electric from "https://miportaldev.tecoenergy.com/files/micwc/assets/electric.a02f37b0.svg";
+  // import lighting from "https://miportaldev.tecoenergy.com/files/micwc/assets/lighting.0131cc59.svg";
   import { fetchstore, apiDomain, apiToken } from "../../js/store";
 
   //state
@@ -59,7 +59,7 @@
               Change Account</button
             ><img
               class="spacing-outer-left-medium"
-              src={"https://tecocdn.azureedge.net/files/micwc/assets/Vector.3d07a0fc.svg"}
+              src={"https://miportaldev.tecoenergy.com/files/micwc/assets/Vector.3d07a0fc.svg"}
               alt="favorite logo"
             />
           </div>
@@ -71,13 +71,13 @@
         >
           <div class="oneLined">
             {#if account.IsElectric}
-              <img class="spacing-outer-right-medium" src={"https://tecocdn.azureedge.net/files/micwc/assets/electric.a02f37b0.svg"} />
+              <img class="spacing-outer-right-medium" src={"https://miportaldev.tecoenergy.com/files/micwc/assets/electric.a02f37b0.svg"} />
             {/if}
             {#if account.IsGas}
-              <img class="spacing-outer-right-medium" src={"https://tecocdn.azureedge.net/files/micwc/assets/Fire.f0f8bb01.svg"} />
+              <img class="spacing-outer-right-medium" src={"https://miportaldev.tecoenergy.com/files/micwc/assets/Fire.f0f8bb01.svg"} />
             {/if}
             {#if account.IsLighting}
-              <img class="lighting" src={"https://tecocdn.azureedge.net/files/micwc/assets/lighting.0131cc59.svg"} />
+              <img class="lighting" src={"https://miportaldev.tecoenergy.com/files/micwc/assets/lighting.0131cc59.svg"} />
             {/if}
             <div>
               <div class="account-id">

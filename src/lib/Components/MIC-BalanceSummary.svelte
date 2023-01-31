@@ -2,7 +2,7 @@
 
 <script>
     // @ts-nocheck
-    // import mask from "https://tecocdn.azureedge.net/files/micwc/assets/mask-bs.db60226b.svg";
+    // import mask from "https://miportaldev.tecoenergy.com/files/micwc/assets/mask-bs.db60226b.svg";
     import {
         fetchstore,
         apiDomain,
@@ -64,7 +64,7 @@
     >
         <div
             class="tecoBalanceSum roundedRadius20"
-            style="background-image:url({'https://tecocdn.azureedge.net/files/micwc/assets/mask-bs.db60226b.svg'});"
+            style="background-image:url({'https://miportaldev.tecoenergy.com/files/micwc/assets/mask-bs.db60226b.svg'});"
         >
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>

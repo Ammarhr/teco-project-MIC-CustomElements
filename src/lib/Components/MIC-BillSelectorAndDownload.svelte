@@ -4,7 +4,7 @@
   // @ts-nocheck
 
   // svg imports
-  // import downloadIcon from "https://tecocdn.azureedge.net/files/micwc/assets/DownloadIcon.9e9f8186.svg";
+  // import downloadIcon from "https://miportaldev.tecoenergy.com/files/micwc/assets/DownloadIcon.9e9f8186.svg";
   import {
     billNumber,
     fetchstore,
@@ -108,7 +108,7 @@
               )}
           >
             <img
-              src={"https://tecocdn.azureedge.net/files/micwc/assets/DownloadIcon.9e9f8186.svg"}
+              src={"https://miportaldev.tecoenergy.com/files/micwc/assets/DownloadIcon.9e9f8186.svg"}
               alt="DI"
             />DOWNLOAD BILL
           </button>
@@ -118,11 +118,15 @@
             <!-- svelte-ignore a11y-missing-attribute -->
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <a
-              on:click={() =>
+              on:click={() => {
+                if ($data.bills[0]) {
+                  changeBillNumber($data.bills[0].value);
+                }
                 fetchAndRedirect(
                   $apiToken,
                   `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Select_Latest_Bill`
-                )}>View Latest Bill</a
+                );
+              }}>View Latest Bill</a
             >
           </span>
         </div>
