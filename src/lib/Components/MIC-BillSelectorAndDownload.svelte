@@ -4,7 +4,7 @@
   // @ts-nocheck
 
   // svg imports
-  // import downloadIcon from "https://miportaldev.tecoenergy.com/files/micwc/assets/DownloadIcon.9e9f8186.svg";
+  // import downloadIcon from "https://miportaldev.tecoenergy.com/micwc-external/assets/DownloadIcon.9e9f8186.svg";
   import {
     billNumber,
     fetchstore,
@@ -13,6 +13,7 @@
     apiToken,
     fetchAndRedirect,
   } from "../../js/store";
+  import setting from "../../js/setting"
 
   // state
   let selectedBill;
@@ -26,7 +27,8 @@
   $: if ($apiDomain && $apiToken && !$data.bills) {
     get(
       $apiToken,
-      `https://miportaldev.${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`
+      // "../../../data/BillSelector.json"
+      `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BillSelector`
       // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json`
     );
   }
@@ -74,7 +76,7 @@
                 handleChange(e);
                 fetchAndRedirect(
                   $apiToken,
-                  `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Select_New_Bill`
+                  `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Select_New_Bill`
                 );
               }}
               bind:value={$billNumber}
@@ -103,12 +105,12 @@
             on:click={() =>
               fetchAndRedirect(
                 $apiToken,
-                `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Bill_Download`,
+                `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Bill_Download`,
                 `${$data.download_link}${$billNumber}`
               )}
           >
             <img
-              src={"https://miportaldev.tecoenergy.com/files/micwc/assets/DownloadIcon.9e9f8186.svg"}
+              src={`${$apiDomain || setting.env_URL}/micwc-external/assets/DownloadIcon.9e9f8186.svg`}
               alt="DI"
             />DOWNLOAD BILL
           </button>
@@ -124,7 +126,7 @@
                 }
                 fetchAndRedirect(
                   $apiToken,
-                  `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Select_Latest_Bill`
+                  `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Select_Latest_Bill`
                 );
               }}>View Latest Bill</a
             >

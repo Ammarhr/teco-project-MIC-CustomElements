@@ -2,14 +2,14 @@
 
 <script>
     // @ts-nocheck
-    // import mask from "https://miportaldev.tecoenergy.com/files/micwc/assets/mask-bs.db60226b.svg";
+    // import mask from "https://miportaldev.tecoenergy.com/micwc-external/assets/mask-bs.db60226b.svg";
     import {
         fetchstore,
         apiDomain,
         apiToken,
         fetchAndRedirect,
     } from "../../js/store";
-
+    import setting from "../../js/setting"
     //state
     var newElement;
     let color; // this change the charge color depend in the its value
@@ -17,13 +17,13 @@
 
     //mocking data
     const [data, loading, error, get] = fetchstore();
-    //testing url:"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json"
-    //dev url:https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BalanceSummary
+
     // trigger token existence
     $: if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
         get(
             $apiToken,
-            `https://miportaldev.${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            // "../../../data/AccountBalanceData.json"
+            `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BalanceSummary`
             // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
         );
         tries--;
@@ -41,7 +41,24 @@
                     "style",
                     "border-top: solid 2px #015faa; padding-top:20px;  margin-top:20px;"
                 );
-            subEle.innerHTML = $data.html_masseges[i].message;
+            //trigger the font family and change it to "Interstate":
+            let start = $data.html_masseges[i].message.indexOf("family:");
+            let end = $data.html_masseges[i].message.indexOf(";", start);
+            if (start > 0 && end > 0) {
+                let result = $data.html_masseges[i].message.substring(
+                    start,
+                    end
+                );
+                let formattedHtml = $data.html_masseges[i].message.replace(
+                    result,
+                    "family:Interstate"
+                );
+                subEle.innerHTML = formattedHtml;
+            } else {
+                subEle.innerHTML = $data.html_masseges[i].message;
+            }
+            /////
+            subEle.setAttribute("style", "font-family: Interstate !important;");
             newElement.appendChild(subEle);
         }
         // dynamic totalAmmount colors
@@ -64,7 +81,7 @@
     >
         <div
             class="tecoBalanceSum roundedRadius20"
-            style="background-image:url({'https://miportaldev.tecoenergy.com/files/micwc/assets/mask-bs.db60226b.svg'});"
+            style="background-image:url({`${setting.env_URL}/micwc-external/assets/mask-bs.db60226b.svg`});"
         >
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>
@@ -94,7 +111,7 @@
                         on:click={() =>
                             fetchAndRedirect(
                                 $apiToken,
-                                `https://miadmindev.tecoenergy.com/api/admin/MiJourney/v1/Create/Event?Event=Payment`,
+                                `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Payment`,
                                 $data.pay_now_link
                             )}>PAY NOW</button
                     >

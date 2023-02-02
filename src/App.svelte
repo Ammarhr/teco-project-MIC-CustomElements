@@ -17,6 +17,9 @@
   <!-- <MicWrapper token="smth" domain="jsdelivr.net" />
   <MicBalanceSummary />
   <MicBillSelectorAndDownload /> -->
+  <!-- <MicLoading /> -->
+  <!-- <MicRenderError /> -->
+  <!-- <MicInsights /> -->
 </div>
 
 <style lang="scss">

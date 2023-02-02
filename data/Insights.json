@@ -1,28 +1,96 @@
 {
-    "VisibilityTab": true,
-    "SelectedBill": "1122332123312313",
-    "ComparedBill": "112233212331222",
-    "unit": "KWH",
-    "valueConsumption": 1358,
-    "percentageConsumption": 105,
-    "colorConsumption": "#F7E6E6",
-    "iconConsumption": "<font-awsome>/<material_icon>",
-    "valueTemp": 56,
-    "percentageTemp": 5,
-    "colorTemp": "#e6eff7",
-    "iconTemp": "<font-awsome>/<material_icon>",
-    "y": {
-        "data": [
-            2500,
-            1000
-        ]
-    },
-    "x": [
-        "Dec 2021",
-        "Dec 2020"
-    ],
-    "hover": [
-        "Dec 2021 2000 KWH",
-        "Dec 2020 3000 KWH"
-    ]
+	"services": [{
+			"serviceName": "Electric",
+			"recommendation": true,
+			"monthly": {
+				"VisibilityTab": true,
+				"unit": "KWH",
+				"valueConsumption": 1358,
+				"percentageConsumption": 105,
+				"colorConsumption": "#F7E6E6",
+				"valueTemp": 56,
+				"percentageTemp": 5,
+				"colorTemp": "#e6eff7",
+				"y": {
+					"data": [
+						2500,
+						1000
+					]
+				},
+				"x": [
+					"Dec 2021",
+					"Nov 2021"
+				]
+
+			},
+			"yearly": {
+				"VisibilityTab": true,
+				"unit": "KWH",
+				"valueConsumption": 1505,
+				"percentageConsumption": 80,
+				"colorConsumption": "#F7E6E6",
+				"valueTemp": 35,
+				"percentageTemp": 6,
+				"colorTemp": "#e6eff7",
+				"y": {
+					"data": [
+						1400,
+						900
+					]
+				},
+				"x": [
+					"Dec 2021",
+					"Dec 2020"
+				]
+
+			}
+		},
+		{
+			"serviceName": "Electric",
+			"recommendation": false,
+			"monthly": {
+				"VisibilityTab": true,
+				"unit": "KWH",
+				"valueConsumption": 1358,
+				"percentageConsumption": 105,
+				"colorConsumption": "#F7E6E6",
+				"valueTemp": 56,
+				"percentageTemp": 5,
+				"colorTemp": "#e6eff7",
+				"y": {
+					"data": [
+						2500,
+						1000
+					]
+				},
+				"x": [
+					"Dec 2021",
+					"Dec 2020"
+				]
+
+			},
+			"yearly": {
+				"VisibilityTab": true,
+				"unit": "KWH",
+				"valueConsumption": 1358,
+				"percentageConsumption": 105,
+				"colorConsumption": "#F7E6E6",
+				"valueTemp": 56,
+				"percentageTemp": 5,
+				"colorTemp": "#e6eff7",
+				"y": {
+					"data": [
+						2500,
+						1000
+					]
+				},
+				"x": [
+					"Dec 2021",
+					"Dec 2020"
+				]
+
+			}
+		}
+
+	]
 }

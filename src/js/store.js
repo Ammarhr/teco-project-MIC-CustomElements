@@ -81,16 +81,15 @@ export function fetchstore() {
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl) => {
     fetch(fetchUrl, {
         method: "GET",
+        mode: "cors",
         cache: "no-cache",
-        credentials: "same-origin",
+        // credentials: "include",
         headers: {
             Authorization: `Bearer ${token}`,
         },
     })
         .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
+            return response.json();
         })
         .catch((error) => {
             console.log(error);
@@ -102,4 +101,3 @@ export const fetchAndRedirect = (token, fetchUrl, redirectUrl) => {
         );
     }
 };
-

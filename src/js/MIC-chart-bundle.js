@@ -14,6 +14,9 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
                 show: false,
             },
         },
+        legend: {
+            show:false,
+          },
         stroke: {
             show: true,
             width: 2,
@@ -73,11 +76,12 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
     return options;
 }
 
-export const renderRadialBar = (seriesArr, labels, color) => {
+export const renderRadialBar = (seriesArr, labels, width, color) => {
     let options = {
         series: seriesArr,
         chart: {
-            height: 250,
+            width: width +5,
+            // height: "auto",
             type: "radialBar",
             offsetY: -10,
         },
@@ -168,7 +172,7 @@ export const renderMixChart = (data, labels, colorsArr, width, height, unit) => 
         },
         legend: {
             show: true,
-            horizontalAlign: 'right', 
+            horizontalAlign: 'right',
             markers: {
                 width: 12,
                 height: 2,

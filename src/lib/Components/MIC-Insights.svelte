@@ -4,11 +4,18 @@
   // @ts-nocheck
   // @ts-ignore
 
-  //svg imports
+  ///////// svg imports
   import arrowUp from "../../assets/arrowUp.svg";
   import dropDown from "../../assets/cr.svg";
   import redArrow from "../../assets/redArrow.svg";
-  //////
+  
+  ///////// sub web components
+  import MicLoading from "./MIC-Loading.svelte";
+  import MicRenderError from "./MIC-RenderError.svelte";
+  import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
+  import MicTabs from "./MIC-Tabs.svelte";
+
+  ///////// js files (store & chart bundles)
   import { chart } from "svelte-apexcharts";
   import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
   import {
@@ -19,94 +26,75 @@
     date,
     CopmarsionDate,
   } from "../../js/store";
-
+  
   //state
-  let dataLables = [$date, $CopmarsionDate];
-  let demandIsightsData = [79];
-  let insightsDataLables = [$date];
-  let thisMonthComparisonPercentage = 105;
-
-  let show = false;
+  /// TODOs:
+  // let dataLables = [$date, $CopmarsionDate];
+  // let demandIsightsData = [79];
+  // let insightsDataLables = [$date];
+  // let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
+  // let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
+  
+  ///// important variables
+  let toggleArray = [];  // array of toggle statuses
+  let styleToggleArr = []; // array of toggle styles
+  let isOpen = true; // toggle card status
+  let svgId = "rotate-svg-" + isOpen; // toggle button rotate ID
   let avgClass = "red"; //toggle style class (complete it later)
+  let chartWidth = 400; // the width of the charts
 
-  ///////// modal pop up dunctionality
-  import MicLoading from "./MIC-Loading.svelte";
-  import MicRenderError from "./MIC-RenderError.svelte";
-  import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
-
-  let options1;
-  let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
-  let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
-  let chartWidth = 400;
-  const [data, loading, error, get] = fetchstore();
-
+  const [data, loading, error, get] = fetchstore(); // store fetch
   // test url: https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json
   // dev url:
-  $: if ($apiDomain && $apiToken && !$data.SelectedBill) {
-    console.log("this is data.VisibilityTab:==>", $data.SelectedBill);
-
+  $: if ($apiDomain && $apiToken && !$data.services) {
     get(
       $apiToken,
-      `https://miadmindev.${$apiDomain}/api/ibill/webcomponents/v1/Post/Insights`
-      // `${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json`
+      "../../../data/Insights.json"
+      // `https://miadmindev.${$apiDomain}/api/ibill/webcomponents/v1/Post/Insights`
+      // `https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json`
     );
   }
 
   ///////// acordion functionality
-  let isOpen = true;
-  let svgId = "rotate-svg-" + isOpen;
-  let toggleClass = "opacity: 1;max-height: 200vh; transition:200ms;";
-  const toggle = () => {
+  const toggle = (i) => {
+    toggleArray[i] = !toggleArray[i];
     isOpen = !isOpen;
-    if (isOpen) {
-      toggleClass = "max-height: 200vh;opacity: 1;transition:200ms;";
+    if (!toggleArray[i]) {
+      styleToggleArr[i] = "max-height: 200vh;opacity: 1;transition:200ms;";
     } else {
-      toggleClass = "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
+      styleToggleArr[i] =
+        "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
     }
-    svgId = "rotate-svg-" + isOpen;
   };
-  ////////// tabs functionality
-  let tab1 = "1";
-  let tab2 = "2";
-  const activateTab = (num1, num2) => {
-    tab2 = num2;
-    tab1 = num1;
-  };
-  $: if (options1) {
-  }
   ////////////////////////
 
-  $: if ($billNumber && $data && $data.y) {
-    let { x, y } = $data;
-    insightsDataLables = [$date];
-    dataLables = [$date];
-    options1 = renderBarChart(
-      [y],
-      x,
-      ["#005FAA", "#B1DBFD"],
-      "100%",
-      300,
-      " kWh"
-    );
-    options2 = renderRadialBar(
-      demandIsightsData,
-      insightsDataLables,
-      "230%",
-      "#005FAA"
-    );
-    options3 = renderRadialBar(
-      demandIsightsData,
-      [$CopmarsionDate],
-      "230%",
-      "#B1DBFD"
-    );
+  $: if ($billNumber && $data.services) {
+    for (let i = 0; i > toggleArray.length; i++) {
+      toggleArray.push(true);
+      styleToggleArr.push("max-height: 200vh;opacity: 1;transition:200ms;");
+    }
+
+    // TODO: Radial Bar chart options
+    // insightsDataLables = [$date];
+    // dataLables = [$date];
+    // options2 = renderRadialBar(
+    //   demandIsightsData,
+    //   insightsDataLables,
+    //   "230%",
+    //   "#005FAA"
+    // );
+    // options3 = renderRadialBar(
+    //   demandIsightsData,
+    //   [$CopmarsionDate],
+    //   "230%",
+    //   "#B1DBFD"
+    // );
   }
   let showModal = false;
 
   function toggleModal() {
     showModal = !showModal;
   }
-  // let chartContainer = document.getElementById
   window.addEventListener("resize", function () {
     if (window.innerWidth < 650) {
       chartWidth = window.innerWidth - 75;
@@ -119,73 +107,120 @@
   <MicLoading />
 {:else if $error}
   <MicRenderError />
-{:else if $data.VisibilityTab == true}
-  {#key $billNumber}
-    <div class="insight-card">
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div id="header" on:click={toggle} aria-expanded={isOpen}>
-        <h5 class="insights-title">MY BILLING INSIGHTS</h5>
-        <img src={dropDown} alt="" id={svgId} />
-      </div>
-      <div
-        class="content-container"
-        style={toggleClass}
-      >
-        <div id="insights-tab-container">
+{:else if $data.services}
+  {#each $data.services as InsightsService, i}
+    {#key $billNumber}
+      <div class="insight-card">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div id="header" on:click={() => toggle(i)}>
+          <h5 class="insights-title">MY BILLING INSIGHTS</h5>
+          <img src={dropDown} alt="" id={svgId} />
+        </div>
+        <div class="content-container" style={styleToggleArr[i]}>
           <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <div id="insights-tabs">
-            <h6 id={"btn" + tab1} on:click={() => activateTab("1", "2")}>
-              Annual Comparison
-            </h6>
-            <h6 id={"btn" + tab2} on:click={() => activateTab("2", "1")}>
-              Monthly Comparison
-            </h6>
-          </div>
-          <div id={"tab1" + tab1}>
-            <div class="chart-container">
-              <div use:chart={options1} />
+          <MicTabs title1="Annual Comparison" title2="Monthly Comparison">
+            <!-- monthly   -->
+            <div
+              slot="monthly-chart"
+              use:chart={renderBarChart(
+                [InsightsService.yearly.y],
+                InsightsService.yearly.x,
+                ["#005FAA", "#B1DBFD"],
+                "100%",
+                300,
+                " kWh"
+              )}
+            />
+            <div class="content" slot="monthly-data">
+              <h6 class="insights-label">THIS MONTH</h6>
+              <div class="val-content">
+                <p class="insights-value">
+                  {InsightsService.yearly.valueConsumption}
+                  {InsightsService.yearly.unit}
+                </p>
+                <p class="percentage">
+                  <span
+                    class={avgClass}
+                    style="background-color:{InsightsService.yearly
+                      .colorConsumption}"
+                  >
+                    <img src={redArrow} class="arrow" alt="" />
+                    {InsightsService.yearly.percentageConsumption}% {InsightsService
+                      .yearly.unit}</span
+                  >
+                </p>
+              </div>
             </div>
-          </div>
-          <div id={"tab1" + tab2}>
-            <div class="chart-container">
-              <div use:chart={options1} />
+            <div slot="monthly-temp" class="content">
+              <h6 class="insights-label">Avg. Temp.</h6>
+              <div class="val-content">
+                <p class="insights-value">
+                  {InsightsService.yearly.valueTemp + "°"}
+                </p>
+                <p class="percentage">
+                  <img src={arrowUp} class="arrow" alt="" />
+                  <span
+                    class="blue"
+                    style="background-color:{InsightsService.yearly.colorTemp}"
+                    >{InsightsService.yearly.valueTemp + "°"}</span
+                  >
+                </p>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="content">
-          <h6 class="insights-label">THIS MONTH</h6>
-          <div class="val-content">
-            <p class="insights-value">
-              {$data.valueConsumption}
-              {$data.unit}
-            </p>
-            <p class="percentage">
-              <span
-                class={avgClass}
-                style="background-color:{$data.colorConsumption}"
-              >
-                <img src={redArrow} class="arrow" alt="" />
-                {thisMonthComparisonPercentage}% {$data.unit}</span
-              >
-            </p>
-          </div>
-        </div>
-        <div class="content">
-          <h6 class="insights-label">Avg. Temp.</h6>
-          <div class="val-content">
-            <p class="insights-value">{$data.valueTemp + "°"}</p>
-            <p class="percentage">
-              <img src={arrowUp} class="arrow" alt="" />
-              <span class="blue" style="background-color:{$data.colorTemp}"
-                >{$data.valueTemp + "°"}</span
-              >
-            </p>
-          </div>
-        </div>
-        <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
+            <!-- annual   -->
+            <div
+              slot="annual-chart"
+              use:chart={renderBarChart(
+                [InsightsService.monthly.y],
+                InsightsService.monthly.x,
+                ["#005FAA", "#B1DBFD"],
+                "100%",
+                300,
+                " kWh"
+              )}
+            />
+            <div class="content" slot="annual-data">
+              <h6 class="insights-label">THIS MONTH</h6>
+              <div class="val-content">
+                <p class="insights-value">
+                  {InsightsService.monthly.valueConsumption}
+                  {InsightsService.monthly.unit}
+                </p>
+                <p class="percentage">
+                  <span
+                    class={avgClass}
+                    style="background-color:{InsightsService.monthly
+                      .colorConsumption}"
+                  >
+                    <img src={redArrow} class="arrow" alt="" />
+                    {InsightsService.monthly.percentageConsumption}% {InsightsService
+                      .monthly.unit}</span
+                  >
+                </p>
+              </div>
+            </div>
+            <div slot="annual-temp" class="content">
+              <h6 class="insights-label">Avg. Temp.</h6>
+              <div class="val-content">
+                <p class="insights-value">
+                  {InsightsService.monthly.valueTemp + "°"}
+                </p>
+                <p class="percentage">
+                  <img src={arrowUp} class="arrow" alt="" />
+                  <span
+                    class="blue"
+                    style="background-color:{InsightsService.monthly.colorTemp}"
+                    >{InsightsService.monthly.valueTemp + "°"}</span
+                  >
+                </p>
+              </div>
+            </div>
+          </MicTabs>
+          <!-- TODO: Demand INSIGHTS  -->
+          <!-- <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
         <div class="chart-container flex-center-items">
           {#key $date}
-            <div class="insights-sub-container">
+          <div class="insights-sub-container">
               <div use:chart={options2} />
             </div>
             <div class="insights-sub-container">
@@ -208,26 +243,27 @@
               >
             </p>
           </div>
-        </div>
-        <hr id="hr-footer" />
-        <div id="footer">
-          <p>Insight title here</p>
-          <button class="" on:click={toggleModal}> VIEW</button>
-          {#if showModal}
-            <div class="modal-container">
-              <div class="modal-content">
-                <button on:click={toggleModal}>X</button>
-                <MicInsightsRecomendation token={$apiToken} />
-              </div>
+        </div> -->
+          {#if InsightsService.recommendation}
+            <hr id="hr-footer" />
+            <div id="footer">
+              <p>Insight title here</p>
+              <button class="" on:click={toggleModal}> VIEW</button>
+              {#if showModal}
+                <div class="modal-container">
+                  <div class="modal-content">
+                    <button on:click={toggleModal}>X</button>
+                    <MicInsightsRecomendation token={$apiToken} />
+                  </div>
+                </div>
+              {/if}
+                <div />
             </div>
-          {/if}
-          {#if show}
-            <div />
           {/if}
         </div>
       </div>
-    </div>
-  {/key}
+    {/key}
+  {/each}
 {:else}
   <h1>error</h1>
 {/if}
@@ -443,48 +479,5 @@
     cursor: pointer;
     transition: transform 0.2s ease-in;
     transform: rotate(0.5turn);
-  }
-  /*tabs*/
-  #insights-tab-container {
-    width: 100%;
-  }
-  #insights-tabs {
-    border-bottom: 1px solid #808080b5;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    h6 {
-      margin: 0;
-    }
-  }
-
-  #btn1 {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 30px;
-    display: flex;
-    align-items: center;
-    color: #000000;
-    order: 1;
-    border-bottom: solid #005faa;
-    cursor: pointer;
-  }
-  #btn2 {
-    font-style: normal;
-    font-weight: 300;
-    font-size: 18px;
-    line-height: 30px;
-    order: 1;
-    display: flex;
-    align-items: center;
-    color: #6c6c6c;
-    cursor: pointer;
-  }
-  #tab11 {
-    display: none;
-  }
-  #tab12 {
-    display: flex;
   }
 </style>
