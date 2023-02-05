@@ -10,7 +10,7 @@
     import MicRenderError from "./MIC-RenderError.svelte";
 
     export let token;
-
+    export let url;
     let fillColor = "#005FAA";
     let unFillColor = "#b1dbfd";
     let messages = [];
@@ -18,10 +18,7 @@
     //mocking data
     const [data, loading, error, get] = fetchstore();
     $: if (token && !$data.messages) {
-        get(
-            token,
-            "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/recomendationMessages.json"
-        );
+        get(token, url);
     }
     // getting the data ready
     $: if ($data && $data.messages) {
@@ -46,14 +43,15 @@
         <div class="card-header">
             <h6>INSIGHTS</h6>
         </div>
-        <div class="hero">
-            <img src={herImg} alt="" />
-            <p>
-                You used <span> 2% less kWh </span> than the same period last year.
-            </p>
-        </div>
         <div class="messages-container">
             {#each messages as message}
+                <div class="hero">
+                    <img src={message.img} alt="" class="message-img" />
+                    <p>
+                        You used <span> 2% less kWh </span> than the same period
+                        last year.
+                    </p>
+                </div>
                 <div class="message">
                     <p>
                         {message.message}
@@ -131,9 +129,9 @@
         flex-grow: 0;
     }
     .hero {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        width: 100%;
+    }
+    .message-img {
         width: 100%;
     }
     .hero p {

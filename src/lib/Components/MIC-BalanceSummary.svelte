@@ -9,7 +9,7 @@
         apiToken,
         fetchAndRedirect,
     } from "../../js/store";
-    import setting from "../../js/setting"
+    import setting from "../../js/setting";
     //state
     var newElement;
     let color; // this change the charge color depend in the its value
@@ -23,7 +23,9 @@
         get(
             $apiToken,
             // "../../../data/AccountBalanceData.json"
-            `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            `${
+                $apiDomain || setting.env_URL
+            }/api/ibill/webcomponents/v1/Post/BalanceSummary`
             // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
         );
         tries--;
@@ -62,10 +64,10 @@
             newElement.appendChild(subEle);
         }
         // dynamic totalAmmount colors
-        if ($data.totalAmmount >= 0) {
-            color = $data.postive_color;
-        } else {
+        if ($data.totalAmmount.includes("-")) {
             color = $data.negative_color;
+        } else {
+            color = $data.postive_color;
         }
     }
 </script>
@@ -88,9 +90,7 @@
                 <div class="amount">
                     <span style="color: {color};">$</span>
                     <span style="color: {color};"
-                        >{$data.totalAmmount
-                            .toLocaleString()
-                            .split(".")[0]}</span
+                        >{$data.totalAmmount.split(".")[0]}</span
                     >
                     {#if $data.totalAmmount.toString().split(".")[1]}
                         <span style="color: {color};"

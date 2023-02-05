@@ -253,7 +253,7 @@
                 <div class="modal-container">
                   <div class="modal-content">
                     <button on:click={toggleModal}>X</button>
-                    <MicInsightsRecomendation token={$apiToken} />
+                    <MicInsightsRecomendation token={$apiToken} url="../../../data/recomendationMessages.json"/>
                   </div>
                 </div>
               {/if}
@@ -294,6 +294,7 @@
     background-color: white;
     padding: 20px;
     border-radius: 10px;
+    max-width: 675px;
   }
   /*...........................**/
   .insight-card {
@@ -318,7 +319,6 @@
     height: 40px;
     cursor: pointer;
   }
-
   .insights-title {
     font-style: normal;
     font-weight: 400;
@@ -328,7 +328,6 @@
     color: #005faa;
     margin: 0;
   }
-
   .insights-title-2 {
     font-style: normal;
     font-weight: 400;
@@ -468,7 +467,6 @@
     margin: 5%;
     border: 1px solid #eaecee;
   }
-
   /*----------acordion-------------*/
   #rotate-svg-false {
     cursor: pointer;
