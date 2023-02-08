@@ -3,7 +3,7 @@
 <script>
   // @ts-nocheck
   import { fetchstore, apiDomain, apiToken } from "../../js/store";
-
+  import setting from "../../js/setting";
   //state
   let account;
   let statusClass = "Inactive";

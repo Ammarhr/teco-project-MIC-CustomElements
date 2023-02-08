@@ -8,16 +8,28 @@
 
   
   $: if (token || domain) {
-    console.log('this is the token: ', token, "and this is the api domain: ", domain);
+    // console.log('this is the token: ', token, "and this is the api domain: ", domain);
     setToken(token);
     setDomain(domain);
   }
 
 </script>
 {#if token && domain}
-<div>
-  
+<div class="wrapper">
+  <mic-headerinformation></mic-headerinformation>
+  <mic-balancesummary></mic-balancesummary>
+  <mic-billselector></mic-billselector>
+  <mic-bulkdownload></mic-bulkdownload>
 </div>
 {:else}
 <mic-render-error err={"failed to load: unvailed token or domain"} />
 {/if}
+
+<style lang="scss">
+  .wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+</style>
