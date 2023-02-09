@@ -16,7 +16,6 @@
 </script>
 {#if token && domain}
 <div class="wrapper">
-  <mic-headerinformation></mic-headerinformation>
   <mic-balancesummary></mic-balancesummary>
   <mic-billselector></mic-billselector>
   <mic-bulkdownload></mic-bulkdownload>

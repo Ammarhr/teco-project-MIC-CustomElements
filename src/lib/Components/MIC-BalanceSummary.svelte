@@ -60,7 +60,6 @@
                 subEle.innerHTML = $data.html_masseges[i].message;
             }
             /////
-            subEle.setAttribute("style", "font-family: Interstate !important;");
             newElement.appendChild(subEle);
         }
         // dynamic totalAmmount colors
