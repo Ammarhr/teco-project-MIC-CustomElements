@@ -39,6 +39,7 @@ export const getDate = derived(
 );
 
 //* fetch function
+export const generalErr = writable(false);
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
@@ -50,10 +51,12 @@ export function fetchstore() {
         try {
             if (!token) {
                 data.set({ errrorMessage: "No Token provided!" });
+                generalErr.set(true)
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* real api hit with jwt token:
+                //* test data
                 // const Publishresponse = await fetch(url)
+                //* real api hit with jwt token:
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
@@ -63,13 +66,14 @@ export function fetchstore() {
                         "Authorization": `Bearer ${token}`
                     },
                     body: JSON.stringify({}),
-                })
+                });
                 data.set(await Publishresponse.json());
             } else {
-                data.set({ errrorMessage: "Invalid Token" });
 
+                data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
+            // generalErr.set(true)
             error.set(e);
         }
         loading.set(false);
@@ -83,7 +87,6 @@ export const fetchAndRedirect = (token, fetchUrl, redirectUrl) => {
         method: "GET",
         mode: "cors",
         cache: "no-cache",
-        // credentials: "include",
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -101,3 +104,44 @@ export const fetchAndRedirect = (token, fetchUrl, redirectUrl) => {
         );
     }
 };
+
+export function feedbackCall() {
+    const error = writable(false);
+    const data = writable({});
+    const loading = writable(false);;
+
+    async function setFeedback(token, url) {
+        loading.set(true)
+        error.set(false);
+        try {
+            if (!token) {
+                data.set({ errrorMessage: "No Token provided!" });
+                throw new Error("No Token provided!");
+            } else if (token) {
+                //* test data
+                // const Publishresponse = await fetch(url)
+                //* real api hit with jwt token:
+                const Publishresponse = await fetch(url, {
+                    method: 'POST',
+                    mode: "cors",
+                    cache: "no-cache",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({}),
+                });
+                data.set(await Publishresponse.json());
+            } else {
+                data.set({ errrorMessage: "Invalid Token" });
+
+            }
+        } catch (e) {
+            error.set(e);
+        }
+        loading.set(true)
+
+    }
+
+    return [data, loading, error, setFeedback]
+}

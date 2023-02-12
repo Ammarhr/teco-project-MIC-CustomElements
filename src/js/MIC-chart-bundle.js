@@ -15,8 +15,8 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
             },
         },
         legend: {
-            show:false,
-          },
+            show: false
+        },
         stroke: {
             show: true,
             width: 2,
@@ -80,7 +80,7 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
     let options = {
         series: seriesArr,
         chart: {
-            width: width +5,
+            width: width + 5,
             // height: "auto",
             type: "radialBar",
             offsetY: -10,
