@@ -14,12 +14,12 @@
 </script>
 
 <div class="app-container">
-  <!-- <MicWrapper token="smth" domain="jsdelivr.net" />
-  <MicBalanceSummary />
-  <MicBillSelectorAndDownload /> -->
+  <MicWrapper token="smth" domain="jsdelivr.net" />
+  <!-- <MicBalanceSummary />-->
   <!-- <MicLoading /> -->
   <!-- <MicRenderError /> -->
-  <!-- <MicInsights /> -->
+  <MicBillSelectorAndDownload />
+  <MicInsights />
 </div>
 
 <style lang="scss">

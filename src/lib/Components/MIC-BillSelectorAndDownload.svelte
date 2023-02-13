@@ -27,8 +27,8 @@
   $: if ($apiDomain && $apiToken && !$data.bills) {
     get(
       $apiToken,
-      // "../../../data/BillSelector.json"
-      `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BillSelector`
+      "../../../data/BillSelector.json"
+      // `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BillSelector`
       // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json`
     );
   }

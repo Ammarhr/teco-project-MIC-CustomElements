@@ -37,8 +37,6 @@
   // let insightsDataLables = [$date];
   // let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
   // let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
-  export let token;
-  export let url;
   ///// important variables
   let toggleArray = []; // array of toggle statuses
   let styleToggleArr = []; // array of toggle styles
@@ -339,13 +337,13 @@
                     </p>
                   </div>
                 </div> -->
+                <!-- <mic-recomendation -->
+                <MicInsightsRecomendation
+                  token={$apiToken}
+                  url={$apiDomain}
+                  billcontractnumber={insightsService.BillContractNo}
+                />
           </div>
-          <!-- <MicInsightsRecomendation -->
-          <mic-recomendation
-            {token}
-            {url}
-            billcontractnumber={insightsService.BillContractNo}
-          />
         </div>
       {/if}
     {/key}
