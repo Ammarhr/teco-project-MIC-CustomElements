@@ -5,6 +5,7 @@
   // @ts-ignore
 
   ///////// svg imports
+  // `${$apiDomain || setting.env_URL}/micwc-external/assets/greenArrow.svg`
   import arrowUp from "../../assets/arrowUp.svg";
   import dropDown from "../../assets/cr.svg";
   import redArrow from "../../assets/redArrow.svg";
@@ -24,19 +25,14 @@
     fetchstore,
     fetchAndRedirect,
     generalErr,
+    newToken,
     apiDomain,
     apiToken,
     date,
     CopmarsionDate,
   } from "../../js/store";
   import setting from "../../js/setting";
-  //state
-  /// TODOs:
-  // let dataLables = [$date, $CopmarsionDate];
-  // let demandIsightsData = [79];
-  // let insightsDataLables = [$date];
-  // let options2 = renderRadialBar(demandIsightsData, insightsDataLables);
-  // let options3 = renderRadialBar(demandIsightsData, insightsDataLables);
+
   ///// important variables
   let toggleArray = []; // array of toggle statuses
   let styleToggleArr = []; // array of toggle styles
@@ -46,16 +42,20 @@
   let chartWidth = 400; // the width of the charts
   let tries = 3;
   const [data, loading, error, get] = fetchstore(); // store fetch
-  // test url: https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json
-  // dev url:
+
   $: if ($apiDomain && $apiToken && !$data.services && tries > 0) {
     get(
       $apiToken,
-      "../../../data/Insights.json"
-      // `https://miadmindev.${$apiDomain}/api/ibill/webcomponents/v1/Post/Insights`
-      // `https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/Insights.json`
+      // "../../../data/Insights.json"
+      `https://miadmindev.${$apiDomain}/api/ibill/webcomponents/v1/Post/Insights`
     );
     tries--;
+  }
+  $: if ($newToken != "") {
+    get($newToken.token, url);
+  }
+  $: if ($error) {
+    if ($generalErr == false) generalErr.set(true);
   }
 
   ///////// acordion functionality
@@ -90,27 +90,11 @@
         $data.services[i].yearly.VisibilityTab == false
       ) {
         tabsToggleArr.push(["1", "2"]);
+      } else {
+        tabsToggleArr.push(["2", "1"]);
       }
       modalToggleArr.push(false);
-      // toggleArray.push(true);
-      // styleToggleArr.push("max-height: 200vh;opacity: 1;transition:200ms;");
     }
-
-    // TODO: Radial Bar chart options
-    // insightsDataLables = [$date];
-    // dataLables = [$date];
-    // options2 = renderRadialBar(
-    //   demandIsightsData,
-    //   insightsDataLables,
-    //   "230%",
-    //   "#005FAA"
-    // );
-    // options3 = renderRadialBar(
-    //   demandIsightsData,
-    //   [$CopmarsionDate],
-    //   "230%",
-    //   "#B1DBFD"
-    // );
   }
   window.addEventListener("resize", function () {
     if (window.innerWidth < 650) {
@@ -143,7 +127,13 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div id="header" on:click={() => toggle(i)}>
             <h5 class="insights-title">MY BILLING INSIGHTS</h5>
-            <img src={dropDown} alt="" id={svgId} />
+            <img
+              src={`${
+                $apiDomain || setting.env_URL
+              }/micwc-external/assets/cr.svg`}
+              alt=""
+              id={svgId}
+            />
           </div>
           <div class="content-container" style={styleToggleArr[i]}>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -154,7 +144,7 @@
                   on:click={(e) => {
                     activateTab(i, 0);
                     fetchAndRedirect(
-                      token,
+                      $apiToken,
                       `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Annual_Comparsion`
                     );
                   }}
@@ -168,7 +158,7 @@
                   on:click={(e) => {
                     activateTab(i, 1);
                     fetchAndRedirect(
-                      token,
+                      $apiToken,
                       `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Monthly_Comparsion`
                     );
                   }}
@@ -203,7 +193,13 @@
                           class={avgClass}
                           style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                         >
-                          <img src={redArrow} class="arrow" alt="" />
+                          <img
+                            src={`${
+                              $apiDomain || setting.env_URL
+                            }/micwc-external/assets/redArrow.svg`}
+                            class="arrow"
+                            alt=""
+                          />
                           {Math.abs(
                             insightsService.yearly?.percentageConsumption
                           )}% {insightsService?.yearly?.unit}</span
@@ -213,7 +209,13 @@
                           class={avgClass}
                           style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                         >
-                          <img src={greenArrow} class="arrow" alt="" />
+                          <img
+                            src={`${
+                              $apiDomain || setting.env_URL
+                            }/micwc-external/assets/greenArrow.svg`}
+                            class="arrow"
+                            alt=""
+                          />
                           {Math.abs(
                             insightsService.yearly?.percentageConsumption
                           )}% {insightsService?.yearly?.unit}</span
@@ -232,7 +234,9 @@
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         <img
-                          src={arrowUp}
+                          src={`${
+                            $apiDomain || setting.env_URL
+                          }/micwc-external/assets/arrowUp.svg`}
                           class="arrow"
                           alt=""
                         />{insightsService?.yearly?.valueTemp + "°"}</span
@@ -269,7 +273,13 @@
                           class={avgClass}
                           style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                         >
-                          <img src={redArrow} class="arrow" alt="" />
+                          <img
+                            src={`${
+                              $apiDomain || setting.env_URL
+                            }/micwc-external/assets/redArrow.svg`}
+                            class="arrow"
+                            alt=""
+                          />
                           {Math.abs(
                             insightsService.monthly?.percentageConsumption
                           )}% {insightsService?.monthly?.unit}</span
@@ -279,7 +289,13 @@
                           class={avgClass}
                           style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                         >
-                          <img src={greenArrow} class="arrow" alt="" />
+                          <img
+                            src={`${
+                              $apiDomain || setting.env_URL
+                            }/micwc-external/assets/greenArrow.svg`}
+                            class="arrow"
+                            alt=""
+                          />
                           {Math.abs(
                             insightsService.monthly?.percentageConsumption
                           )}% {insightsService?.monthly?.unit}</span
@@ -298,7 +314,9 @@
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         <img
-                          src={arrowUp}
+                          src={`${
+                            $apiDomain || setting.env_URL
+                          }/micwc-external/assets/arrowUp.svg`}
                           class="arrow"
                           alt=""
                         />{insightsService?.monthly?.valueTemp + "°"}</span
@@ -328,7 +346,7 @@
                       {$data.valueConsumption}% {$data.unit}
                     </p>
                     <p class="percentage">
-                      <img src={redArrow} class="arrow" alt="" />
+                      <img src={`${$apiDomain || setting.env_URL}/micwc-external/assets/redArrow.svg`} class="arrow" alt="" />
                       <span
                       class={avgClass}
                       style="background-color:{$data.colorConsumption}"
@@ -337,12 +355,12 @@
                     </p>
                   </div>
                 </div> -->
-                <!-- <mic-recomendation -->
-                <MicInsightsRecomendation
-                  token={$apiToken}
-                  url={$apiDomain}
-                  billcontractnumber={insightsService.BillContractNo}
-                />
+            <!-- <mic-recomendation -->
+            <MicInsightsRecomendation
+              token={$apiToken}
+              url={$apiDomain}
+              billcontractnumber={insightsService.BillContractNo}
+            />
           </div>
         </div>
       {/if}

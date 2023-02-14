@@ -13,15 +13,13 @@
     //mocking data
     const [data, loading, error, get] = fetchstore();
 
-  
     $: if ($apiDomain && $apiToken && !$data.BlkDownload) {
         get(
             $apiToken,
-            "../../data/bulkDownload.json"
-            // `${
-            //     $apiDomain || setting.env_URL
-            // }/api/ibill/webcomponents/v1/Post/BulkDownload`
-            // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/bulkDownload.json`
+            // "../../data/bulkDownload.json"
+            `${
+                $apiDomain || setting.env_URL
+            }/api/ibill/webcomponents/v1/Post/BulkDownload``https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/bulkDownload.json`
         );
     }
     $: if ($error) {
@@ -38,7 +36,9 @@
 {:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
-        style="background-image:url({backgroundPattern});"
+        style="background-image:url({`${
+            $apiDomain || setting.env_URL
+        }/micwc-external/assets/mask-bd.78a6b58f.svg`});"
     >
         <div class="tecoBillBannerBody">
             <p>

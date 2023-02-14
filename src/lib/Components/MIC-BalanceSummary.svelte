@@ -23,11 +23,10 @@
     $: if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
         get(
             $apiToken,
-            "../../../data/AccountBalanceData.json"
-            // `${
-            //     $apiDomain || setting.env_URL
-            // }/api/ibill/webcomponents/v1/Post/BalanceSummary`
-            // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
+            // "../../../data/AccountBalanceData.json"
+            `${
+                $apiDomain || setting.env_URL
+            }/api/ibill/webcomponents/v1/Post/BalanceSummary``https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
         );
         tries--;
     }
@@ -83,8 +82,10 @@
     <div
         class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
     >
-        <!-- style="background-image:url({mask});" -->
-        <div class="tecoBalanceSum roundedRadius20">
+        <div
+            class="tecoBalanceSum roundedRadius20"
+            style="background-image:url({`${setting.env_URL}/micwc-external/assets/mask-bs.db60226b.svg`});"
+        >
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>
                 <div class="amount">

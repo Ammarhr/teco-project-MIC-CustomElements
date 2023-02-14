@@ -4,74 +4,87 @@
     // @ts-nocheck
     import { fetchstore, fetchAndRedirect, feedbackCall } from "../../js/store";
     import setting from "../../js/setting";
+    
     import thumbsUp from "../../assets/un-filled-awesome-thumbs-up.svg";
     import thumbsDown from "../../assets/un-filled-awesome-thumbs-down.svg";
     import disabledButtons from "../../assets/disabled-feedback-button.svg";
-    import MicCoursel from "./MIC-Coursel.svelte";
+    import nexPrevBtn from "../../assets/next-svgr.svg";
+    // import MicCoursel from "./MIC-Coursel.svelte";
 
     export let token;
     export let url;
     export let billcontractnumber;
-    let fillColor = "#005FAA";
-    let unFillColor = "#b1dbfd";
+    // let fillColor = "#005FAA";
+    // let unFillColor = "#b1dbfd";
     let messages = [];
+    let arrOfPopUp = [];
+    let comment = "";
+    let feedbackBolean = "";
+    let index = 0;
 
     //mocking data
     const [data, loading, error, get] = fetchstore();
     const [feedbackData, feedbackLoading, feedbackError, setFeedback] =
         feedbackCall();
 
-    $: if ( url && token && billcontractnumber && !$data.messages) {
-
-        // let devUrl = `${
-        //     url.split("Post")[0]
-        // }Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
-        let devUrl = "../../../data/recomendationMessages.json";
+    $: if (url && token && billcontractnumber && !$data.messages) {
+        let devUrl = `${
+            url.split("Post")[0]
+        }Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
+        // let devUrl = "../../../data/recomendationMessages.json";
         get(token, devUrl);
     }
+
     // getting the data ready
     $: if ($data && $data.messages) {
         messages = $data.messages;
     }
-
+    // main modal fun
     let showModal = false;
     function toggleModal() {
         showModal = !showModal;
     }
 
-    const likeDislike = (e, feedBack, id) => {
-        let feedbackResponse;
+    // feedback fun
+    const likeDislike = (e, id, i) => {
         let feedbackURL;
+        arrOfPopUp[i] = !arrOfPopUp[i];
+        thankMoadalShow = !thankMoadalShow;
 
-        if (feedBack == "true") {
-            feedbackResponse = "true";
-            // e.target.setAttribute(
-            //     "style",
-            //     "filter: invert(150%) sepia(63%) saturate(6280%) hue-rotate(246deg) brightness(250%) contrast(109%);"
-            // );
-            // let likeDislikeDiv = document.getElementById("dis-like");
-            // likeDislikeDiv.setAttribute("style", "pointer-events: none;");
+        feedbackURL = `${setting.feedBack}rest/recommendationsfeedback/v1/Feedback?MessageId=${id}&Liked=${feedbackBolean}`;
 
-            feedbackURL = `${setting.feedBack}rest/recommendationsfeedback/v1/Feedback?MessageId=${id}&Liked=${feedbackResponse}`;
-            setFeedback(token, feedbackURL);
-        } else {
-            feedbackResponse = "false";
-            // e.target.setAttribute(
-            //     "style",
-            //     "filter: invert(150%) sepia(63%) saturate(6280%) hue-rotate(246deg) brightness(250%) contrast(109%);"
-            // );
-            // let likeDislikeDiv = document.getElementById("like");
-            // likeDislikeDiv.setAttribute("style", "pointer-events: none;");
+        setFeedback(token, feedbackURL);
 
-            feedbackURL = `${setting.feedBack}rest/recommendationsfeedback/v1/Feedback?MessageId=${id}&Liked=${feedbackResponse}`;
-            setFeedback(token, feedbackURL);
-        }
-        // let devUrl = `${
-        //     url.split("Post")[0]
-        // }Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
-        let devUrl = "../../../data/recomendationMessages.json";
+        let devUrl = `${
+            url.split("Post")[0]
+        }Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
+
+        fetchAndRedirect(token, setting.event_URL, null, {
+            EventCode: "IN_Recommendation_Feedback",
+            Outcome: id,
+            Feedback: comment,
+        });
 
         get(token, devUrl);
+    };
+    function showPopUpHandle(i, fed) {
+        feedbackBolean = "";
+        arrOfPopUp[i] = !arrOfPopUp[i];
+        feedbackBolean = fed;
+    }
+    function commentChamge(e) {
+        comment = e.target.value;
+    }
+    let thankMoadalShow = false;
+    function thankMsg() {
+        thankMoadalShow = !thankMoadalShow;
+    }
+    // coursel fun
+    const next = () => {
+        index = (index + 1) % messages.length;
+    };
+    const prev = () => {
+        index = (index - 1) % messages.length;
     };
 </script>
 
@@ -83,10 +96,10 @@
             class=""
             on:click={() => {
                 toggleModal();
-                fetchAndRedirect(
-                    token,
-                    `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=View_Recommendations`
-                );
+                fetchAndRedirect(token, setting.event_URL, null, {
+                    EventCode: "IN_Recommendation_View",
+                    Outcome: "",
+                });
             }}
         >
             VIEW</button
@@ -104,73 +117,89 @@
                                 toggleModal();
                                 fetchAndRedirect(
                                     token,
-                                    `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Close_Recommendations`
+                                    setting.event_URL,
+                                    null,
+                                    {
+                                        EventCode: "IN_Recommendation_Close",
+                                        Outcome: "",
+                                    }
                                 );
                             }}>×</button
                         >
                     </div>
                     <div class="messages-container">
-                        {#if messages && messages[0].img}
-                        <div class="hero">
-                            <MicCoursel carouselelements={messages} />
-                            <!-- <img
-                                src={message.img}
-                                alt=""
-                                class="message-img"
-                                style="cursor: auto;"
-                                /> -->
-                            </div>
+                        <div class="consumption-con">
+                            {#if messages && messages[0].img}
+                                <div class="hero">
+                                    {#each [messages[index]] as ele}
+                                        <img
+                                            class="car_img"
+                                            src={`data:image/png;base64,${ele.img}`} 
+                                            alt=""
+                                        />
+                                    {/each}
+                                    <div class="next_btn" on:click={next}>
+                                        <img class="img_btn" src={nexPrevBtn} />
+                                    </div>
+                                    {#if index > 0}
+                                        <div
+                                            class="prev_btn"
+                                            id="prev"
+                                            on:click={prev}
+                                        >
+                                            <img
+                                                class="img_btn"
+                                                id="prev-img"
+                                                src={nexPrevBtn}
+                                            />
+                                        </div>
+                                    {/if}
+                                </div>
                             {/if}
-                            <div class="consumption-con">
-                                {#if $data.yearlyPercentageConsumption && $data.monthlyPercentageConsumption}
-                                    <p>
-                                        You used <span>
-                                            {$data.yearlyPercentageConsumption}
-                                        </span> than the same period last year.
-                                    </p>
-                                    <p>
-                                        You used <span>
-                                            {$data.monthlyPercentageConsumption}
-                                        </span> than the same period last year.
-                                    </p>
-                                {:else if $data.yearlyPercentageConsumption}
-                                    <p>
-                                        You used <span>
-                                            {$data.yearlyPercentageConsumption}
-                                        </span> than the same period last year.
-                                    </p>
-                                {:else if $data.monthlyPercentageConsumption}
-                                    <p>
-                                        You used <span>
-                                            {$data.monthlyPercentageConsumption}
-                                        </span> than the same period last year.
-                                    </p>
-                                {:else}
-                                    <p />
-                                {/if}
-                            </div>
-                        {#each messages as message}
+                            {#if $data.yearlyPercentageConsumption && $data.monthlyPercentageConsumption}
+                                <p>
+                                    You used <span>
+                                        {$data.yearlyPercentageConsumption}
+                                    </span> than the same period last year.
+                                </p>
+                                <p>
+                                    You used <span>
+                                        {$data.monthlyPercentageConsumption}
+                                    </span> than the same period last month.
+                                </p>
+                            {:else if $data.yearlyPercentageConsumption && !$data.monthlyPercentageConsumption}
+                                <p>
+                                    You used <span>
+                                        {$data.yearlyPercentageConsumption}
+                                    </span> than the same period last year.
+                                </p>
+                            {:else if $data.monthlyPercentageConsumption && !$data.yearlyPercentageConsumption}
+                                <p>
+                                    You used <span>
+                                        {$data.monthlyPercentageConsumption}
+                                    </span> than the same period last month.
+                                </p>
+                            {:else}
+                                <p />
+                            {/if}
+                        </div>
+
+                        {#each messages as message, i}
                             <div class="message">
                                 {@html message.message}
                                 <div class="react">
                                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     {#if message.liked.toLowerCase() == "true" || message.liked.toLowerCase() == "false"}
-                                        <!-- style="filter: invert(150%) sepia(63%) saturate(6280%) hue-rotate(246deg) brightness(250%) contrast(109%);" -->
                                         <img
                                             src={disabledButtons}
                                             alt=""
                                             style="cursor: auto;"
                                         />
-                                        <!-- <img src={thumbsDown} alt="" /> -->
                                     {:else}
                                         <img
                                             src={thumbsUp}
-                                            on:click|once={(e) => {
-                                                likeDislike(
-                                                    e,
-                                                    "true",
-                                                    message.id
-                                                );
+                                            on:click={(e) => {
+                                                showPopUpHandle(i, "true");
                                             }}
                                             alt=""
                                             id="like"
@@ -178,12 +207,8 @@
                                         <hr class="hor-line" />
                                         <img
                                             src={thumbsDown}
-                                            on:click|once={(e) => {
-                                                likeDislike(
-                                                    e,
-                                                    "false",
-                                                    message.id
-                                                );
+                                            on:click={(e) => {
+                                                showPopUpHandle(i, "false");
                                             }}
                                             alt=""
                                             id="dis-like"
@@ -191,15 +216,194 @@
                                     {/if}
                                 </div>
                             </div>
+                            {#if arrOfPopUp[i] == true}
+                                <div class="modal-container">
+                                    <div class="feedback_modal">
+                                        <div class="feedback_modal_header">
+                                            <button
+                                                on:click={() =>
+                                                    showPopUpHandle(i)}
+                                                >×</button
+                                            >
+                                            <h4>
+                                                Lets us know what you think of
+                                                the recommendation
+                                            </h4>
+                                        </div>
+                                        <h6 class="feedback_label">
+                                            Comment (Optional)
+                                        </h6>
+                                        <textarea
+                                            placeholder="Start Typing your feedback here"
+                                            on:change={(e) => {
+                                                commentChamge(e);
+                                            }}
+                                        />
+                                        <div class="feedback_actions">
+                                            <button
+                                                class="cancel"
+                                                on:click={() =>
+                                                    showPopUpHandle(i)}
+                                                >CANCEL</button
+                                            >
+                                            <button
+                                                class="submit"
+                                                on:click={(e) => {
+                                                    likeDislike(
+                                                        e,
+                                                        message.id,
+                                                        i
+                                                    );
+                                                }}>SUBMIT</button
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            {/if}
                         {/each}
                     </div>
                 </div>
             </div>
         </div>
+        {#if thankMoadalShow == true}
+            <div class="modal-container">
+                <div class="thanks_modal">
+                    <div class="feedback_modal_header">
+                        <button on:click={() => thankMsg()}>×</button>
+                    </div>
+                    <div class="thx_msg">
+                        <h4>Thank you for your feedback</h4>
+                    </div>
+                </div>
+            </div>
+        {/if}
     {/if}
 {/if}
 
 <style lang="scss">
+    .thanks_modal {
+        position: fixed;
+        top: 45%;
+        background-color: white;
+        padding: 5px;
+        border-radius: 10px;
+        width: 25vw;
+        button {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 30px;
+            color: #818285;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    }
+    .thx_msg {
+        width: 100%;
+        margin: 0 auto;
+        h4 {
+            font-weight: 300;
+            font-size: 28px;
+            line-height: 34px;
+            display: flex;
+            align-items: flex-end;
+            text-align: center;
+            color: #005faa;
+            margin: 0 0px 23px 0;
+        }
+    }
+    .feedback_modal {
+        position: fixed;
+        top: 45%;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 62vw;
+    }
+    .feedback_modal_header {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+        h4 {
+            font-weight: 400;
+            font-size: 24px;
+            line-height: 29px;
+            display: flex;
+            align-items: flex-end;
+            text-align: center;
+            letter-spacing: -0.02em;
+            color: #005faa;
+            transform: rotate(-0.12deg);
+            margin: 0;
+        }
+        button {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    }
+    .feedback_label {
+        margin: 11px 0px 2px;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        display: flex;
+        align-items: center;
+        font-feature-settings: "salt" on;
+        color: #005faa;
+        transform: rotate(-0.12deg);
+    }
+    textarea {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 56px 12px;
+        gap: 12px;
+        width: 686px;
+        height: 132px;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+        border-radius: 6px;
+        transform: rotate(-0.12deg);
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        display: flex;
+        align-items: center;
+        letter-spacing: -0.02em;
+    }
+    .cancel {
+        padding: 10px 24px !important;
+        width: 164px !important;
+        height: 40px !important;
+        background: #ffffff !important;
+        border: 1px solid #d1d5db !important;
+        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05) !important;
+        border-radius: 6px;
+        transform: rotate(-0.12deg);
+        color: #005faa !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        letter-spacing: -0.02em !important;
+        margin: 15px;
+    }
+    .submit {
+        padding: 10px 24px !important;
+        width: 164px !important;
+        height: 40px !important;
+        background: #005faa !important;
+        border: 1px solid #d1d5db !important;
+        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05) !important;
+        border-radius: 6px;
+        transform: rotate(-0.12deg);
+        color: #ffffff !important;
+        font-weight: 400 !important;
+        font-size: 16px !important;
+        letter-spacing: -0.02em !important;
+        margin: 15px;
+    }
     .modal-container {
         position: fixed;
         top: 0;
@@ -211,6 +415,7 @@
         align-items: center;
         justify-content: center;
         z-index: 3;
+        overflow-y: auto;
     }
     .modal-content {
         position: fixed;
@@ -397,5 +602,79 @@
         height: 37px;
         margin: 0;
         border: 1px solid #b0dbfd6e;
+    }
+    ///*this is the coursel*///
+    .car_img {
+        width: 100%;
+        max-width: 720px;
+        height: 100%;
+    }
+    .next_btn {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translate(0, -50%);
+        height: 100%;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none;
+        width: 25%;
+        /* opacity: 0; */
+        cursor: pointer;
+        background: transparent;
+        transition: linear 0.5s;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15% 0% 0% 15% / 50% 0% 0% 50%;
+    }
+    .prev_btn {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+        left: 0;
+        height: 100%;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none;
+        width: 25%;
+        /* opacity: 0; */
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0);
+        transition: linear 1.5s;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0% 15% 15% 0% / 0% 50% 50% 0%;
+    }
+    .prev_btn:hover {
+        background: rgb(245, 245, 245);
+        background: linear-gradient(
+            90deg,
+            rgba(245, 245, 245, 0.2) 0%,
+            rgba(245, 245, 245, 0.05) 100%
+        );
+    }
+    .next_btn:hover {
+        background: rgb(245, 245, 245);
+        background: linear-gradient(
+            90deg,
+            rgba(245, 245, 245, 0.05) 0%,
+            rgba(245, 245, 245, 0.2) 100%
+        );
+    }
+    .img_btn {
+        position: absolute;
+        right: 15px;
+        width: 25px;
+        opacity: 50%;
+    }
+
+    #prev-img {
+        position: absolute;
+        left: 15px;
+        transform: rotate(180deg);
     }
 </style>

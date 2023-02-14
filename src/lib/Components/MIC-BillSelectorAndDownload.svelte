@@ -28,14 +28,14 @@
   $: if ($apiDomain && $apiToken && !$data.bills) {
     get(
       $apiToken,
-      "../../data/BillSelector.json"
-      // `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BillSelector`
+      // "../../data/BillSelector.json"
+      `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BillSelector`
       // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json`
     );
   }
 
   const handleChange = (e) => {
-    console.log("heello from change");
+    // console.log("heello from change");
     selectedBill = e.target.value;
     changeBillNumber(e.target.value);
     getToken(
@@ -90,7 +90,7 @@
                   null,
                   {
                     EventCode: "Select_New_Bill",
-                    Outcome: "",
+                    Outcome: $billNumber,
                   }
                 );
               }}
@@ -124,7 +124,7 @@
                 `${$data.download_link}${$billNumber}`,
                 {
                   EventCode: "Bill_Download",
-                  Outcome: "",
+                  Outcome: $billNumber,
                 }
               )}
           >
@@ -151,7 +151,7 @@
                   null,
                   {
                     EventCode: "Select_Latest_Bill",
-                    Outcome: "",
+                    Outcome: $billNumber,
                   }
                 );
               }}>View Latest Bill</a

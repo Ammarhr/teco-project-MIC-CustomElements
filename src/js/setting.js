@@ -1,6 +1,6 @@
 const setting = {
     env_URL: "https://miportaldev.tecoenergy.com",
-    event_URL: "http://localhost:8082",
+    event_URL: "https://miadmindev.tecoenergy.com",
     feedBack: "https://miadmindev.tecoenergy.com/"
 }
 

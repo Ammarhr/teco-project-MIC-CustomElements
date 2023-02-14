@@ -14,13 +14,9 @@
 </script>
 
 <div class="app-container">
-  <MicWrapper token="smth" domain="jsdelivr.net" />
-  <MicBalanceSummary />
-  <MicBillSelectorAndDownload />
-  <MicBulkDownload />
+  <!-- <MicWrapper token="smth" domain="jsdelivr.net" /> -->
   <!-- <MicLoading /> -->
   <!-- <MicRenderError /> -->
-  <!-- <MicInsights /> -->
 </div>
 
 <style lang="scss">

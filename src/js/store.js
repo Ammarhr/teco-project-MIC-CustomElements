@@ -37,12 +37,13 @@ export const getDate = derived(
 );
 
 //* fetch function
-export const generalErr = writable(false);
+export const generalErr = writable();
+generalErr.set(false)
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
-
+    // generalErr.set(false)
     async function get(token, url) {
         loading.set(true);
         error.set(false);
@@ -69,7 +70,9 @@ export function fetchstore() {
                 data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
+            console.log("asa");
             error.set(e);
+            generalErr.set(true)
         }
         loading.set(false);
     }
