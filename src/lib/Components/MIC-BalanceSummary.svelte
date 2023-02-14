@@ -8,6 +8,7 @@
         apiDomain,
         apiToken,
         fetchAndRedirect,
+        generalErr,
     } from "../../js/store";
     import setting from "../../js/setting";
     //state
@@ -22,17 +23,19 @@
     $: if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
         get(
             $apiToken,
-            // "../../../data/AccountBalanceData.json"
-            `${
-                $apiDomain || setting.env_URL
-            }/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            "../../../data/AccountBalanceData.json"
+            // `${
+            //     $apiDomain || setting.env_URL
+            // }/api/ibill/webcomponents/v1/Post/BalanceSummary`
             // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
         );
         tries--;
     }
 
+    $: if ($error) {
+        if ($generalErr == false) generalErr.set(true);
+    }
     $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
-
     $: if (newElement && $data && $data.html_masseges) {
         // create elements fro html_masseges
         for (let i = 0; i < $data.html_masseges.length; i++) {
@@ -45,11 +48,11 @@
                 );
             //trigger the font family and change it to "Interstate":
             let start = $data.html_masseges[i].message.indexOf("family:");
-            let end = $data.html_masseges[i].message.indexOf(";", start);
+            let end = $data.html_masseges[i].message.indexOf("serif", start);
             if (start > 0 && end > 0) {
                 let result = $data.html_masseges[i].message.substring(
                     start,
-                    end
+                    end + 5
                 );
                 let formattedHtml = $data.html_masseges[i].message.replace(
                     result,
@@ -59,7 +62,6 @@
             } else {
                 subEle.innerHTML = $data.html_masseges[i].message;
             }
-            /////
             newElement.appendChild(subEle);
         }
         // dynamic totalAmmount colors
@@ -75,15 +77,14 @@
     <mic-loading />
 {:else if $error}
     <!--error regarding to fetch-->
-    <mic-render-error err={"failed to load regarding server issues"} />
+{:else if $generalErr == true}
+    <div />
 {:else if $data.html_masseges}
     <div
         class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
     >
-        <div
-            class="tecoBalanceSum roundedRadius20"
-            style="background-image:url({`${setting.env_URL}/micwc-external/assets/mask-bs.db60226b.svg`});"
-        >
+        <!-- style="background-image:url({mask});" -->
+        <div class="tecoBalanceSum roundedRadius20">
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>
                 <div class="amount">
@@ -110,8 +111,12 @@
                         on:click={() =>
                             fetchAndRedirect(
                                 $apiToken,
-                                `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Payment`,
-                                $data.pay_now_link
+                                `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event`,
+                                $data.pay_now_link,
+                                {
+                                    EventCode: "Payment",
+                                    Outcome: "",
+                                }
                             )}>PAY NOW</button
                     >
                 </div>
@@ -123,6 +128,8 @@
             />
         </div>
     </div>
+{:else if $generalErr == true}
+    <div />
 {:else}
     <h1 />
 {/if}

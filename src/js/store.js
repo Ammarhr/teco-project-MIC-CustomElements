@@ -8,8 +8,6 @@ export function showmodal() {
     showMessagesModal.set(!showMessagesModal);
 }
 
-
-
 // date for bill selector
 let newDate = new Date();
 let year = newDate.getFullYear();
@@ -51,7 +49,6 @@ export function fetchstore() {
         try {
             if (!token) {
                 data.set({ errrorMessage: "No Token provided!" });
-                generalErr.set(true)
                 throw new Error("No Token provided!");
             } else if (token) {
                 //* test data
@@ -69,11 +66,9 @@ export function fetchstore() {
                 });
                 data.set(await Publishresponse.json());
             } else {
-
                 data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
-            // generalErr.set(true)
             error.set(e);
         }
         loading.set(false);
@@ -82,14 +77,16 @@ export function fetchstore() {
     return [data, loading, error, get]
 }
 
-export const fetchAndRedirect = (token, fetchUrl, redirectUrl) => {
+export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
     fetch(fetchUrl, {
-        method: "GET",
+        method: "POST",
         mode: "cors",
         cache: "no-cache",
         headers: {
-            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
         },
+        body: JSON.stringify(fetchBody || {}),
     })
         .then((response) => {
             return response.json();
@@ -139,9 +136,91 @@ export function feedbackCall() {
         } catch (e) {
             error.set(e);
         }
-        loading.set(true)
+        loading.set(false)
 
     }
 
     return [data, loading, error, setFeedback]
+}
+
+export function errorCallback() {
+    const error = writable(false);
+    const data = writable({});
+    const loading = writable(false);;
+
+    async function errorHandler(token, url) {
+        loading.set(true)
+        error.set(false);
+        try {
+            if (!token) {
+                data.set({ errrorMessage: "No Token provided!" });
+                throw new Error("No Token provided!");
+            } else if (token) {
+                //* test data
+                // const Publishresponse = await fetch(url)
+                //* real api hit with jwt token:
+                const Publishresponse = await fetch(url, {
+                    method: 'GET',
+                    mode: "cors",
+                    cache: "no-cache",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    },
+                });
+                data.set(await Publishresponse.json());
+            } else {
+                data.set({ errrorMessage: "Invalid Token" });
+            }
+        } catch (e) {
+            error.set(e);
+        }
+        loading.set(false)
+
+    }
+
+    return [data, loading, error, errorHandler]
+}
+
+
+
+export const newToken = writable('');
+
+export function reGenerateToken() {
+    const loading = writable(false);
+    const error = writable(false);
+    const data = writable({});
+
+    async function getToken(oldToken, url) {
+        loading.set(true);
+        error.set(false);
+        try {
+            if (!oldToken) {
+                data.set({ errrorMessage: "No Token provided!" });
+                throw new Error("No Token provided!");
+            } else if (oldToken) {
+                //* test data
+                // const Publishresponse = await fetch(url)
+                //* real api hit with jwt token:
+                const Publishresponse = await fetch(url, {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${oldToken}`
+                    },
+                    body: JSON.stringify({}),
+                });
+                newToken.set(await Publishresponse.json());
+            } else {
+                data.set({ errrorMessage: "Invalid Token" });
+            }
+        } catch (e) {
+            error.set(e);
+        }
+        loading.set(false);
+    }
+
+    return [data, loading, error, getToken]
 }

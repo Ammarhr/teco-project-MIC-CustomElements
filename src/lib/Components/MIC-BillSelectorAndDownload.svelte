@@ -4,40 +4,48 @@
   // @ts-nocheck
 
   // svg imports
-  // import downloadIcon from "https://miportaldev.tecoenergy.com/micwc-external/assets/DownloadIcon.9e9f8186.svg";
+  import downloadIcon from "../../assets/DownloadIcon.svg";
   import {
-    billNumber,
     fetchstore,
     changeBillNumber,
+    fetchAndRedirect,
+    billNumber,
+    generalErr,
+    reGenerateToken,
     apiDomain,
     apiToken,
-    fetchAndRedirect,
+    newToken,
   } from "../../js/store";
-  import setting from "../../js/setting"
+  import setting from "../../js/setting";
 
   // state
   let selectedBill;
   let selectedLabelBill;
-
   //mocking data
   const [data, loading, error, get] = fetchstore();
+  const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken();
 
-  //testing url: "https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json"
-  //dev url: `https://miportaldev.tecoenergy.com/api/ibill/webcomponents/v1/Post/BillSelector`
   $: if ($apiDomain && $apiToken && !$data.bills) {
     get(
       $apiToken,
-      "../../../data/BillSelector.json"
+      "../../data/BillSelector.json"
       // `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BillSelector`
       // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json`
     );
   }
 
   const handleChange = (e) => {
+    console.log("heello from change");
     selectedBill = e.target.value;
     changeBillNumber(e.target.value);
+    getToken(
+      $apiToken,
+      `${setting.env_URL}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${$billNumber}`
+    );
   };
-
+  $: if ($error) {
+    if ($generalErr == false) generalErr.set(true);
+  }
   $: if ($data.bills) {
     if (!selectedBill) {
       if ($data.bills.filter((bill) => bill.value == $data.selectedBill)[0]) {
@@ -55,8 +63,10 @@
 {#if $loading}
   <mic-loading />
 {:else if $error}
+  <div />
   <!--error regarding to fetch-->
-  <mic-render-error err={"failed to load regarding server issues"} />
+{:else if $generalErr == true}
+  <div />
 {:else if $data && $data.bills}
   <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
     <div class="tecoBillSelector-v2">
@@ -76,7 +86,12 @@
                 handleChange(e);
                 fetchAndRedirect(
                   $apiToken,
-                  `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Select_New_Bill`
+                  `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event`,
+                  null,
+                  {
+                    EventCode: "Select_New_Bill",
+                    Outcome: "",
+                  }
                 );
               }}
               bind:value={$billNumber}
@@ -105,14 +120,15 @@
             on:click={() =>
               fetchAndRedirect(
                 $apiToken,
-                `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Bill_Download`,
-                `${$data.download_link}${$billNumber}`
+                `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event`,
+                `${$data.download_link}${$billNumber}`,
+                {
+                  EventCode: "Bill_Download",
+                  Outcome: "",
+                }
               )}
           >
-            <img
-              src={`${$apiDomain || setting.env_URL}/micwc-external/assets/DownloadIcon.9e9f8186.svg`}
-              alt="DI"
-            />DOWNLOAD BILL
+            <img src={downloadIcon} alt="DI" />DOWNLOAD BILL
           </button>
         </div>
         <div class="tecoBillSelectorSmallText">
@@ -124,9 +140,19 @@
                 if ($data.bills[0]) {
                   changeBillNumber($data.bills[0].value);
                 }
+                getToken(
+                  $apiToken,
+                  `${setting.env_URL}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${$billNumber}`
+                );
+
                 fetchAndRedirect(
                   $apiToken,
-                  `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Select_Latest_Bill`
+                  `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event`,
+                  null,
+                  {
+                    EventCode: "Select_Latest_Bill",
+                    Outcome: "",
+                  }
                 );
               }}>View Latest Bill</a
             >
@@ -135,6 +161,8 @@
       </div>
     </div>
   </div>
+{:else if $generalErr == true}
+  <div />
 {:else}
   <h1 />
   <!-- <mic-render-error err={"failed in bill selector no Token provided"} /> -->
