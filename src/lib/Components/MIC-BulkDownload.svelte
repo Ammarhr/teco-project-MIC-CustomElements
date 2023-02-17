@@ -22,17 +22,18 @@
             }/api/ibill/webcomponents/v1/Post/BulkDownload``https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/bulkDownload.json`
         );
     }
-    $: if ($error) {
-        if ($generalErr == false) generalErr.set(true);
-    }
+    // $: if ($error) {
+    //     if ($generalErr == false) generalErr.set(true);
+    // }
 </script>
 
 {#if $loading}
     <mic-loading />
 {:else if $error}
     <!--error regarding to fetch-->
-{:else if $generalErr == true}
-    <div />
+    <mic-render-error />
+    <!-- {:else if $generalErr == true}
+    <div /> -->
 {:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"

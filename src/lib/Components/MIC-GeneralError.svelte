@@ -10,7 +10,7 @@
     const [data, loading, err, errorHandler] = errorCallback();
 
     $: if ($apiToken && $generalErr == true && !$data.HTMLBody && tries > 0) {
-        console.log("kkk");
+        // console.log("kkk");
         errorHandler(
             $apiToken,
             // "../../../data/generalErr.json"

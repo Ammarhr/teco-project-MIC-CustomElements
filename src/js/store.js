@@ -70,9 +70,8 @@ export function fetchstore() {
                 data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
-            console.log("asa");
             error.set(e);
-            generalErr.set(true)
+            // generalErr.set(true)
         }
         loading.set(false);
     }

@@ -31,9 +31,9 @@
         tries--;
     }
 
-    $: if ($error) {
-        if ($generalErr == false) generalErr.set(true);
-    }
+    // $: if ($error) {
+    //     if ($generalErr == false) generalErr.set(true);
+    // }
     $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
     $: if (newElement && $data && $data.html_masseges) {
         // create elements fro html_masseges
@@ -76,8 +76,9 @@
     <mic-loading />
 {:else if $error}
     <!--error regarding to fetch-->
-{:else if $generalErr == true}
-    <div />
+    <mic-render-error />
+    <!-- {:else if $generalErr == true}
+    <div /> -->
 {:else if $data.html_masseges}
     <div
         class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard paddingReset"
@@ -112,7 +113,7 @@
                         on:click={() =>
                             fetchAndRedirect(
                                 $apiToken,
-                                `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event`,
+                                setting.event_URL,
                                 $data.pay_now_link,
                                 {
                                     EventCode: "Payment",
@@ -129,8 +130,8 @@
             />
         </div>
     </div>
-{:else if $generalErr == true}
-    <div />
+    <!-- {:else if $generalErr == true}
+    <div /> -->
 {:else}
     <h1 />
 {/if}

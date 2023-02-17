@@ -1,7 +1,7 @@
 const setting = {
-    env_URL: "https://miportaldev.tecoenergy.com",
-    event_URL: "https://miadmindev.tecoenergy.com",
-    feedBack: "https://miadmindev.tecoenergy.com/"
+    env_URL: "https://miportalqa.tecoenergy.com",
+    event_URL: "https://miadminqa.tecoenergy.com/api/admin/MiJourney/v1/Create/Event",
+    feedBack: "https://miadminqa.tecoenergy.com/"
 }
 
 export default setting;

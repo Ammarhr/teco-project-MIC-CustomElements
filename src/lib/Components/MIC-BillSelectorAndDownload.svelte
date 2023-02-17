@@ -29,7 +29,9 @@
     get(
       $apiToken,
       // "../../data/BillSelector.json"
-      `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/BillSelector`
+      `${
+        $apiDomain || setting.env_URL
+      }/api/ibill/webcomponents/v1/Post/BillSelector`
       // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json`
     );
   }
@@ -43,9 +45,9 @@
       `${setting.env_URL}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${$billNumber}`
     );
   };
-  $: if ($error) {
-    if ($generalErr == false) generalErr.set(true);
-  }
+  // $: if ($error) {
+  //   if ($generalErr == false) generalErr.set(true);
+  // }
   $: if ($data.bills) {
     if (!selectedBill) {
       if ($data.bills.filter((bill) => bill.value == $data.selectedBill)[0]) {
@@ -63,10 +65,10 @@
 {#if $loading}
   <mic-loading />
 {:else if $error}
-  <div />
+  <mic-render-error />
   <!--error regarding to fetch-->
-{:else if $generalErr == true}
-  <div />
+  <!-- {:else if $generalErr == true}
+  <div /> -->
 {:else if $data && $data.bills}
   <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
     <div class="tecoBillSelector-v2">
@@ -120,7 +122,7 @@
             on:click={() =>
               fetchAndRedirect(
                 $apiToken,
-                `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event`,
+                setting.event_URL,
                 `${$data.download_link}${$billNumber}`,
                 {
                   EventCode: "Bill_Download",
@@ -140,20 +142,10 @@
                 if ($data.bills[0]) {
                   changeBillNumber($data.bills[0].value);
                 }
-                getToken(
-                  $apiToken,
-                  `${setting.env_URL}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${$billNumber}`
-                );
-
-                fetchAndRedirect(
-                  $apiToken,
-                  `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event`,
-                  null,
-                  {
-                    EventCode: "Select_Latest_Bill",
-                    Outcome: $billNumber,
-                  }
-                );
+                fetchAndRedirect($apiToken, setting.event_URL, null, {
+                  EventCode: "Select_Latest_Bill",
+                  Outcome: $billNumber,
+                });
               }}>View Latest Bill</a
             >
           </span>
@@ -161,8 +153,8 @@
       </div>
     </div>
   </div>
-{:else if $generalErr == true}
-  <div />
+  <!-- {:else if $generalErr == true}
+  <div /> -->
 {:else}
   <h1 />
   <!-- <mic-render-error err={"failed in bill selector no Token provided"} /> -->
