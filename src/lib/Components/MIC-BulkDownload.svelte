@@ -16,10 +16,9 @@
     $: if ($apiDomain && $apiToken && !$data.BlkDownload) {
         get(
             $apiToken,
-            // "../../data/bulkDownload.json"
             `${
                 $apiDomain || setting.env_URL
-            }/api/ibill/webcomponents/v1/Post/BulkDownload``https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/bulkDownload.json`
+            }/api/ibill/webcomponents/v1/Post/BulkDownload`
         );
     }
     // $: if ($error) {

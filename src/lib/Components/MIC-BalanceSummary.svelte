@@ -26,7 +26,7 @@
             // "../../../data/AccountBalanceData.json"
             `${
                 $apiDomain || setting.env_URL
-            }/api/ibill/webcomponents/v1/Post/BalanceSummary``https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json`
+            }/api/ibill/webcomponents/v1/Post/BalanceSummary`
         );
         tries--;
     }

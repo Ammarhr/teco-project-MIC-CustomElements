@@ -86,27 +86,25 @@
               aria-label=""
               on:change={(e) => {
                 handleChange(e);
-                fetchAndRedirect(
-                  $apiToken,
-                  `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event`,
-                  null,
-                  {
-                    EventCode: "Select_New_Bill",
-                    Outcome: $billNumber,
-                  }
-                );
+                fetchAndRedirect($apiToken, setting.event_URL, null, {
+                  EventCode: "Select_New_Bill",
+                  Outcome: $billNumber,
+                });
               }}
               bind:value={$billNumber}
             >
-              {#if selectedLabelBill}
-                <option name="bill-selector" selected value={$data.selectedBill}
-                  >{selectedLabelBill.lable}</option
-                >
-              {/if}
               {#each $data.bills as billDate}
-                <option name="bill-selector" value={billDate.value}
-                  >{billDate.lable}</option
-                >
+                {#if selectedLabelBill == billDate.value}
+                  <option
+                    name="bill-selector"
+                    selected
+                    value={$data.selectedBill}>{selectedLabelBill.lable}</option
+                  >
+                {:else}
+                  <option name="bill-selector" value={billDate.value}
+                    >{billDate.lable}</option
+                  >
+                {/if}
               {/each}
             </select>
           {/if}
@@ -130,7 +128,7 @@
                 }
               )}
           >
-            <img src={downloadIcon} alt="DI" />DOWNLOAD BILL
+            <img src={`${setting.env_URL}/micwc-external/assets/DownloadIcon.9e9f8186.svg`} alt="DI" />DOWNLOAD BILL
           </button>
         </div>
         <div class="tecoBillSelectorSmallText">

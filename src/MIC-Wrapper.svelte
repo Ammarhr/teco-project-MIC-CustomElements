@@ -2,7 +2,7 @@
 
 <script>
   // @ts-nocheck
-  import { setDomain, setToken, generalErr } from "./js/store";
+  import { setDomain, setToken } from "./js/store";
   import MicHeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
   import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
   import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
