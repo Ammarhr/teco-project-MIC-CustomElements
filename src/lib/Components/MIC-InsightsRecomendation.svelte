@@ -2,20 +2,23 @@
 
 <script>
     // @ts-nocheck
-    import { fetchstore, fetchAndRedirect, feedbackCall } from "../../js/store";
-    import setting from "../../js/setting";
-    
-    import thumbsUp from "../../assets/un-filled-awesome-thumbs-up.svg";
-    import thumbsDown from "../../assets/un-filled-awesome-thumbs-down.svg";
-    import disabledButtons from "../../assets/disabled-feedback-button.svg";
-    import nexPrevBtn from "../../assets/next-svgr.svg";
+    import {
+        fetchstore,
+        fetchAndRedirect,
+        feedbackCall,
+        eventsDomain,
+        apiDomain,
+        newToken,
+    } from "../../js/store";
+    // import thumbsUp from "../../assets/un-filled-awesome-thumbs-up.svg";
+    // import thumbsDown from "../../assets/un-filled-awesome-thumbs-down.svg";
+    // import disabledButtons from "../../assets/disabled-feedback-button.svg";
+    // import nexPrevBtn from "../../assets/next-svgr.svg";
+    import { onMount } from "svelte";
     // import MicCoursel from "./MIC-Coursel.svelte";
-
     export let token;
-    export let url;
+    // export let url;
     export let billcontractnumber;
-    // let fillColor = "#005FAA";
-    // let unFillColor = "#b1dbfd";
     let messages = [];
     let arrOfPopUp = [];
     let comment = "";
@@ -27,14 +30,15 @@
     const [feedbackData, feedbackLoading, feedbackError, setFeedback] =
         feedbackCall();
 
-    $: if (url && token && billcontractnumber && !$data.messages) {
-        let devUrl = `${
-            url.split("Post")[0]
-        }Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
-        // let devUrl = "../../../data/recomendationMessages.json";
-        get(token, devUrl);
-    }
-
+    onMount(() => {
+        if (token && token !== "" && billcontractnumber && !$data.messages) {
+            let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
+            // let devUrl = "../../../data/recomendationMessages.json";
+            get(token, devUrl);
+        }
+        token = "";
+        console.log(token, "this is the token from the mount reco");
+    });
     // getting the data ready
     $: if ($data && $data.messages) {
         messages = $data.messages;
@@ -51,20 +55,35 @@
         arrOfPopUp[i] = !arrOfPopUp[i];
         thankMoadalShow = !thankMoadalShow;
 
-        feedbackURL = `${setting.feedBack}rest/recommendationsfeedback/v1/Feedback?MessageId=${id}&Liked=${feedbackBolean}`;
+        feedbackURL = `${$eventsDomain}/rest/recommendationsfeedback/v1/Feedback?MessageId=${id}&Liked=${feedbackBolean}`;
 
         setFeedback(token, feedbackURL);
 
-        let devUrl = `${
-            url.split("Post")[0]
-        }Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
+        if (feedbackBolean == "true") {
+            fetchAndRedirect(
+                token,
+                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                null,
+                {
+                    EventCode: "IN_Recommendation_Feedback_Like",
+                    Outcome: `Recommendation ${id} Cast Submitted.`,
+                    Feedback: comment,
+                }
+            );
+        } else {
+            fetchAndRedirect(
+                token,
+                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                null,
+                {
+                    EventCode: "IN_Recommendation_Feedback_Dislike",
+                    Outcome: `Recommendation ${id} Cast Submitted.`,
+                    Feedback: comment,
+                }
+            );
+        }
 
-        fetchAndRedirect(token, setting.event_URL, null, {
-            EventCode: "IN_Recommendation_Feedback",
-            Outcome: id,
-            Feedback: comment,
-        });
-
+        let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
         get(token, devUrl);
     };
     function showPopUpHandle(i, fed) {
@@ -72,7 +91,7 @@
         arrOfPopUp[i] = !arrOfPopUp[i];
         feedbackBolean = fed;
     }
-    function commentChamge(e) {
+    function commentChange(e) {
         comment = e.target.value;
     }
     let thankMoadalShow = false;
@@ -88,7 +107,7 @@
     };
 </script>
 
-{#if $data && $data.messages}
+{#if $data && $data.messages && $data.messages.length > 0}
     <hr id="hr-footer" />
     <div id="footer">
         <p>Recommendations</p>
@@ -96,10 +115,15 @@
             class=""
             on:click={() => {
                 toggleModal();
-                fetchAndRedirect(token, setting.event_URL, null, {
-                    EventCode: "IN_Recommendation_View",
-                    Outcome: "",
-                });
+                fetchAndRedirect(
+                    token,
+                    `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    null,
+                    {
+                        EventCode: "IN_Recommendation_View",
+                        Outcome: "",
+                    }
+                );
             }}
         >
             VIEW</button
@@ -117,7 +141,7 @@
                                 toggleModal();
                                 fetchAndRedirect(
                                     token,
-                                    setting.event_URL,
+                                    `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
                                     null,
                                     {
                                         EventCode: "IN_Recommendation_Close",
@@ -129,17 +153,22 @@
                     </div>
                     <div class="messages-container">
                         <div class="consumption-con">
-                            {#if messages && messages[0].img}
+                            {#if messages && messages[1] && messages[1].img && messages[1].img !== ""}
                                 <div class="hero">
                                     {#each [messages[index]] as ele}
-                                        <img
-                                            class="car_img"
-                                            src={`data:image/png;base64,${ele.img}`} 
-                                            alt=""
-                                        />
+                                        {#if ele.img}
+                                            <img
+                                                class="car_img"
+                                                src={`data:image/png;base64,${ele.img}`}
+                                                alt=""
+                                            />
+                                        {/if}
                                     {/each}
                                     <div class="next_btn" on:click={next}>
-                                        <img class="img_btn" src={nexPrevBtn} />
+                                        <img
+                                            class="img_btn"
+                                            src={`${$apiDomain}/micwc-external/assets/next-svgr.e0acfd1a.svg`}
+                                        />
                                     </div>
                                     {#if index > 0}
                                         <div
@@ -150,11 +179,17 @@
                                             <img
                                                 class="img_btn"
                                                 id="prev-img"
-                                                src={nexPrevBtn}
+                                                src={`${$apiDomain}/micwc-external/assets/next-svgr.e0acfd1a.svg`}
                                             />
                                         </div>
                                     {/if}
                                 </div>
+                            {:else if messages && messages[0] && messages[0].img && (!messages[1] || (messages[1] && messages[1].img == ""))}
+                                <img
+                                    class="car_img"
+                                    src={`data:image/png;base64,${messages[0].img}`}
+                                    alt=""
+                                />
                             {/if}
                             {#if $data.yearlyPercentageConsumption && $data.monthlyPercentageConsumption}
                                 <p>
@@ -191,13 +226,13 @@
                                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     {#if message.liked.toLowerCase() == "true" || message.liked.toLowerCase() == "false"}
                                         <img
-                                            src={disabledButtons}
+                                            src={`${$apiDomain}/micwc-external/assets/disabled-feedback-button.fcfe0f97.svg`}
                                             alt=""
                                             style="cursor: auto;"
                                         />
                                     {:else}
                                         <img
-                                            src={thumbsUp}
+                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-up.293c3129.svg`}
                                             on:click={(e) => {
                                                 showPopUpHandle(i, "true");
                                             }}
@@ -206,7 +241,7 @@
                                         />
                                         <hr class="hor-line" />
                                         <img
-                                            src={thumbsDown}
+                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-down.1aa7dac2.svg`}
                                             on:click={(e) => {
                                                 showPopUpHandle(i, "false");
                                             }}
@@ -221,9 +256,20 @@
                                     <div class="feedback_modal">
                                         <div class="feedback_modal_header">
                                             <button
-                                                on:click={() =>
-                                                    showPopUpHandle(i)}
-                                                >×</button
+                                                on:click={() => {
+                                                    showPopUpHandle(i);
+                                                    fetchAndRedirect(
+                                                        token,
+                                                        `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                                        null,
+                                                        {
+                                                            EventCode:
+                                                                "IN_Recommendation_Feedback_Close",
+                                                            Outcome: `Recommendation ${message.id} Cast Closed.`,
+                                                            Feedback: comment,
+                                                        }
+                                                    );
+                                                }}>×</button
                                             >
                                             <h4>
                                                 Lets us know what you think of
@@ -236,15 +282,26 @@
                                         <textarea
                                             placeholder="Start Typing your feedback here"
                                             on:change={(e) => {
-                                                commentChamge(e);
+                                                commentChange(e);
                                             }}
                                         />
                                         <div class="feedback_actions">
                                             <button
                                                 class="cancel"
-                                                on:click={() =>
-                                                    showPopUpHandle(i)}
-                                                >CANCEL</button
+                                                on:click={() => {
+                                                    showPopUpHandle(i);
+                                                    fetchAndRedirect(
+                                                        token,
+                                                        `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                                        null,
+                                                        {
+                                                            EventCode:
+                                                                "IN_Recommendation_Feedback_Close",
+                                                            Outcome: `Recommendation ${message.id} Cast Closed.`,
+                                                            Feedback: comment,
+                                                        }
+                                                    );
+                                                }}>CANCEL</button
                                             >
                                             <button
                                                 class="submit"
@@ -285,9 +342,9 @@
         position: fixed;
         top: 45%;
         background-color: white;
-        padding: 5px;
+        padding: 13px;
         border-radius: 10px;
-        width: 25vw;
+        max-width: 30vw;
         button {
             margin: 0 !important;
             padding: 0 !important;
@@ -309,16 +366,17 @@
             align-items: flex-end;
             text-align: center;
             color: #005faa;
-            margin: 0 0px 23px 0;
+            margin: 3px 25px 23px 25px;
+            max-width: 254px;
         }
     }
     .feedback_modal {
         position: fixed;
-        top: 45%;
+        top: 40%;
         background-color: white;
         padding: 20px;
         border-radius: 10px;
-        width: 62vw;
+        max-width: 62vw;
     }
     .feedback_modal_header {
         display: flex;
@@ -354,25 +412,23 @@
         transform: rotate(-0.12deg);
     }
     textarea {
-        box-sizing: border-box;
         display: flex;
-        flex-direction: row;
-        align-items: flex-start;
+        align-items: center;
         padding: 56px 12px;
         gap: 12px;
-        width: 686px;
-        height: 132px;
+        width: 100%;
+        max-height: 132px;
         background: #ffffff;
+        box-sizing: border-box;
         border: 1px solid #d1d5db;
-        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
         border-radius: 6px;
-        transform: rotate(-0.12deg);
+        box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+        font-family: "Interstate";
         font-weight: 400;
         font-size: 16px;
         line-height: 19px;
-        display: flex;
-        align-items: center;
         letter-spacing: -0.02em;
+        transform: rotate(-0.12deg);
     }
     .cancel {
         padding: 10px 24px !important;
@@ -421,10 +477,12 @@
         position: fixed;
         top: 25px;
         background-color: white;
-        padding: 20px;
+        /* padding: 20px; */
         border-radius: 10px;
         max-width: 100vw;
         overflow-y: auto;
+        max-height: 75%;
+        padding: 20px 20px 25px 20px;
 
         button {
             background: none;
@@ -506,10 +564,6 @@
         width: 100%;
     }
 
-    .card {
-        // overflow-y: auto;
-        max-height: 800px;
-    }
     .card-header {
         position: relative;
         display: flex;

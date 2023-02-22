@@ -5,11 +5,10 @@
   // @ts-ignore
 
   ///////// svg imports
-  // `${$apiDomain || setting.env_URL}/micwc-external/assets/greenArrow.svg`
-  import arrowUp from "../../assets/arrowUp.svg";
+  // import arrowUp from "../../assets/arrowUp.svg";
   import dropDown from "../../assets/cr.svg";
-  import redArrow from "../../assets/redArrow.svg";
-  import greenArrow from "../../assets/greenArrow.svg";
+  // import redArrow from "../../assets/redArrow.svg";
+  // import greenArrow from "../../assets/greenArrow.svg";
 
   ///////// sub web components
   // import MicLoading from "./MIC-Loading.svelte";
@@ -19,19 +18,20 @@
 
   ///////// js files (store & chart bundles)
   import { chart } from "svelte-apexcharts";
-  import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
+  import { renderBarChart } from "../../js/MIC-chart-bundle";
   import {
     billNumber,
     fetchstore,
     fetchAndRedirect,
-    generalErr,
     newToken,
     apiDomain,
     apiToken,
+    latestBill,
+    eventsDomain,
     date,
     CopmarsionDate,
   } from "../../js/store";
-  import setting from "../../js/setting";
+  import { onMount } from "svelte";
 
   ///// important variables
   let toggleArray = []; // array of toggle statuses
@@ -39,29 +39,48 @@
   let isOpen = true; // toggle card status
   let svgId = "rotate-svg-" + isOpen; // toggle button rotate ID
   let avgClass = "red"; //toggle style class (complete it later)
-  let chartWidth = 400; // the width of the charts
+  let chartWidth = 385; // the width of the charts
   let tries = 3;
   const [data, loading, error, get] = fetchstore(); // store fetch
+  let recoToken;
 
-  $: if ($apiDomain && $apiToken && !$data.services && tries > 0) {
+  onMount(() => {
+    if (
+      $apiDomain &&
+      $apiToken &&
+      !$data.services &&
+      tries > 0 &&
+      $newToken === ""
+    ) {
+      get(
+        $apiToken,
+        // "../../../data/Insights.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
+      );
+      tries--;
+    }
+    recoToken = $apiToken;
+  });
+
+  $: if (
+    $newToken &&
+    $newToken.token &&
+    (recoToken == $apiToken || recoToken !== $newToken.token)
+  ) {
+    tabsToggleArr = [];
     get(
-      $apiToken,
-      // "../../../data/Insights.json"
-      `https://miadmindev.${$apiDomain}/api/ibill/webcomponents/v1/Post/Insights`
+      $newToken.token,
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
     );
-    tries--;
-  }
-  $: if ($newToken != "") {
-    get($newToken.token, url);
-  }
-  $: if ($error) {
-    if ($generalErr == false) generalErr.set(true);
+    recoToken = $newToken.token;
+    // console.info("this is from new token insights")
   }
 
   ///////// acordion functionality
   const toggle = (i) => {
     toggleArray[i] = !toggleArray[i];
-    isOpen = !isOpen;
+    svgId = "rotate-svg-";
+
     if (!toggleArray[i]) {
       styleToggleArr[i] = "max-height: 200vh;opacity: 1;transition:200ms;";
     } else {
@@ -72,8 +91,8 @@
   ////////////////////////
   let tabsToggleArr = [];
   let modalToggleArr = [];
-
-  $: if ($billNumber && $data.services) {
+  $: if ($data.services && !tabsToggleArr[0]) {
+    tabsToggleArr = [];
     for (let i = 0; i < $data.services.length; i++) {
       if (
         $data.services[i].monthly.VisibilityTab == true &&
@@ -93,7 +112,7 @@
       } else {
         tabsToggleArr.push(["2", "1"]);
       }
-      modalToggleArr.push(false);
+      toggleArray.push(false);
     }
   }
   window.addEventListener("resize", function () {
@@ -115,24 +134,21 @@
 </script>
 
 <!----------html----------->
-{#if $loading}
-  <mic-loading />
-{:else if $generalErr}
-  <div />
-{:else if $billNumber && $data.services}
-  {#each $data.services as insightsService, i}
-    {#key $billNumber}
+  {#if $loading}
+    <mic-loading />
+  {:else if $billNumber && $data.services && tabsToggleArr.length == $data.services.length}
+    {#each $data.services as insightsService, i}
       {#if insightsService.yearly.VisibilityTab == true || insightsService.monthly.VisibilityTab == true}
         <div class="insight-card">
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div id="header" on:click={() => toggle(i)}>
             <h5 class="insights-title">MY BILLING INSIGHTS</h5>
+
+            <!-- <img src={dropDown} alt="" id={`${svgId}${toggleArray[i]}`} /> -->
             <img
-              src={`${
-                $apiDomain || setting.env_URL
-              }/micwc-external/assets/cr.svg`}
+              src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
               alt=""
-              id={svgId}
+              id={`${svgId}${toggleArray[i]}`}
             />
           </div>
           <div class="content-container" style={styleToggleArr[i]}>
@@ -144,12 +160,17 @@
                   on:click={(e) => {
                     activateTab(i, 0);
                     fetchAndRedirect(
-                      $apiToken,
-                      `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Annual_Comparsion`
+                      recoToken,
+                      `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                      null,
+                      {
+                        EventCode: "IN_Yearly_Compare",
+                        Outcome: "",
+                      }
                     );
                   }}
                 >
-                  {"Annual Comparsion"}
+                  {"Annual Comparison"}
                 </h6>
               {/if}
               {#if insightsService?.monthly?.VisibilityTab == true}
@@ -158,12 +179,17 @@
                   on:click={(e) => {
                     activateTab(i, 1);
                     fetchAndRedirect(
-                      $apiToken,
-                      `${setting.event_URL}/api/admin/MiJourney/v1/Create/Event?Event=Monthly_Comparsion`
+                      recoToken,
+                      `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                      null,
+                      {
+                        EventCode: "IN_Monthly_Compare",
+                        Outcome: "",
+                      }
                     );
                   }}
                 >
-                  {"Monthly Comparsion"}
+                  {"Monthly Comparison"}
                 </h6>
               {/if}
             </div>
@@ -176,8 +202,8 @@
                       [insightsService?.yearly?.y],
                       insightsService?.yearly?.x,
                       ["#005FAA", "#B1DBFD"],
-                      "100%",
-                      300,
+                      chartWidth,
+                      350,
                       ` ${insightsService?.yearly?.unit}`
                     )}
                   />
@@ -194,9 +220,7 @@
                           style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                         >
                           <img
-                            src={`${
-                              $apiDomain || setting.env_URL
-                            }/micwc-external/assets/redArrow.svg`}
+                            src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
                             class="arrow"
                             alt=""
                           />
@@ -210,9 +234,7 @@
                           style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                         >
                           <img
-                            src={`${
-                              $apiDomain || setting.env_URL
-                            }/micwc-external/assets/greenArrow.svg`}
+                            src={`${$apiDomain}/micwc-external/assets/greenArrow.7e8b9860.svg`}
                             class="arrow"
                             alt=""
                           />
@@ -234,9 +256,7 @@
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         <img
-                          src={`${
-                            $apiDomain || setting.env_URL
-                          }/micwc-external/assets/arrowUp.svg`}
+                          src={`${$apiDomain}/micwc-external/assets/arrowUp.7240fadd.svg`}
                           class="arrow"
                           alt=""
                         />{insightsService?.yearly?.valueTemp + "°"}</span
@@ -248,16 +268,16 @@
             {/if}
             <!-- ---Monthly---- -->
             {#if insightsService?.monthly?.VisibilityTab == true}
-              <div id={"tab1" + tabsToggleArr[i][1]}>
+              <!-- id={"tab1" + tabsToggleArr[i][1]} -->
+              <div>
                 <div class="chart-container">
                   <div
                     use:chart={renderBarChart(
                       [insightsService?.monthly?.y],
                       insightsService?.monthly?.x,
                       ["#005FAA", "#B1DBFD"],
-                      "100%",
-
-                      300,
+                      chartWidth,
+                      350,
                       ` ${insightsService?.monthly?.unit}`
                     )}
                   />
@@ -274,11 +294,8 @@
                           style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                         >
                           <img
-                            src={`${
-                              $apiDomain || setting.env_URL
-                            }/micwc-external/assets/redArrow.svg`}
+                            src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
                             class="arrow"
-                            alt=""
                           />
                           {Math.abs(
                             insightsService.monthly?.percentageConsumption
@@ -290,9 +307,7 @@
                           style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                         >
                           <img
-                            src={`${
-                              $apiDomain || setting.env_URL
-                            }/micwc-external/assets/greenArrow.svg`}
+                            src={`${$apiDomain}/micwc-external/assets/greenArrow.7e8b9860.svg`}
                             class="arrow"
                             alt=""
                           />
@@ -314,9 +329,7 @@
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         <img
-                          src={`${
-                            $apiDomain || setting.env_URL
-                          }/micwc-external/assets/arrowUp.svg`}
+                          src={`${$apiDomain}/micwc-external/assets/arrowUp.7240fadd.svg`}
                           class="arrow"
                           alt=""
                         />{insightsService?.monthly?.valueTemp + "°"}</span
@@ -326,49 +339,38 @@
                 </div>
               </div>
             {/if}
-
-            <!-- TODO: Demand INSIGHTS  -->
-            <!-- <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
-                <div class="chart-container flex-center-items">
-                  {#key $date}
-                  <div class="insights-sub-container">
-                    <div use:chart={options2} />
-                  </div>
-                  <div class="insights-sub-container">
-                    <div use:chart={options3} />
-                  </div>
-                  {/key}
-                </div>
-                <div class="insights-content">
-                  <h6 class="insights-label">THIS MONTH</h6>
-                  <div class="val-content">
-                    <p class="insights-value">
-                      {$data.valueConsumption}% {$data.unit}
-                    </p>
-                    <p class="percentage">
-                      <img src={`${$apiDomain || setting.env_URL}/micwc-external/assets/redArrow.svg`} class="arrow" alt="" />
-                      <span
-                      class={avgClass}
-                      style="background-color:{$data.colorConsumption}"
-                      >{thisMonthComparisonPercentage}% {$data.unit}</span
-                      >
-                    </p>
-                  </div>
-                </div> -->
-            <!-- <mic-recomendation -->
-            <MicInsightsRecomendation
-              token={$apiToken}
-              url={$apiDomain}
-              billcontractnumber={insightsService.BillContractNo}
-            />
+            <!-- {$billNumber}
+            {$latestBill} -->
+            {#if $billNumber === $latestBill && insightsService.BillContractNo && recoToken == $apiToken}
+              <!-- <MicInsightsRecomendation
+                token={$apiToken}
+                url={$apiDomain}
+                billcontractnumber={insightsService.BillContractNo}
+              /> -->
+              <mic-recomendation
+                token={$apiToken}
+                url={$apiDomain}
+                billcontractnumber={insightsService.BillContractNo}
+              />
+            {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo}
+              <!-- <MicInsightsRecomendation
+                token={$apiToken}
+                url={$apiDomain}
+                billcontractnumber={insightsService.BillContractNo}
+              /> -->
+              <mic-recomendation
+                token={$newToken.token}
+                url={$apiDomain}
+                billcontractnumber={insightsService.BillContractNo}
+              />
+            {/if}
           </div>
         </div>
       {/if}
-    {/key}
-  {/each}
-{:else}
-  <h1 />
-{/if}
+    {/each}
+  {:else}
+    <h1 />
+  {/if}
 
 <style lang="scss">
   .insight-card {
@@ -383,6 +385,11 @@
     border-radius: 16px;
     box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
     margin-bottom: 15px;
+    background-color: #ffff;
+    overflow: hidden;
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
   }
   #header {
     display: flex;
@@ -394,7 +401,6 @@
     height: 40px;
     cursor: pointer;
   }
-
   .insights-title {
     font-style: normal;
     font-weight: 400;
@@ -404,7 +410,6 @@
     color: #005faa;
     margin: 0;
   }
-
   .insights-title-2 {
     font-style: normal;
     font-weight: 400;
@@ -527,17 +532,16 @@
     margin: 5%;
     border: 1px solid #eaecee;
   }
-
   /*----------acordion-------------*/
   #rotate-svg-false {
     cursor: pointer;
-    transform: rotate(0.25turn);
+    transform: rotate(0turn);
     transition: transform 0.2s ease-in;
   }
   #rotate-svg-true {
     cursor: pointer;
     transition: transform 0.2s ease-in;
-    transform: rotate(0.5turn);
+    transform: rotate(180deg);
   }
   /*----------tabs--------------*/
   #insights-tab-container {
@@ -552,7 +556,6 @@
       margin: 0;
     }
   }
-
   #btn1 {
     font-style: normal;
     font-weight: 700;

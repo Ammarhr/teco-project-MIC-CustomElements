@@ -2,28 +2,25 @@
 
 <script>
     // @ts-nocheck
-    import backgroundPattern from "../../assets/mask-bd.svg";
+    import { onMount } from "svelte";
+    // import backgroundPattern from "../../assets/mask-bd.svg";
     import {
         fetchstore,
         apiDomain,
         apiToken,
         generalErr,
     } from "../../js/store";
-    import setting from "../../js/setting";
     //mocking data
     const [data, loading, error, get] = fetchstore();
-
-    $: if ($apiDomain && $apiToken && !$data.BlkDownload) {
-        get(
-            $apiToken,
-            `${
-                $apiDomain || setting.env_URL
-            }/api/ibill/webcomponents/v1/Post/BulkDownload`
-        );
-    }
-    // $: if ($error) {
-    //     if ($generalErr == false) generalErr.set(true);
-    // }
+    onMount(() => {
+        if ($apiDomain && $apiToken && !$data.BlkDownload) {
+            get(
+                $apiToken,
+                // "../../data/bulkDownload.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`
+            );
+        }
+    });
 </script>
 
 {#if $loading}
@@ -36,9 +33,7 @@
 {:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
-        style="background-image:url({`${
-            $apiDomain || setting.env_URL
-        }/micwc-external/assets/mask-bd.78a6b58f.svg`});"
+        style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bd.78a6b58f.svg`});"
     >
         <div class="tecoBillBannerBody">
             <p>

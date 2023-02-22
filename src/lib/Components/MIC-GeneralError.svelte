@@ -3,21 +3,19 @@
 <script>
     // @ts-nocheck
 
-    import { generalErr, errorCallback, apiToken } from "../../js/store";
-    import setting from "../../js/setting";
-
-    let tries = 3;
+    import { generalErr, errorCallback, eventsDomain } from "../../js/store";
+    import { onMount } from "svelte";
+    export let token;
     const [data, loading, err, errorHandler] = errorCallback();
-
-    $: if ($apiToken && $generalErr == true && !$data.HTMLBody && tries > 0) {
-        // console.log("kkk");
-        errorHandler(
-            $apiToken,
-            // "../../../data/generalErr.json"
-            `${setting.feedBack}rest/recommendationsfeedback/v1/Feedback/ErrorMessages?Code=ER_General_001`
-        );
-        tries--;
-    }
+    onMount(() => {
+        if (token && $generalErr == true && !$data.HTMLBody) {
+            errorHandler(
+                token,
+                // "../../../data/generalErr.json"
+                `${$eventsDomain}/rest/recommendationsfeedback/v1/Feedback/ErrorMessages?Code=ER_General_001`
+            );
+        }
+    });
 </script>
 
 {#if $loading}
@@ -29,7 +27,7 @@
         <p>Oops! Something went wrong.</p>
 
         <img
-        src={`data:image/png;base64,${$data.RecommendationImage}`}
+            src={`data:image/png;base64,${$data.RecommendationImage}`}
             alt=""
             class="err-img"
         />

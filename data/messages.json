@@ -1,13 +1,19 @@
 {
   "messages": [
     {
-      "message": "We’ve noticed that you have been paying your bill electronically lately. To help cut down on clutter and waste, we are no longer including a remittance envelope with your bill. Should you want to mail in your payment, you can request the rest of the bills whenever you want."
+      "title": "Removing Your Envelop.",
+      "message_id": "546546546",
+      "message": "<p>We’ve noticed that you have been paying your bill electronically lately. To help cut down on clutter and waste, we are no longer including a remittance envelope with your bill. Should you want to mail in your payment, you can request the rest of the bills whenever you want....</p>"
     },
     {
-      "message": "We’ve noticed that you have been paying your bill electronically lately. To help cut down on clutter and waste, we are no longer including a remittance envelope with your bill. Should you want to mail in your payment, you can request the rest of the bills whenever you want."
+      "title": "Removing Your Envelop.",
+      "message_id": "546546546",
+      "message": "<p>We’ve noticed that you have been paying your bill electronically lately. To help cut down on clutter and waste, we are no longer including a remittance envelope with your bill. Should you want to mail in your payment, you can request the rest of the bills whenever you want....</p>"
     },
     {
-      "message": "We’ve noticed that you have been paying your bill electronically lately. To help cut down on clutter and waste, we are no longer including a remittance envelope with your bill. Should you want to mail in your payment, you can request the rest of the bills whenever you want."
+      "title": "Removing Your Envelop.",
+      "message_id": "546546546",
+      "message": "<p>We’ve noticed that you have been paying your bill electronically lately. To help cut down on clutter and waste, we are no longer including a remittance envelope with your bill. Should you want to mail in your payment, you can request the rest of the bills whenever you want....</p>"
     }
   ]
 }

@@ -1,25 +1,10 @@
 {
-  "YearlyValues": [
-    {
-      "Label": "Previous YTD Balance",
-      "Value": "250 kWh",
-      "SumFlag": false
-    },
-    {
-      "Label": "This Bill’s Surplus",
-      "Value": "0 kWh",
-      "SumFlag": false
-    },
-    {
-      "Label": "Applied To This Bill",
-      "Value": "-250 kWh",
-      "SumFlag": false
-    },
-    {
-      "Label": "New YTD Balance",
-      "Value": "0 kWh",
-      "SumFlag": true
-    }
-  ],
-  "YearlyTooltip": "At the end of each calendar year, your balance will be applied to your account on or around your February statement."
+  "NetMeter":[
+     {
+        "CurrentBillSurplus":"0 kwh",
+        "AppliedToCurrentBill":"-250 kWh",
+        "NewYTDBalance":"250 kWh",
+        "PreviousYTDBalance":"500 kWh"
+     }
+  ]
 }

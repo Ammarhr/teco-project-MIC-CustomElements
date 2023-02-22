@@ -3,7 +3,6 @@
 <script>
   // @ts-nocheck
   import { fetchstore, apiDomain, apiToken } from "../../js/store";
-  import setting from "../../js/setting";
   //state
   let account;
   let statusClass = "Inactive";
@@ -11,11 +10,12 @@
   const [data, loading, error, get] = fetchstore();
 
   // testing url:"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json"
-  // dev url:"${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/AccountDetails"
+  // dev url:"${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails"
   $: if ($apiDomain && $apiToken && !$data.account) {
     get(
       $apiToken,
-      `${$apiDomain || setting.env_URL}/api/ibill/webcomponents/v1/Post/AccountDetails`
+      // "../../data/accountData.json"
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`
       // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json`
     );
   }
@@ -54,7 +54,7 @@
               Change Account</button
             ><img
               class="spacing-outer-left-medium"
-              src={`${$apiDomain || setting.env_URL}/micwc-external/assets/Vector.3d07a0fc.svg`}
+              src={`${$apiDomain}/micwc-external/assets/Vector.3d07a0fc.svg`}
               alt="favorite logo"
             />
           </div>
@@ -66,13 +66,13 @@
         >
           <div class="oneLined">
             {#if account.IsElectric}
-              <img class="spacing-outer-right-medium" src={`${$apiDomain || setting.env_URL}/micwc-external/assets/electric.a02f37b0.svg`} />
+              <img class="spacing-outer-right-medium" src={`${$apiDomain}/micwc-external/assets/electric.a02f37b0.svg`} />
             {/if}
             {#if account.IsGas}
-              <img class="spacing-outer-right-medium" src={`${$apiDomain || setting.env_URL}/micwc-external/assets/Fire.f0f8bb01.svg`} />
+              <img class="spacing-outer-right-medium" src={`${$apiDomain}/micwc-external/assets/Fire.f0f8bb01.svg`} />
             {/if}
             {#if account.IsLighting}
-              <img class="lighting" src={`${$apiDomain || setting.env_URL}/micwc-external/assets/lighting.0131cc59.svg`} />
+              <img class="lighting" src={`${$apiDomain}/micwc-external/assets/lighting.0131cc59.svg`} />
             {/if}
             <div>
               <div class="account-id">

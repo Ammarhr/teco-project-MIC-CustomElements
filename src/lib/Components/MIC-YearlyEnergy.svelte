@@ -5,11 +5,20 @@
 
     import dropDown from "../../assets/cr.svg";
     import { slide } from "svelte/transition";
-    import { fetchstore } from "../../js/store";
-    export let token;
+    import {
+        fetchstore,
+        apiToken,
+        apiDomain,
+        eventsDomain,
+        newToken,
+    } from "../../js/store";
+    import { onMount } from "svelte";
+    import MicLoading from "./MIC-Loading.svelte";
+    let newTokenTrigger;
+
     let yearlyEnergyData;
     ///////// acordion functionality
-    let isOpen = false;
+    let isOpen = true;
     let svgId = "rotate-svg-" + isOpen;
 
     const toggle = () => {
@@ -17,20 +26,37 @@
         svgId = "rotate-svg-" + isOpen;
     };
     ////////////////////////
-    const [data, loading, error, get] = fetchstore(
-        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/yearlyEnergy.json",
-        token
-    );
-    $: if (token && !$data.YearlyValues) {
-       get(token)
+    const [data, loading, error, get] = fetchstore();
+    onMount(() => {
+        if ($apiToken && !$data.NetMeter) {
+            get(
+                $apiToken,
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`
+                "../../data/yearlyEnergy.json"
+            );
+        }
+        newTokenTrigger = $apiToken;
+    });
+
+    $: if (
+        $newToken &&
+        $newToken.token &&
+        (newTokenTrigger == $apiToken || newTokenTrigger !== $newToken.token)
+    ) {
+        get(
+            $newToken.token,
+            "../../data/yearlyEnergy.json"
+            // `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`
+        );
+        newTokenTrigger = $newToken.token;
     }
-    $: if ($data && $data.YearlyValues) {
-        yearlyEnergyData = $data.YearlyValues;
+    $: if ($data && $data.NetMeter) {
+        yearlyEnergyData = $data.NetMeter;
     }
 </script>
 
-{#if $loading && !token}
-    <h1>loading...</h1>
+{#if $loading}
+    <MicLoading />
 {:else if $error}
     <h1>{$error}</h1>
 {:else if yearlyEnergyData}
@@ -48,55 +74,68 @@
         </div>
         {#if isOpen}
             {#each yearlyEnergyData as YearlyValue}
-                {#if !YearlyValue.SumFlag}
-                    <div
-                        class="yearly-content"
-                        transition:slide={{ duration: 300 }}
-                    >
-                        <h2 class="yearly-label">{YearlyValue.Label}</h2>
-                        <p>{YearlyValue.Value}</p>
-                    </div>
-                {:else}
-                    <div
-                        class="sum-content"
-                        transition:slide={{ duration: 300 }}
-                    >
-                        <h2 id="sum-label">{YearlyValue.Label}</h2>
-                        <p id="sum-value">{YearlyValue.Value}</p>
-                    </div>
-                {/if}
+                <!-- {#if !YearlyValue.SumFlag} -->
+                <div
+                    class="yearly-content"
+                    transition:slide={{ duration: 300 }}
+                >
+                    <h2 class="yearly-label">Previous YTD Balance</h2>
+                    <p>{YearlyValue.PreviousYTDBalance}</p>
+                </div>
+                <div
+                    class="yearly-content"
+                    transition:slide={{ duration: 300 }}
+                >
+                    <h2 class="yearly-label">This Bill’s Surplus</h2>
+                    <p>{YearlyValue.CurrentBillSurplus}</p>
+                </div>
+                <div
+                    class="yearly-content"
+                    transition:slide={{ duration: 300 }}
+                >
+                    <h2 class="yearly-label">Applied To This Bill</h2>
+                    <p>{YearlyValue.AppliedToCurrentBill}</p>
+                </div>
+                <!-- {:else} -->
+                <div class="sum-content" transition:slide={{ duration: 300 }}>
+                    <h2 id="sum-label">New YTD Balance</h2>
+                    <p id="sum-value">{YearlyValue.NewYTDBalance}</p>
+                </div>
             {/each}
             <div class="tool-tip" transition:slide={{ duration: 300 }}>
-                <p>{$data.YearlyTooltip}</p>
+                <p>
+                    At the end of each calendar year, your balance will be
+                    applied to your account on or around your February
+                    statement.
+                </p>
             </div>
+            <!-- {/if} -->
         {/if}
     </div>
 {:else}
     <h1>failed to load</h1>
 {/if}
 
-<style scoped>
-    @font-face {
-        font-family: "Interstate";
-        src: url("../../assets/fonts/Interstate.ttf") format("truetype");
-    }
-    * {
-        font-family: "Interstate";
-    }
+<style lang="scss">
     .yearly-energy-card {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
-        align-items: center;
-        width: 100%;
+        width: 370px;
+        max-width: calc(100% - 40px);
         padding: 20px;
         transition: 0.3s;
         border-radius: 16px;
-        margin-top: 10px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
+        margin-bottom: 15px;
+        background-color: #ffff;
+        overflow: hidden;
+        @media screen and (max-width: 767px) {
+            width: 100%;
+        }
     }
     .card-header {
-        position: relative;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -104,13 +143,9 @@
         padding: 0px;
         width: 100%;
         height: 40px;
-        flex: none;
-        order: 0;
-        flex-grow: 0;
+        cursor: pointer;
     }
     .title {
-        width: 242px;
-        height: 29px;
         font-style: normal;
         font-weight: 400;
         font-size: 24px;
@@ -119,25 +154,18 @@
         align-items: center;
         letter-spacing: -0.02em;
         color: #005faa;
-        flex: none;
-        order: 0;
-        flex-grow: 0;
     }
 
     /*----------acordion-------------*/
-    #rotate-svg-false {
-        cursor: pointer;
-        position: absolute;
-        transform: rotate(0.25turn);
-        transition: transform 0.2s ease-in;
-        right: 0;
-    }
     #rotate-svg-true {
         cursor: pointer;
         transition: transform 0.2s ease-in;
-        transform: rotate(0.5turn);
-        position: absolute;
-        right: 0;
+        transform: rotate(0);
+    }
+    #rotate-svg-false {
+        cursor: pointer;
+        transition: transform 0.2s ease-in;
+        transform: rotate(180deg);
     }
     /*------------------*/
     .yearly-content {
@@ -149,7 +177,7 @@
         border-bottom: 1px solid #eaecee;
     }
     .yearly-label {
-        font-weight: 300;
+        font-weight: 400;
         font-size: 20px;
         line-height: 30px;
         display: flex;

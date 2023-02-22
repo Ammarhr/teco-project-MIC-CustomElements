@@ -7,122 +7,106 @@
   import messageLogo from "../../assets/envelope-solid.svg";
   import circyle from "../../assets/cr.svg";
   import notification from "../../assets/notification.svg";
+  import messageNotification from "../../assets/messages-notification.svg";
 
   //state
   let state = {};
-  // export let item = { name: "Item" };
-  export let token;
-  let show = false;
   let message;
   //unreaded messages counter
-  import { fetchstore, apiToken } from "../../js/store";
+  import {
+    fetchstore,
+    apiToken,
+    apiDomain,
+    eventsDomain,
+  } from "../../js/store";
+  import { onMount } from "svelte";
   import ImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
 
   //mocking data
 
-  const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/messages.json",
-    token
-  );
-  $: if (token && !$data.messages) {
-    get(token)
-  }
+  const [data, loading, error, get] = fetchstore();
+  onMount(() => {
+    if ($apiToken && !$data.messages) {
+      get(
+        $apiToken,
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
+
+        "../../data/messages.json"
+      );
+    }
+  });
   $: if ($data && $data.messages) {
     state = $data;
   }
 
   //slice long message
   $: if (state && state.messages) {
-    message = state.messages[0].message.slice(0, 233);
+    message = state.messages[0].message.slice(0, 237);
   }
 
   ///////// acordion functionality
   import { slide } from "svelte/transition";
-  let isOpen = false;
+  import MicImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
+  let isOpen = true;
   let svgId = "rotate-svg-" + isOpen;
 
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
   };
-
-  const showMessages = () => {
-    show = !show;
-  };
 </script>
 
-{#if $loading && !token}
-Loading: {$loading}
+{#if $loading}
+  Loading: {$loading}
 {:else if $error}
   Error: {$error}
 {:else if state.messages}
-  <div class="message-container">
-    <div class="container">
-      <div id="message-header">
-        <img src={messageLogo} alt="" /><img
-          src={notification}
-          alt=""
-          id="notification"
-        />
-        <span id="unreaded-msgs">{state.messages.length}</span>
-        <h4 id="title">Important Message</h4>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <img
-          src={circyle}
-          alt=""
-          id={svgId}
-          on:click={toggle}
-          aria-expanded={isOpen}
-        />
+  <div class="container">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div id="message-header" on:click={toggle} aria-expanded={isOpen}>
+      <div class="message-counter">
+        <img src={messageNotification} alt="" />
+        <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
       </div>
-      {#if state.messages}
-        {#if isOpen}
-          <div class="message-body" transition:slide={{ duration: 300 }}>
-            <p class="msg-data">{message}...</p>
-          </div>
-          <div class="message-footer" transition:slide={{ duration: 300 }}>
-            <button on:click={showMessages}><span>View</span></button>
-          </div>
-          {#if show}
-            <div>
-              <mic-messagesdetails token={token}></mic-messagesdetails>
-            </div>
-          {/if}
-        {/if}
-      {:else}
-        <h1>no messages to load</h1>
-      {/if}
+      <h4 id="title">Important Message</h4>
+      <img src={circyle} alt="" id={svgId} />
     </div>
+    {#if state.messages}
+      {#if isOpen}
+        <div class="message-body" transition:slide={{ duration: 300 }}>
+          <p class="msg-data">{@html message + "..."}</p>
+        </div>
+        <div class="message-footer">
+          <MicImportantMessagesDetails messages={state.messages} />
+        </div>
+      {/if}
+    {:else}
+      <h1>no messages to load</h1>
+    {/if}
   </div>
+  <!-- </div> -->
 {:else}
   <h1>failed to load in messages</h1>
 {/if}
 
-<style scoped>
-@font-face {
-    font-family: "Interstate";
-    src: url("../../assets/fonts/InterstateThin.ttf") format("truetype");
-  }
-  * {
-    font-family: "Interstate";
-    letter-spacing: -0.02em;
-  }
-  .message-container {
-    min-width: 38%;
-  }
+<style lang="scss">
   .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-height: fit-content;
-    min-width: fit-content;
-    order: 0;
-    padding: 2rem;
+    width: 370px;
+    max-width: calc(100% - 40px);
+    padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
-    background: #ffffff;
-    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
+    margin-bottom: 15px;
+    background-color: #ffff;
+    overflow: hidden;
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
   }
   #message-header {
     display: flex;
@@ -130,17 +114,12 @@ Loading: {$loading}
     justify-content: space-between;
     align-items: center;
     padding: 0px;
-    width: 90%;
+    width: 100%;
     height: 40px;
-    order: 0;
-    flex-grow: 0;
-    position: relative;
-    text-transform: uppercase;
+
+    cursor: pointer;
   }
   #message-header h4 {
-    height: 29px;
-    font-family: "Interstate";
-    font-style: normal;
     font-weight: 400;
     font-size: 24px;
     line-height: 29px;
@@ -149,18 +128,9 @@ Loading: {$loading}
     letter-spacing: -0.02em;
     text-transform: uppercase;
     color: #005faa;
-    flex: none;
-    flex-grow: 0;
   }
-  #rotate-svg-false {
-    cursor: pointer;
-    transform: rotate(0.25turn);
-    transition: transform 0.2s ease-in;
-  }
-  #rotate-svg-true {
-    cursor: pointer;
-    transition: transform 0.2s ease-in;
-    transform: rotate(0.5turn);
+  .message-counter {
+    position: relative;
   }
   #notification {
     position: absolute;
@@ -170,16 +140,13 @@ Loading: {$loading}
   }
   #unreaded-msgs {
     position: absolute;
-    left: 1.5rem;
-    top: -0.1rem;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 20px;
-    font-feature-settings: "salt" on;
+    right: 0;
     color: #ffffff;
+    background: #da1e28;
+    border-radius: 50%;
+    border: 2px solid white;
   }
-  .message-body {
+  .message .message-body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -260,28 +227,13 @@ Loading: {$loading}
     width: 4rem;
   }
 
-  #rotate-svg {
-    transition: transform 0.2s ease-in;
-    transform: rotate(0.25turn);
-  }
-
   #rotate-svg-true {
     transition: transform 0.2s ease-in;
-    transform: rotate(0.5turn);
+    transform: rotate(0turn);
   }
-  @media screen and (max-width: 1000px) {
-    .container {
-      width: 90%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0.7rem 0.2rem;
-    }
-    .message-container {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+
+  #rotate-svg-false {
+    transition: transform 0.2s ease-in;
+    transform: rotate(0.5turn);
   }
 </style>

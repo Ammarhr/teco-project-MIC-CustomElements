@@ -8,9 +8,8 @@
         apiDomain,
         apiToken,
         fetchAndRedirect,
-        generalErr,
+        eventsDomain,
     } from "../../js/store";
-    import setting from "../../js/setting";
     //state
     var newElement;
     let color; // this change the charge color depend in the its value
@@ -24,16 +23,11 @@
         get(
             $apiToken,
             // "../../../data/AccountBalanceData.json"
-            `${
-                $apiDomain || setting.env_URL
-            }/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
         );
         tries--;
     }
 
-    // $: if ($error) {
-    //     if ($generalErr == false) generalErr.set(true);
-    // }
     $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
     $: if (newElement && $data && $data.html_masseges) {
         // create elements fro html_masseges
@@ -85,7 +79,7 @@
     >
         <div
             class="tecoBalanceSum roundedRadius20"
-            style="background-image:url({`${setting.env_URL}/micwc-external/assets/mask-bs.db60226b.svg`});"
+            style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bs.db60226b.svg`});"
         >
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>
@@ -113,7 +107,7 @@
                         on:click={() =>
                             fetchAndRedirect(
                                 $apiToken,
-                                setting.event_URL,
+                                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
                                 $data.pay_now_link,
                                 {
                                     EventCode: "Payment",

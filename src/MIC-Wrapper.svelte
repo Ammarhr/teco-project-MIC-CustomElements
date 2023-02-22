@@ -2,39 +2,70 @@
 
 <script>
   // @ts-nocheck
-  import { setDomain, setToken } from "./js/store";
+  import {
+    setDomain,
+    setToken,
+    generalErr,
+    setEventDomain,
+    newToken,
+  } from "./js/store";
   import MicHeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
   import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
   import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
   import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
   import MicInsights from "./lib/Components/MIC-Insights.svelte";
   import MicRenderError from "./lib/Components/MIC-RenderError.svelte";
-  // import MicGeneralError from "./lib/Components/MIC-GeneralError.svelte";
+  import MicGeneralError from "./lib/Components/MIC-GeneralError.svelte";
+  import { onMount } from "svelte";
+  import MicSunSelect from "./lib/Components/MIC-SunSelect.svelte";
+  import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
+  import MicYearlyEnergy from "./lib/Components/MIC-YearlyEnergy.svelte";
   export let token;
   export let domain;
-
-  $: if (token || domain) {
-    // console.log('this is the token: ', token, "and this is the api domain: ", domain);
+  export let eventdomain;
+  const refresh = () => {
+    newToken.set("");
+  };
+  $: if (token && domain && eventdomain) {
     setToken(token);
     setDomain(domain);
+    setEventDomain(eventdomain);
   }
+  onMount(() => {
+    generalErr.set(false);
+    newToken.set("");
+  });
+  refresh();
 </script>
 
-{#if token && domain}
-  <div class="wrapper">
-    <!-- <MicBalanceSummary />
-    <MicBillSelectorAndDownload />
-    <MicBulkDownload />
-    <MicInsights /> -->
-    <mic-balancesummary />
-    <mic-billselector />
-    <mic-bulkdownload />
-  </div>
-{:else}
-  <h1 />
-  <!-- <MicGeneralError /> -->
-  <!-- <mic-generalerror /> -->
-{/if}
+{#key token}
+  {#if token && domain && eventdomain && $generalErr !== true}
+    <div class="wrapper">
+      <mic-headerinformation />
+      <!-- <MicHeaderInformation /> -->
+      <mic-balancesummary />
+      <!-- <MicImportantMessage /> -->
+      <!-- <MicBalanceSummary /> -->
+      <mic-billselector />
+      <!-- <MicBillSelectorAndDownload /> -->
+      <div class="refreshable">
+        <div class="charge-detailes" />
+        <div class="insights">
+          <mic-insights />
+          <!-- <MicInsights /> -->
+          <!-- <MicSunSelect />
+          <MicYearlyEnergy /> -->
+        </div>
+      </div>
+      <div class="blk-container">
+        <!-- <MicBulkDownload /> -->
+        <mic-bulkdownload />
+      </div>
+    </div>
+  {:else if $generalErr === true}
+    <mic-generalerror {token} />
+  {/if}
+{/key}
 
 <style lang="scss">
   .wrapper {
@@ -42,5 +73,31 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+  }
+  .refreshable {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    @media screen and (max-width: 767px) {
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+  .charge-detailes {
+    width: -webkit-fill-available;
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
+  }
+  .insights {
+    display: flex;
+    flex-direction: column;
+    max-width: 40%;
+    align-items: end;
+    @media screen and (max-width: 767px) {
+      max-width: unset;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
   }
 </style>

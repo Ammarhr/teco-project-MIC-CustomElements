@@ -21,6 +21,9 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
             show: true,
             width: 2,
         },
+        tooltip: {
+            enabled: false,
+        },
         plotOptions: {
             bar: {
                 // columnWidth: '120px',
@@ -33,11 +36,10 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
         },
         dataLabels: {
             enabled: true,
-            formatter: function (val) {
+            formatter: function (/** @type {Number} */ val) {
                 return val + unit;
-
             },
-            offsetY: -20,
+            offsetY: -30,
             style: {
                 fontSize: '14px',
                 fontFamily: 'Interstate',
@@ -46,6 +48,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
         },
         xaxis: {
             categories: labels,
+            type: 'category',
             position: "bottom",
             axisBorder: {
                 show: false,
@@ -67,7 +70,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
             },
             labels: {
                 show: true,
-                formatter: function (val) {
+                formatter: function ( /** @type {Number} */ val) {
                     return val;
                 },
             },

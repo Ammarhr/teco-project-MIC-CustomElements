@@ -30,21 +30,24 @@ export const apiToken = writable('');
 export const setToken = (token) => {
     apiToken.set(token);
 }
-
+export const eventsDomain = writable('')
+export const setEventDomain = (domain) => {
+    eventsDomain.set(domain)
+}
 export const getDate = derived(
     date,
     $date => $date
 );
 
 //* fetch function
-export const generalErr = writable();
-generalErr.set(false)
+export const generalErr = writable(false);
+
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    async function get(token, url) {
+    const get = async (token, url) => {
         loading.set(true);
         error.set(false);
         try {
@@ -65,15 +68,18 @@ export function fetchstore() {
                     },
                     body: JSON.stringify({}),
                 });
+                // if (Publishresponse.status !== 204)
                 data.set(await Publishresponse.json());
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
             error.set(e);
-            // generalErr.set(true)
+            generalErr.set(true);
         }
-        loading.set(false);
+        setTimeout(() => {
+            loading.set(false);
+        }, 800);
     }
 
     return [data, loading, error, get]
@@ -186,8 +192,8 @@ export function errorCallback() {
 
 
 
+export const latestBill = writable('');
 export const newToken = writable('');
-
 export function reGenerateToken() {
     const loading = writable(false);
     const error = writable(false);

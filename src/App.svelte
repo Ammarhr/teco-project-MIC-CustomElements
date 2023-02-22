@@ -14,9 +14,11 @@
 </script>
 
 <div class="app-container">
-  <!-- <MicWrapper token="smth" domain="jsdelivr.net" /> -->
-  <!-- <MicLoading /> -->
-  <!-- <MicRenderError /> -->
+  <!-- <MicWrapper token="smth" domain="jsdelivr.net" eventdomain="s"/> -->
+  <!-- <MicBillSelectorAndDownload />
+  <MicInsights /> -->
+  <!-- <MicLoading />
+  <MicRenderError /> -->
 </div>
 
 <style lang="scss">

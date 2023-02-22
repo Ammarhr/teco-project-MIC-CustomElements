@@ -4,19 +4,19 @@
   // @ts-nocheck
 
   // svg imports
-  import downloadIcon from "../../assets/DownloadIcon.svg";
+  // import downloadIcon from "../../assets/DownloadIcon.svg";
   import {
     fetchstore,
     changeBillNumber,
     fetchAndRedirect,
     billNumber,
-    generalErr,
     reGenerateToken,
     apiDomain,
     apiToken,
+    latestBill,
+    eventsDomain,
     newToken,
   } from "../../js/store";
-  import setting from "../../js/setting";
 
   // state
   let selectedBill;
@@ -29,26 +29,39 @@
     get(
       $apiToken,
       // "../../data/BillSelector.json"
-      `${
-        $apiDomain || setting.env_URL
-      }/api/ibill/webcomponents/v1/Post/BillSelector`
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`
       // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json`
     );
   }
 
-  const handleChange = (e) => {
-    // console.log("heello from change");
-    selectedBill = e.target.value;
-    changeBillNumber(e.target.value);
-    getToken(
-      $apiToken,
-      `${setting.env_URL}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${$billNumber}`
-    );
+  const handleChange = (e, latest1) => {
+    if (latest1) {
+      selectedBill = latest1;
+      newToken.set("");
+      getToken(
+        $apiToken,
+        // "../../data/Token.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
+      );
+    } else {
+      selectedBill = e.target.value;
+      newToken.set("");
+      getToken(
+        $apiToken,
+        // "../../data/Token.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
+      );
+    }
+    setTimeout(() => {
+      changeBillNumber(selectedBill);
+    }, 500);
   };
-  // $: if ($error) {
-  //   if ($generalErr == false) generalErr.set(true);
-  // }
+
   $: if ($data.bills) {
+    if ($data.bills[0]) {
+      let latest = $data.bills[0].value;
+      latestBill.set(latest);
+    }
     if (!selectedBill) {
       if ($data.bills.filter((bill) => bill.value == $data.selectedBill)[0]) {
         selectedLabelBill = $data.bills.filter(
@@ -66,9 +79,6 @@
   <mic-loading />
 {:else if $error}
   <mic-render-error />
-  <!--error regarding to fetch-->
-  <!-- {:else if $generalErr == true}
-  <div /> -->
 {:else if $data && $data.bills}
   <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
     <div class="tecoBillSelector-v2">
@@ -86,10 +96,15 @@
               aria-label=""
               on:change={(e) => {
                 handleChange(e);
-                fetchAndRedirect($apiToken, setting.event_URL, null, {
-                  EventCode: "Select_New_Bill",
-                  Outcome: $billNumber,
-                });
+                fetchAndRedirect(
+                  $apiToken,
+                  `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                  null,
+                  {
+                    EventCode: "Select_New_Bill",
+                    Outcome: $billNumber,
+                  }
+                );
               }}
               bind:value={$billNumber}
             >
@@ -120,7 +135,7 @@
             on:click={() =>
               fetchAndRedirect(
                 $apiToken,
-                setting.event_URL,
+                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
                 `${$data.download_link}${$billNumber}`,
                 {
                   EventCode: "Bill_Download",
@@ -128,7 +143,10 @@
                 }
               )}
           >
-            <img src={`${setting.env_URL}/micwc-external/assets/DownloadIcon.9e9f8186.svg`} alt="DI" />DOWNLOAD BILL
+            <img
+              src={`${$apiDomain}/micwc-external/assets/DownloadIcon.9e9f8186.svg`}
+              alt="DI"
+            />DOWNLOAD BILL
           </button>
         </div>
         <div class="tecoBillSelectorSmallText">
@@ -136,14 +154,19 @@
             <!-- svelte-ignore a11y-missing-attribute -->
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <a
-              on:click={() => {
+              on:click={(e) => {
                 if ($data.bills[0]) {
-                  changeBillNumber($data.bills[0].value);
+                  handleChange(e, $data.bills[0].value);
                 }
-                fetchAndRedirect($apiToken, setting.event_URL, null, {
-                  EventCode: "Select_Latest_Bill",
-                  Outcome: $billNumber,
-                });
+                fetchAndRedirect(
+                  $apiToken,
+                  `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                  null,
+                  {
+                    EventCode: "Select_Latest_Bill",
+                    Outcome: $billNumber,
+                  }
+                );
               }}>View Latest Bill</a
             >
           </span>
@@ -151,8 +174,6 @@
       </div>
     </div>
   </div>
-  <!-- {:else if $generalErr == true}
-  <div /> -->
 {:else}
   <h1 />
   <!-- <mic-render-error err={"failed in bill selector no Token provided"} /> -->

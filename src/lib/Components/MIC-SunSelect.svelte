@@ -5,11 +5,12 @@
 
     import dropDown from "../../assets/cr.svg";
     import { slide } from "svelte/transition";
-    import { fetchstore } from "../../js/store";
-    export let token;
+    import { fetchstore, apiToken,apiDomain ,eventsDomain } from "../../js/store";
+    import { onMount } from "svelte";
+    import percentageIcon from "../../assets/percentage-icon.svg";
     let sunSelectData;
     ///////// acordion functionality
-    let isOpen = false;
+    let isOpen = true;
     let svgId = "rotate-svg-" + isOpen;
 
     const toggle = () => {
@@ -17,39 +18,44 @@
         svgId = "rotate-svg-" + isOpen;
     };
     ////////////////////////
-    const [data, loading, error, get] = fetchstore(
-        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/sunSelect.json",
-        token
-    );
-    $: if (token && !sunSelectData) {
-       get(token)
-    }
-    $: if ($data) {
+    const [data, loading, error, get] = fetchstore();
+    onMount(() => {
+        if ($apiToken && !sunSelectData) {
+            get($apiToken,
+            // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+            "../../data/sunSelect.json");
+        }
+    });
+    $: if ($data && $data.SubSelectValue) {
         sunSelectData = $data;
     }
-    
 </script>
 
-{#if $loading && !token}
-<h1>loading...</h1>
+{#if $loading}
+    <h1>loading...</h1>
 {:else if $error}
     <h1>{$error}</h1>
 {:else if sunSelectData}
-    <div class="sun-Select-card">
-        <div class="sun-select-card-header">
+    <div class="card">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div id="header" on:click={toggle} aria-expanded={isOpen}>
             <h5 class="title">SUN SELECT</h5>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <img
-                src={dropDown}
-                alt=""
-                id={svgId}
-                on:click={toggle}
-                aria-expanded={isOpen}
-            />
+            <img src={dropDown} alt="" id={svgId} />
         </div>
         {#if isOpen}
-            <div class="sun-select-content" transition:slide={{ duration: 300 }}>
-                <h2 id="percentage">{sunSelectData.SubSelectValue}%</h2>
+            <div
+                class="sun-select-content"
+                transition:slide={{ duration: 300 }}
+            >
+                <h2 id="percentage">
+                    {#if sunSelectData.SubSelectValue.includes("%")}
+                        {sunSelectData.SubSelectValue.split("%")[0]}
+                        <img src={percentageIcon} alt="" />
+                    {:else}
+                        {sunSelectData.SubSelectValue}
+                    {/if}
+                </h2>
                 <p>{sunSelectData.SubSelectMessage}</p>
             </div>
             <div class="sub-content" transition:slide={{ duration: 300 }}>
@@ -61,112 +67,121 @@
             </div>
         {/if}
     </div>
-    {:else}
+{:else}
     <h1>failed to load</h1>
 {/if}
 
-<style scoped>
+<style lang="scss">
     @font-face {
-    font-family: "Interstate";
-    src: url("../../assets/fonts/Interstate.ttf") format("truetype");
-}
-* {
-    font-family: "Interstate";
-}
-.sun-Select-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
-    transition: 0.3s;
-    border-radius: 16px;
-    margin-top: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
-.sun-select-card-header {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px;
-    width: 100%;
-    height: 40px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-}
-.title {
-    width: 242px;
-    height: 29px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 29px;
-    display: flex;
-    align-items: center;
-    letter-spacing: -0.02em;
-    color: #005faa;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-}
+        font-family: "Interstate";
+        src: url("../../assets/fonts/Interstate.ttf") format("truetype");
+    }
+    * {
+        font-family: "Interstate";
+    }
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 370px;
+        max-width: calc(100% - 40px);
+        padding: 20px;
+        transition: 0.3s;
+        border-radius: 16px;
+        box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
+        margin-bottom: 15px;
+        background-color: #ffff;
+        overflow: hidden;
+        @media screen and (max-width: 767px) {
+            width: 100%;
+        }
+    }
+    #header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0px;
+        width: 100%;
+        height: 40px;
+        cursor: pointer;
+    }
+    .insights-title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        color: #005faa;
+        margin: 0;
+    }
+    .title {
+        /* width: 242px; */
+        /* height: 29px; */
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 29px;
+        /* display: flex; */
+        /* align-items: center; */
+        letter-spacing: -0.02em;
+        color: #005faa;
+        /* flex: none; */
+        /* order: 0; */
+        /* flex-grow: 0; */
+        margin: 0;
+    }
 
-/*----------acordion-------------*/
-#rotate-svg-false {
-    cursor: pointer;
-    position: absolute;
-    transform: rotate(0.25turn);
-    transition: transform 0.2s ease-in;
-    right: 0;
-}
-#rotate-svg-true {
-    cursor: pointer;
-    transition: transform 0.2s ease-in;
-    transform: rotate(0.5turn);
-    position: absolute;
-    right: 0;
-}
-/*------------------*/
-.sun-select-content {
-    width: 100%;
-    padding: 5px;
-}
-#percentage {
-    font-family: "Interstate";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 88px;
-    line-height: 106px;
-    color: #005faa;
-    margin: 0;
-}
-.content p {
-    width: 403px;
-    height: 60px;
-    font-family: "Interstate";
-    font-style: normal;
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 30px;
-    display: flex;
-    align-items: center;
-    color: #000000;
-}
-.sub-content {
-    padding-top: 10px;
-    border-top: 1px solid #eaecee;
-}
-.sub-content p {
-    font-style: normal;
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 30px;
-    color: #6c6c6c;
-    flex: none;
-    order: 4;
-    flex-grow: 0;
-}
+    /*----------acordion-------------*/
+    #rotate-svg-true {
+        cursor: pointer;
+        transform: rotate(0.0turn);
+        transition: transform 0.2s ease-in;
+    }
+    #rotate-svg-false {
+        cursor: pointer;
+        transition: transform 0.2s ease-in;
+        transform: rotate(180deg);
+    }
+    /*------------------*/
+    .sun-select-content {
+        width: 100%;
+        padding: 5px;
+    }
+    #percentage {
+        font-family: "Interstate";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 88px;
+        line-height: 106px;
+        color: #005faa;
+        margin: 0;
+    }
+    .content p {
+        width: 403px;
+        height: 60px;
+        font-family: "Interstate";
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 30px;
+        display: flex;
+        align-items: center;
+        color: #000000;
+    }
+    .sub-content {
+        padding-top: 10px;
+        border-top: 1px solid #eaecee;
+    }
+    .sub-content p {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 30px;
+        color: #6c6c6c;
+        flex: none;
+        order: 4;
+        flex-grow: 0;
+    }
 </style>
