@@ -6,27 +6,71 @@
     import messageLogo from "../../assets/envelope-solid.svg";
     import notification from "../../assets/notification.svg";
     import { slide } from "svelte/transition";
+    import { fetchAndRedirect, apiToken, eventsDomain } from "../../js/store";
 
     export let messages;
+    let container;
     //state
     let show = false;
 
-    const showMessages = () => {
+    const showMessages = (toggle) => {
         show = !show;
+        if (toggle) {
+            fetchAndRedirect(
+                $apiToken,
+                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                null,
+                {
+                    EventCode: "IN_Important_Messages_view",
+                    Outcome: "",
+                }
+            );
+        } else {
+            fetchAndRedirect(
+                $apiToken,
+                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                null,
+                {
+                    EventCode: "IN_Important_Messages_Close",
+                    Outcome: "",
+                }
+            );
+        }
     };
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape" || event.keyCode === 27) {
-            if (show == true) show = false;
+            if (show == true) {
+                show = false;
+                fetchAndRedirect(
+                    $apiToken,
+                    `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    null,
+                    {
+                        EventCode: "IN_Important_Messages_Close",
+                        Outcome: "",
+                    }
+                );
+            }
         }
     });
+    $: container = document.querySelector(".container");
+    $: if (container) {
+        container.addEventListener("click", function (event) {
+            // check if the click event originated from the container
+            if (event.target === container) {
+                // do something when the container is clicked
+                showMessages();
+            }
+        });
+    }
 </script>
 
 <div class="message-footer" transition:slide={{ duration: 300 }}>
-    <button on:click={showMessages}><span>View</span></button>
+    <button on:click={() => showMessages("view")}><span>View</span></button>
 </div>
 {#if show}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="modal-container" on:click={showMessages}>
+    <div class="modal-container" bind:this={container}>
         <div>
             {#if messages}
                 <div class="modal-content">
@@ -44,15 +88,30 @@
                     </div>
                     {#if messages}
                         <div class="message-body">
-                            {#each messages as { message }, i}
-                                <section>
-                                    <h4>Message {i + 1}</h4>
-                                    <p class="msg-data">
-                                        {@html message}
-                                    </p>
-                                    <br />
-                                    <hr />
-                                </section>
+                            {#each messages as messageObj, i}
+                                {#if messageObj.message !== ""}
+                                    <section>
+                                        <h4 class="msg-title">
+                                            Message {i + 1}
+                                        </h4>
+                                        <p class="msg-data">
+                                            {#if messageObj.title !== ""}
+                                                <span>
+                                                    <span class="msg-title">
+                                                        <b>
+                                                            {messageObj.title}</b
+                                                        >
+                                                    </span>
+                                                    {@html messageObj.message}
+                                                </span>
+                                            {:else}
+                                                {@html messageObj.message}
+                                            {/if}
+                                        </p>
+                                        <br />
+                                        <hr />
+                                    </section>
+                                {/if}
                             {/each}
                         </div>
                     {/if}
@@ -78,14 +137,19 @@
     }
     .modal-content {
         position: fixed;
-        top: 25px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         background-color: white;
         border-radius: 10px;
         max-width: 100vw;
         overflow-y: auto;
         max-height: 75%;
         padding: 20px 20px 25px 20px;
-
+        // width: 80%;
+        @media screen and (max-width: 450px) {
+            width: 80%;
+        }
         button {
             background: none;
             border: none;
@@ -131,16 +195,18 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-evenly;
-        font-weight: 400;
-        font-size: 24px;
-        line-height: 29px;
-        display: flex;
-        align-items: center;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-        color: #005faa;
-        display: flex;
+
         width: 100%;
+        .message-lable {
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            color: #005faa;
+            letter-spacing: -0.02em;
+            font-weight: 400;
+            font-size: 21px;
+            line-height: 29px;
+        }
     }
     #notification {
         position: absolute;
@@ -149,7 +215,8 @@
         right: 0;
         top: -7px;
     }
-    h4 {
+
+    .msg-title {
         font-family: "Interstate";
         font-style: normal;
         font-weight: 400;
@@ -170,22 +237,19 @@
         color: #ffffff;
     }
     .message-body {
-        grid-area: message-body;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
         padding: 0px;
-        width: 392px;
+        max-width: 392px;
         height: 80%;
-        flex: none;
-        order: 0;
-        flex-grow: 0;
+        width: 90%;
     }
     .msg-data {
-        font-family: "Interstate";
         font-style: normal;
-        font-size: 18px;
+        font-weight: 300;
+        font-size: 20px;
         line-height: 30px;
     }
 

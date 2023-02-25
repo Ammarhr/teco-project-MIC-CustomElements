@@ -5,9 +5,17 @@
 
     import dropDown from "../../assets/cr.svg";
     import { slide } from "svelte/transition";
-    import { fetchstore, apiToken,apiDomain ,eventsDomain } from "../../js/store";
+    import {
+        fetchstore,
+        apiToken,
+        apiDomain,
+        eventsDomain,
+        newToken,
+    } from "../../js/store";
     import { onMount } from "svelte";
     import percentageIcon from "../../assets/percentage-icon.svg";
+
+    let newTokenTrigger;
     let sunSelectData;
     ///////// acordion functionality
     let isOpen = true;
@@ -21,21 +29,34 @@
     const [data, loading, error, get] = fetchstore();
     onMount(() => {
         if ($apiToken && !sunSelectData) {
-            get($apiToken,
-            // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-            "../../data/sunSelect.json");
+            get(
+                $apiToken,
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+                // "../../data/sunSelect.json"
+            );
         }
+        newTokenTrigger = $apiToken;
     });
-    $: if ($data && $data.SubSelectValue) {
+    $: if (
+        $newToken &&
+        $newToken.token &&
+        (newTokenTrigger == $apiToken || newTokenTrigger !== $newToken.token)
+    ) {
+        get(
+            $newToken.token,
+            // "../../data/yearlyEnergy.json"
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+        );
+        newTokenTrigger = $newToken.token;
+    }
+    $: if ($data && $data.SunSelectValue) {
         sunSelectData = $data;
     }
 </script>
 
 {#if $loading}
-    <h1>loading...</h1>
-{:else if $error}
-    <h1>{$error}</h1>
-{:else if sunSelectData}
+    <mic-loading />
+{:else if sunSelectData && sunSelectData.SunSelectValue}
     <div class="card">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div id="header" on:click={toggle} aria-expanded={isOpen}>
@@ -48,34 +69,30 @@
                 class="sun-select-content"
                 transition:slide={{ duration: 300 }}
             >
-                <h2 id="percentage">
-                    {#if sunSelectData.SubSelectValue.includes("%")}
-                        {sunSelectData.SubSelectValue.split("%")[0]}
-                        <img src={percentageIcon} alt="" />
-                    {:else}
-                        {sunSelectData.SubSelectValue}
-                    {/if}
-                </h2>
-                <p>{sunSelectData.SubSelectMessage}</p>
+                {#if sunSelectData.SunSelectValue !== ""}
+                    <h2 id="percentage">
+                        {#if sunSelectData.SunSelectValue.includes("%")}
+                            {sunSelectData.SunSelectValue.split("%")[0]}
+                            <img src={percentageIcon} alt="" />
+                        {:else}
+                            {sunSelectData.SunSelectValue}
+                        {/if}
+                    </h2>
+                {/if}
+                <p>{sunSelectData.SunSelectMessage}</p>
             </div>
             <div class="sub-content" transition:slide={{ duration: 300 }}>
                 <p>
-                    {sunSelectData.SubSelectTooltip}
+                    {sunSelectData.SunSelectTooltip}
                     <!-- As a Sun Select customer you <span>DO NOT</span> pay fuel cost
                     for the energy you consume from solar. -->
                 </p>
             </div>
         {/if}
     </div>
-{:else}
-    <h1>failed to load</h1>
 {/if}
 
 <style lang="scss">
-    @font-face {
-        font-family: "Interstate";
-        src: url("../../assets/fonts/Interstate.ttf") format("truetype");
-    }
     * {
         font-family: "Interstate";
     }
@@ -136,7 +153,7 @@
     /*----------acordion-------------*/
     #rotate-svg-true {
         cursor: pointer;
-        transform: rotate(0.0turn);
+        transform: rotate(0turn);
         transition: transform 0.2s ease-in;
     }
     #rotate-svg-false {

@@ -20,7 +20,11 @@
     eventsDomain,
   } from "../../js/store";
   import { onMount } from "svelte";
-  import ImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
+  import { slide } from "svelte/transition";
+  import MicImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
+  import MicLoading from "./MIC-Loading.svelte";
+  let isOpen = true;
+  let svgId = "rotate-svg-" + isOpen;
 
   //mocking data
 
@@ -29,9 +33,8 @@
     if ($apiToken && !$data.messages) {
       get(
         $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
-
-        "../../data/messages.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
+        // "../../data/messages.json"
       );
     }
   });
@@ -40,15 +43,25 @@
   }
 
   //slice long message
-  $: if (state && state.messages) {
+  $: if (
+    state &&
+    state.messages &&
+    state.messages[0] &&
+    state.messages[0].message &&
+    state.messages[0].message.length > 237
+  ) {
     message = state.messages[0].message.slice(0, 237);
+  } else if (
+    state &&
+    state.messages &&
+    state.messages[0] &&
+    state.messages[0].message &&
+    state.messages[0].message !== ""
+  ) {
+    message = state.messages[0].message;
   }
 
   ///////// acordion functionality
-  import { slide } from "svelte/transition";
-  import MicImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
-  let isOpen = true;
-  let svgId = "rotate-svg-" + isOpen;
 
   const toggle = () => {
     isOpen = !isOpen;
@@ -57,10 +70,10 @@
 </script>
 
 {#if $loading}
-  Loading: {$loading}
+  <mic-loading />
 {:else if $error}
   Error: {$error}
-{:else if state.messages}
+{:else if state.messages && message && message !== ""}
   <div class="container">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div id="message-header" on:click={toggle} aria-expanded={isOpen}>
@@ -77,16 +90,12 @@
           <p class="msg-data">{@html message + "..."}</p>
         </div>
         <div class="message-footer">
-          <MicImportantMessagesDetails messages={state.messages} />
+          <mic-messagesdetails messages={state.messages} />
+          <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
         </div>
       {/if}
-    {:else}
-      <h1>no messages to load</h1>
     {/if}
   </div>
-  <!-- </div> -->
-{:else}
-  <h1>failed to load in messages</h1>
 {/if}
 
 <style lang="scss">
@@ -95,7 +104,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 370px;
+    width: 560px;
     max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
@@ -128,6 +137,7 @@
     letter-spacing: -0.02em;
     text-transform: uppercase;
     color: #005faa;
+    margin: 0;
   }
   .message-counter {
     position: relative;
@@ -163,13 +173,11 @@
     font-family: "Interstate";
     font-style: normal;
     font-weight: 300;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 30px;
     display: flex;
     align-items: center;
     color: #000000;
-    flex: none;
-    order: 1;
     flex-grow: 0;
     height: auto;
     padding: 1rem;

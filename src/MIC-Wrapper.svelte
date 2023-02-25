@@ -16,10 +16,10 @@
   import MicInsights from "./lib/Components/MIC-Insights.svelte";
   import MicRenderError from "./lib/Components/MIC-RenderError.svelte";
   import MicGeneralError from "./lib/Components/MIC-GeneralError.svelte";
-  import { onMount } from "svelte";
   import MicSunSelect from "./lib/Components/MIC-SunSelect.svelte";
   import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
   import MicYearlyEnergy from "./lib/Components/MIC-YearlyEnergy.svelte";
+  import { onMount } from "svelte";
   export let token;
   export let domain;
   export let eventdomain;
@@ -43,22 +43,27 @@
     <div class="wrapper">
       <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
-      <mic-balancesummary />
-      <!-- <MicImportantMessage /> -->
-      <!-- <MicBalanceSummary /> -->
+      <div class="important-balance">
+        <mic-balancesummary />
+        <mic-importentmessage />
+        <!-- <MicBalanceSummary /> -->
+        <!-- <MicImportantMessage /> -->
+      </div>
       <mic-billselector />
       <!-- <MicBillSelectorAndDownload /> -->
       <div class="refreshable">
         <div class="charge-detailes" />
         <div class="insights">
           <mic-insights />
+          <mic-sunselect />
+          <mic-yearlyenergy />
           <!-- <MicInsights /> -->
-          <!-- <MicSunSelect />
-          <MicYearlyEnergy /> -->
+          <!-- <MicSunSelect /> -->
+          <!-- <MicYearlyEnergy /> -->
+          <!-- <MicBulkDownload /> -->
         </div>
       </div>
       <div class="blk-container">
-        <!-- <MicBulkDownload /> -->
         <mic-bulkdownload />
       </div>
     </div>
@@ -73,6 +78,17 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+  }
+  .important-balance {
+    // display: flex;
+    // flex-direction: row;
+    // align-items: flex-start;
+    gap: 30px;
+    width: 100%;
+    @media screen and (max-width: 833px) {
+      flex-direction: column;
+      align-items: flex-end;
+    }
   }
   .refreshable {
     display: flex;

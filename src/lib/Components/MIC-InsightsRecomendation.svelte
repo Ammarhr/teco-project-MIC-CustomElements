@@ -36,8 +36,6 @@
             // let devUrl = "../../../data/recomendationMessages.json";
             get(token, devUrl);
         }
-        token = "";
-        console.log(token, "this is the token from the mount reco");
     });
     // getting the data ready
     $: if ($data && $data.messages) {

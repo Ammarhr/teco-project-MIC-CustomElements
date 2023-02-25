@@ -35,15 +35,20 @@
   }
 
   const handleChange = (e, latest1) => {
-    if (latest1) {
+    console.log($billNumber, $latestBill, ":campared bills");
+    if (latest1 && $billNumber !== $latestBill) {
       selectedBill = latest1;
       newToken.set("");
       getToken(
         $apiToken,
-        // "../../data/Token.json"
+        // "../../data/Token.son"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
       );
-    } else {
+      setTimeout(() => {
+        changeBillNumber(selectedBill);
+      }, 500);
+    } else if (!latest1) {
+      console.log("here");
       selectedBill = e.target.value;
       newToken.set("");
       getToken(
@@ -51,10 +56,10 @@
         // "../../data/Token.json"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
       );
+      setTimeout(() => {
+        changeBillNumber(selectedBill);
+      }, 500);
     }
-    setTimeout(() => {
-      changeBillNumber(selectedBill);
-    }, 500);
   };
 
   $: if ($data.bills) {

@@ -13,9 +13,7 @@
         newToken,
     } from "../../js/store";
     import { onMount } from "svelte";
-    import MicLoading from "./MIC-Loading.svelte";
     let newTokenTrigger;
-
     let yearlyEnergyData;
     ///////// acordion functionality
     let isOpen = true;
@@ -31,8 +29,8 @@
         if ($apiToken && !$data.NetMeter) {
             get(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`
-                "../../data/yearlyEnergy.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`
+                // "../../data/yearlyEnergy.json"
             );
         }
         newTokenTrigger = $apiToken;
@@ -45,8 +43,8 @@
     ) {
         get(
             $newToken.token,
-            "../../data/yearlyEnergy.json"
-            // `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`
+            // "../../data/yearlyEnergy.json"
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`
         );
         newTokenTrigger = $newToken.token;
     }
@@ -56,10 +54,8 @@
 </script>
 
 {#if $loading}
-    <MicLoading />
-{:else if $error}
-    <h1>{$error}</h1>
-{:else if yearlyEnergyData}
+    <mic-loading />
+{:else if yearlyEnergyData }
     <div class="yearly-energy-card">
         <div class="card-header">
             <h5 class="title">YOUR GENERATED ENERGY SUMMARY</h5>
@@ -74,33 +70,42 @@
         </div>
         {#if isOpen}
             {#each yearlyEnergyData as YearlyValue}
-                <!-- {#if !YearlyValue.SumFlag} -->
-                <div
-                    class="yearly-content"
-                    transition:slide={{ duration: 300 }}
-                >
-                    <h2 class="yearly-label">Previous YTD Balance</h2>
-                    <p>{YearlyValue.PreviousYTDBalance}</p>
-                </div>
-                <div
-                    class="yearly-content"
-                    transition:slide={{ duration: 300 }}
-                >
-                    <h2 class="yearly-label">This Bill’s Surplus</h2>
-                    <p>{YearlyValue.CurrentBillSurplus}</p>
-                </div>
-                <div
-                    class="yearly-content"
-                    transition:slide={{ duration: 300 }}
-                >
-                    <h2 class="yearly-label">Applied To This Bill</h2>
-                    <p>{YearlyValue.AppliedToCurrentBill}</p>
-                </div>
-                <!-- {:else} -->
-                <div class="sum-content" transition:slide={{ duration: 300 }}>
-                    <h2 id="sum-label">New YTD Balance</h2>
-                    <p id="sum-value">{YearlyValue.NewYTDBalance}</p>
-                </div>
+                {#if YearlyValue.PreviousYTDBalance !== ""}
+                    <div
+                        class="yearly-content"
+                        transition:slide={{ duration: 300 }}
+                    >
+                        <h2 class="yearly-label">Previous YTD Balance</h2>
+                        <p>{YearlyValue.PreviousYTDBalance}</p>
+                    </div>
+                {/if}
+                {#if YearlyValue.CurrentBillSurplus !== ""}
+                    <div
+                        class="yearly-content"
+                        transition:slide={{ duration: 300 }}
+                    >
+                        <h2 class="yearly-label">This Bill’s Surplus</h2>
+                        <p>{YearlyValue.CurrentBillSurplus}</p>
+                    </div>
+                {/if}
+                {#if YearlyValue.AppliedToCurrentBill !== ""}
+                    <div
+                        class="yearly-content"
+                        transition:slide={{ duration: 300 }}
+                    >
+                        <h2 class="yearly-label">Applied To This Bill</h2>
+                        <p>{YearlyValue.AppliedToCurrentBill}</p>
+                    </div>
+                {/if}
+                {#if YearlyValue.NewYTDBalance !== ""}
+                    <div
+                        class="sum-content"
+                        transition:slide={{ duration: 300 }}
+                    >
+                        <h2 id="sum-label">New YTD Balance</h2>
+                        <p id="sum-value">{YearlyValue.NewYTDBalance}</p>
+                    </div>
+                {/if}
             {/each}
             <div class="tool-tip" transition:slide={{ duration: 300 }}>
                 <p>
@@ -112,8 +117,6 @@
             <!-- {/if} -->
         {/if}
     </div>
-{:else}
-    <h1>failed to load</h1>
 {/if}
 
 <style lang="scss">

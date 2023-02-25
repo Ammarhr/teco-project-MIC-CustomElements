@@ -4,10 +4,25 @@
             "serviceName": "Electric",
             "BillContractNo": "654646545646556",
             "monthly": {
-                "VisibilityTab": false
+                "VisibilityTab": true,
+                "unit": "KWH",
+                "valueConsumption": 1358,
+                "percentageConsumption": -105,
+                "valueTemp": 56,
+                "percentageTemp": 5,
+                "y": {
+                    "data": [
+                        2500,
+                        1000
+                    ]
+                },
+                "x": [
+                    "Nov 2021",
+                    "Oct 2021"
+                ]
             },
             "yearly": {
-                "VisibilityTab": true,
+                "VisibilityTab": false,
                 "unit": "KWH",
                 "valueConsumption": 1505,
                 "percentageConsumption": -80,
@@ -29,7 +44,7 @@
             "serviceName": "Electric",
             "BillContractNo": "654654654646",
             "monthly": {
-                "VisibilityTab": true,
+                "VisibilityTab": false,
                 "unit": "KWH",
                 "valueConsumption": 1358,
                 "percentageConsumption": -105,
