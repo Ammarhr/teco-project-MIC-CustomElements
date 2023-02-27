@@ -3,8 +3,8 @@
 <script>
     // @ts-nocheck
 
-    import messageLogo from "../../assets/envelope-solid.svg";
-    import notification from "../../assets/notification.svg";
+    import circyle from "../../assets/cr.svg";
+    import messageNotification from "../../assets/messages-notification.svg";
     import { slide } from "svelte/transition";
     import { fetchAndRedirect, apiToken, eventsDomain } from "../../js/store";
 
@@ -76,12 +76,10 @@
                 <div class="modal-content">
                     <div class="message-header">
                         <div class="message-logo">
-                            <img src={messageLogo} alt="" /><img
-                                src={notification}
-                                alt=""
-                                id="notification"
-                            />
-                            <span id="unreaded-msgs">{messages.length}</span>
+                            <img src={messageNotification} alt="" />
+                            <span id="unreaded-msgs"
+                                >&nbsp;{messages.length}&nbsp;</span
+                            >
                         </div>
                         <div class="message-lable">Important Message</div>
                         <button on:click={showMessages}>×</button>
@@ -95,12 +93,10 @@
                                             Message {i + 1}
                                         </h4>
                                         <p class="msg-data">
-                                            {#if messageObj.title !== ""}
+                                            {#if messageObj && messageObj.Title !== ""}
                                                 <span>
                                                     <span class="msg-title">
-                                                        <b>
-                                                            {messageObj.title}</b
-                                                        >
+                                                        {messageObj.Title}.
                                                     </span>
                                                     {@html messageObj.message}
                                                 </span>
@@ -182,6 +178,9 @@
     ::-webkit-scrollbar-thumb:hover {
         background: rgba(192, 192, 192, 0.759);
     }
+    hr {
+        margin-top: 32px;
+    }
     .container {
         padding: 2rem;
         display: flex;
@@ -194,7 +193,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: space-between;
 
         width: 100%;
         .message-lable {
@@ -217,24 +216,22 @@
     }
 
     .msg-title {
-        font-family: "Interstate";
-        font-style: normal;
-        font-weight: 400;
+        font-weight: 300;
         font-size: 20px;
         letter-spacing: -0.02em;
         color: #005faa;
         height: 1.5rem;
     }
+    p {
+        display: contents;
+    }
     #unreaded-msgs {
         position: absolute;
-        left: 1.4rem;
-        top: -0.4rem;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
-        line-height: 20px;
-        font-feature-settings: "salt" on;
+        right: 0;
         color: #ffffff;
+        background: #da1e28;
+        border-radius: 50%;
+        border: 2px solid white;
     }
     .message-body {
         display: flex;
@@ -244,7 +241,6 @@
         padding: 0px;
         max-width: 392px;
         height: 80%;
-        width: 90%;
     }
     .msg-data {
         font-style: normal;
@@ -254,9 +250,7 @@
     }
 
     .message-logo {
-        grid-area: message-logo;
         position: relative;
-        width: 58px;
     }
     .message-footer {
         height: auto;

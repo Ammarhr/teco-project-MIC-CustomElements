@@ -18,7 +18,7 @@
 
   ///////// js files (store & chart bundles)
   import { chart } from "svelte-apexcharts";
-  import { renderBarChart } from "../../js/MIC-chart-bundle";
+  import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
   import {
     billNumber,
     fetchstore,
@@ -54,7 +54,7 @@
     ) {
       get(
         $apiToken,
-        // "../../../data/Insights.json"
+        // "../../../data/DemandInsight.json"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
       );
       tries--;
@@ -266,6 +266,76 @@
                   </div>
                 </div>
               </div>
+              {#if insightsService?.yearly && insightsService?.yearly?.CurrentFactorValue && insightsService?.yearly?.CurrentFactorValue !== ""}
+                <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
+                <div class="chart-container flex-center-items">
+                  <div class="insights-sub-container">
+                    <div
+                      use:chart={renderRadialBar(
+                        [insightsService?.yearly?.CurrentFactorValue],
+                        [insightsService?.yearly?.CurrentFactorDate],
+                        250,
+                        "#005FAA"
+                      )}
+                    />
+                  </div>
+                  <div
+                    class="insights-sub-container"
+                    use:chart={renderRadialBar(
+                      [insightsService?.yearly?.PreviousFactorValue],
+                      [insightsService?.yearly?.PreviousFactorDate],
+                      250,
+                      "#B1DBFD"
+                    )}
+                  />
+                </div>
+                <div class="content">
+                  <h6 class="insights-label">THIS MONTH</h6>
+                  <div class="val-content">
+                    <p class="insights-value">
+                      {insightsService?.yearly?.CurrentDemandValue}
+                      {insightsService?.yearly?.DemandUnit}
+                    </p>
+                    {#if insightsService.yearly.LoadFactorArrowComparison > 0}
+                      <span
+                        class={avgClass}
+                        style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
+                      >
+                        <img
+                          src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
+                          class="arrow"
+                        />
+                        {Math.abs(
+                          insightsService.yearly?.LoadFactorArrowComparison
+                        )}% {insightsService?.yearly?.DemandUnit}</span
+                      >
+                    {:else if insightsService.yearly.LoadFactorArrowComparison < 0}
+                      <span
+                        class={avgClass}
+                        style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
+                      >
+                        <img
+                          src={`${$apiDomain}/micwc-external/assets/greenArrow.7e8b9860.svg`}
+                          class="arrow"
+                          alt=""
+                        />
+                        {Math.abs(
+                          insightsService.yearly?.LoadFactorArrowComparison
+                        )}% {insightsService?.yearly?.DemandUnit}</span
+                      >
+                    {:else if insightsService.yearly.LoadFactorArrowComparison == 0}
+                      <span
+                        class={avgClass}
+                        style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
+                      >
+                        {Math.abs(
+                          insightsService.monthly?.LoadFactorArrowComparison
+                        )}% {insightsService?.monthly?.DemandUnit}</span
+                      >
+                    {/if}
+                  </div>
+                </div>
+              {/if}
             </div>
           {/if}
           <!-- ---Monthly---- -->
@@ -338,6 +408,76 @@
                   </div>
                 </div>
               </div>
+              {#if insightsService?.monthly && insightsService?.monthly?.CurrentFactorValue && insightsService?.monthly?.CurrentFactorValue !== ""}
+                <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
+                <div class="chart-container flex-center-items">
+                  <div class="insights-sub-container">
+                    <div
+                      use:chart={renderRadialBar(
+                        [insightsService?.monthly?.CurrentFactorValue],
+                        [insightsService?.monthly?.CurrentFactorDate],
+                        250,
+                        "#005FAA"
+                      )}
+                    />
+                  </div>
+                  <div
+                    class="insights-sub-container"
+                    use:chart={renderRadialBar(
+                      [insightsService?.monthly?.PreviousFactorValue],
+                      [insightsService?.monthly?.PreviousFactorDate],
+                      250,
+                      "#B1DBFD"
+                    )}
+                  />
+                </div>
+                <div class="content">
+                  <h6 class="insights-label">THIS MONTH</h6>
+                  <div class="val-content">
+                    <p class="insights-value">
+                      {insightsService?.monthly?.CurrentDemandValue}
+                      {insightsService?.monthly?.DemandUnit}
+                    </p>
+                    {#if insightsService.monthly.LoadFactorArrowComparison > 0}
+                      <span
+                        class={avgClass}
+                        style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
+                      >
+                        <img
+                          src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
+                          class="arrow"
+                        />
+                        {Math.abs(
+                          insightsService.monthly?.LoadFactorArrowComparison
+                        )}% {insightsService?.monthly?.DemandUnit}</span
+                      >
+                    {:else if insightsService.monthly.LoadFactorArrowComparison < 0}
+                      <span
+                        class={avgClass}
+                        style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
+                      >
+                        <img
+                          src={`${$apiDomain}/micwc-external/assets/greenArrow.7e8b9860.svg`}
+                          class="arrow"
+                          alt=""
+                        />
+                        {Math.abs(
+                          insightsService.monthly?.LoadFactorArrowComparison
+                        )}% {insightsService?.monthly?.DemandUnit}</span
+                      >
+                    {:else if insightsService.monthly.LoadFactorArrowComparison == 0}
+                      <span
+                        class={avgClass}
+                        style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
+                      >
+                        {Math.abs(
+                          insightsService.monthly?.LoadFactorArrowComparison
+                        )}% {insightsService?.monthly?.DemandUnit}</span
+                      >
+                    {/if}
+                  </div>
+                </div>
+              {/if}
             </div>
           {/if}
           <!-- {$billNumber}

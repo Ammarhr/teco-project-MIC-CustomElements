@@ -44,8 +44,12 @@
       <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
       <div class="important-balance">
-        <mic-balancesummary />
-        <mic-importentmessage />
+        <div class="balance">
+          <mic-balancesummary />
+        </div>
+        <div class="messages">
+          <mic-importentmessage />
+        </div>
         <!-- <MicBalanceSummary /> -->
         <!-- <MicImportantMessage /> -->
       </div>
@@ -64,7 +68,7 @@
         </div>
       </div>
       <div class="blk-container">
-        <mic-bulkdownload />
+        <mic-bulkdownload style="max-width:460px"/>
       </div>
     </div>
   {:else if $generalErr === true}
@@ -80,12 +84,28 @@
     gap: 30px;
   }
   .important-balance {
-    // display: flex;
-    // flex-direction: row;
-    // align-items: flex-start;
+    display: flex;
+    flex-direction: row;
     gap: 30px;
     width: 100%;
+    justify-content: space-between;
     @media screen and (max-width: 833px) {
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+  .balance {
+    width: 100%;
+    @media screen and (max-width: 833px) {
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+  .messages {
+    width: 35%;
+    @media screen and (max-width: 833px) {
+      width: 100%;
       flex-direction: column;
       align-items: flex-end;
     }
@@ -115,5 +135,11 @@
       display: grid;
       grid-template-columns: 1fr;
     }
+  }
+  
+  .blk-container {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
   }
 </style>

@@ -110,20 +110,20 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
                         fontFamily: "Interstate",
                         formatter: function (val) {
                             return val + "%";
-                        },
+},
                     },
                 },
             },
         },
-        fill: {
-            colors: color,
+fill: {
+    colors: color,
         },
-        stroke: {
-            lineCap: "round",
+stroke: {
+    lineCap: "round",
         },
-        labels: labels,
+labels: labels,
     };
-    return options;
+return options;
 }
 
 

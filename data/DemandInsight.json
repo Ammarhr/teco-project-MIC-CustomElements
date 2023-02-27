@@ -1,11 +1,89 @@
 {
-    "SelectedBill" : "1122332123312313",
-    "ComparedBill" : "112233212331222",
-     "CurrentFactorValue": " 70%",
-     "CurrentFactorDate": " March 22",
-     "PreviousFactorValue": "50%",
-     "PreviousFactorDate": "March 21",
-     "LoadFactorArrowComparison": "105%",
-     "ThiMonthValue": "1200 KW",
-     "Unit": "KWH"
-   }
+  "services": [
+    {
+      "serviceName": "Electric",
+      "BillContractNo": "654646545646556",
+      "monthly": {
+        "VisibilityTab": true,
+        "unit": "KWH",
+        "valueConsumption": 1358,
+        "percentageConsumption": -105,
+        "valueTemp": 56,
+        "percentageTemp": 5,
+        "y": {
+          "data": [
+            2500,
+            1000
+          ]
+        },
+        "x": [
+          "Nov 2021",
+          "Dec 2021"
+        ],
+        "CurrentFactorValue": 75,
+        "CurrentFactorDate": "MAR 22",
+        "PreviousFactorValue": 20,
+        "PreviousFactorDate": "FEP 22",
+        "LoadFactorArrowComparison": 50,
+        "CurrentDemandValue": 920,
+        "DemandUnit": "KW"
+      },
+      "yearly": {
+        "VisibilityTab": true,
+        "unit": "KWH",
+        "valueConsumption": 1505,
+        "percentageConsumption": -80,
+        "valueTemp": 35,
+        "percentageTemp": 6,
+        "y": {
+          "data": [
+            1400,
+            900
+          ]
+        },
+        "x": [
+          "Dec 2021",
+          "Dec 2020"
+        ],
+        "CurrentFactorValue": 70,
+        "CurrentFactorDate": "MAR 22",
+        "PreviousFactorValue": 50,
+        "PreviousFactorDate": "MAR 21",
+        "LoadFactorArrowComparison": -150,
+        "CurrentDemandValue": 580,
+        "DemandUnit": "KW"
+      }
+    },
+    {
+      "serviceName": "Gas",
+      "BillContractNo": "654654654646",
+      "monthly": {
+        "VisibilityTab": true,
+        "unit": "KWH",
+        "valueConsumption": 1358,
+        "percentageConsumption": -105,
+        "valueTemp": 56,
+        "percentageTemp": 5,
+        "y": {
+          "data": [
+            2500,
+            1000
+          ]
+        },
+        "x": [
+          "Nov 2021",
+          "Dec 2021"
+        ],
+        "CurrentFactorValue": "",
+        "CurrentFactorDate": "",
+        "PreviousFactorValue": "",
+        "PreviousFactorDate": "",
+        "LoadFactorArrowComparison": "",
+        "ThiMonthValue": ""
+      },
+      "yearly": {
+        "VisibilityTab": false
+      }
+    }
+  ]
+}

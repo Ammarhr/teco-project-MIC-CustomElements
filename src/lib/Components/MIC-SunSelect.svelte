@@ -56,7 +56,7 @@
 
 {#if $loading}
     <mic-loading />
-{:else if sunSelectData && sunSelectData.SunSelectValue}
+{:else if sunSelectData && sunSelectData.SunSelectValue && sunSelectData.SunSelectValue !== ""}
     <div class="card">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div id="header" on:click={toggle} aria-expanded={isOpen}>

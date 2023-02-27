@@ -162,8 +162,7 @@
     .tecoCard {
         margin: 0 !important;
         padding: 15px;
-        container-type: inline-size;
-        width: 100%;
+        max-width: 455px;
     }
     .tecoBillBanner {
         // image and color
@@ -171,6 +170,7 @@
         background-color: #005faa;
         color: white;
         .tecoBillBannerBody {
+            max-width: 463px;
             min-height: 80px;
             display: flex;
             flex-direction: column;

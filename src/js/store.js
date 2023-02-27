@@ -77,9 +77,7 @@ export function fetchstore() {
             error.set(e);
             generalErr.set(true);
         }
-        setTimeout(() => {
             loading.set(false);
-        }, 800);
     }
 
     return [data, loading, error, get]

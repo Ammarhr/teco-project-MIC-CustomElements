@@ -4,14 +4,9 @@
   // @ts-nocheck
 
   //svg imports
-  import messageLogo from "../../assets/envelope-solid.svg";
   import circyle from "../../assets/cr.svg";
-  import notification from "../../assets/notification.svg";
   import messageNotification from "../../assets/messages-notification.svg";
 
-  //state
-  let state = {};
-  let message;
   //unreaded messages counter
   import {
     fetchstore,
@@ -22,11 +17,12 @@
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
   import MicImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
-  import MicLoading from "./MIC-Loading.svelte";
+
+  //state
+  let state = {};
+  let message;
   let isOpen = true;
   let svgId = "rotate-svg-" + isOpen;
-
-  //mocking data
 
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
@@ -38,6 +34,7 @@
       );
     }
   });
+
   $: if ($data && $data.messages) {
     state = $data;
   }
@@ -50,7 +47,7 @@
     state.messages[0].message &&
     state.messages[0].message.length > 237
   ) {
-    message = state.messages[0].message.slice(0, 237);
+    message = state.messages[0].message.slice(0, 237) + "...";
   } else if (
     state &&
     state.messages &&
@@ -60,8 +57,6 @@
   ) {
     message = state.messages[0].message;
   }
-
-  ///////// acordion functionality
 
   const toggle = () => {
     isOpen = !isOpen;
@@ -87,10 +82,24 @@
     {#if state.messages}
       {#if isOpen}
         <div class="message-body" transition:slide={{ duration: 300 }}>
-          <p class="msg-data">{@html message + "..."}</p>
+          <p class="msg-data">
+            {#if state.messages[0] && (state.messages[0].Title !== "") !== ""}
+              <span>
+                <span class="msg-title">
+                  {state.messages[0].Title}.
+                </span>
+                {@html message}
+              </span>
+            {:else}
+              {@html message}
+            {/if}
+          </p>
         </div>
         <div class="message-footer">
-          <mic-messagesdetails messages={state.messages} />
+          <mic-messagesdetails
+            messages={state.messages}
+            messagesCount={state.messages.length}
+          />
           <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
         </div>
       {/if}
@@ -105,13 +114,13 @@
     justify-content: center;
     align-items: center;
     width: 560px;
+    min-height: 275px;
     max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
     box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
-    margin-bottom: 15px;
-    background-color: #ffff;
+    background-color: white;
     overflow: hidden;
     @media screen and (max-width: 767px) {
       width: 100%;
@@ -120,33 +129,27 @@
   #message-header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding: 0px;
     width: 100%;
     height: 40px;
-
     cursor: pointer;
+    h4 {
+      font-weight: 300;
+      font-size: 20px;
+      line-height: 29px;
+      display: flex;
+      align-items: center;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #005faa;
+      margin: 0;
+    }
   }
-  #message-header h4 {
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 29px;
-    display: flex;
-    align-items: center;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    color: #005faa;
-    margin: 0;
-  }
+
   .message-counter {
     position: relative;
-  }
-  #notification {
-    position: absolute;
-    left: 4.71%;
-    right: 0;
-    top: -2px;
   }
   #unreaded-msgs {
     position: absolute;
@@ -170,19 +173,26 @@
     flex-grow: 0;
   }
   .msg-data {
-    font-family: "Interstate";
     font-style: normal;
     font-weight: 300;
     font-size: 20px;
     line-height: 30px;
     display: flex;
     align-items: center;
-    color: #000000;
+    color: rgb(0, 0, 0);
     flex-grow: 0;
     height: auto;
-    padding: 1rem;
   }
-
+  .msg-title {
+    font-weight: 300;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: #005faa;
+    height: 1.5rem;
+  }
+  p {
+    display: contents;
+  }
   button {
     display: flex;
     flex-direction: column;

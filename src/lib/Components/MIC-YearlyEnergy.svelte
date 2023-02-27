@@ -55,68 +55,70 @@
 
 {#if $loading}
     <mic-loading />
-{:else if yearlyEnergyData }
-    <div class="yearly-energy-card">
-        <div class="card-header">
-            <h5 class="title">YOUR GENERATED ENERGY SUMMARY</h5>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <img
-                src={dropDown}
-                alt=""
-                id={svgId}
-                on:click={toggle}
-                aria-expanded={isOpen}
-            />
-        </div>
-        {#if isOpen}
-            {#each yearlyEnergyData as YearlyValue}
-                {#if YearlyValue.PreviousYTDBalance !== ""}
-                    <div
-                        class="yearly-content"
-                        transition:slide={{ duration: 300 }}
-                    >
-                        <h2 class="yearly-label">Previous YTD Balance</h2>
-                        <p>{YearlyValue.PreviousYTDBalance}</p>
-                    </div>
-                {/if}
-                {#if YearlyValue.CurrentBillSurplus !== ""}
-                    <div
-                        class="yearly-content"
-                        transition:slide={{ duration: 300 }}
-                    >
-                        <h2 class="yearly-label">This Bill’s Surplus</h2>
-                        <p>{YearlyValue.CurrentBillSurplus}</p>
-                    </div>
-                {/if}
-                {#if YearlyValue.AppliedToCurrentBill !== ""}
-                    <div
-                        class="yearly-content"
-                        transition:slide={{ duration: 300 }}
-                    >
-                        <h2 class="yearly-label">Applied To This Bill</h2>
-                        <p>{YearlyValue.AppliedToCurrentBill}</p>
-                    </div>
-                {/if}
-                {#if YearlyValue.NewYTDBalance !== ""}
-                    <div
-                        class="sum-content"
-                        transition:slide={{ duration: 300 }}
-                    >
-                        <h2 id="sum-label">New YTD Balance</h2>
-                        <p id="sum-value">{YearlyValue.NewYTDBalance}</p>
-                    </div>
-                {/if}
-            {/each}
-            <div class="tool-tip" transition:slide={{ duration: 300 }}>
-                <p>
-                    At the end of each calendar year, your balance will be
-                    applied to your account on or around your February
-                    statement.
-                </p>
+{:else if yearlyEnergyData && yearlyEnergyData[0]}
+    {#if yearlyEnergyData[0].CurrentBillSurplus && yearlyEnergyData[0].CurrentBillSurplus !== ""}
+        <div class="yearly-energy-card">
+            <div class="card-header">
+                <h5 class="title">YOUR GENERATED ENERGY SUMMARY</h5>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <img
+                    src={dropDown}
+                    alt=""
+                    id={svgId}
+                    on:click={toggle}
+                    aria-expanded={isOpen}
+                />
             </div>
-            <!-- {/if} -->
-        {/if}
-    </div>
+            {#if isOpen}
+                {#each yearlyEnergyData as YearlyValue}
+                    {#if YearlyValue.PreviousYTDBalance !== ""}
+                        <div
+                            class="yearly-content"
+                            transition:slide={{ duration: 300 }}
+                        >
+                            <h2 class="yearly-label">Previous YTD Balance</h2>
+                            <p>{YearlyValue.PreviousYTDBalance}</p>
+                        </div>
+                    {/if}
+                    {#if YearlyValue.CurrentBillSurplus !== ""}
+                        <div
+                            class="yearly-content"
+                            transition:slide={{ duration: 300 }}
+                        >
+                            <h2 class="yearly-label">This Bill’s Surplus</h2>
+                            <p>{YearlyValue.CurrentBillSurplus}</p>
+                        </div>
+                    {/if}
+                    {#if YearlyValue.AppliedToCurrentBill !== ""}
+                        <div
+                            class="yearly-content"
+                            transition:slide={{ duration: 300 }}
+                        >
+                            <h2 class="yearly-label">Applied To This Bill</h2>
+                            <p>{YearlyValue.AppliedToCurrentBill}</p>
+                        </div>
+                    {/if}
+                    {#if YearlyValue.NewYTDBalance !== ""}
+                        <div
+                            class="sum-content"
+                            transition:slide={{ duration: 300 }}
+                        >
+                            <h2 id="sum-label">New YTD Balance</h2>
+                            <p id="sum-value">{YearlyValue.NewYTDBalance}</p>
+                        </div>
+                    {/if}
+                {/each}
+                <div class="tool-tip" transition:slide={{ duration: 300 }}>
+                    <p>
+                        At the end of each calendar year, your balance will be
+                        applied to your account on or around your February
+                        statement.
+                    </p>
+                </div>
+                <!-- {/if} -->
+            {/if}
+        </div>
+    {/if}
 {/if}
 
 <style lang="scss">

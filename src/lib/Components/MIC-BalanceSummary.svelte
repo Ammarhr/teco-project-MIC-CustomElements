@@ -238,7 +238,6 @@
         margin: 0 !important;
         margin-top: 15px;
         padding: 15px;
-        container-type: inline-size;
         width: 100%;
     }
     .tecoBalanceSum {
