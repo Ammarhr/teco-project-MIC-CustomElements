@@ -7,7 +7,7 @@ export const showMessagesModal = writable(false);
 export function showmodal() {
     showMessagesModal.set(!showMessagesModal);
 }
-
+export const showToolTipDetails = writable(false);
 // date for bill selector
 let newDate = new Date();
 let year = newDate.getFullYear();
@@ -77,7 +77,7 @@ export function fetchstore() {
             error.set(e);
             generalErr.set(true);
         }
-            loading.set(false);
+        loading.set(false);
     }
 
     return [data, loading, error, get]

@@ -1,5 +1,14 @@
 {
-    "SunSelectValue": "100%",
-    "SunSelectMessage": "100% of your electricity is being sourced from the sun.",
-    "SunSelectTooltip": "As a Sun Select customer you do not pay fuel cost for the energy you consume from solar."
+    "SunSelect": [
+        {
+            "SunSelectValue": "100%",
+            "SunSelectMessage": "100% of your electricity is being sourced from the sun.",
+            "SunSelectTooltip": "As a Sun Select customer you do not pay fuel cost for the energy you consume from solar."
+        },
+        {
+            "SunSelectValue": "450 kWh",
+            "SunSelectMessage": "100% of your electricity is being sourced from the sun.",
+            "SunSelectTooltip": "As a Sun Select customer you do not pay fuel cost for the energy you consume from solar."
+        }
+    ]
 }

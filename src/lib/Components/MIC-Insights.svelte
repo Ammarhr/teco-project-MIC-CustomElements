@@ -216,7 +216,7 @@
                       {insightsService?.yearly?.valueConsumption}
                       {insightsService?.yearly?.unit}
                     </p>
-                    {#if insightsService.yearly.percentageConsumption >= 0}
+                    {#if insightsService.yearly.percentageConsumption > 0}
                       <span
                         class={avgClass}
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
@@ -240,6 +240,15 @@
                           class="arrow"
                           alt=""
                         />
+                        {Math.abs(
+                          insightsService.yearly?.percentageConsumption
+                        )}% {insightsService?.yearly?.unit}</span
+                      >
+                    {:else if insightsService.yearly.percentageConsumption == 0}
+                      <span
+                        class={"red"}
+                        style="background: #E6EFF7; border: 1px solid #005FAA"
+                      >
                         {Math.abs(
                           insightsService.yearly?.percentageConsumption
                         )}% {insightsService?.yearly?.unit}</span
@@ -325,8 +334,8 @@
                       >
                     {:else if insightsService.yearly.LoadFactorArrowComparison == 0}
                       <span
-                        class={avgClass}
-                        style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
+                        class={"red"}
+                        style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         {Math.abs(
                           insightsService.monthly?.LoadFactorArrowComparison
@@ -359,7 +368,7 @@
                       {insightsService?.monthly?.valueConsumption}
                       {insightsService?.monthly?.unit}
                     </p>
-                    {#if insightsService.monthly.percentageConsumption >= 0}
+                    {#if insightsService.monthly.percentageConsumption > 0}
                       <span
                         class={avgClass}
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
@@ -382,6 +391,15 @@
                           class="arrow"
                           alt=""
                         />
+                        {Math.abs(
+                          insightsService.monthly?.percentageConsumption
+                        )}% {insightsService?.monthly?.unit}</span
+                      >
+                    {:else if insightsService.monthly.percentageConsumption == 0}
+                      <span
+                        class={"red"}
+                        style="background: #E6EFF7; border: 1px solid #005FAA"
+                      >
                         {Math.abs(
                           insightsService.monthly?.percentageConsumption
                         )}% {insightsService?.monthly?.unit}</span
@@ -467,8 +485,8 @@
                       >
                     {:else if insightsService.monthly.LoadFactorArrowComparison == 0}
                       <span
-                        class={avgClass}
-                        style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
+                        class={"red"}
+                        style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         {Math.abs(
                           insightsService.monthly?.LoadFactorArrowComparison

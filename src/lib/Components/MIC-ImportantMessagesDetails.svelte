@@ -6,7 +6,12 @@
     import circyle from "../../assets/cr.svg";
     import messageNotification from "../../assets/messages-notification.svg";
     import { slide } from "svelte/transition";
-    import { fetchAndRedirect, apiToken, eventsDomain } from "../../js/store";
+    import {
+        fetchAndRedirect,
+        apiToken,
+        eventsDomain,
+        apiDomain,
+    } from "../../js/store";
 
     export let messages;
     let container;
@@ -76,7 +81,10 @@
                 <div class="modal-content">
                     <div class="message-header">
                         <div class="message-logo">
-                            <img src={messageNotification} alt="" />
+                            <img
+                                src={`${$apiDomain}/micwc-external/assets/messages-notification.26af3974.svg`}
+                                alt=""
+                            />
                             <span id="unreaded-msgs"
                                 >&nbsp;{messages.length}&nbsp;</span
                             >
@@ -96,7 +104,7 @@
                                             {#if messageObj && messageObj.Title !== ""}
                                                 <span>
                                                     <span class="msg-title">
-                                                        {messageObj.Title}.
+                                                        {messageObj.Title}
                                                     </span>
                                                     {@html messageObj.message}
                                                 </span>
@@ -216,7 +224,7 @@
     }
 
     .msg-title {
-        font-weight: 300;
+        font-weight: 700;
         font-size: 20px;
         letter-spacing: -0.02em;
         color: #005faa;

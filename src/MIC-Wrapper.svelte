@@ -2,13 +2,6 @@
 
 <script>
   // @ts-nocheck
-  import {
-    setDomain,
-    setToken,
-    generalErr,
-    setEventDomain,
-    newToken,
-  } from "./js/store";
   import MicHeaderInformation from "./lib/Components/MIC-HeaderInformation.svelte";
   import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
   import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
@@ -19,7 +12,17 @@
   import MicSunSelect from "./lib/Components/MIC-SunSelect.svelte";
   import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
   import MicYearlyEnergy from "./lib/Components/MIC-YearlyEnergy.svelte";
+  import MicBillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
+  import MicToolTipDetails from "./lib/Components/MIC-ToolTipDetails.svelte";
   import { onMount } from "svelte";
+  import {
+    setDomain,
+    setToken,
+    generalErr,
+    showToolTipDetails,
+    setEventDomain,
+    newToken,
+  } from "./js/store";
   export let token;
   export let domain;
   export let eventdomain;
@@ -31,18 +34,23 @@
     setDomain(domain);
     setEventDomain(eventdomain);
   }
+  $: if ($showToolTipDetails) {
+    console.log("wrapper", $showToolTipDetails);
+  }
   onMount(() => {
     generalErr.set(false);
     newToken.set("");
+    showToolTipDetails.set(false);
   });
   refresh();
 </script>
 
-{#key token}
-  {#if token && domain && eventdomain && $generalErr !== true}
+{#key $showToolTipDetails}
+  {#if token && domain && eventdomain && $generalErr !== true && $showToolTipDetails !== true}
     <div class="wrapper">
       <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
+      <MicBillingSummary />
       <div class="important-balance">
         <div class="balance">
           <mic-balancesummary />
@@ -62,17 +70,21 @@
           <mic-sunselect />
           <mic-yearlyenergy />
           <!-- <MicInsights /> -->
-          <!-- <MicSunSelect /> -->
-          <!-- <MicYearlyEnergy /> -->
+          <!-- <MicSunSelect />
+          <MicYearlyEnergy /> -->
           <!-- <MicBulkDownload /> -->
         </div>
       </div>
       <div class="blk-container">
-        <mic-bulkdownload style="max-width:460px"/>
+        <mic-bulkdownload style="max-width:460px" />
       </div>
     </div>
   {:else if $generalErr === true}
     <mic-generalerror {token} />
+  {:else if $showToolTipDetails === true}
+    <div class="wrapper">
+      <MicToolTipDetails />
+    </div>
   {/if}
 {/key}
 
@@ -136,7 +148,7 @@
       grid-template-columns: 1fr;
     }
   }
-  
+
   .blk-container {
     display: flex;
     flex-direction: row-reverse;

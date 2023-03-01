@@ -15,14 +15,8 @@
     import { onMount } from "svelte";
     let newTokenTrigger;
     let yearlyEnergyData;
-    ///////// acordion functionality
-    let isOpen = true;
-    let svgId = "rotate-svg-" + isOpen;
+    let arrayOfToggles = [];
 
-    const toggle = () => {
-        isOpen = !isOpen;
-        svgId = "rotate-svg-" + isOpen;
-    };
     ////////////////////////
     const [data, loading, error, get] = fetchstore();
     onMount(() => {
@@ -48,29 +42,35 @@
         );
         newTokenTrigger = $newToken.token;
     }
+    const toggle = (i) => {
+        arrayOfToggles[i] = !arrayOfToggles[i];
+    };
     $: if ($data && $data.NetMeter) {
         yearlyEnergyData = $data.NetMeter;
+        for (let i = 0; i < yearlyEnergyData.length; i++) {
+            arrayOfToggles.push(true);
+        }
     }
 </script>
 
 {#if $loading}
     <mic-loading />
 {:else if yearlyEnergyData && yearlyEnergyData[0]}
-    {#if yearlyEnergyData[0].CurrentBillSurplus && yearlyEnergyData[0].CurrentBillSurplus !== ""}
-        <div class="yearly-energy-card">
-            <div class="card-header">
-                <h5 class="title">YOUR GENERATED ENERGY SUMMARY</h5>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <img
-                    src={dropDown}
-                    alt=""
-                    id={svgId}
-                    on:click={toggle}
-                    aria-expanded={isOpen}
-                />
-            </div>
-            {#if isOpen}
-                {#each yearlyEnergyData as YearlyValue}
+    {#each yearlyEnergyData as YearlyValue, i}
+        {#if YearlyValue.CurrentBillSurplus && YearlyValue.CurrentBillSurplus !== ""}
+            <div class="yearly-energy-card">
+                <div class="card-header">
+                    <h5 class="title">YOUR GENERATED ENERGY SUMMARY</h5>
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <img
+                        src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+                        alt=""
+                        id={"rotate-svg-" + arrayOfToggles[i]}
+                        on:click={() => toggle(i)}
+                        aria-expanded={arrayOfToggles[i]}
+                    />
+                </div>
+                {#if arrayOfToggles[i]}
                     {#if YearlyValue.PreviousYTDBalance !== ""}
                         <div
                             class="yearly-content"
@@ -107,18 +107,18 @@
                             <p id="sum-value">{YearlyValue.NewYTDBalance}</p>
                         </div>
                     {/if}
-                {/each}
-                <div class="tool-tip" transition:slide={{ duration: 300 }}>
-                    <p>
-                        At the end of each calendar year, your balance will be
-                        applied to your account on or around your February
-                        statement.
-                    </p>
-                </div>
-                <!-- {/if} -->
-            {/if}
-        </div>
-    {/if}
+                    <div class="tool-tip" transition:slide={{ duration: 300 }}>
+                        <p>
+                            At the end of each calendar year, your balance will
+                            be applied to your account on or around your
+                            February statement.
+                        </p>
+                    </div>
+                    <!-- {/if} -->
+                {/if}
+            </div>
+        {/if}
+    {/each}
 {/if}
 
 <style lang="scss">

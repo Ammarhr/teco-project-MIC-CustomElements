@@ -213,6 +213,116 @@
           ]
         }
       ]
+    },
+    {
+      "title": "Natural Gas Charges",
+      "servicePeriod": "November 25, 2021 - December 28, 2022",
+      "rateSchadule": "General Service",
+      "icon": "<font-awsome>/<material_icon>",
+      "color": "#1112313",
+      "sections": [
+        {
+          "title": "",
+          "icon": "<font-awsome>/<material_icon>",
+          "color": "#1112313",
+          "controls": [
+            {
+              "label": "Billing Demand Charge",
+              "tooltip": "Description",
+              "description": "26 days @ $1.07000",
+              "value": 36.38,
+              "isTotal": false,
+              "breakdown": [
+                {
+                  "label": "Supplemental Billing Demand",
+                  "tooltip": "Description",
+                  "description": "12,300 kW @ 2.88000/kW",
+                  "color": "#1112313",
+                  "value": 35424.00
+                },
+                {
+                  "label": "Supplemental Peak Demand",
+                  "tooltip": "Description",
+                  "description": "12,300 kW @ 6.15000/kW",
+                  "color": "#1112313",
+                  "value": 75645.00
+                }
+              ]
+            },
+            {
+              "label": "Capacity Charge",
+              "tooltip": "Description",
+              "description": "26 days @ $1.07000",
+              "value": 22.38,
+              "isTotal": false,
+              "breakdown": [
+                {
+                  "label": "Supplemental Billing Demand",
+                  "tooltip": "Description",
+                  "description": "12,300 kW @ 2.88000/kW",
+                  "color": "#1112313",
+                  "value": 35424.00
+                },
+                {
+                  "label": "Supplemental Peak Demand",
+                  "tooltip": "Description",
+                  "description": "12,300 kW @ 6.15000/kW",
+                  "color": "#1112313",
+                  "value": 75645.00
+                },
+                {
+                  "label": "Local Facilities Reservation",
+                  "tooltip": "Description",
+                  "description": "24,850 kW @ $0.84000/kW",
+                  "color": "#1112313",
+                  "value": 20874.00
+                },
+                {
+                  "label": "Power Supply Demand",
+                  "tooltip": "Description",
+                  "description": "104,300 kW @ $0.43000/kW",
+                  "color": "#1112313",
+                  "value": 44849.00
+                }
+              ]
+            },
+            {
+              "label": "Billing Demand Charge",
+              "tooltip": "Description",
+              "description": "26 days @ $1.07000",
+              "value": 36.38,
+              "isTotal": false,
+              "totalValue": 108.5,
+              "totalTitle": "Gas Charges Subtotal"
+            },
+            {
+              "label": "Billing Demand Charge",
+              "tooltip": "Description",
+              "description": "26 days @ $1.07000",
+              "value": 36.38,
+              "isTotal": true,
+              "totalValue": 108.5,
+              "totalTitle": "Gas Charges Subtotal",
+              "breakdown": [
+                {
+                  "label": "Capacity Charge",
+                  "tooltip": "Description",
+                  "description": "12,300 kW @ 2.88000/kW",
+                  "color": "#1112313",
+                  "value": 35424.00
+                },
+                {
+                  "label": "Supplemental Peak Demand",
+                  "tooltip": "Description",
+                  "description": "12,300 kW @ 6.15000/kW",
+                  "color": "#1112313",
+                  "value": 75645.00
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

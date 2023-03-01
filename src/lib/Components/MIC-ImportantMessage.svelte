@@ -73,11 +73,11 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div id="message-header" on:click={toggle} aria-expanded={isOpen}>
       <div class="message-counter">
-        <img src={messageNotification} alt="" />
+        <img src={`${$apiDomain}/micwc-external/assets/messages-notification.26af3974.svg`} alt="" />
         <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
       </div>
       <h4 id="title">Important Message</h4>
-      <img src={circyle} alt="" id={svgId} />
+      <img src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`} alt="" id={svgId} />
     </div>
     {#if state.messages}
       {#if isOpen}
@@ -86,7 +86,7 @@
             {#if state.messages[0] && (state.messages[0].Title !== "") !== ""}
               <span>
                 <span class="msg-title">
-                  {state.messages[0].Title}.
+                  {state.messages[0].Title}
                 </span>
                 {@html message}
               </span>
@@ -96,11 +96,13 @@
           </p>
         </div>
         <div class="message-footer">
-          <mic-messagesdetails
-            messages={state.messages}
-            messagesCount={state.messages.length}
-          />
-          <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
+          {#if state.messages.length > 0 || state.messages[0].length > 237}
+            <mic-messagesdetails
+              messages={state.messages}
+              messagesCount={state.messages.length}
+            />
+            <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
+          {/if}
         </div>
       {/if}
     {/if}
@@ -114,7 +116,6 @@
     justify-content: center;
     align-items: center;
     width: 560px;
-    min-height: 275px;
     max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
@@ -184,7 +185,7 @@
     height: auto;
   }
   .msg-title {
-    font-weight: 300;
+    font-weight: 700;
     font-size: 20px;
     letter-spacing: -0.02em;
     color: #005faa;

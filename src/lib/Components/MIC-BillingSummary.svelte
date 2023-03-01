@@ -7,69 +7,89 @@
   import breakdownToggle from "../../assets/breakdown-drop-icon.svg";
   import electricityIcon from "../../assets/Iconawesome-bolt.svg";
   import toolTip from "../../assets/tool-tip-icon.svg";
+  import {
+    fetchstore,
+    apiDomain,
+    apiToken,
+    eventsDomain,
+    showToolTipDetails,
+  } from "../../js/store";
   // export let item = { name: "Item" };
-  export let token;
-  let billingData;
   let toggleArray = [];
 
-  class BillingSummary {
-    constructor(service) {
-      this.isOpen = true;
-      this.service = service;
-    }
-    toggleContainer(card, breakDown) {
-      if (card) this.isOpen = !this.isOpen;
-      if (breakDown) subIsOpen = !subIsOpen;
-      svgId = "rotate-svg-" + this.isOpen;
-    }
-  }
-
-  import { fetchstore } from "../../js/store";
-
   //mocking data
-  const [data, loading, error, get] = fetchstore(
-    "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/ChargeDetails.json",
-    token
-  );
-  $: if (token && !$data.services) {
-    get(token);
-  }
-  ///////// acordion functionality
+  const [data, loading, error, get] = fetchstore();
 
-  import { slide } from "svelte/transition";
+  ///////// acordion functionality
+  import { onMount } from "svelte";
   let isOpen = false;
   let subIsOpen = true;
-  let svgId = "rotate-svg-" + isOpen;
+  let styleToggleArr = [];
+  let billsObjectsArray = [];
 
+  ////////////////////////
+  onMount(() => {
+    if ($apiToken && $apiDomain && !$data.services) {
+      get($apiToken, "../../data/ChargeDetails.json");
+    }
+  });
+
+  $: if ($data && $data.services && typeof toggleArray[0] !== "boolean") {
+    for (let i = 0; i < $data.services.length; i++) {
+      toggleArray.push(true);
+      let billObj = {
+        subSectionArray: [],
+        subToggleStyleArray: [],
+        toolTipArray: [],
+        toolTipStylleArray: [],
+      };
+      billsObjectsArray.push(billObj);
+    }
+  }
   const toggleContainer = (i) => {
     toggleArray[i] = !toggleArray[i];
-    svgId = "rotate-svg-" + isOpen;
-  };
-  ////////////////////////
 
-  $: if ($data && $data.services && token) {
-    for (let i = 0; i > toggleArray.length; i++) {
-      toggleArray.push(false);
-      // arr.push(new BillingSummary({ service }));
+    if (toggleArray[i]) {
+      styleToggleArr[i] = "max-height: 200vh;opacity: 1;transition:200ms;";
+    } else {
+      styleToggleArr[i] =
+        "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
     }
-    billingData = $data.services;
-    console.log("details", $data.services);
-  }
-  // $: if ($data && $data.services) {
-  //   $data.services.map((item, i) => {
-  //     console.log(item);
-  //     item.sections[0].forEach(controls=>{
-  //       // controls.forEach(breakdown=>{
-  //       //   console.log(breakdown);
+    console.log(toggleArray);
+  };
+  const subSectionToggle = (j, i) => {
+    if (typeof billsObjectsArray[i].subSectionArray[j] !== "boolean")
+      billsObjectsArray[i].subSectionArray.push(false);
 
-  //       // })
-  //     })
-  //   })
-  // }
+    billsObjectsArray[i].subSectionArray[j] =
+      !billsObjectsArray[i].subSectionArray[j];
+    if (!billsObjectsArray[i].subSectionArray[j]) {
+      billsObjectsArray[i].subToggleStyleArray[j] =
+        "max-height: 200vh;opacity: 1;transition:200ms;";
+    } else {
+      billsObjectsArray[i].subToggleStyleArray[j] =
+        "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
+    }
+  };
+
+  const toolTipToggle = (j, i) => {
+    if (typeof billsObjectsArray[i].toolTipArray[j] !== "boolean")
+      billsObjectsArray[i].toolTipArray.push(false);
+
+    billsObjectsArray[i].toolTipArray[j] =
+      !billsObjectsArray[i].toolTipArray[j];
+    if (billsObjectsArray[i].toolTipArray[j]) {
+      billsObjectsArray[i].toolTipStylleArray[j] =
+        "max-height: 200vh;opacity: 1;transition:200ms;";
+    } else {
+      billsObjectsArray[i].toolTipStylleArray[j] =
+        "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
+    }
+  };
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-{#if $loading && !token}
+{#if $loading}
   Loading: {$loading}
 {:else if $error}
   Error: {$error}
@@ -77,18 +97,17 @@
   <div class="billing-container">
     {#each $data.services as billService, i}
       <div class="card">
-        <div id="bills-header">
+        <div
+          id="bills-header"
+          on:click={() => toggleContainer(i)}
+          aria-expanded={isOpen}
+        >
           <h4 id="title">BILLING SUMMARY</h4>
-          <img
-            src={toggle}
-            alt=""
-            id={svgId}
-            on:click={() => toggleContainer(i)}
-            aria-expanded={isOpen}
-          />
+          <img src={toggle} alt="" id={"rotate-svg-" + !toggleArray[i]} />
         </div>
-        {#if toggleArray[i]}
-          <h3 id="sectiontitle" transition:slide={{ duration: 300 }}>
+        <!-- {#if toggleArray[i]} -->
+        <div style={styleToggleArr[i]}>
+          <h3 id="sectiontitle">
             <span
               ><img src={electricityIcon} alt="" style="width: 15px;" /></span
             >
@@ -97,18 +116,43 @@
           <p id="comment">
             Service Period: {billService.servicePeriod}
           </p>
-          <div id="content" transition:slide={{ duration: 300 }}>
+          <div id="content">
             {#each billService.sections as section}
               <img src="" alt="{section.title} icon" />
               <p>{section.title}</p>
               {#if section.controls}
-                {#each section.controls as control}
+                {#each section.controls as control, j}
                   <div class="row-container">
                     <div class="row" id="daily-basic-service-charge">
                       <p class="first-label">
                         {control.label}
                         {#if control.tooltip}
-                          <img src={toolTip} alt="" />
+                          <div class="tooltip-icon">
+                            <img
+                              src={toolTip}
+                              alt=""
+                              on:pointerenter={() => toolTipToggle(j, i)}
+                            />
+                            {#if billsObjectsArray[i].toolTipStylleArray[j]}
+                              <div
+                                class="tooltip-description"
+                                style={billsObjectsArray[i].toolTipStylleArray[
+                                  j
+                                ]}
+                              >
+                                Covers the costs of moving gas from its source
+                                to your premise, other than the cost of gas
+                                itself. <br />
+                                <a
+                                  href="#"
+                                  on:click={() => {
+                                    showToolTipDetails.set(true);
+                                  }}>UNDERSTANDING YOUR CHARGES</a
+                                >
+                                <!-- {control.tooltip} -->
+                              </div>
+                            {/if}
+                          </div>
                         {/if}
                       </p>
                       <p class="sub-label">{control.description}</p>
@@ -117,35 +161,34 @@
                     {#if control.breakdown}
                       <div
                         class="breakdown-header"
-                        on:click={console.log("hide")}
+                        on:click={() => {
+                          subSectionToggle(j, i);
+                        }}
                       >
                         <h6>View Breakdown</h6>
                         <img
                           src={breakdownToggle}
-                          on:click={() => toggleContainer(false, true)}
-                          id={svgId}
                           alt=""
-                          aria-expanded={isOpen}
+                          id={"rotate-svg-" +
+                            billsObjectsArray[i].subSectionArray[j]}
                         />
                       </div>
-                      {#if subIsOpen}
-                        <div
-                          class="break-down"
-                          transition:slide={{ duration: 300 }}
-                        >
-                          {#each control.breakdown as breakdown}
-                            <div class="sub-container">
-                              <h6 class="breakdown-label">{breakdown.label}</h6>
-                              <h6 class="breakdown-description">
-                                {breakdown.description}
-                              </h6>
-                              <h6 class="breakdown-values">
-                                {breakdown.value}
-                              </h6>
-                            </div>
-                          {/each}
-                        </div>
-                      {/if}
+                      <div
+                        class="break-down"
+                        style={billsObjectsArray[i].subToggleStyleArray[j]}
+                      >
+                        {#each control.breakdown as breakdown}
+                          <div class="sub-container">
+                            <h6 class="breakdown-label">{breakdown.label}</h6>
+                            <h6 class="breakdown-description">
+                              {breakdown.description}
+                            </h6>
+                            <h6 class="breakdown-values">
+                              {breakdown.value}
+                            </h6>
+                          </div>
+                        {/each}
+                      </div>
                       {#if control.isTotal}
                         <div
                           class="sub-row total-row"
@@ -167,21 +210,50 @@
               <h6 class="total-value">${billService.total}</h6>
             </div>
           {/if}
-        {/if}
+          <!-- {/if} -->
+        </div>
       </div>
     {/each}
   </div>
-{:else}
-  <h5>failed in billing summaty</h5>
 {/if}
 
-<style scoped>
-  @font-face {
-    font-family: "Interstate";
-    src: url("../../assets/fonts/Interstate.ttf") format("truetype");
-  }
+<style lang="scss">
   * {
     font-family: "Interstate";
+  }
+  .tooltip-icon {
+    display: inline;
+    position: relative;
+    cursor: pointer;
+  }
+  .tooltip-description {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 125%;
+    left: -156px;
+    z-index: 1;
+    width: 441px;
+    border-radius: 6px;
+    padding: 5px 0 32px 6px;
+    margin-left: -60px;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    background: #cbe8ff;
+    color: #000000;
+    clip-path: polygon(
+      50% 0%,
+      100% 0,
+      100% 35%,
+      100% 86%,
+      54% 86%,
+      50% 100%,
+      47% 85%,
+      0 85%,
+      0% 35%,
+      0 0
+    );
   }
   .billing-container {
     display: flex;
@@ -191,6 +263,7 @@
     min-width: 60%;
   }
   .breakdown-header {
+    cursor: pointer;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -276,7 +349,7 @@
   /*-----------------------*/
   #rotate-svg-false {
     cursor: pointer;
-    transform: rotate(0.25turn);
+    transform: rotate(0turn);
     transition: transform 0.2s ease-in;
   }
   #rotate-svg-true {
@@ -391,27 +464,18 @@
     justify-content: space-between;
     align-items: center;
     padding: 25px 30px;
-    max-width: 710px;
     max-height: 92px;
     background: #005faa;
     border-radius: 6px;
-    flex: none;
-    order: 4;
-    flex-grow: 0;
   }
   .total-label {
-    font-style: normal;
+    display: flex;
+    align-items: center;
     font-weight: 300;
     font-size: 24px;
     line-height: 29px;
-    display: flex;
-    align-items: center;
     letter-spacing: -0.02em;
     color: #ffffff;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    margin: 0;
   }
   .total-value {
     font-family: "Interstate";

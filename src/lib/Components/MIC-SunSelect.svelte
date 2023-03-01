@@ -3,7 +3,8 @@
 <script>
     // @ts-nocheck
 
-    import dropDown from "../../assets/cr.svg";
+    // import dropDown from "../../assets/cr.svg";
+    // import percentageIcon from "../../assets/percentage-icon.svg";
     import { slide } from "svelte/transition";
     import {
         fetchstore,
@@ -13,17 +14,13 @@
         newToken,
     } from "../../js/store";
     import { onMount } from "svelte";
-    import percentageIcon from "../../assets/percentage-icon.svg";
-
+    let arrayOfToggles = [];
     let newTokenTrigger;
     let sunSelectData;
     ///////// acordion functionality
-    let isOpen = true;
-    let svgId = "rotate-svg-" + isOpen;
 
-    const toggle = () => {
-        isOpen = !isOpen;
-        svgId = "rotate-svg-" + isOpen;
+    const toggle = (i) => {
+        arrayOfToggles[i] = !arrayOfToggles[i];
     };
     ////////////////////////
     const [data, loading, error, get] = fetchstore();
@@ -49,47 +46,63 @@
         );
         newTokenTrigger = $newToken.token;
     }
-    $: if ($data && $data.SunSelectValue) {
-        sunSelectData = $data;
+    $: if ($data && $data.SunSelect) {
+        sunSelectData = $data.SunSelect;
+        for (let i = 0; i < sunSelectData.length; i++) {
+            arrayOfToggles.push(true);
+        }
     }
 </script>
 
 {#if $loading}
     <mic-loading />
-{:else if sunSelectData && sunSelectData.SunSelectValue && sunSelectData.SunSelectValue !== ""}
-    <div class="card">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div id="header" on:click={toggle} aria-expanded={isOpen}>
-            <h5 class="title">SUN SELECT</h5>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <img src={dropDown} alt="" id={svgId} />
-        </div>
-        {#if isOpen}
-            <div
-                class="sun-select-content"
-                transition:slide={{ duration: 300 }}
-            >
-                {#if sunSelectData.SunSelectValue !== ""}
-                    <h2 id="percentage">
-                        {#if sunSelectData.SunSelectValue.includes("%")}
-                            {sunSelectData.SunSelectValue.split("%")[0]}
-                            <img src={percentageIcon} alt="" />
-                        {:else}
-                            {sunSelectData.SunSelectValue}
-                        {/if}
-                    </h2>
+{:else if sunSelectData && sunSelectData[0] && sunSelectData[0].SunSelectValue && sunSelectData[0].SunSelectValue !== ""}
+    {#each sunSelectData as sunSelectObj, i}
+        {#if sunSelectObj.SunSelectValue && sunSelectObj.SunSelectValue !== ""}
+            <div class="card">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div
+                    id="header"
+                    on:click={() => toggle(i)}
+                    aria-expanded={arrayOfToggles[i]}
+                >
+                    <h5 class="title">SUN SELECT</h5>
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <img
+                        src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+                        alt=""
+                        id={"rotate-svg-" + arrayOfToggles[i]}
+                    />
+                </div>
+                {#if arrayOfToggles[i]}
+                    <div
+                        class="sun-select-content"
+                        transition:slide={{ duration: 300 }}
+                    >
+                        <h2 id="percentage">
+                            {#if sunSelectObj.SunSelectValue.includes("%")}
+                                {sunSelectObj.SunSelectValue.split("%")[0]}
+                                <img src={`${$apiDomain}/micwc-external/assets/percentage-icon.d50d3669.svg`} alt="" />
+                            {:else}
+                                {sunSelectObj.SunSelectValue}
+                            {/if}
+                        </h2>
+                        <p>{sunSelectObj.SunSelectMessage}</p>
+                    </div>
+                    <div
+                        class="sub-content"
+                        transition:slide={{ duration: 300 }}
+                    >
+                        <p>
+                            {sunSelectObj.SunSelectTooltip}
+                            <!-- As a Sun Select customer you <span>DO NOT</span> pay fuel cost
+                                for the energy you consume from solar. -->
+                        </p>
+                    </div>
                 {/if}
-                <p>{sunSelectData.SunSelectMessage}</p>
-            </div>
-            <div class="sub-content" transition:slide={{ duration: 300 }}>
-                <p>
-                    {sunSelectData.SunSelectTooltip}
-                    <!-- As a Sun Select customer you <span>DO NOT</span> pay fuel cost
-                    for the energy you consume from solar. -->
-                </p>
             </div>
         {/if}
-    </div>
+    {/each}
 {/if}
 
 <style lang="scss">
@@ -170,7 +183,7 @@
         font-family: "Interstate";
         font-style: normal;
         font-weight: 700;
-        font-size: 88px;
+        font-size: 70px;
         line-height: 106px;
         color: #005faa;
         margin: 0;
