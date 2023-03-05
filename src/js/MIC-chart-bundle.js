@@ -1,4 +1,4 @@
-export const renderBarChart = (data, labels, colorsArr, width, height, unit) => {
+export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
 
     let options = {
         series: data,
@@ -26,8 +26,8 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
         },
         plotOptions: {
             bar: {
-                // columnWidth: '120px',
                 borderRadius: 10,
+                barHeight: 100,
                 dataLabels: {
                     position: "top", // top, center, bottom,
                 },
@@ -41,7 +41,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
             },
             offsetY: -30,
             style: {
-                fontSize: '14px',
+                fontSize: '16px',
                 fontFamily: 'Interstate',
                 colors: '#bbbb'
             },
@@ -62,6 +62,8 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
             },
         },
         yaxis: {
+            min: 0,
+            max: max,
             axisBorder: {
                 show: false,
             },
@@ -110,20 +112,20 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
                         fontFamily: "Interstate",
                         formatter: function (val) {
                             return val + "%";
-},
+                        },
                     },
                 },
             },
         },
-fill: {
-    colors: color,
+        fill: {
+            colors: color,
         },
-stroke: {
-    lineCap: "round",
+        stroke: {
+            lineCap: "round",
         },
-labels: labels,
+        labels: labels,
     };
-return options;
+    return options;
 }
 
 

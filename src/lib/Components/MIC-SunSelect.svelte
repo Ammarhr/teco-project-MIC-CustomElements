@@ -56,7 +56,7 @@
 
 {#if $loading}
     <mic-loading />
-{:else if sunSelectData && sunSelectData[0] && sunSelectData[0].SunSelectValue && sunSelectData[0].SunSelectValue !== ""}
+{:else if sunSelectData && sunSelectData[0]}
     {#each sunSelectData as sunSelectObj, i}
         {#if sunSelectObj.SunSelectValue && sunSelectObj.SunSelectValue !== ""}
             <div class="card">

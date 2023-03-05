@@ -468,7 +468,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 10;
+        z-index: 1001;
         overflow-y: auto;
     }
     .modal-content {

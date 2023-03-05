@@ -50,7 +50,7 @@
     <div class="wrapper">
       <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
-      <MicBillingSummary />
+      <!-- <MicBillingSummary /> -->
       <div class="important-balance">
         <div class="balance">
           <mic-balancesummary />
@@ -62,14 +62,14 @@
         <!-- <MicImportantMessage /> -->
       </div>
       <mic-billselector />
-      <!-- <MicBillSelectorAndDownload /> -->
+      <MicBillSelectorAndDownload />
       <div class="refreshable">
         <div class="charge-detailes" />
         <div class="insights">
           <mic-insights />
           <mic-sunselect />
           <mic-yearlyenergy />
-          <!-- <MicInsights /> -->
+          <MicInsights />
           <!-- <MicSunSelect />
           <MicYearlyEnergy /> -->
           <!-- <MicBulkDownload /> -->
@@ -101,6 +101,7 @@
     gap: 30px;
     width: 100%;
     justify-content: space-between;
+    background: rgba(245, 245, 245, 0.745);
     @media screen and (max-width: 833px) {
       flex-direction: column;
       align-items: flex-end;
