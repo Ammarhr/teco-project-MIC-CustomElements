@@ -35,7 +35,6 @@
   }
 
   const handleChange = (e, latest1) => {
-    console.log($billNumber, $latestBill, ":campared bills");
     if (latest1 && $billNumber !== $latestBill) {
       selectedBill = latest1;
       newToken.set("");
@@ -48,7 +47,6 @@
         changeBillNumber(selectedBill);
       }, 500);
     } else if (!latest1) {
-      console.log("here");
       selectedBill = e.target.value;
       newToken.set("");
       getToken(

@@ -199,16 +199,16 @@
           {#if insightsService?.yearly?.VisibilityTab == true}
             <div id={"tab1" + tabsToggleArr[i][0]}>
               <div class="chart-container">
-                <!-- {insightsService?.yearly?.y.data[0] + 1000} -->
                 <div
                   use:chart={renderBarChart(
                     [insightsService?.yearly?.y],
                     insightsService?.yearly?.x,
                     ["#005FAA", "#B1DBFD"],
-                    chartWidth,
+                    "100%",
                     350,
                     ` ${insightsService?.yearly?.unit}`,
-                    insightsService?.yearly?.y.data[0] + 500
+                    insightsService?.yearly?.y.data[0] +
+                      insightsService?.yearly?.y.data[1]
                   )}
                 />
                 <div class="content">
@@ -358,7 +358,7 @@
                     [insightsService?.monthly?.y],
                     insightsService?.monthly?.x,
                     ["#005FAA", "#B1DBFD"],
-                    chartWidth,
+                    "100%",
                     350,
                     ` ${insightsService?.monthly?.unit}`,
                     insightsService?.monthly?.y.data[0] +
@@ -502,25 +502,13 @@
               {/if}
             </div>
           {/if}
-          <!-- {$billNumber}
-            {$latestBill} -->
           {#if $billNumber === $latestBill && insightsService.BillContractNo && recoToken == $apiToken}
-            <!-- <MicInsightsRecomendation
-                token={$apiToken}
-                url={$apiDomain}
-                billcontractnumber={insightsService.BillContractNo}
-              /> -->
             <mic-recomendation
               token={$apiToken}
               url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
             />
           {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo}
-            <!-- <MicInsightsRecomendation
-                token={$apiToken}
-                url={$apiDomain}
-                billcontractnumber={insightsService.BillContractNo}
-              /> -->
             <mic-recomendation
               token={$newToken.token}
               url={$apiDomain}

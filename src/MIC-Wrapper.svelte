@@ -14,6 +14,7 @@
   import MicYearlyEnergy from "./lib/Components/MIC-YearlyEnergy.svelte";
   import MicBillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import MicToolTipDetails from "./lib/Components/MIC-ToolTipDetails.svelte";
+  import MicPagination from "./lib/Components/mic-pagination.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -23,6 +24,7 @@
     setEventDomain,
     newToken,
   } from "./js/store";
+  import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
   export let token;
   export let domain;
   export let eventdomain;
@@ -50,7 +52,6 @@
     <div class="wrapper">
       <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
-      <!-- <MicBillingSummary /> -->
       <div class="important-balance">
         <div class="balance">
           <mic-balancesummary />
@@ -64,7 +65,9 @@
       <mic-billselector />
       <MicBillSelectorAndDownload />
       <div class="refreshable">
-        <div class="charge-detailes" />
+        <div class="charge-detailes">
+          <!-- <MicBillingSummary /> -->
+        </div>
         <div class="insights">
           <mic-insights />
           <mic-sunselect />
@@ -78,6 +81,7 @@
       <div class="blk-container">
         <mic-bulkdownload style="max-width:460px" />
       </div>
+      <MicMeterTable />
     </div>
   {:else if $generalErr === true}
     <mic-generalerror {token} />
@@ -124,29 +128,29 @@
     }
   }
   .refreshable {
-    display: flex;
+    display: grid;
     flex-direction: row;
-    gap: 30px;
-    @media screen and (max-width: 767px) {
-      flex-direction: column;
-      align-items: flex-end;
+    column-gap: 30px;
+    grid-template-columns: calc(66% - 30px) 33%;
+    width: 100%;
+    @media screen and (max-width: 992px) {
+      grid-template-columns: 100%;
     }
   }
   .charge-detailes {
-    width: -webkit-fill-available;
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 992px) {
       width: 100%;
     }
   }
   .insights {
     display: flex;
     flex-direction: column;
-    max-width: 40%;
+    width: 100%;
     align-items: end;
-    @media screen and (max-width: 767px) {
-      max-width: unset;
-      display: grid;
-      grid-template-columns: 1fr;
+    @media screen and (max-width: 992px) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 

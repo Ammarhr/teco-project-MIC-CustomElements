@@ -6,18 +6,14 @@
     import toolTip from "../../assets/toolTip.svg";
     import verticalLine from "../../assets/vertical-line.svg";
     import { slide } from "svelte/transition";
-    import { fetchstore } from "../../js/store";
+    import { fetchstore, apiDomain, apiToken } from "../../js/store";
     import { chart } from "svelte-apexcharts";
     import { renderMixChart } from "../../js/MIC-chart-bundle";
-    
-    export let token;
+
     let tableData;
     let options;
     let selectedMeter;
-    const [data, loading, error, get] = fetchstore(
-        "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/meterDataUsage.json",
-        token
-    );
+    const [data, loading, error, get] = fetchstore();
 
     // acordion functionality
     let isOpen = false;
@@ -27,13 +23,7 @@
         isOpen = !isOpen;
         svgId = "rotate-svg-" + isOpen;
     };
-    ////////// tabs functionality
-    let tab1 = "1";
-    let tab2 = "2";
-    const activateTab = (num1, num2) => {
-        tab2 = num2;
-        tab1 = num1;
-    };
+
     //////// change the selected meter
     const handleSelectedMeter = (meterObject) => {
         selectedMeter = meterObject;
@@ -65,34 +55,62 @@
         );
     }
     ///////// pagination:
-    import { paginate, LightPaginationNav } from "svelte-paginate";
+    import { onMount } from "svelte";
     let items;
-    let currentPage = 1;
-    let pageSize = 5;
-    let paginatedItems;
     //////// first render
-    $: if (token && !$data.results) {
-        get(token);
-        console.log("token from meter", token, $data);
-    }
+    onMount(() => {
+        if ($apiToken && $apiDomain && !$data.results) {
+            get($apiToken, "../../data/meterDataUsage.json");
+        }
+    });
+
     $: if ($data && $data.results) {
-        console.log("data in meter", $data.results);
         tableData = $data.results;
         selectedMeter = $data.results[0];
         items = $data.results;
     }
-    $: if (items) {
-        paginatedItems = paginate({ items, pageSize, currentPage });
-    }
+    ////////// tabs functionality
+    let tab1 = "1";
+    let tab2 = "2";
+    const activateTab = (num1, num2) => {
+        tab2 = num2;
+        tab1 = num1;
+    };
+    // $: if (($data.results && !tab1) || !tab2) {
+    //     for (let i = 0; i < $data.services.length; i++) {
+    //         if (
+    //             $data.services[i].monthly.VisibilityTab == true &&
+    //             $data.services[i].yearly.VisibilityTab == true
+    //         ) {
+    //             tab1 = "1";
+    //             tab2 = "2";
+    //         } else if (
+    //             $data.services[i].monthly.VisibilityTab == false &&
+    //             $data.services[i].yearly.VisibilityTab == true
+    //         ) {
+    //             tab1 = "1";
+    //             tab2 = "2";
+    //         } else if (
+    //             $data.services[i].monthly.VisibilityTab == true &&
+    //             $data.services[i].yearly.VisibilityTab == false
+    //         ) {
+    //             tab1 = "2";
+    //             tab2 = "1";
+    //         } else {
+    //             tab1 = "2";
+    //             tab2 = "1";
+    //         }
+    //     }
+    // }
 </script>
 
 <!------ html ------->
-{#if $loading && !token}
+{#if $loading}
     <h1>loading..</h1>
 {:else if $error}
     <h1>{error}</h1>
 {:else if $data}
-    {#key token}
+    {#key $apiToken}
         <div class="meter-card">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div
@@ -127,8 +145,9 @@
                                     <th>Previous Reading</th>
                                     <th>Total Used</th>
                                 </tr>
-                                {#each Object.values(paginatedItems) as row}
-                                    <!-- {#each Object.values(tableData) as row} -->
+                                <!-- div  -->
+
+                                {#each items as row}
                                     <tr
                                         class="table-row"
                                         on:click={() => {
@@ -140,7 +159,6 @@
                                         {/each}
                                     </tr>
                                 {/each}
-                                <!-- {/each} -->
                                 {#if $data.meterLocation}
                                     <div id="location">
                                         <span
@@ -153,16 +171,7 @@
                         {/if}
                     {/if}
                 </div>
-                <div class="options">
-                    <!-- <LightPaginationNav
-                    totalItems={items.length}
-                    {pageSize}
-                    {currentPage}
-                    limit={1}
-                    showStepOptions={true}
-                    on:setPage={(e) => (currentPage = e.detail.page)}
-                /> -->
-                </div>
+                <div class="options" />
                 <div
                     id="meter-tab-container"
                     transition:slide={{ duration: 300 }}
@@ -192,9 +201,15 @@
                         />
                     </div>
                     <div id={"meter-tab1" + tab1}>
+                        {#if selectedMeter.settings.gas.data.length == 0}
+                            <h1 class="no-data">No Data to display</h1>
+                        {/if}
                         <div class="chart" use:chart={options} />
                     </div>
                     <div id={"meter-tab1" + tab2}>
+                        {#if selectedMeter.settings.gas.data.length == 0 && selectedMeter.settings.tempereature.data.length == 0}
+                            <h1 class="no-data">No Data to display</h1>
+                        {/if}
                         <div class="chart" use:chart={options} />
                     </div>
                 </div>
@@ -214,18 +229,28 @@
     {/key}
 {/if}
 
-<style scoped>
-    @font-face {
-        font-family: "Interstate";
-        src: url("../../assets/fonts/Interstate.ttf") format("truetype");
-    }
+<style lang="scss">
     * {
         font-family: "Interstate";
+    }
+    .no-data {
+        position: absolute;
+        left: 41.24%;
+        right: 37.43%;
+        top: 42.91%;
+        bottom: 45.6%;
+        font-weight: 300;
+        font-size: 32px;
+        line-height: 38px;
+        letter-spacing: -0.02em;
+        color: #6c6c6c;
+        z-index: 1;
     }
     #meter-header {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        cursor: pointer;
     }
     .meter-card {
         display: flex;
@@ -422,6 +447,7 @@
     }
     #meter-tab12 {
         display: flex;
+        position: relative;
     }
     /*--------*/
     .information-box {

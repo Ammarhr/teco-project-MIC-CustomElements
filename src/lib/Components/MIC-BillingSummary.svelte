@@ -14,7 +14,7 @@
     eventsDomain,
     showToolTipDetails,
   } from "../../js/store";
-  // export let item = { name: "Item" };
+
   let toggleArray = [];
 
   //mocking data
@@ -23,7 +23,6 @@
   ///////// acordion functionality
   import { onMount } from "svelte";
   let isOpen = false;
-  let subIsOpen = true;
   let styleToggleArr = [];
   let billsObjectsArray = [];
 

@@ -86,9 +86,7 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
         series: seriesArr,
         chart: {
             width: width + 5,
-            // height: "auto",
             type: "radialBar",
-            offsetY: -10,
         },
         plotOptions: {
             radialBar: {
@@ -102,12 +100,12 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
                     name: {
                         fontSize: "16px",
                         color: "#6C6C6C",
-                        offsetY: 40,
+                        offsetY: 15,
                         fontFamily: "Interstate",
                     },
                     value: {
-                        offsetY: 0,
-                        fontSize: "22px",
+                        offsetY: -25,
+                        fontSize: "18px",
                         color: "#005FAA",
                         fontFamily: "Interstate",
                         formatter: function (val) {
@@ -154,6 +152,9 @@ export const renderMixChart = (data, labels, colorsArr, width, height, unit) => 
             strokeDashArray: 50,
             strokeWidth: 3,
             strokeColors: "#FF832B",
+            customHTML: function() {
+                return '<span style="width:14px; height: 5px; border: 2px solid #FF832B;"></span>'
+              }
         },
         plotOptions: {
             bar: {
@@ -178,13 +179,7 @@ export const renderMixChart = (data, labels, colorsArr, width, height, unit) => 
         legend: {
             show: true,
             horizontalAlign: 'right',
-            markers: {
-                width: 12,
-                height: 2,
-                strokeWidth: 0,
-                strokeColor: '#fff',
-                radius: 0,
-            },
+
         },
 
         xaxis: {
@@ -213,7 +208,7 @@ export const renderMixChart = (data, labels, colorsArr, width, height, unit) => 
                 formatter: function (val) {
                     return val;
                 },
-            },
+            }   
         },
     }
     return options;
