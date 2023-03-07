@@ -50,7 +50,7 @@
             [gas, tempereature],
             x,
             ["#044F8D"],
-            "1210px",
+            "100%",
             650
         );
     }
@@ -76,32 +76,37 @@
         tab2 = num2;
         tab1 = num1;
     };
-    // $: if (($data.results && !tab1) || !tab2) {
-    //     for (let i = 0; i < $data.services.length; i++) {
-    //         if (
-    //             $data.services[i].monthly.VisibilityTab == true &&
-    //             $data.services[i].yearly.VisibilityTab == true
-    //         ) {
-    //             tab1 = "1";
-    //             tab2 = "2";
-    //         } else if (
-    //             $data.services[i].monthly.VisibilityTab == false &&
-    //             $data.services[i].yearly.VisibilityTab == true
-    //         ) {
-    //             tab1 = "1";
-    //             tab2 = "2";
-    //         } else if (
-    //             $data.services[i].monthly.VisibilityTab == true &&
-    //             $data.services[i].yearly.VisibilityTab == false
-    //         ) {
-    //             tab1 = "2";
-    //             tab2 = "1";
-    //         } else {
-    //             tab1 = "2";
-    //             tab2 = "1";
-    //         }
-    //     }
-    // }
+
+    let currentPage = 1;
+    let pageSize = 10;
+    let data1 = [];
+
+    function setCurrentPage(page) {
+        currentPage = page;
+    }
+
+    function nextPage() {
+        if (currentPage < totalPages()) {
+            currentPage++;
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+        }
+    }
+
+    function totalPages() {
+        return Math.ceil(data.length / pageSize);
+    }
+
+    function getData() {
+        // fetch data from an API or other data source
+        data1 = [1, 8, 6, 8];
+    }
+
+    onMount(getData);
 </script>
 
 <!------ html ------->
@@ -145,8 +150,6 @@
                                     <th>Previous Reading</th>
                                     <th>Total Used</th>
                                 </tr>
-                                <!-- div  -->
-
                                 {#each items as row}
                                     <tr
                                         class="table-row"

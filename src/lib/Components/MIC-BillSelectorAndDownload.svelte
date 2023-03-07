@@ -17,7 +17,7 @@
     eventsDomain,
     newToken,
   } from "../../js/store";
-
+  import MicSunSelect from "./MIC-SunSelect.svelte";
   // state
   let selectedBill;
   let selectedLabelBill;
@@ -40,7 +40,7 @@
       newToken.set("");
       getToken(
         $apiToken,
-        // "../../data/Token.son"
+        // "../../data/Token.json"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
       );
       setTimeout(() => {

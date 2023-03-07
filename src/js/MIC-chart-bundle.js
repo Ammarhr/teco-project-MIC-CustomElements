@@ -1,5 +1,4 @@
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
-
     let options = {
         series: data,
         fill: {
@@ -73,7 +72,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
             labels: {
                 show: true,
                 formatter: function ( /** @type {Number} */ val) {
-                    return val;
+                    return Math.floor(val);
                 },
             },
         },
@@ -152,9 +151,9 @@ export const renderMixChart = (data, labels, colorsArr, width, height, unit) => 
             strokeDashArray: 50,
             strokeWidth: 3,
             strokeColors: "#FF832B",
-            customHTML: function() {
+            customHTML: function () {
                 return '<span style="width:14px; height: 5px; border: 2px solid #FF832B;"></span>'
-              }
+            }
         },
         plotOptions: {
             bar: {
@@ -208,7 +207,7 @@ export const renderMixChart = (data, labels, colorsArr, width, height, unit) => 
                 formatter: function (val) {
                     return val;
                 },
-            }   
+            }
         },
     }
     return options;

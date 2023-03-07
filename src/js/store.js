@@ -38,7 +38,8 @@ export const getDate = derived(
     date,
     $date => $date
 );
-
+//* Sunselect array;
+export const sunSelectServicesArray = writable([]);
 //* fetch function
 export const generalErr = writable(false);
 

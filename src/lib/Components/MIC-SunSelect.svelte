@@ -12,8 +12,11 @@
         apiDomain,
         eventsDomain,
         newToken,
+        sunSelectServicesArray,
     } from "../../js/store";
     import { onMount } from "svelte";
+    export let contractnum;
+
     let arrayOfToggles = [];
     let newTokenTrigger;
     let sunSelectData;
@@ -23,41 +26,17 @@
         arrayOfToggles[i] = !arrayOfToggles[i];
     };
     ////////////////////////
-    const [data, loading, error, get] = fetchstore();
-    onMount(() => {
-        if ($apiToken && !sunSelectData) {
-            get(
-                $apiToken,
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-                // "../../data/sunSelect.json"
-            );
-        }
-        newTokenTrigger = $apiToken;
-    });
-    $: if (
-        $newToken &&
-        $newToken.token &&
-        (newTokenTrigger == $apiToken || newTokenTrigger !== $newToken.token)
-    ) {
-        get(
-            $newToken.token,
-            // "../../data/yearlyEnergy.json"
-            `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-        );
-        newTokenTrigger = $newToken.token;
-    }
-    $: if ($data && $data.SunSelect) {
-        sunSelectData = $data.SunSelect;
-        for (let i = 0; i < sunSelectData.length; i++) {
+    $: if (contractnum && contractnum.length > 0) {
+        // sunSelectServicesArray.set($data.SunSelect);
+        // console.log($sunSelectServicesArray);
+        for (let i = 0; i < contractnum.length; i++) {
             arrayOfToggles.push(true);
         }
     }
 </script>
 
-{#if $loading}
-    <mic-loading />
-{:else if sunSelectData && sunSelectData[0]}
-    {#each sunSelectData as sunSelectObj, i}
+{#if contractnum && contractnum[0]}
+    {#each contractnum as sunSelectObj, i}
         {#if sunSelectObj.SunSelectValue && sunSelectObj.SunSelectValue !== ""}
             <div class="card">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -82,7 +61,10 @@
                         <h2 id="percentage">
                             {#if sunSelectObj.SunSelectValue.includes("%")}
                                 {sunSelectObj.SunSelectValue.split("%")[0]}
-                                <img src={`${$apiDomain}/micwc-external/assets/percentage-icon.d50d3669.svg`} alt="" />
+                                <img
+                                    src={`${$apiDomain}/micwc-external/assets/percentage-icon.d50d3669.svg`}
+                                    alt=""
+                                />
                             {:else}
                                 {sunSelectObj.SunSelectValue}
                             {/if}

@@ -15,6 +15,7 @@
   import MicBillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import MicToolTipDetails from "./lib/Components/MIC-ToolTipDetails.svelte";
   import MicPagination from "./lib/Components/mic-pagination.svelte";
+  import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -24,7 +25,6 @@
     setEventDomain,
     newToken,
   } from "./js/store";
-  import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
   export let token;
   export let domain;
   export let eventdomain;
@@ -36,9 +36,9 @@
     setDomain(domain);
     setEventDomain(eventdomain);
   }
-  $: if ($showToolTipDetails) {
-    console.log("wrapper", $showToolTipDetails);
-  }
+  // $: if ($showToolTipDetails) {
+  //   console.log("wrapper", $showToolTipDetails);
+  // }
   onMount(() => {
     generalErr.set(false);
     newToken.set("");
@@ -50,7 +50,7 @@
 {#key $showToolTipDetails}
   {#if token && domain && eventdomain && $generalErr !== true && $showToolTipDetails !== true}
     <div class="wrapper">
-      <mic-headerinformation />
+      <!-- <mic-headerinformation /> -->
       <!-- <MicHeaderInformation /> -->
       <div class="important-balance">
         <div class="balance">
@@ -73,8 +73,7 @@
           <mic-sunselect />
           <mic-yearlyenergy />
           <MicInsights />
-          <!-- <MicSunSelect />
-          <MicYearlyEnergy /> -->
+          <!-- <MicYearlyEnergy /> -->
           <!-- <MicBulkDownload /> -->
         </div>
       </div>
@@ -85,10 +84,10 @@
     </div>
   {:else if $generalErr === true}
     <mic-generalerror {token} />
-  {:else if $showToolTipDetails === true}
+    <!-- {:else if $showToolTipDetails === true}
     <div class="wrapper">
       <MicToolTipDetails />
-    </div>
+    </div> -->
   {/if}
 {/key}
 

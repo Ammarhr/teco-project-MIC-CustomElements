@@ -1,0 +1,284 @@
+[
+    {
+      "Lable": "Electric Service",
+      "Value": "",
+      "ToolTip": "",
+      "Order": 1,
+      "Color": "",
+      "IconPath": "",
+      "FontSize": 0,
+      "IsItalic": false,
+      "SectionType": "Service",
+      "IsBreakdown": false,
+      "Section_Level1s": [
+        {
+          "Lable": "",
+          "Value": "5100491072",
+          "ToolTip": "",
+          "Order": 1,
+          "Color": "",
+          "IconPath": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Config",
+          "IsBreakdown": false
+        },
+        {
+          "Lable": "",
+          "Order": 2,
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Charge_Group",
+          "IsBreakdown": false,
+          "Section_Level2s": [
+            {
+              "Value": "Basic Service Charge",
+              "Order": 1,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "$15.12",
+              "Order": 4,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            }
+          ]
+        },
+        {
+          "Lable": "",
+          "Order": 2,
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Charge_Group",
+          "IsBreakdown": false,
+          "Section_Level2s": [
+            {
+              "Value": "Energy Charge",
+              "Order": 1,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            }
+          ]
+        },
+        {
+          "Lable": "",
+          "Order": 2,
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Charge_Group",
+          "IsBreakdown": false,
+          "Section_Level2s": [
+            {
+              "Value": "First 1,000 kWh",
+              "Order": 1,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "1,000 kWh",
+              "Order": 2,
+              "FontSize": 0,
+              "IsItalic": true,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "@ $0.05674/kWh",
+              "Order": 3,
+              "FontSize": 0,
+              "IsItalic": true,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "$56.74",
+              "Order": 4,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            }
+          ]
+        },
+        {
+          "Lable": "",
+          "Order": 2,
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Charge_Group",
+          "IsBreakdown": false,
+          "Section_Level2s": [
+            {
+              "Value": "Above 1,000 kWh",
+              "Order": 1,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "434 kWh",
+              "Order": 2,
+              "FontSize": 0,
+              "IsItalic": true,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "@ $0.06674/kWh",
+              "Order": 3,
+              "FontSize": 0,
+              "IsItalic": true,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "$28.97",
+              "Order": 4,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            }
+          ]
+        },
+        {
+          "Lable": "",
+          "Order": 2,
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Charge_Group",
+          "IsBreakdown": false,
+          "Section_Level2s": [
+            {
+              "Value": "Fuel Charge",
+              "Order": 1,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "717 kWh",
+              "Order": 2,
+              "FontSize": 0,
+              "IsItalic": true,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "@ $0.02913/kWh",
+              "Order": 3,
+              "FontSize": 0,
+              "IsItalic": true,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "$20.89",
+              "Order": 4,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            }
+          ]
+        },
+        {
+          "Lable": "",
+          "Order": 2,
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Charge_Group",
+          "IsBreakdown": false,
+          "Section_Level2s": [
+            {
+              "Value": "Sun Select Charge",
+              "Order": 1,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "717 kWh",
+              "Order": 2,
+              "FontSize": 0,
+              "IsItalic": true,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "@ $0.06300/kWh",
+              "Order": 3,
+              "FontSize": 0,
+              "IsItalic": true,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "$45.17",
+              "Order": 4,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            }
+          ]
+        },
+        {
+          "Lable": "",
+          "Order": 2,
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Charge_Group",
+          "IsBreakdown": false,
+          "Section_Level2s": [
+            {
+              "Value": "Florida Gross Receipt Tax",
+              "Order": 1,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            },
+            {
+              "Value": "$4.28",
+              "Order": 4,
+              "FontSize": 0,
+              "IsItalic": false,
+              "SectionType": "Charge",
+              "IsBreakdown": false
+            }
+          ]
+        },
+        {
+          "Lable": "Electric Charges Subtotal",
+          "Value": "$171.17",
+          "Order": 3,
+          "FontSize": 0,
+          "IsItalic": false,
+          "SectionType": "Total",
+          "IsBreakdown": false
+        }
+      ]
+    },
+    {
+      "Lable": "Total",
+      "Value": "$198.97",
+      "Order": 2,
+      "FontSize": 0,
+      "IsItalic": false,
+      "SectionType": "Total",
+      "IsBreakdown": false
+    }
+  ]

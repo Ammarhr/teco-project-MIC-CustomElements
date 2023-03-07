@@ -14,6 +14,7 @@
   // import MicLoading from "./MIC-Loading.svelte";
   // import MicRenderError from "./MIC-RenderError.svelte";
   import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
+  import MicSunSelect from "./MIC-SunSelect.svelte";
   // import MicTabs from "./MIC-Tabs.svelte";
 
   ///////// js files (store & chart bundles)
@@ -28,21 +29,23 @@
     apiToken,
     latestBill,
     eventsDomain,
-    date,
-    CopmarsionDate,
+    sunSelectServicesArray,
   } from "../../js/store";
   import { onMount } from "svelte";
-
   ///// important variables
   let toggleArray = []; // array of toggle statuses
-  let styleToggleArr = []; // array of toggle styles
+  let styleToggleArr = []; // array of toggle style
+  let tabsToggleArr = [];
+  let sunSelectArray = [];
+  let sunArrayVal;
+  let recoToken;
   let isOpen = true; // toggle card status
   let svgId = "rotate-svg-" + isOpen; // toggle button rotate ID
   let avgClass = "red"; //toggle style class (complete it later)
-  let chartWidth = 385; // the width of the charts
+  let chartWidth = 310; // the width of the charts
   let tries = 3;
   const [data, loading, error, get] = fetchstore(); // store fetch
-  let recoToken;
+  const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
   onMount(() => {
     if (
@@ -57,11 +60,26 @@
         "../../../data/DemandInsight.json"
         // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
       );
+      sunget(
+        $apiToken,
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+        "../../data/sunSelect.json"
+      );
       tries--;
     }
+
+    /// sunSelect fetch:
+    if ($apiToken && !sunSelectArray) {
+      console.log("this is new call");
+      sunget(
+        $apiToken,
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+        "../../data/sunSelect.json"
+      );
+    }
+    //////
     recoToken = $apiToken;
   });
-
   $: if (
     $newToken &&
     $newToken.token &&
@@ -71,12 +89,11 @@
       $newToken.token,
       // "../../../data/Insights.json"
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
-    );
-    recoToken = $newToken.token;
-    // console.info("this is from new token insights")
-    setTimeout(() => {
+    ).then(() => {
       tabsToggleArr = [];
-    }, 800);
+      sunSelectArray = [];
+    });
+    recoToken = $newToken.token;
   }
 
   ///////// acordion functionality
@@ -92,7 +109,22 @@
     }
   };
   ////////////////////////
-  let tabsToggleArr = [];
+  let newArr;
+  $: if (
+    $data.services &&
+    $data.services.length > 0 &&
+    $sundata.SunSelect &&
+    $sundata.SunSelect.length > 0
+  ) {
+    newArr = $sundata.SunSelect;
+    for (let i = 0; i < $data.services.length; i++) {
+      sunArrayVal = newArr.filter((results) => {
+        return $data.services[i].BillContractNo == results.SunSelectContract;
+      });
+      sunSelectArray.push(sunArrayVal);
+    }
+  }
+
   $: if ($data.services && !tabsToggleArr[0]) {
     tabsToggleArr = [];
     for (let i = 0; i < $data.services.length; i++) {
@@ -145,11 +177,9 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div id="header" on:click={() => toggle(i)}>
           <h5 class="insights-title">MY BILLING INSIGHTS</h5>
-
-          <!-- <img src={dropDown} alt="" id={`${svgId}${toggleArray[i]}`} /> -->
           <img
             src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
-            alt=""
+            alt="toggle"
             id={`${svgId}${toggleArray[i]}`}
           />
         </div>
@@ -199,18 +229,31 @@
           {#if insightsService?.yearly?.VisibilityTab == true}
             <div id={"tab1" + tabsToggleArr[i][0]}>
               <div class="chart-container">
-                <div
-                  use:chart={renderBarChart(
-                    [insightsService?.yearly?.y],
-                    insightsService?.yearly?.x,
-                    ["#005FAA", "#B1DBFD"],
-                    "100%",
-                    350,
-                    ` ${insightsService?.yearly?.unit}`,
-                    insightsService?.yearly?.y.data[0] +
-                      insightsService?.yearly?.y.data[1]
-                  )}
-                />
+                {#if insightsService?.yearly?.y.data[0] > insightsService?.yearly?.y.data[1]}
+                  <div
+                    use:chart={renderBarChart(
+                      [insightsService?.yearly?.y],
+                      insightsService?.yearly?.x,
+                      ["#005FAA", "#B1DBFD"],
+                      chartWidth,
+                      350,
+                      ` ${insightsService?.yearly?.unit}`,
+                      insightsService?.yearly?.y.data[0] + 150
+                    )}
+                  />
+                {:else}
+                  <div
+                    use:chart={renderBarChart(
+                      [insightsService?.yearly?.y],
+                      insightsService?.yearly?.x,
+                      ["#005FAA", "#B1DBFD"],
+                      chartWidth,
+                      350,
+                      ` ${insightsService?.yearly?.unit}`,
+                      insightsService?.yearly?.y.data[1] + 150
+                    )}
+                  />
+                {/if}
                 <div class="content">
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
@@ -258,24 +301,26 @@
                     {/if}
                   </div>
                 </div>
-                <div class="content">
-                  <h6 class="insights-label">Avg. Temp.</h6>
-                  <div class="val-content">
-                    <p class="insights-value">
-                      {insightsService?.yearly?.valueTemp + "°"}
-                    </p>
-                    <span
-                      class="red"
-                      style="background: #E6EFF7; border: 1px solid #005FAA;"
-                    >
-                      <img
-                        src={`${$apiDomain}/micwc-external/assets/arrowUp.7240fadd.svg`}
-                        class="arrow"
-                        alt=""
-                      />{insightsService?.yearly?.valueTemp + "°"}</span
-                    >
+                {#if insightsService?.yearly?.valueTemp}
+                  <div class="content">
+                    <h6 class="insights-label">Avg. Temp.</h6>
+                    <div class="val-content">
+                      <p class="insights-value">
+                        {insightsService?.yearly?.valueTemp + "°"}
+                      </p>
+                      <span
+                        class="red"
+                        style="background: #E6EFF7; border: 1px solid #005FAA;"
+                      >
+                        <img
+                          src={`${$apiDomain}/micwc-external/assets/arrowUp.7240fadd.svg`}
+                          class="arrow"
+                          alt=""
+                        />{insightsService?.yearly?.valueTemp + "°"}</span
+                      >
+                    </div>
                   </div>
-                </div>
+                {/if}
               </div>
               {#if insightsService?.yearly && insightsService?.yearly?.CurrentFactorValue && insightsService?.yearly?.CurrentFactorValue !== ""}
                 <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
@@ -315,6 +360,7 @@
                         <img
                           src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
                           class="arrow"
+                          alt="arrow icon"
                         />
                         {Math.abs(
                           insightsService.yearly?.LoadFactorArrowComparison
@@ -353,18 +399,31 @@
           {#if insightsService?.monthly?.VisibilityTab == true}
             <div id={"tab1" + tabsToggleArr[i][1]}>
               <div class="chart-container">
-                <div
-                  use:chart={renderBarChart(
-                    [insightsService?.monthly?.y],
-                    insightsService?.monthly?.x,
-                    ["#005FAA", "#B1DBFD"],
-                    "100%",
-                    350,
-                    ` ${insightsService?.monthly?.unit}`,
-                    insightsService?.monthly?.y.data[0] +
-                      insightsService?.monthly?.y.data[1]
-                  )}
-                />
+                {#if insightsService?.monthly?.y.data[0] > insightsService?.monthly?.y.data[1]}
+                  <div
+                    use:chart={renderBarChart(
+                      [insightsService?.monthly?.y],
+                      insightsService?.monthly?.x,
+                      ["#005FAA", "#B1DBFD"],
+                      chartWidth,
+                      350,
+                      ` ${insightsService?.monthly?.unit}`,
+                      insightsService?.monthly?.y.data[0] + 150
+                    )}
+                  />
+                {:else}
+                  <div
+                    use:chart={renderBarChart(
+                      [insightsService?.monthly?.y],
+                      insightsService?.monthly?.x,
+                      ["#005FAA", "#B1DBFD"],
+                      chartWidth,
+                      350,
+                      ` ${insightsService?.monthly?.unit}`,
+                      insightsService?.monthly?.y.data[1] + 150
+                    )}
+                  />
+                {/if}
                 <div class="content">
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
@@ -380,6 +439,7 @@
                         <img
                           src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
                           class="arrow"
+                          alt="arrow icon"
                         />
                         {Math.abs(
                           insightsService.monthly?.percentageConsumption
@@ -411,24 +471,26 @@
                     {/if}
                   </div>
                 </div>
-                <div class="content">
-                  <h6 class="insights-label">Avg. Temp.</h6>
-                  <div class="val-content">
-                    <p class="insights-value">
-                      {insightsService?.monthly?.valueTemp + "°"}
-                    </p>
-                    <span
-                      class="red"
-                      style="background: #E6EFF7; border: 1px solid #005FAA;"
-                    >
-                      <img
-                        src={`${$apiDomain}/micwc-external/assets/arrowUp.7240fadd.svg`}
-                        class="arrow"
-                        alt=""
-                      />{insightsService?.monthly?.valueTemp + "°"}</span
-                    >
+                {#if insightsService?.monthly?.valueTemp}
+                  <div class="content">
+                    <h6 class="insights-label">Avg. Temp.</h6>
+                    <div class="val-content">
+                      <p class="insights-value">
+                        {insightsService?.monthly?.valueTemp + "°"}
+                      </p>
+                      <span
+                        class="red"
+                        style="background: #E6EFF7; border: 1px solid #005FAA;"
+                      >
+                        <img
+                          src={`${$apiDomain}/micwc-external/assets/arrowUp.7240fadd.svg`}
+                          class="arrow"
+                          alt=""
+                        />{insightsService?.monthly?.valueTemp + "°"}</span
+                      >
+                    </div>
                   </div>
-                </div>
+                {/if}
               </div>
               {#if insightsService?.monthly && insightsService?.monthly?.CurrentFactorValue && insightsService?.monthly?.CurrentFactorValue !== ""}
                 <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
@@ -468,6 +530,7 @@
                         <img
                           src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
                           class="arrow"
+                          alt="arrow icon"
                         />
                         {Math.abs(
                           insightsService.monthly?.LoadFactorArrowComparison
@@ -517,6 +580,13 @@
           {/if}
         </div>
       </div>
+    {/if}
+    {#if $sunloading}
+      <mic-loading />
+    {:else if $sunerror}
+      <h1 />
+    {:else if sunSelectArray && sunSelectArray.length > 0}
+      <MicSunSelect contractnum={sunSelectArray[i]} />
     {/if}
   {/each}
 {:else}
