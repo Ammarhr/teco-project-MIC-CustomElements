@@ -12,8 +12,8 @@
         "percentageTemp": 5,
         "y": {
           "data": [
-            2500,
-            1000
+            64,
+            34
           ]
         },
         "x": [
@@ -29,7 +29,7 @@
         "DemandUnit": "KW"
       },
       "yearly": {
-        "VisibilityTab": false,
+        "VisibilityTab": true,
         "unit": "KWH",
         "valueConsumption": 1505,
         "percentageConsumption": -80,
@@ -37,8 +37,8 @@
         "percentageTemp": 6,
         "y": {
           "data": [
-            5099,
-            5098
+            2,
+            1
           ]
         },
         "x": [

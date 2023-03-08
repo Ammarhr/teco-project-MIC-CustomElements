@@ -6,9 +6,9 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
         },
         colors: colorsArr,
         chart: {
-            type: "bar",
+            type: 'bar',
             height: height,
-            width: width,
+            width: "100%",
             toolbar: {
                 show: false,
             },

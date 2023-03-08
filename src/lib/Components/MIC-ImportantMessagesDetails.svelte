@@ -27,7 +27,7 @@
                 null,
                 {
                     EventCode: "IN_Important_Messages_view",
-                    Outcome: "",
+                    Outcome: `Number Of Messsages: ${messages.length}`,
                 }
             );
         } else {

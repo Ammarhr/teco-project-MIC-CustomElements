@@ -57,25 +57,15 @@
     ) {
       get(
         $apiToken,
-        "../../../data/DemandInsight.json"
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
+        // "../../../data/DemandInsight.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
       );
       sunget(
         $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-        "../../data/sunSelect.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+        // "../../data/sunSelect.json"
       );
       tries--;
-    }
-
-    /// sunSelect fetch:
-    if ($apiToken && !sunSelectArray) {
-      console.log("this is new call");
-      sunget(
-        $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-        "../../data/sunSelect.json"
-      );
     }
     //////
     recoToken = $apiToken;
@@ -91,6 +81,13 @@
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
     ).then(() => {
       tabsToggleArr = [];
+    });
+    /// sunSelect fetch:
+    sunget(
+      $apiToken,
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+      // "../../data/sunSelect.json"
+    ).then(() => {
       sunSelectArray = [];
     });
     recoToken = $newToken.token;
@@ -238,7 +235,8 @@
                       chartWidth,
                       350,
                       ` ${insightsService?.yearly?.unit}`,
-                      insightsService?.yearly?.y.data[0] + 150
+                      insightsService?.yearly?.y.data[0] +
+                        insightsService?.yearly?.y.data[0] / 10
                     )}
                   />
                 {:else}
@@ -250,7 +248,8 @@
                       chartWidth,
                       350,
                       ` ${insightsService?.yearly?.unit}`,
-                      insightsService?.yearly?.y.data[1] + 150
+                      insightsService?.yearly?.y.data[1] +
+                        insightsService?.yearly?.y.data[1] / 10
                     )}
                   />
                 {/if}
@@ -328,8 +327,8 @@
                   <div class="insights-sub-container">
                     <div
                       use:chart={renderRadialBar(
-                        [insightsService?.yearly?.CurrentFactorValue],
-                        [insightsService?.yearly?.CurrentFactorDate],
+                        [insightsService?.yearly?.PreviousFactorValue],
+                        [insightsService?.yearly?.PreviousFactorDate],
                         250,
                         "#005FAA"
                       )}
@@ -338,8 +337,8 @@
                   <div
                     class="insights-sub-container"
                     use:chart={renderRadialBar(
-                      [insightsService?.yearly?.PreviousFactorValue],
-                      [insightsService?.yearly?.PreviousFactorDate],
+                      [insightsService?.yearly?.CurrentFactorValue],
+                      [insightsService?.yearly?.CurrentFactorDate],
                       250,
                       "#B1DBFD"
                     )}
@@ -408,7 +407,8 @@
                       chartWidth,
                       350,
                       ` ${insightsService?.monthly?.unit}`,
-                      insightsService?.monthly?.y.data[0] + 150
+                      insightsService?.monthly?.y.data[0] +
+                        insightsService?.monthly?.y.data[0] / 10
                     )}
                   />
                 {:else}
@@ -420,7 +420,8 @@
                       chartWidth,
                       350,
                       ` ${insightsService?.monthly?.unit}`,
-                      insightsService?.monthly?.y.data[1] + 150
+                      insightsService?.monthly?.y.data[1] +
+                        insightsService?.monthly?.y.data[1] / 10
                     )}
                   />
                 {/if}
@@ -498,8 +499,9 @@
                   <div class="insights-sub-container">
                     <div
                       use:chart={renderRadialBar(
-                        [insightsService?.monthly?.CurrentFactorValue],
-                        [insightsService?.monthly?.CurrentFactorDate],
+                        [insightsService?.monthly?.PreviousFactorValue],
+                        [insightsService?.monthly?.PreviousFactorDate],
+
                         250,
                         "#005FAA"
                       )}
@@ -508,8 +510,8 @@
                   <div
                     class="insights-sub-container"
                     use:chart={renderRadialBar(
-                      [insightsService?.monthly?.PreviousFactorValue],
-                      [insightsService?.monthly?.PreviousFactorDate],
+                      [insightsService?.monthly?.CurrentFactorValue],
+                      [insightsService?.monthly?.CurrentFactorDate],
                       250,
                       "#B1DBFD"
                     )}
@@ -586,7 +588,7 @@
     {:else if $sunerror}
       <h1 />
     {:else if sunSelectArray && sunSelectArray.length > 0}
-      <MicSunSelect contractnum={sunSelectArray[i]} />
+      <mic-sunselect contractnum={sunSelectArray[i]} />
     {/if}
   {/each}
 {:else}

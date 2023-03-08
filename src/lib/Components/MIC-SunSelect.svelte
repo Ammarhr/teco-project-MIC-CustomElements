@@ -58,17 +58,19 @@
                         class="sun-select-content"
                         transition:slide={{ duration: 300 }}
                     >
-                        <h2 id="percentage">
-                            {#if sunSelectObj.SunSelectValue.includes("%")}
+                        {#if sunSelectObj.SunSelectValue.includes("%")}
+                            <h2 id="percentage" style="font-size: 8.5rem;">
                                 {sunSelectObj.SunSelectValue.split("%")[0]}
                                 <img
                                     src={`${$apiDomain}/micwc-external/assets/percentage-icon.d50d3669.svg`}
                                     alt=""
                                 />
-                            {:else}
+                            </h2>
+                        {:else}
+                            <h2 id="percentage">
                                 {sunSelectObj.SunSelectValue}
-                            {/if}
-                        </h2>
+                            </h2>
+                        {/if}
                         <p>{sunSelectObj.SunSelectMessage}</p>
                     </div>
                     <div
@@ -165,7 +167,7 @@
         font-family: "Interstate";
         font-style: normal;
         font-weight: 700;
-        font-size: 70px;
+        font-size: 5.5rem;
         line-height: 106px;
         color: #005faa;
         margin: 0;

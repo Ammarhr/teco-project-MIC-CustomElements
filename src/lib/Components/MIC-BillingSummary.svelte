@@ -29,11 +29,17 @@
   ////////////////////////
   onMount(() => {
     if ($apiToken && $apiDomain && !$data.services) {
-      get($apiToken, "../../data/ChargeDetails.json");
+      get($apiToken, "../../data/BillingSummary.json");
     }
   });
 
-  $: if ($data && $data.services && typeof toggleArray[0] !== "boolean") {
+  $: if (
+    $data &&
+    $data.services &&
+    $data.services.length > 0 &&
+    typeof toggleArray[0] !== "boolean"
+  ) {
+    console.log("data from billing:", $data);
     for (let i = 0; i < $data.services.length; i++) {
       toggleArray.push(true);
       let billObj = {
@@ -45,6 +51,7 @@
       billsObjectsArray.push(billObj);
     }
   }
+
   const toggleContainer = (i) => {
     toggleArray[i] = !toggleArray[i];
 
@@ -56,6 +63,7 @@
     }
     console.log(toggleArray);
   };
+
   const subSectionToggle = (j, i) => {
     if (typeof billsObjectsArray[i].subSectionArray[j] !== "boolean")
       billsObjectsArray[i].subSectionArray.push(false);
@@ -64,10 +72,10 @@
       !billsObjectsArray[i].subSectionArray[j];
     if (!billsObjectsArray[i].subSectionArray[j]) {
       billsObjectsArray[i].subToggleStyleArray[j] =
-        "max-height: 200vh;opacity: 1;transition:200ms;";
+        "max-height: 200vh;opacity: 1;transition:200ms; ";
     } else {
       billsObjectsArray[i].subToggleStyleArray[j] =
-        "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
+        "opacity: 0;max-height: 0;margin: 0; transition:200ms; ";
     }
   };
 
@@ -94,8 +102,8 @@
   Error: {$error}
 {:else if $data.services}
   <div class="billing-container">
-    {#each $data.services as billService, i}
-      <div class="card">
+    <div class="card">
+      {#each $data.services as billService, i}
         <div
           id="bills-header"
           on:click={() => toggleContainer(i)}
@@ -105,114 +113,153 @@
           <img src={toggle} alt="" id={"rotate-svg-" + !toggleArray[i]} />
         </div>
         <!-- {#if toggleArray[i]} -->
-        <div style={styleToggleArr[i]}>
+        <div style={styleToggleArr[i]} class="bill-content">
           <h3 id="sectiontitle">
             <span
               ><img src={electricityIcon} alt="" style="width: 15px;" /></span
             >
-            {billService.title}
+            {billService.Lable}
           </h3>
-          <p id="comment">
-            Service Period: {billService.servicePeriod}
-          </p>
+          {#if billService.servicePeriod}
+            <p id="comment">
+              Service Period: {billService.servicePeriod}
+            </p>
+          {/if}
           <div id="content">
-            {#each billService.sections as section}
-              <img src="" alt="{section.title} icon" />
-              <p>{section.title}</p>
-              {#if section.controls}
-                {#each section.controls as control, j}
-                  <div class="row-container">
-                    <div class="row" id="daily-basic-service-charge">
-                      <p class="first-label">
-                        {control.label}
-                        {#if control.tooltip}
-                          <div class="tooltip-icon">
-                            <img
-                              src={toolTip}
-                              alt=""
-                              on:pointerenter={() => toolTipToggle(j, i)}
-                            />
-                            {#if billsObjectsArray[i].toolTipStylleArray[j]}
-                              <div
-                                class="tooltip-description"
-                                style={billsObjectsArray[i].toolTipStylleArray[
-                                  j
-                                ]}
-                              >
-                                Covers the costs of moving gas from its source
-                                to your premise, other than the cost of gas
-                                itself. <br />
-                                <a
-                                  href="#"
-                                  on:click={() => {
-                                    showToolTipDetails.set(true);
-                                  }}>UNDERSTANDING YOUR CHARGES</a
+            {#if billService.Section_Level1s}
+              {#each billService.Section_Level1s as section}
+              {console.log(section.ToolTip)}
+                {#if section.SectionType == "Charge_Group"}
+                  {#if section.Section_Level2s}
+                    <div class="charges-container">
+                      {#each section.Section_Level2s as level2Obj}
+                        <!-- {section.SectionType} -->
+                        {#if level2Obj.SectionType == "Charge"}
+                          {#if level2Obj.Order == 1}
+                            <p class={"level" + level2Obj.Order}>
+                              {level2Obj.Value}
+                              {#if section.ToolTip && section.ToolTip !== ""}
+                                <div class="tooltip-icon">
+                                  <img
+                                    src={toolTip}
+                                    alt=""
+                                    on:pointerenter={() => toolTipToggle(j, i)}
+                                  />
+                                  <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]}
+                                <div
+                                  class="tooltip-description"
+                                  style={billsObjectsArray[i]
+                                    .toolTipStylleArray[j]}
                                 >
-                                <!-- {control.tooltip} -->
-                              </div>
-                            {/if}
+                                  Covers the costs of moving gas from its source
+                                  to your premise, other than the cost of gas
+                                  itself. <br />
+                                  <a
+                                    href="#"
+                                    on:click={() => {
+                                      showToolTipDetails.set(true);
+                                    }}>UNDERSTANDING YOUR CHARGES</a
+                                  >
+                                </div>
+                              {/if} -->
+                                </div>
+                              {/if}
+                            </p>
+                          {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
+                            <div class="row" id="daily-basic-service-charge">
+                              <p class={"level2"}>
+                                {level2Obj.Value}
+                              </p>
+                            </div>
+                          {:else}
+                            <p class={"level" + level2Obj.Order}>
+                              {level2Obj.Value}
+                            </p>
+                          {/if}
+                        {/if}
+                      {/each}
+                    </div>
+                  {/if}
+                {:else if section.SectionType == "SubTotal"}
+                  <div class="sub-row total-row" id="electric-charges-subtotal">
+                    <p class="first-label">{section.Lable}</p>
+                    <p class="value">${section.Value}</p>
+                  </div>
+                {/if}
+                <!-- <img src="" alt="{section.title} icon" />
+              -->
+                <!-- {#if section.controls}
+                  {#each section.controls as control, j}
+                    <div class="row-container">
+                      <div class="row" id="daily-basic-service-charge">
+                        <p class="sub-label">{control.description}</p>
+                        <p class="value">{control.value}</p>
+                      </div>
+                      {#if control.breakdown}
+                        <div
+                          class="breakdown-header"
+                          on:click={() => {
+                            subSectionToggle(j, i);
+                          }}
+                        >
+                          <h6>View Breakdown</h6>
+                          <img
+                            src={breakdownToggle}
+                            alt=""
+                            id={"rotate-svg-" +
+                              billsObjectsArray[i].subSectionArray[j]}
+                          />
+                        </div>
+                        <div
+                          class="break-down"
+                          style={billsObjectsArray[i].subToggleStyleArray[j]}
+                        >
+                          {#each control.breakdown as breakdown}
+                            <div class="sub-container">
+                              <h6 class="breakdown-label">{breakdown.label}</h6>
+                              <h6 class="breakdown-description">
+                                {breakdown.description}
+                              </h6>
+                              <h6 class="breakdown-values">
+                                {breakdown.value}
+                              </h6>
+                            </div>
+                          {/each}
+                        </div>
+                        {#if control.isTotal}
+                          <div
+                            class="sub-row total-row"
+                            id="electric-charges-subtotal"
+                          >
+                            <p class="first-label">{control.totalTitle}</p>
+                            <p class="value">${control.totalValue}</p>
                           </div>
                         {/if}
-                      </p>
-                      <p class="sub-label">{control.description}</p>
-                      <p class="value">{control.value}</p>
-                    </div>
-                    {#if control.breakdown}
-                      <div
-                        class="breakdown-header"
-                        on:click={() => {
-                          subSectionToggle(j, i);
-                        }}
-                      >
-                        <h6>View Breakdown</h6>
-                        <img
-                          src={breakdownToggle}
-                          alt=""
-                          id={"rotate-svg-" +
-                            billsObjectsArray[i].subSectionArray[j]}
-                        />
-                      </div>
-                      <div
-                        class="break-down"
-                        style={billsObjectsArray[i].subToggleStyleArray[j]}
-                      >
-                        {#each control.breakdown as breakdown}
-                          <div class="sub-container">
-                            <h6 class="breakdown-label">{breakdown.label}</h6>
-                            <h6 class="breakdown-description">
-                              {breakdown.description}
-                            </h6>
-                            <h6 class="breakdown-values">
-                              {breakdown.value}
-                            </h6>
-                          </div>
-                        {/each}
-                      </div>
-                      {#if control.isTotal}
-                        <div
-                          class="sub-row total-row"
-                          id="electric-charges-subtotal"
-                        >
-                          <p class="first-label">{control.totalTitle}</p>
-                          <p class="value">${control.totalValue}</p>
-                        </div>
                       {/if}
-                    {/if}
-                  </div>
-                {/each}
-              {/if}
-            {/each}
+                    </div>
+                  {/each}
+                {/if} -->
+              {/each}
+            {/if}
           </div>
-          {#if billService.total}
+          <!-- {#if billService.total}
             <div class="total">
               <h6 class="total-label">Total Current Charges</h6>
               <h6 class="total-value">${billService.total}</h6>
             </div>
+          {/if} -->
+          {#if i == $data.services.length - 1 && $data.total}
+            <div class="total">
+              <h6 class="total-label">{$data.total.Lable}</h6>
+              <h6 class="total-value">{$data.total.Value}</h6>
+            </div>
           {/if}
-          <!-- {/if} -->
+          {#if i < $data.services.length - 1}
+            <hr />
+          {/if}
         </div>
-      </div>
-    {/each}
+      {/each}
+    </div>
   </div>
 {/if}
 
@@ -254,11 +301,27 @@
       0 0
     );
   }
+  .bill-content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 26px;
+    hr {
+      height: 3px;
+      background-color: #eaecee;
+      border: none;
+    }
+  }
+  .charges-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eaecee;
+    padding: 10px 0 10px 0;
+  }
   .billing-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     min-width: 60%;
   }
   .breakdown-header {
@@ -276,11 +339,7 @@
     display: flex;
     align-items: center;
     color: #005faa;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
     padding: 10px;
-    margin: 0;
   }
   .break-down {
     padding: 16px 0px;
@@ -342,8 +401,7 @@
     padding: 0px;
     width: 100%;
     height: 40px;
-    order: 0;
-    flex-grow: 0;
+    margin-bottom: 24px;
   }
   /*-----------------------*/
   #rotate-svg-false {
@@ -412,7 +470,7 @@
     font-size: 12px;
   }
 
-  .sub-label {
+  .level2 {
     color: #005faa;
     font-style: italic;
     font-weight: 400;
@@ -426,25 +484,23 @@
     font-weight: 500;
   }
 
-  .first-label {
+  .level1 {
     font-weight: 400;
     font-size: 20px;
     line-height: 30px;
     color: #000000;
     padding: 5px 0;
     margin: 0;
-    text-align: left;
-    width: 50%;
   }
 
-  .value {
+  .level4 {
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;
     color: #000000;
+    margin: 0;
   }
   #electric-charges-subtotal {
-    margin-top: 10px;
     border-top: 2px solid #bbb;
   }
   #electric-charges-subtotal p {
