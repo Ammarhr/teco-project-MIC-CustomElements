@@ -5,7 +5,7 @@
 
   //svg imports
   import circyle from "../../assets/cr.svg";
-  import messageNotification from "../../assets/messages-notification.svg";
+  import messageNotification from "../../assets/envelope-solid.svg";
 
   //unreaded messages counter
   import {
@@ -47,7 +47,9 @@
     state.messages[0].message &&
     state.messages[0].message.length > 237
   ) {
-    message = state.messages[0].message.slice(0, 237) + "...";
+    message =
+      state.messages[0].message.slice(0, 237 - state.messages[0].Title.length) +
+      "...";
   } else if (
     state &&
     state.messages &&
@@ -68,39 +70,55 @@
   <mic-loading />
 {:else if $error}
   Error: {$error}
-{:else if state.messages && message && message !== ""}
+{:else if state.messages}
   <div class="container">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div id="message-header" on:click={toggle} aria-expanded={isOpen}>
       <div class="message-counter">
-        <img src={`${$apiDomain}/micwc-external/assets/messages-notification.26af3974.svg`} alt="" />
-        <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
+        {#if message || (message && message !== "")}
+          <img
+            src={`${$apiDomain}/micwc-external/assets/envelope-solid.ab8c231d.svg`}
+            alt=""
+          />
+          <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
+        {:else}
+          <img
+            src={`${$apiDomain}/micwc-external/assets/envelope-solid.ab8c231d.svg`}
+            alt=""
+          />
+          <span id="unreaded-msgs">&nbsp;{0}&nbsp;</span>
+        {/if}
       </div>
       <h4 id="title">Important Message</h4>
-      <img src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`} alt="" id={svgId} />
+      <img
+        src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+        alt=""
+        id={svgId}
+      />
     </div>
     {#if state.messages}
       {#if isOpen}
         <div class="message-body" transition:slide={{ duration: 300 }}>
-          <p class="msg-data">
-            {#if state.messages[0] && (state.messages[0].Title !== "") !== ""}
-              <span>
-                <span class="msg-title">
-                  {state.messages[0].Title}
+          {#if message && message !== ""}
+            <p class="msg-data">
+              {#if !state.messages[0].empty && state.messages[0] && (state.messages[0].Title !== "") !== ""}
+                <span>
+                  <span class="msg-title">
+                    {state.messages[0].Title}
+                  </span>
+                  {@html message}
                 </span>
+              {:else}
                 {@html message}
-              </span>
-            {:else}
-              {@html message}
-            {/if}
-          </p>
+              {/if}
+            </p>
+          {:else}
+            <p class="msg-data" style="height: 105px;">No Messages</p>
+          {/if}
         </div>
         <div class="message-footer">
-          {#if state.messages.length > 0 || state.messages[0].length > 237}
-            <mic-messagesdetails
-              messages={state.messages}
-              messagesCount={state.messages.length}
-            />
+          {#if (!state.messages[0].empty && state.messages.length > 0) || state.messages[0].length > 237}
+            <mic-messagesdetails messages={state.messages} />
             <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
           {/if}
         </div>
@@ -123,7 +141,7 @@
     box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
     background-color: white;
     overflow: hidden;
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 830px) {
       width: 100%;
     }
   }
@@ -146,6 +164,9 @@
       text-transform: uppercase;
       color: #005faa;
       margin: 0;
+      @media screen and (max-width: 4803px) {
+        margin-left: 28px;
+      }
     }
   }
 
@@ -154,7 +175,8 @@
   }
   #unreaded-msgs {
     position: absolute;
-    right: 0;
+    right: -10px;
+    top: -8px;
     color: #ffffff;
     background: #da1e28;
     border-radius: 50%;
@@ -168,10 +190,7 @@
     padding: 0px;
     gap: 499px;
     width: 392px;
-    height: auto;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    max-height: 310px;
   }
   .msg-data {
     font-style: normal;
@@ -181,8 +200,7 @@
     display: flex;
     align-items: center;
     color: rgb(0, 0, 0);
-    flex-grow: 0;
-    height: auto;
+    max-height: 310px;
   }
   .msg-title {
     font-weight: 700;

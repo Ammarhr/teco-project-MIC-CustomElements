@@ -35,6 +35,7 @@
                         {
                             "Value": "Basic Service Charge",
                             "Order": 1,
+                            "tooltip":"545",
                             "FontSize": 0,
                             "IsItalic": false,
                             "SectionType": "Charge",

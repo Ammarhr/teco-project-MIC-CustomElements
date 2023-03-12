@@ -46,15 +46,14 @@
     function toggleModal() {
         showModal = !showModal;
     }
-
+    
     // feedback fun
     const likeDislike = (e, id, i) => {
         let feedbackURL;
         arrOfPopUp[i] = !arrOfPopUp[i];
         thankMoadalShow = !thankMoadalShow;
-
-        feedbackURL = `${$eventsDomain}/rest/recommendationsfeedback/v1/Feedback?MessageId=${id}&Liked=${feedbackBolean}`;
-
+        
+        feedbackURL = `${$apiDomain}/api/ibill/webcomponents/v1/Post/Recommendationfeedback?MessageId=${id}&Liked=${feedbackBolean}`;
         setFeedback(token, feedbackURL);
 
         if (feedbackBolean == "true") {

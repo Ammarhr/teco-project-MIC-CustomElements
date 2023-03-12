@@ -102,8 +102,8 @@
   Error: {$error}
 {:else if $data.services}
   <div class="billing-container">
-    <div class="card">
-      {#each $data.services as billService, i}
+    {#each $data.services as billService, i}
+      <div class="card">
         <div
           id="bills-header"
           on:click={() => toggleContainer(i)}
@@ -128,7 +128,6 @@
           <div id="content">
             {#if billService.Section_Level1s}
               {#each billService.Section_Level1s as section}
-              {console.log(section.ToolTip)}
                 {#if section.SectionType == "Charge_Group"}
                   {#if section.Section_Level2s}
                     <div class="charges-container">
@@ -137,40 +136,41 @@
                         {#if level2Obj.SectionType == "Charge"}
                           {#if level2Obj.Order == 1}
                             <p class={"level" + level2Obj.Order}>
+                              <!-- {console.log(level2Obj.tooltip)} -->
                               {level2Obj.Value}
-                              {#if section.ToolTip && section.ToolTip !== ""}
+                              {#if level2Obj.tooltip && level2Obj.tooltip == ""}
                                 <div class="tooltip-icon">
                                   <img
                                     src={toolTip}
                                     alt=""
                                     on:pointerenter={() => toolTipToggle(j, i)}
                                   />
-                                  <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]}
-                                <div
-                                  class="tooltip-description"
-                                  style={billsObjectsArray[i]
-                                    .toolTipStylleArray[j]}
-                                >
-                                  Covers the costs of moving gas from its source
-                                  to your premise, other than the cost of gas
-                                  itself. <br />
-                                  <a
-                                    href="#"
-                                    on:click={() => {
-                                      showToolTipDetails.set(true);
-                                    }}>UNDERSTANDING YOUR CHARGES</a
-                                  >
-                                </div>
-                              {/if} -->
+                                  <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
+                                  <div class="tooltip-description">
+                                    <!-- style={billsObjectsArray[i]
+                                    .toolTipStylleArray[j]} -->
+                                    <div class="tooltip-con">
+                                      Covers the costs of moving gas from its
+                                      source to your premise, other than the
+                                      cost of gas itself. <br />
+                                      <a
+                                        href="#"
+                                        on:click={() => {
+                                          showToolTipDetails.set(true);
+                                        }}>UNDERSTANDING YOUR CHARGES</a
+                                      >
+                                    </div>
+                                  </div>
+                                  <!-- {/if}   -->
                                 </div>
                               {/if}
                             </p>
                           {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
-                            <div class="row" id="daily-basic-service-charge">
-                              <p class={"level2"}>
-                                {level2Obj.Value}
-                              </p>
-                            </div>
+                            <!-- <div class="row" id="daily-basic-service-charge"> -->
+                            <p class={"level" + level2Obj.Order}>
+                              {level2Obj.Value}
+                            </p>
+                            <!-- </div> -->
                           {:else}
                             <p class={"level" + level2Obj.Order}>
                               {level2Obj.Value}
@@ -183,7 +183,7 @@
                 {:else if section.SectionType == "SubTotal"}
                   <div class="sub-row total-row" id="electric-charges-subtotal">
                     <p class="first-label">{section.Lable}</p>
-                    <p class="value">${section.Value}</p>
+                    <p class="value">{section.Value}</p>
                   </div>
                 {/if}
                 <!-- <img src="" alt="{section.title} icon" />
@@ -258,8 +258,8 @@
             <hr />
           {/if}
         </div>
-      {/each}
-    </div>
+      </div>
+    {/each}
   </div>
 {/if}
 
@@ -269,20 +269,17 @@
   }
   .tooltip-icon {
     display: inline;
-    position: relative;
+    // position: relative;
     cursor: pointer;
   }
   .tooltip-description {
-    display: flex;
-    flex-direction: column;
     position: absolute;
-    bottom: 125%;
-    left: -156px;
+    right: -100%;
+    bottom: 100%;
     z-index: 1;
-    width: 441px;
+    min-width: 320px;
     border-radius: 6px;
     padding: 5px 0 32px 6px;
-    margin-left: -60px;
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
@@ -300,6 +297,18 @@
       0% 35%,
       0 0
     );
+
+    @media screen and (max-width: 480px) {
+      left: 0;
+      right: unset;
+    }
+    .tooltip-con {
+      padding: 8px;
+      > a {
+        text-decoration: none;
+        color: #005faa;
+      }
+    }
   }
   .bill-content {
     display: flex;
@@ -312,12 +321,20 @@
     }
   }
   .charges-container {
-    display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #eaecee;
     padding: 10px 0 10px 0;
+    display: grid;
+    grid-template-columns: 45% auto 1fr auto;
+    @media screen and (max-width: 767px) {
+      justify-content: unset;
+      align-items: center;
+      border-bottom: 1px solid #eaecee;
+      padding: 10px 0 10px 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
   }
   .billing-container {
     display: flex;
@@ -421,6 +438,7 @@
     min-width: 90%;
     padding: 20px;
     margin-bottom: 5%;
+    background-color: white;
   }
   .row-container {
     padding-bottom: 10px;
@@ -475,9 +493,22 @@
     font-style: italic;
     font-weight: 400;
     margin: 0;
-    font-weight: 300;
     font-size: 18px;
-    line-height: 28px;
+    // line-height: 28px;
+    @media screen and (max-width: 767px) {
+      order: 3;
+    }
+  }
+  .level3 {
+    color: #005faa;
+    font-style: italic;
+    font-weight: 400;
+    margin: 0;
+    font-size: 18px;
+    // line-height: 28px;
+    @media screen and (max-width: 767px) {
+      order: 4;
+    }
   }
 
   .total-row {
@@ -491,6 +522,10 @@
     color: #000000;
     padding: 5px 0;
     margin: 0;
+    position: relative;
+    @media screen and (max-width: 767px) {
+      flex: 1 0 75%;
+    }
   }
 
   .level4 {
@@ -499,6 +534,11 @@
     line-height: 24px;
     color: #000000;
     margin: 0;
+    grid-column-start: 4;
+    text-align: right;
+    @media screen and (max-width: 767px) {
+      flex: 1 0 25%;
+    }
   }
   #electric-charges-subtotal {
     border-top: 2px solid #bbb;
@@ -546,10 +586,5 @@
     order: 1;
     flex-grow: 0;
     margin: 0;
-  }
-  @media screen and (max-width: 1000px) {
-    .card {
-      width: 90%;
-    }
   }
 </style>

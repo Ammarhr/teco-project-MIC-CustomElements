@@ -289,7 +289,10 @@
     margin: 0 !important;
     padding: 15px;
     container-type: inline-size;
-    width: 100%;
+    width: calc(66% - 30px);
+    @media screen and (max-width: 992px) {
+      width: 100%;
+    }
   }
   // web component "tecoBillSelector" style
   .tecoBillSelector-v2 {
@@ -402,26 +405,26 @@
       }
     }
     // too large
-    @media screen and (min-width: 1024px) {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      .tecoBillSelect {
-        width: 250px;
-      }
-      .tecoInfoLabel {
-        margin-right: 4%;
-        h4 {
-          color: $teco-dark-grey;
-          display: block !important;
-          margin: 0;
-        }
-      }
-      .tecobillSelectorDetailRow {
-        flex-grow: 2;
-        width: unset;
-      }
-    }
+    // @media screen and (min-width: 1024px) {
+    //   flex-direction: row;
+    //   justify-content: space-between;
+    //   align-items: center;
+    //   .tecoBillSelect {
+    //     width: 250px;
+    //   }
+    //   .tecoInfoLabel {
+    //     margin-right: 4%;
+    //     h4 {
+    //       color: $teco-dark-grey;
+    //       display: block !important;
+    //       margin: 0;
+    //     }
+    //   }
+    //   .tecobillSelectorDetailRow {
+    //     flex-grow: 2;
+    //     width: unset;
+    //   }
+    // }
     a {
       text-decoration: none;
       color: $teco-dark-grey;

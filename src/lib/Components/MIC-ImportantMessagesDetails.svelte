@@ -4,7 +4,9 @@
     // @ts-nocheck
 
     import circyle from "../../assets/cr.svg";
-    import messageNotification from "../../assets/messages-notification.svg";
+    // import messageNotification from "../../assets/messages-notification.svg";
+    import messageNotification from "../../assets/envelope-solid.svg";
+
     import { slide } from "svelte/transition";
     import {
         fetchAndRedirect,
@@ -82,7 +84,7 @@
                     <div class="message-header">
                         <div class="message-logo">
                             <img
-                                src={`${$apiDomain}/micwc-external/assets/messages-notification.26af3974.svg`}
+                                src={`${$apiDomain}/micwc-external/assets/envelope-solid.ab8c231d.svg`}
                                 alt=""
                             />
                             <span id="unreaded-msgs"
@@ -213,6 +215,9 @@
             font-weight: 400;
             font-size: 21px;
             line-height: 29px;
+            @media screen and (max-width: 4803px) {
+                margin-left: 28px;
+            }
         }
     }
     #notification {
@@ -235,7 +240,8 @@
     }
     #unreaded-msgs {
         position: absolute;
-        right: 0;
+        right: -10px;
+        top: -8px;
         color: #ffffff;
         background: #da1e28;
         border-radius: 50%;

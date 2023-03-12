@@ -84,7 +84,7 @@
     });
     /// sunSelect fetch:
     sunget(
-      $apiToken,
+      $newToken.token,
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
       // "../../data/sunSelect.json"
     ).then(() => {
@@ -385,8 +385,8 @@
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         {Math.abs(
-                          insightsService.monthly?.LoadFactorArrowComparison
-                        )}% {insightsService?.monthly?.DemandUnit}</span
+                          insightsService.yearly?.LoadFactorArrowComparison
+                        )}% {insightsService?.yearly?.DemandUnit}</span
                       >
                     {/if}
                   </div>
@@ -591,8 +591,16 @@
       <mic-sunselect contractnum={sunSelectArray[i]} />
     {/if}
   {/each}
+{:else if $sundata && $sundata.SunSelect}
+  {#if $sunloading}
+    <mic-loading />
+  {:else if $sunerror}
+    <h1 />
+  {:else if $sundata && $sundata.SunSelect.length > 0}
+    <mic-sunselect contractnum={$sundata.SunSelect} />
+  {/if}
 {:else}
-  <h1 />
+  <div />
 {/if}
 
 <style lang="scss">

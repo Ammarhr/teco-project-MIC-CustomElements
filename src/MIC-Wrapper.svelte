@@ -96,6 +96,7 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+    background-color: #f4f5f7;
   }
   .important-balance {
     display: flex;

@@ -3,7 +3,7 @@
 <script>
     // @ts-nocheck
 
-    import { generalErr, errorCallback, eventsDomain } from "../../js/store";
+    import { generalErr, errorCallback, apiDomain } from "../../js/store";
     import { onMount } from "svelte";
     export let token;
     const [data, loading, err, errorHandler] = errorCallback();
@@ -12,7 +12,7 @@
             errorHandler(
                 token,
                 // "../../../data/generalErr.json"
-                `${$eventsDomain}/rest/recommendationsfeedback/v1/Feedback/ErrorMessages?Code=ER_General_001`
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/GetErrorMessages?Code=ER_General_001`
             );
         }
     });
@@ -31,7 +31,6 @@
             alt=""
             class="err-img"
         />
-
         <p id="err-body">
             {@html $data.HTMLBody}
         </p>
