@@ -6,6 +6,7 @@
   import toggle from "../../assets/cr.svg";
   import breakdownToggle from "../../assets/breakdown-drop-icon.svg";
   import electricityIcon from "../../assets/Iconawesome-bolt.svg";
+  import percentageGas from "../../assets/gas-percentage.svg";
   import toolTip from "../../assets/tool-tip-icon.svg";
   import {
     fetchstore,
@@ -29,7 +30,10 @@
   ////////////////////////
   onMount(() => {
     if ($apiToken && $apiDomain && !$data.services) {
-      get($apiToken, "../../data/BillingSummary.json");
+      get($apiToken,
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+      // "../../data/BillingSummary.json"
+      );
     }
   });
 
@@ -61,7 +65,6 @@
       styleToggleArr[i] =
         "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
     }
-    console.log(toggleArray);
   };
 
   const subSectionToggle = (j, i) => {
@@ -97,9 +100,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if $loading}
-  Loading: {$loading}
-{:else if $error}
-  Error: {$error}
+<mic-loading />
 {:else if $data.services}
   <div class="billing-container">
     {#each $data.services as billService, i}
@@ -110,7 +111,7 @@
           aria-expanded={isOpen}
         >
           <h4 id="title">BILLING SUMMARY</h4>
-          <img src={toggle} alt="" id={"rotate-svg-" + !toggleArray[i]} />
+          <img src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`} alt="" id={"rotate-svg-" + !toggleArray[i]} />
         </div>
         <!-- {#if toggleArray[i]} -->
         <div style={styleToggleArr[i]} class="bill-content">
@@ -130,6 +131,21 @@
               {#each billService.Section_Level1s as section}
                 {#if section.SectionType == "Charge_Group"}
                   {#if section.Section_Level2s}
+                    {#if section.Lable && section.Lable != ""}
+                      <div class="sub-title">
+                        {#if section.IconPath && section.IconPath != ""}
+                          <div
+                            class="sub-sec-header"
+                            style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                          >
+                            <img src={percentageGas} alt="" />
+                            <h4 tyle="font-size:{section.FontSize}px">
+                              {section.Lable}
+                            </h4>
+                          </div>
+                        {/if}
+                      </div>
+                    {/if}
                     <div class="charges-container">
                       {#each section.Section_Level2s as level2Obj}
                         <!-- {section.SectionType} -->
@@ -318,6 +334,12 @@
       height: 3px;
       background-color: #eaecee;
       border: none;
+    }
+  }
+  .sub-title {
+    h4 {
+      font-weight: 400;
+      line-height: 29px;
     }
   }
   .charges-container {

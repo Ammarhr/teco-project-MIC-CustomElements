@@ -66,6 +66,7 @@
       <!-- <MicBillSelectorAndDownload /> -->
       <div class="refreshable">
         <div class="charge-detailes">
+          <mic-billingsummary />
           <!-- <MicBillingSummary /> -->
         </div>
         <div class="insights">
