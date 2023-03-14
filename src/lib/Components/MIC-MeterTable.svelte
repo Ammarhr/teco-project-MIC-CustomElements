@@ -9,6 +9,7 @@
     import { fetchstore, apiDomain, apiToken } from "../../js/store";
     import { chart } from "svelte-apexcharts";
     import { renderMixChart } from "../../js/MIC-chart-bundle";
+    import { onMount } from "svelte";
 
     let tableData;
     let options;
@@ -16,7 +17,7 @@
     const [data, loading, error, get] = fetchstore();
 
     // acordion functionality
-    let isOpen = false;
+    let isOpen = true;
     let svgId = "rotate-svg-" + isOpen;
 
     const toggleContainer = () => {
@@ -26,7 +27,11 @@
 
     //////// change the selected meter
     const handleSelectedMeter = (meterObject) => {
-        selectedMeter = meterObject;
+        if (meterObject) {
+            selectedMeter = meterObject;
+        } else {
+            selectedMeter = pagenateItems[0];
+        }
     };
     ////// search & filter
     const handleSearch = () => {
@@ -55,7 +60,6 @@
         );
     }
     ///////// pagination:
-    import { onMount } from "svelte";
     let items;
     //////// first render
     onMount(() => {
@@ -68,6 +72,7 @@
         tableData = $data.results;
         selectedMeter = $data.results[0];
         items = $data.results;
+        getPaginatedItems();
     }
     ////////// tabs functionality
     let tab1 = "1";
@@ -77,36 +82,49 @@
         tab1 = num1;
     };
 
-    let currentPage = 1;
-    let pageSize = 10;
-    let data1 = [];
-
-    function setCurrentPage(page) {
-        currentPage = page;
-    }
+    ////////////////////////////
+    // export let items = []; // array of items to paginate
+    export let pageSize = 5; // number of items per page
+    let pagenateItems = [];
+    let currentPage = 0;
 
     function nextPage() {
-        if (currentPage < totalPages()) {
-            currentPage++;
-        }
+        currentPage++;
+        getPaginatedItems();
     }
 
     function prevPage() {
-        if (currentPage > 1) {
-            currentPage--;
-        }
+        currentPage--;
+        getPaginatedItems();
+    }
+    function goToPage(page) {
+        currentPage = page;
+        getPaginatedItems();
+    }
+    function getPaginatedItems() {
+        const startIndex = currentPage * pageSize;
+        const endIndex = startIndex + pageSize;
+        console.log("grommemteete :", items.slice(startIndex, endIndex));
+        pagenateItems = items.slice(startIndex, endIndex);
+        handleSelectedMeter()
     }
 
-    function totalPages() {
-        return Math.ceil(data.length / pageSize);
+    function getCurrentPage() {
+        return currentPage + 1;
     }
 
-    function getData() {
-        // fetch data from an API or other data source
-        data1 = [1, 8, 6, 8];
+    function getTotalPages() {
+        return Math.ceil(items.length / pageSize);
     }
-
-    onMount(getData);
+    function getPagesToShow() {
+        const totalPages = getTotalPages();
+        const currentPageIndex = currentPage;
+        const startPageIndex = Math.max(0, currentPageIndex - 2);
+        const endPageIndex = Math.min(totalPages - 1, currentPageIndex + 2);
+        return Array(endPageIndex - startPageIndex + 1)
+            .fill()
+            .map((_, idx) => startPageIndex + idx);
+    }
 </script>
 
 <!------ html ------->
@@ -114,7 +132,7 @@
     <h1>loading..</h1>
 {:else if $error}
     <h1>{error}</h1>
-{:else if $data}
+{:else if $data && pagenateItems && pagenateItems.length > 0}
     {#key $apiToken}
         <div class="meter-card">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -150,7 +168,7 @@
                                     <th>Previous Reading</th>
                                     <th>Total Used</th>
                                 </tr>
-                                {#each items as row}
+                                {#each pagenateItems as row}
                                     <tr
                                         class="table-row"
                                         on:click={() => {
@@ -171,6 +189,35 @@
                                     </div>
                                 {/if}
                             </table>
+                            <div>
+                                <p>
+                                    Page {getCurrentPage()} of {getTotalPages()}
+                                </p>
+                                <button
+                                    on:click={prevPage}
+                                    disabled={currentPage === 0}
+                                >
+                                    Previous
+                                </button>
+
+                                {#each getPagesToShow() as pageIndex}
+                                    <button
+                                        on:click={() => goToPage(pageIndex)}
+                                        class:selected={pageIndex ===
+                                            currentPage}
+                                    >
+                                        {pageIndex + 1}
+                                    </button>
+                                {/each}
+
+                                <button
+                                    on:click={nextPage}
+                                    disabled={currentPage ===
+                                        getTotalPages() - 1}
+                                >
+                                    Next
+                                </button>
+                            </div>
                         {/if}
                     {/if}
                 </div>

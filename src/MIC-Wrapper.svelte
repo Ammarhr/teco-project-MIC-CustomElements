@@ -50,7 +50,7 @@
 {#key $showToolTipDetails}
   {#if token && domain && eventdomain && $generalErr !== true && $showToolTipDetails !== true}
     <div class="wrapper">
-      <!-- <mic-headerinformation /> -->
+      <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
       <div class="important-balance">
         <div class="balance">
@@ -67,7 +67,7 @@
       <div class="refreshable">
         <div class="charge-detailes">
           <mic-billingsummary />
-          <!-- <MicBillingSummary /> -->
+          <MicBillingSummary />
         </div>
         <div class="insights">
           <mic-insights />
@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="blk-container">
-        <mic-bulkdownload style="max-width:460px" />
+        <!-- <mic-bulkdownload style="max-width:460px" /> -->
       </div>
       <!-- <MicMeterTable /> -->
     </div>

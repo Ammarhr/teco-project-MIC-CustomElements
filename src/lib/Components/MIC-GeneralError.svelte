@@ -25,7 +25,7 @@
 {:else if $data.HTMLBody}
     <div class="container">
         <p>Oops! Something went wrong.</p>
-
+        
         <img
             src={`data:image/png;base64,${$data.RecommendationImage}`}
             alt=""

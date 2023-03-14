@@ -14,7 +14,7 @@
 </script>
 
 <div class="app-container">
-  <!-- <MicWrapper token="smth" domain="jsdelivr.net" eventdomain="s"/> -->
+  <MicWrapper token="smth" domain="jsdelivr.net" eventdomain="s"/>
   <!-- <MicBillSelectorAndDownload />
   <MicInsights /> -->
   <!-- <MicLoading />

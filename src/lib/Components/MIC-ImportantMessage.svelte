@@ -70,7 +70,7 @@
   <mic-loading />
 {:else if $error}
   Error: {$error}
-{:else if state.messages}
+{:else if state && state.messages && state.messages[0]}
   <div class="container">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div id="message-header" on:click={toggle} aria-expanded={isOpen}>
@@ -117,7 +117,9 @@
           {/if}
         </div>
         <div class="message-footer">
-          {#if (!state.messages[0].empty && state.messages.length > 0) || state.messages[0].length > 237}
+          {#if state.messages[0].empty}
+            <span />
+          {:else if state.messages.length > 1 || state.messages[0].Title.length + state.messages[0].message.length > 237}
             <mic-messagesdetails messages={state.messages} />
             <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
           {/if}

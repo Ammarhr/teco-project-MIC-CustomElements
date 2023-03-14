@@ -30,7 +30,49 @@
                     "FontSize": 0,
                     "IsItalic": false,
                     "SectionType": "Charge_Group",
-                    "IsBreakdown": false,
+                    "IsBreakdown": true,
+                    "Section_Level2s": [
+                        {
+                            "Value": "First 1,000 kWh",
+                            "Order": 1,
+                            "FontSize": 0,
+                            "IsItalic": false,
+                            "SectionType": "Charge",
+                            "IsBreakdown": true
+                        },
+                        {
+                            "Value": "1,000 kWh",
+                            "Order": 2,
+                            "FontSize": 0,
+                            "IsItalic": true,
+                            "SectionType": "Charge",
+                            "IsBreakdown": false
+                        },
+                        {
+                            "Value": "@ $0.05674/kWh",
+                            "Order": 3,
+                            "FontSize": 0,
+                            "IsItalic": true,
+                            "SectionType": "Charge",
+                            "IsBreakdown": false
+                        },
+                        {
+                            "Value": "$56.74",
+                            "Order": 4,
+                            "FontSize": 0,
+                            "IsItalic": false,
+                            "SectionType": "Charge",
+                            "IsBreakdown": false
+                        }
+                    ]
+                },
+                {
+                    "Lable": "",
+                    "Order": 2,
+                    "FontSize": 0,
+                    "IsItalic": false,
+                    "SectionType": "Charge_Group",
+                    "IsBreakdown": true,
                     "Section_Level2s": [
                         {
                             "Value": "Basic Service Charge",

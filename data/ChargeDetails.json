@@ -1,328 +1,361 @@
 {
-  "totalCharges": 1000,
-  "servicePeriod": null,
-  "rateSchadule": null,
-  "services": [
+  "Sections": [
     {
-      "title": "Electric Charges",
-      "servicePeriod": "November 25, 2021 - December 28, 2022",
-      "rateSchadule": "General Service",
-      "icon": "<font-awsome>/<material_icon>",
-      "color": "#1112313",
-      "total": 1142.02,
-      "sections": [
+      "Order": 1,
+      "Lable": "Electric Service",
+      "Value": "",
+      "FontSize": 30,
+      "Color": "#00294A",
+      "IsItalic": false,
+      "IsBreakdown": false,
+      "SectionType": "Service",
+      "Section_Level1s": [
         {
-          "title": "",
-          "icon": "<font-awsome>/<material_icon>",
-          "color": "#1112313",
-          "controls": [
+          "Order": 1,
+          "Value": "5200070577",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Config"
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
             {
-              "label": "Daily Basic Service Charge3",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": false,
-              "breakdown": [
-                {
-                  "label": "Supplemental Billing Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                }
-              ]
+              "Order": 1,
+              "Value": "Basic Service Charge",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
             },
             {
-              "label": "Daily Basic Service Charge1",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": true,
-              "totalValue": 108.5,
-              "totalTitle": "Electric Charges Subtotal",
-              "breakdown": [
-                {
-                  "label": "Supplemental Billing Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                },
-                {
-                  "label": "Local Facilities Reservation",
-                  "tooltip": "Description",
-                  "description": "24,850 kW @ $0.84000/kW",
-                  "color": "#1112313",
-                  "value": 20874.00
-                },
-                {
-                  "label": "Power Supply Demand",
-                  "description": "104,300 kW @ $0.43000/kW",
-                  "color": "#1112313",
-                  "value": 44849.00
-                }
-              ]
-            },
-            {
-              "label": "Billing Demand Charge4",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": false,
-              "breakdown": [
-                {
-                  "label": "Supplemental Billing Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                }
-              ]
+              "Order": 4,
+              "Value": "$16.62",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
             }
           ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Energy Charge",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": true,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "First 1,000 kWh",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": true,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "1,000 kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $0.05902/kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$59.02",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": true,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Above 1,000 kWh",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": true,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "971 kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $0.07010/kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$68.07",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Fuel Charge",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "First 1,000 kWh",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": true,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "1,000 kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $0.02642/kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$26.42",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Above 1,000 kWh",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": true,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "971 kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $0.03642/kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$35.36",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Florida Gross Receipt Tax",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$5.27",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 3,
+          "Lable": "Electric Charges Subtotal",
+          "Value": "$210.76",
+          "FontSize": 20,
+          "Color": "#005FAA",
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Total"
+        },
+        {
+          "Order": 4,
+          "Lable": "Other Fees & Charges",
+          "Value": "",
+          "FontSize": 28,
+          "Color": "#5EB0F4",
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Electric Late Payment Fee",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$5.00",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 5,
+          "Lable": "Sub Total",
+          "Value": "$5.00",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Total"
         }
       ]
     },
     {
-      "title": "Natural Gas Charges",
-      "servicePeriod": "November 25, 2021 - December 28, 2022",
-      "rateSchadule": "General Service",
-      "icon": "<font-awsome>/<material_icon>",
-      "color": "#1112313",
-      "sections": [
-        {
-          "title": "",
-          "icon": "<font-awsome>/<material_icon>",
-          "color": "#1112313",
-          "controls": [
-            {
-              "label": "Billing Demand Charge",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": false,
-              "breakdown": [
-                {
-                  "label": "Supplemental Billing Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                }
-              ]
-            },
-            {
-              "label": "Capacity Charge",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 22.38,
-              "isTotal": false,
-              "breakdown": [
-                {
-                  "label": "Supplemental Billing Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                },
-                {
-                  "label": "Local Facilities Reservation",
-                  "tooltip": "Description",
-                  "description": "24,850 kW @ $0.84000/kW",
-                  "color": "#1112313",
-                  "value": 20874.00
-                },
-                {
-                  "label": "Power Supply Demand",
-                  "tooltip": "Description",
-                  "description": "104,300 kW @ $0.43000/kW",
-                  "color": "#1112313",
-                  "value": 44849.00
-                }
-              ]
-            },
-            {
-              "label": "Billing Demand Charge",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": false,
-              "totalValue": 108.5,
-              "totalTitle": "Gas Charges Subtotal"
-            },
-            {
-              "label": "Billing Demand Charge",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": true,
-              "totalValue": 108.5,
-              "totalTitle": "Gas Charges Subtotal",
-              "breakdown": [
-                {
-                  "label": "Capacity Charge",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Natural Gas Charges",
-      "servicePeriod": "November 25, 2021 - December 28, 2022",
-      "rateSchadule": "General Service",
-      "icon": "<font-awsome>/<material_icon>",
-      "color": "#1112313",
-      "sections": [
-        {
-          "title": "",
-          "icon": "<font-awsome>/<material_icon>",
-          "color": "#1112313",
-          "controls": [
-            {
-              "label": "Billing Demand Charge",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": false,
-              "breakdown": [
-                {
-                  "label": "Supplemental Billing Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                }
-              ]
-            },
-            {
-              "label": "Capacity Charge",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 22.38,
-              "isTotal": false,
-              "breakdown": [
-                {
-                  "label": "Supplemental Billing Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                },
-                {
-                  "label": "Local Facilities Reservation",
-                  "tooltip": "Description",
-                  "description": "24,850 kW @ $0.84000/kW",
-                  "color": "#1112313",
-                  "value": 20874.00
-                },
-                {
-                  "label": "Power Supply Demand",
-                  "tooltip": "Description",
-                  "description": "104,300 kW @ $0.43000/kW",
-                  "color": "#1112313",
-                  "value": 44849.00
-                }
-              ]
-            },
-            {
-              "label": "Billing Demand Charge",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": false,
-              "totalValue": 108.5,
-              "totalTitle": "Gas Charges Subtotal"
-            },
-            {
-              "label": "Billing Demand Charge",
-              "tooltip": "Description",
-              "description": "26 days @ $1.07000",
-              "value": 36.38,
-              "isTotal": true,
-              "totalValue": 108.5,
-              "totalTitle": "Gas Charges Subtotal",
-              "breakdown": [
-                {
-                  "label": "Capacity Charge",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 2.88000/kW",
-                  "color": "#1112313",
-                  "value": 35424.00
-                },
-                {
-                  "label": "Supplemental Peak Demand",
-                  "tooltip": "Description",
-                  "description": "12,300 kW @ 6.15000/kW",
-                  "color": "#1112313",
-                  "value": 75645.00
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      "Order": 2,
+      "Lable": "Total Current Charges",
+      "Value": "$393.15",
+      "FontSize": 35,
+      "Color": "#005FAA",
+      "IsItalic": false,
+      "IsBreakdown": false,
+      "SectionType": "InvoiceTotal"
     }
   ]
 }

@@ -14,6 +14,7 @@
     apiToken,
     eventsDomain,
     showToolTipDetails,
+    newToken,
   } from "../../js/store";
 
   let toggleArray = [];
@@ -26,25 +27,64 @@
   let isOpen = false;
   let styleToggleArr = [];
   let billsObjectsArray = [];
+  let refreshToken;
 
   ////////////////////////
   onMount(() => {
-    if ($apiToken && $apiDomain && !$data.services) {
-      get($apiToken,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-      // "../../data/BillingSummary.json"
+    if ($apiToken && $apiDomain && !$data.Sections) {
+      get(
+        $apiToken,
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+        "../../data/ChargeDetails.json"
       );
     }
+    refreshToken = $apiToken;
   });
 
   $: if (
+    $newToken &&
+    $newToken.token &&
+    (recoToken == $apiToken || recoToken !== $newToken.token)
+  ) {
+    get(
+      $newToken.token,
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+      // "../../data/ChargeDetails.json"
+    ).then(() => {
+      styleToggleArr = [];
+      billsObjectsArray = [];
+    });
+    recoToken = $newToken.token;
+  }
+
+  let arrOfBreakDown = [];
+  let arr = [];
+  $: if (
     $data &&
-    $data.services &&
-    $data.services.length > 0 &&
+    $data.Sections &&
+    $data.Sections.length > 0 &&
     typeof toggleArray[0] !== "boolean"
   ) {
-    console.log("data from billing:", $data);
-    for (let i = 0; i < $data.services.length; i++) {
+    for (let i = 0; i < $data.Sections.length; i++) {
+      console.log("section mapped", $data.Sections[i].Section_Level1s);
+      if ($data.Sections[i].Section_Level1s) {
+        $data.Sections[i].Section_Level1s.map((dataMapped, j) => {
+          if (dataMapped.Section_Level2s) {
+            console.log("section mapped level 2", dataMapped.Section_Level2s);
+            let resArray = [];
+            resArray = dataMapped.Section_Level2s.filter((result, k) => {
+              console.log("level order :", j);
+              return result.IsBreakdown == true;
+            });
+            if (resArray.length > 0) {
+              arrOfBreakDown.push(resArray);
+            } else {
+              arr.push(arrOfBreakDown);
+              arrOfBreakDown = [];
+            }
+          }
+        });
+      }
       toggleArray.push(true);
       let billObj = {
         subSectionArray: [],
@@ -54,6 +94,7 @@
       };
       billsObjectsArray.push(billObj);
     }
+    console.log("array fo break downs :", arr);
   }
 
   const toggleContainer = (i) => {
@@ -78,7 +119,7 @@
         "max-height: 200vh;opacity: 1;transition:200ms; ";
     } else {
       billsObjectsArray[i].subToggleStyleArray[j] =
-        "opacity: 0;max-height: 0;margin: 0; transition:200ms; ";
+        "opacity: 0;max-height: 0;margin: 0; transition:200ms; padding:0; ";
     }
   };
 
@@ -100,181 +141,271 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if $loading}
-<mic-loading />
-{:else if $data.services}
+  <mic-loading />
+{:else if $data && $data.Sections}
   <div class="billing-container">
-    {#each $data.services as billService, i}
-      <div class="card">
+    {#each arr as breakdownGroup}
+      {#if breakdownGroup.length > 0}
         <div
-          id="bills-header"
-          on:click={() => toggleContainer(i)}
-          aria-expanded={isOpen}
+          class="breakdown-header"
+          on:click={() => {
+            // subSectionToggle(j, i);
+          }}
         >
-          <h4 id="title">BILLING SUMMARY</h4>
-          <img src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`} alt="" id={"rotate-svg-" + !toggleArray[i]} />
+          <h6>View Breakdown</h6>
+          <img src={breakdownToggle} alt="" />
+          <!-- id={"rotate-svg-" + billsObjectsArray[i].subSectionArray[j]} -->
         </div>
-        <!-- {#if toggleArray[i]} -->
-        <div style={styleToggleArr[i]} class="bill-content">
-          <h3 id="sectiontitle">
-            <span
-              ><img src={electricityIcon} alt="" style="width: 15px;" /></span
-            >
-            {billService.Lable}
-          </h3>
-          {#if billService.servicePeriod}
-            <p id="comment">
-              Service Period: {billService.servicePeriod}
-            </p>
-          {/if}
-          <div id="content">
-            {#if billService.Section_Level1s}
-              {#each billService.Section_Level1s as section}
-                {#if section.SectionType == "Charge_Group"}
-                  {#if section.Section_Level2s}
-                    {#if section.Lable && section.Lable != ""}
-                      <div class="sub-title">
-                        {#if section.IconPath && section.IconPath != ""}
-                          <div
-                            class="sub-sec-header"
-                            style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
-                          >
-                            <img src={percentageGas} alt="" />
-                            <h4 tyle="font-size:{section.FontSize}px">
-                              {section.Lable}
-                            </h4>
-                          </div>
-                        {/if}
+        <div
+        class="charges-container break-down"
+      >
+        {#each breakdownGroup as level2Obj}
+          <!-- {section.SectionType} -->
+          <!-- {#if level2Obj.SectionType == "Charge"} -->
+            {#if level2Obj.Order == 1}
+              <p class={"level" + level2Obj.Order}>
+                {level2Obj.Value}
+                {#if level2Obj.tooltip && level2Obj.tooltip == ""}
+                  <div class="tooltip-icon">
+                    <img
+                      src={toolTip}
+                      alt=""
+                      on:pointerenter={() =>
+                        toolTipToggle(j, i)}
+                    />
+                    <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
+                    <div class="tooltip-description">
+                      <!-- style={billsObjectsArray[i]
+                      .toolTipStylleArray[j]} -->
+                      <div class="tooltip-con">
+                        Covers the costs of moving gas from its
+                        source to your premise, other than the
+                        cost of gas itself. <br />
+                        <a
+                          href="#"
+                          on:click={() => {
+                            showToolTipDetails.set(true);
+                          }}>UNDERSTANDING YOUR CHARGES</a
+                        >
                       </div>
-                    {/if}
-                    <div class="charges-container">
-                      {#each section.Section_Level2s as level2Obj}
-                        <!-- {section.SectionType} -->
-                        {#if level2Obj.SectionType == "Charge"}
-                          {#if level2Obj.Order == 1}
-                            <p class={"level" + level2Obj.Order}>
-                              <!-- {console.log(level2Obj.tooltip)} -->
-                              {level2Obj.Value}
-                              {#if level2Obj.tooltip && level2Obj.tooltip == ""}
-                                <div class="tooltip-icon">
-                                  <img
-                                    src={toolTip}
-                                    alt=""
-                                    on:pointerenter={() => toolTipToggle(j, i)}
-                                  />
-                                  <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
-                                  <div class="tooltip-description">
-                                    <!-- style={billsObjectsArray[i]
-                                    .toolTipStylleArray[j]} -->
-                                    <div class="tooltip-con">
-                                      Covers the costs of moving gas from its
-                                      source to your premise, other than the
-                                      cost of gas itself. <br />
-                                      <a
-                                        href="#"
-                                        on:click={() => {
-                                          showToolTipDetails.set(true);
-                                        }}>UNDERSTANDING YOUR CHARGES</a
-                                      >
-                                    </div>
-                                  </div>
-                                  <!-- {/if}   -->
-                                </div>
-                              {/if}
-                            </p>
-                          {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
-                            <!-- <div class="row" id="daily-basic-service-charge"> -->
-                            <p class={"level" + level2Obj.Order}>
-                              {level2Obj.Value}
-                            </p>
-                            <!-- </div> -->
-                          {:else}
-                            <p class={"level" + level2Obj.Order}>
-                              {level2Obj.Value}
-                            </p>
-                          {/if}
-                        {/if}
-                      {/each}
                     </div>
-                  {/if}
-                {:else if section.SectionType == "SubTotal"}
-                  <div class="sub-row total-row" id="electric-charges-subtotal">
-                    <p class="first-label">{section.Lable}</p>
-                    <p class="value">{section.Value}</p>
+                    <!-- {/if}   -->
                   </div>
                 {/if}
-                <!-- <img src="" alt="{section.title} icon" />
-              -->
-                <!-- {#if section.controls}
-                  {#each section.controls as control, j}
-                    <div class="row-container">
-                      <div class="row" id="daily-basic-service-charge">
-                        <p class="sub-label">{control.description}</p>
-                        <p class="value">{control.value}</p>
+              </p>
+            {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
+              <p class={"level" + level2Obj.Order}>
+                {level2Obj.Value}
+              </p>
+            {:else}
+              <p class={"level" + level2Obj.Order}>
+                {level2Obj.Value}
+              </p>
+            {/if}
+          <!-- {/if} -->
+        {/each}
+      </div>    
+    
+    {/if}
+
+
+
+    {/each}
+
+
+
+
+
+    {#each $data.Sections as billService, i}
+      {#if billService.SectionType == "Service"}
+        <div class="card">
+          <div
+            id="bills-header"
+            on:click={() => toggleContainer(i)}
+            aria-expanded={isOpen}
+          >
+            <h4 id="title">BILLING SUMMARY</h4>
+            <img
+              src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+              alt=""
+              id={"rotate-svg-" + !toggleArray[i]}
+            />
+          </div>
+          <!-- {#if toggleArray[i]} -->
+          <div style={styleToggleArr[i]} class="bill-content">
+            <h3 id="sectiontitle">
+              <span
+                ><img src={electricityIcon} alt="" style="width: 15px;" /></span
+              >
+              {billService.Lable}
+            </h3>
+            {#if billService.servicePeriod}
+              <p id="comment">
+                Service Period: {billService.servicePeriod}
+              </p>
+            {/if}
+            <div id="content">
+              {#if billService.Section_Level1s}
+                {#each billService.Section_Level1s as section, j}
+                  {#if section.SectionType == "Charge_Group"}
+                    {#if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == true}
+                      <div
+                        class="breakdown-header"
+                        on:click={() => {
+                          subSectionToggle(j, i);
+                        }}
+                      >
+                        <h6>View Breakdown</h6>
+                        <img
+                          src={breakdownToggle}
+                          alt=""
+                          id={"rotate-svg-" +
+                            billsObjectsArray[i].subSectionArray[j]}
+                        />
+                        
                       </div>
-                      {#if control.breakdown}
-                        <div
-                          class="breakdown-header"
-                          on:click={() => {
-                            subSectionToggle(j, i);
-                          }}
-                        >
-                          <h6>View Breakdown</h6>
-                          <img
-                            src={breakdownToggle}
-                            alt=""
-                            id={"rotate-svg-" +
-                              billsObjectsArray[i].subSectionArray[j]}
-                          />
-                        </div>
-                        <div
-                          class="break-down"
-                          style={billsObjectsArray[i].subToggleStyleArray[j]}
-                        >
-                          {#each control.breakdown as breakdown}
-                            <div class="sub-container">
-                              <h6 class="breakdown-label">{breakdown.label}</h6>
-                              <h6 class="breakdown-description">
-                                {breakdown.description}
-                              </h6>
-                              <h6 class="breakdown-values">
-                                {breakdown.value}
-                              </h6>
-                            </div>
-                          {/each}
-                        </div>
-                        {#if control.isTotal}
-                          <div
-                            class="sub-row total-row"
-                            id="electric-charges-subtotal"
-                          >
-                            <p class="first-label">{control.totalTitle}</p>
-                            <p class="value">${control.totalValue}</p>
+                      <div
+                        class="charges-container break-down"
+                        style={billsObjectsArray[i].subToggleStyleArray[j]}
+                      >
+                        {#each section.Section_Level2s as level2Obj}
+                          <!-- {section.SectionType} -->
+                          {#if level2Obj.SectionType == "Charge"}
+                            {#if level2Obj.Order == 1}
+                              <p class={"level" + level2Obj.Order}>
+                                {level2Obj.Value}
+                                {#if level2Obj.tooltip && level2Obj.tooltip == ""}
+                                  <div class="tooltip-icon">
+                                    <img
+                                      src={toolTip}
+                                      alt=""
+                                      on:pointerenter={() =>
+                                        toolTipToggle(j, i)}
+                                    />
+                                    <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
+                                    <div class="tooltip-description">
+                                      <!-- style={billsObjectsArray[i]
+                                      .toolTipStylleArray[j]} -->
+                                      <div class="tooltip-con">
+                                        Covers the costs of moving gas from its
+                                        source to your premise, other than the
+                                        cost of gas itself. <br />
+                                        <a
+                                          href="#"
+                                          on:click={() => {
+                                            showToolTipDetails.set(true);
+                                          }}>UNDERSTANDING YOUR CHARGES</a
+                                        >
+                                      </div>
+                                    </div>
+                                    <!-- {/if}   -->
+                                  </div>
+                                {/if}
+                              </p>
+                            {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
+                              <p class={"level" + level2Obj.Order}>
+                                {level2Obj.Value}
+                              </p>
+                            {:else}
+                              <p class={"level" + level2Obj.Order}>
+                                {level2Obj.Value}
+                              </p>
+                            {/if}
+                          {/if}
+                        {/each}
+                      </div>
+                    {:else if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == false}
+                      {#if section.Section_Level2s}
+                        {#if section.Lable && section.Lable != ""}
+                          <div class="sub-title">
+                            {#if section.IconPath && section.IconPath != ""}
+                              <div
+                                class="sub-sec-header"
+                                style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                              >
+                                <img src={percentageGas} alt="" />
+                                <h4 tyle="font-size:{section.FontSize}px">
+                                  {section.Lable}
+                                </h4>
+                              </div>
+                            {/if}
                           </div>
                         {/if}
+                        <div class="charges-container">
+                          {#each section.Section_Level2s as level2Obj}
+                            <!-- {section.SectionType} -->
+                            {#if level2Obj.SectionType == "Charge"}
+                              {#if level2Obj.Order == 1}
+                                <p class={"level" + level2Obj.Order}>
+                                  <!-- {console.log(level2Obj.tooltip)} -->
+                                  {level2Obj.Value}
+                                  {#if level2Obj.tooltip && level2Obj.tooltip == ""}
+                                    <div class="tooltip-icon">
+                                      <img
+                                        src={toolTip}
+                                        alt=""
+                                        on:pointerenter={() =>
+                                          toolTipToggle(j, i)}
+                                      />
+                                      <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
+                                      <div class="tooltip-description">
+                                        <!-- style={billsObjectsArray[i]
+                              .toolTipStylleArray[j]} -->
+                                        <div class="tooltip-con">
+                                          Covers the costs of moving gas from
+                                          its source to your premise, other than
+                                          the cost of gas itself. <br />
+                                          <a
+                                            href="#"
+                                            on:click={() => {
+                                              showToolTipDetails.set(true);
+                                            }}>UNDERSTANDING YOUR CHARGES</a
+                                          >
+                                        </div>
+                                      </div>
+                                      <!-- {/if}   -->
+                                    </div>
+                                  {/if}
+                                </p>
+                              {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
+                                <p class={"level" + level2Obj.Order}>
+                                  {level2Obj.Value}
+                                </p>
+                              {:else}
+                                <p class={"level" + level2Obj.Order}>
+                                  {level2Obj.Value}
+                                </p>
+                              {/if}
+                            {/if}
+                          {/each}
+                        </div>
                       {/if}
-                    </div>
-                  {/each}
-                {/if} -->
-              {/each}
+                    {:else if section.SectionType == "SubTotal"}
+                      <div
+                        class="sub-row total-row"
+                        id="electric-charges-subtotal"
+                      >
+                        <p class="first-label">{section.Lable}</p>
+                        <p class="value">{section.Value}</p>
+                      </div>
+                    {/if}
+                  {/if}
+                {/each}
+              {/if}
+            </div>
+            {#if billService.Order == $data.Sections.length - 1}
+              <div class="total">
+                <h6 class="total-label">
+                  {$data.Sections[$data.Sections.length - 1].Lable}
+                </h6>
+                <h6 class="total-value">
+                  {$data.Sections[$data.Sections.length - 1].Value}
+                </h6>
+              </div>
             {/if}
           </div>
-          <!-- {#if billService.total}
-            <div class="total">
-              <h6 class="total-label">Total Current Charges</h6>
-              <h6 class="total-value">${billService.total}</h6>
-            </div>
-          {/if} -->
-          {#if i == $data.services.length - 1 && $data.total}
-            <div class="total">
-              <h6 class="total-label">{$data.total.Lable}</h6>
-              <h6 class="total-value">{$data.total.Value}</h6>
-            </div>
-          {/if}
-          {#if i < $data.services.length - 1}
-            <hr />
-          {/if}
         </div>
-      </div>
+      {/if}
     {/each}
   </div>
 {/if}
@@ -369,27 +500,26 @@
     flex-direction: row;
     align-items: center;
     padding: 0px;
-  }
-  .breakdown-header h6 {
-    font-style: normal;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 17px;
-    display: flex;
-    align-items: center;
-    color: #005faa;
-    padding: 10px;
+
+    h6 {
+      font-style: normal;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 17px;
+      display: flex;
+      align-items: center;
+      color: #005faa;
+      padding: 10px 0;
+      margin: 0;
+      margin-right: 12px;
+    }
   }
   .break-down {
-    padding: 16px 0px;
-    gap: 16px;
-    max-width: 100%;
-    max-height: 242px;
     background: #f4f5f7;
-    border-radius: 6px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+
+    h6 {
+      margin: 13px 0;
+    }
   }
   .sub-container {
     display: flex;
@@ -441,6 +571,7 @@
     width: 100%;
     height: 40px;
     margin-bottom: 24px;
+    cursor: pointer;
   }
   /*-----------------------*/
   #rotate-svg-false {
@@ -580,8 +711,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 25px 30px;
-    max-height: 92px;
+    padding: 22px 30px;
+    height: 70px;
     background: #005faa;
     border-radius: 6px;
   }
