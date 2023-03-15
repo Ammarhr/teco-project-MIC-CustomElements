@@ -10,6 +10,7 @@
             "FontSize": 0,
             "IsItalic": false,
             "SectionType": "Service",
+            "ServiceType": "Electric",
             "IsBreakdown": false,
             "Section_Level1s": [
                 {

@@ -28,14 +28,14 @@
   let styleToggleArr = [];
   let billsObjectsArray = [];
   let refreshToken;
-
+  let recoToken;
   ////////////////////////
   onMount(() => {
     if ($apiToken && $apiDomain && !$data.Sections) {
       get(
         $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-        "../../data/ChargeDetails.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+        // "../../data/ChargeDetails.json"
       );
     }
     refreshToken = $apiToken;
@@ -53,6 +53,7 @@
     ).then(() => {
       styleToggleArr = [];
       billsObjectsArray = [];
+      toggleArray = [];
     });
     recoToken = $newToken.token;
   }
@@ -66,25 +67,29 @@
     typeof toggleArray[0] !== "boolean"
   ) {
     for (let i = 0; i < $data.Sections.length; i++) {
-      console.log("section mapped", $data.Sections[i].Section_Level1s);
-      if ($data.Sections[i].Section_Level1s) {
-        $data.Sections[i].Section_Level1s.map((dataMapped, j) => {
-          if (dataMapped.Section_Level2s) {
-            console.log("section mapped level 2", dataMapped.Section_Level2s);
-            let resArray = [];
-            resArray = dataMapped.Section_Level2s.filter((result, k) => {
-              console.log("level order :", j);
-              return result.IsBreakdown == true;
-            });
-            if (resArray.length > 0) {
-              arrOfBreakDown.push(resArray);
-            } else {
-              arr.push(arrOfBreakDown);
-              arrOfBreakDown = [];
-            }
-          }
-        });
-      }
+      // console.log("section mapped", $data.Sections[i].Section_Level1s);
+      // if ($data.Sections[i].Section_Level1s) {
+      //   $data.Sections[i].Section_Level1s.map((dataMapped, j) => {
+      //     if (dataMapped.Section_Level2s) {
+      //       let resArray = [];
+      //       dataMapped.Section_Level2s.filter((result, k) => {
+      //         if (result.IsBreakdown == true) {
+      //           resArray = dataMapped.Section_Level2s;
+      //         }
+      //         // return
+      //       });
+      //       if (resArray.length == 0) {
+      //         arrOfBreakDown.push(dataMapped.Section_Level2s);
+      //       }
+      //       if (resArray.length > 0) {
+      //         arrOfBreakDown.push(resArray);
+      //       } else {
+      //         arr.push(arrOfBreakDown);
+      //         arrOfBreakDown = [];
+      //       }
+      //     }
+      //   });
+      // }
       toggleArray.push(true);
       let billObj = {
         subSectionArray: [],
@@ -94,7 +99,7 @@
       };
       billsObjectsArray.push(billObj);
     }
-    console.log("array fo break downs :", arr);
+    // console.log("array fo break downs :", arr);
   }
 
   const toggleContainer = (i) => {
@@ -142,80 +147,8 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if $loading}
   <mic-loading />
-{:else if $data && $data.Sections}
+{:else if $data && $data.Sections && toggleArray}
   <div class="billing-container">
-    {#each arr as breakdownGroup}
-      {#if breakdownGroup.length > 0}
-        <div
-          class="breakdown-header"
-          on:click={() => {
-            // subSectionToggle(j, i);
-          }}
-        >
-          <h6>View Breakdown</h6>
-          <img src={breakdownToggle} alt="" />
-          <!-- id={"rotate-svg-" + billsObjectsArray[i].subSectionArray[j]} -->
-        </div>
-        <div
-        class="charges-container break-down"
-      >
-        {#each breakdownGroup as level2Obj}
-          <!-- {section.SectionType} -->
-          <!-- {#if level2Obj.SectionType == "Charge"} -->
-            {#if level2Obj.Order == 1}
-              <p class={"level" + level2Obj.Order}>
-                {level2Obj.Value}
-                {#if level2Obj.tooltip && level2Obj.tooltip == ""}
-                  <div class="tooltip-icon">
-                    <img
-                      src={toolTip}
-                      alt=""
-                      on:pointerenter={() =>
-                        toolTipToggle(j, i)}
-                    />
-                    <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
-                    <div class="tooltip-description">
-                      <!-- style={billsObjectsArray[i]
-                      .toolTipStylleArray[j]} -->
-                      <div class="tooltip-con">
-                        Covers the costs of moving gas from its
-                        source to your premise, other than the
-                        cost of gas itself. <br />
-                        <a
-                          href="#"
-                          on:click={() => {
-                            showToolTipDetails.set(true);
-                          }}>UNDERSTANDING YOUR CHARGES</a
-                        >
-                      </div>
-                    </div>
-                    <!-- {/if}   -->
-                  </div>
-                {/if}
-              </p>
-            {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
-              <p class={"level" + level2Obj.Order}>
-                {level2Obj.Value}
-              </p>
-            {:else}
-              <p class={"level" + level2Obj.Order}>
-                {level2Obj.Value}
-              </p>
-            {/if}
-          <!-- {/if} -->
-        {/each}
-      </div>    
-    
-    {/if}
-
-
-
-    {/each}
-
-
-
-
-
     {#each $data.Sections as billService, i}
       {#if billService.SectionType == "Service"}
         <div class="card">
@@ -234,10 +167,28 @@
           <!-- {#if toggleArray[i]} -->
           <div style={styleToggleArr[i]} class="bill-content">
             <h3 id="sectiontitle">
-              <span
-                ><img src={electricityIcon} alt="" style="width: 15px;" /></span
-              >
-              {billService.Lable}
+              <span>
+                {#if billService.Lable == "Electric"}
+                  <img
+                    src={`${$apiDomain}/micwc-external/assets/electric.a02f37b0.svg`}
+                    alt=""
+                    style="width: 15px;"
+                  />
+                {:else if billService.ServiceType && billService.ServiceType == "GAS"}
+                  <img
+                    src={`${$apiDomain}/micwc-external/assets/Fire.f0f8bb01.svg`}
+                    alt=""
+                    style="width: 15px;"
+                  />
+                {:else if billService.ServiceType && billService.ServiceType == "Lighting"}
+                  <img
+                    src={`${$apiDomain}/micwc-external/assets/lighting.0131cc59.svg`}
+                    alt=""
+                    style="width: 15px;"
+                  />
+                {/if}
+                {billService.Lable}
+              </span>
             </h3>
             {#if billService.servicePeriod}
               <p id="comment">
@@ -249,7 +200,22 @@
                 {#each billService.Section_Level1s as section, j}
                   {#if section.SectionType == "Charge_Group"}
                     {#if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == true}
-                      <div
+                      {#if section.Lable && section.Lable != ""}
+                        <div class="sub-title">
+                          <div
+                            class="sub-sec-header"
+                            style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                          >
+                            {#if section.IconPath && section.IconPath != ""}
+                              <img src={percentageGas} alt="" />
+                            {/if}
+                            <h4 tyle="font-size:{section.FontSize}px">
+                              {section.Lable}
+                            </h4>
+                          </div>
+                        </div>
+                      {/if}
+                      <!-- <div
                         class="breakdown-header"
                         on:click={() => {
                           subSectionToggle(j, i);
@@ -262,12 +228,9 @@
                           id={"rotate-svg-" +
                             billsObjectsArray[i].subSectionArray[j]}
                         />
-                        
-                      </div>
-                      <div
-                        class="charges-container break-down"
-                        style={billsObjectsArray[i].subToggleStyleArray[j]}
-                      >
+                      </div> -->
+                      <!-- style={billsObjectsArray[i].subToggleStyleArray[j]} -->
+                      <div class="charges-container break-down">
                         {#each section.Section_Level2s as level2Obj}
                           <!-- {section.SectionType} -->
                           {#if level2Obj.SectionType == "Charge"}
@@ -318,17 +281,17 @@
                       {#if section.Section_Level2s}
                         {#if section.Lable && section.Lable != ""}
                           <div class="sub-title">
-                            {#if section.IconPath && section.IconPath != ""}
-                              <div
-                                class="sub-sec-header"
-                                style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
-                              >
+                            <div
+                              class="sub-sec-header"
+                              style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                            >
+                              {#if section.IconPath && section.IconPath != ""}
                                 <img src={percentageGas} alt="" />
-                                <h4 tyle="font-size:{section.FontSize}px">
-                                  {section.Lable}
-                                </h4>
-                              </div>
-                            {/if}
+                              {/if}
+                              <h4 tyle="font-size:{section.FontSize}px">
+                                {section.Lable}
+                              </h4>
+                            </div>
                           </div>
                         {/if}
                         <div class="charges-container">
@@ -380,20 +343,20 @@
                           {/each}
                         </div>
                       {/if}
-                    {:else if section.SectionType == "SubTotal"}
-                      <div
-                        class="sub-row total-row"
-                        id="electric-charges-subtotal"
-                      >
-                        <p class="first-label">{section.Lable}</p>
-                        <p class="value">{section.Value}</p>
-                      </div>
                     {/if}
+                  {:else if section.SectionType == "Total"}
+                    <div
+                      class="sub-row total-row"
+                      id="electric-charges-subtotal"
+                    >
+                      <p class="first-label">{section.Lable}</p>
+                      <p class="value">{section.Value}</p>
+                    </div>
                   {/if}
                 {/each}
               {/if}
             </div>
-            {#if billService.Order == $data.Sections.length - 1}
+            {#if i == $data.Sections.length - 2}
               <div class="total">
                 <h6 class="total-label">
                   {$data.Sections[$data.Sections.length - 1].Lable}
@@ -471,6 +434,7 @@
     h4 {
       font-weight: 400;
       line-height: 29px;
+      margin: 16px 0 16px 0;
     }
   }
   .charges-container {
@@ -516,9 +480,13 @@
   }
   .break-down {
     background: #f4f5f7;
-
+    padding: 8px;
     h6 {
       margin: 13px 0;
+    }
+    p {
+      font-weight: 300;
+      font-size: 18px;
     }
   }
   .sub-container {
@@ -644,10 +612,10 @@
   .level2 {
     color: #005faa;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 300;
     margin: 0;
     font-size: 18px;
-    // line-height: 28px;
+    font-style: italic;
     @media screen and (max-width: 767px) {
       order: 3;
     }
@@ -655,10 +623,10 @@
   .level3 {
     color: #005faa;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 300;
     margin: 0;
     font-size: 18px;
-    // line-height: 28px;
+    font-style: italic;
     @media screen and (max-width: 767px) {
       order: 4;
     }

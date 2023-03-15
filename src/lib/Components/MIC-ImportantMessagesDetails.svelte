@@ -22,7 +22,8 @@
 
     const showMessages = (toggle) => {
         show = !show;
-        if (toggle) {
+        console.log(toggle, "hello there");
+        if (toggle == "view") {
             fetchAndRedirect(
                 $apiToken,
                 `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
@@ -92,7 +93,7 @@
                             >
                         </div>
                         <div class="message-lable">Important Message</div>
-                        <button on:click={showMessages}>×</button>
+                        <button on:click={() => showMessages()}>×</button>
                     </div>
                     {#if messages}
                         <div class="message-body">

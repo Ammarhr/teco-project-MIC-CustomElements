@@ -70,7 +70,7 @@
           "Value": "",
           "FontSize": 0,
           "IsItalic": false,
-          "IsBreakdown": true,
+          "IsBreakdown": false,
           "SectionType": "Charge_Group",
           "Section_Level2s": [
             {
@@ -116,7 +116,7 @@
           "Value": "",
           "FontSize": 0,
           "IsItalic": false,
-          "IsBreakdown": true,
+          "IsBreakdown": false,
           "SectionType": "Charge_Group",
           "Section_Level2s": [
             {

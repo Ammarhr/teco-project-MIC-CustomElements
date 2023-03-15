@@ -24,10 +24,13 @@
     showToolTipDetails,
     setEventDomain,
     newToken,
+    persona,
   } from "./js/store";
   export let token;
   export let domain;
   export let eventdomain;
+  // export let agent;
+
   const refresh = () => {
     newToken.set("");
   };
@@ -35,7 +38,9 @@
     setToken(token);
     setDomain(domain);
     setEventDomain(eventdomain);
+    // persona.set(agent);
   }
+  
   // $: if ($showToolTipDetails) {
   //   console.log("wrapper", $showToolTipDetails);
   // }
@@ -67,10 +72,10 @@
       <div class="refreshable">
         <div class="charge-detailes">
           <mic-billingsummary />
-          <MicBillingSummary />
+          <!-- <MicBillingSummary /> -->
         </div>
         <div class="insights">
-          <mic-insights />
+          <mic-insights style="width:100%; max-width:410px" />
           <mic-yearlyenergy />
           <!-- <MicInsights /> -->
           <!-- <MicYearlyEnergy /> -->
@@ -78,7 +83,7 @@
         </div>
       </div>
       <div class="blk-container">
-        <!-- <mic-bulkdownload style="max-width:460px" /> -->
+        <mic-bulkdownload style="max-width:460px" />
       </div>
       <!-- <MicMeterTable /> -->
     </div>
@@ -148,7 +153,8 @@
     align-items: end;
     @media screen and (max-width: 992px) {
       display: flex;
-      justify-content: center;
+      flex-direction: row;
+      justify-content: end;
       align-items: center;
     }
   }

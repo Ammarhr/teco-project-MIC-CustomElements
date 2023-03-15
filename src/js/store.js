@@ -40,9 +40,13 @@ export const getDate = derived(
 );
 //* Sunselect array;
 export const sunSelectServicesArray = writable([]);
-//* fetch function
+//*geral error flag;
 export const generalErr = writable(false);
 
+//* Agint persona:
+export const persona = writable('')
+
+//* fetch function
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
