@@ -34,6 +34,11 @@ export const eventsDomain = writable('')
 export const setEventDomain = (domain) => {
     eventsDomain.set(domain)
 }
+export const assetsUrl = writable('')
+export const setAssetsUrl = (domain) => {
+    assetsUrl.set(domain)
+}
+
 export const getDate = derived(
     date,
     $date => $date
@@ -73,7 +78,7 @@ export function fetchstore() {
                     },
                     body: JSON.stringify({}),
                 });
-                // if (Publishresponse.status !== 204)
+                // if (Publishresponse.status !== 204)  
                 data.set(await Publishresponse.json());
             } else {
                 data.set({ errrorMessage: "Invalid Token" });

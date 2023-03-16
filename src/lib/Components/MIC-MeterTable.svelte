@@ -25,7 +25,7 @@
         svgId = "rotate-svg-" + isOpen;
     };
 
-    //////// change the selected meter
+    //////// change the selected meter + call Dap Api
     const handleSelectedMeter = (meterObject) => {
         if (meterObject) {
             selectedMeter = meterObject;

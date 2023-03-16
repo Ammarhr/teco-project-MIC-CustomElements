@@ -13,6 +13,8 @@
         apiToken,
         eventsDomain,
         apiDomain,
+        persona,
+        assetsUrl
     } from "../../js/store";
 
     export let messages;
@@ -22,7 +24,6 @@
 
     const showMessages = (toggle) => {
         show = !show;
-        console.log(toggle, "hello there");
         if (toggle == "view") {
             fetchAndRedirect(
                 $apiToken,
@@ -31,6 +32,8 @@
                 {
                     EventCode: "IN_Important_Messages_view",
                     Outcome: `Number Of Messsages: ${messages.length}`,
+                    Feedback: "",
+                    // Persona: $persona,
                 }
             );
         } else {
@@ -41,6 +44,8 @@
                 {
                     EventCode: "IN_Important_Messages_Close",
                     Outcome: "",
+                    Feedback: "",
+                    // Persona: $persona,
                 }
             );
         }
@@ -56,6 +61,8 @@
                     {
                         EventCode: "IN_Important_Messages_Close",
                         Outcome: "",
+                        Feedback: "",
+                        // Persona: $persona,
                     }
                 );
             }
@@ -85,7 +92,7 @@
                     <div class="message-header">
                         <div class="message-logo">
                             <img
-                                src={`${$apiDomain}/micwc-external/assets/envelope-solid.ab8c231d.svg`}
+                                src={`${$assetsUrl}/svgs/envelope-solid.ab8c231d.svg`}
                                 alt=""
                             />
                             <span id="unreaded-msgs"
@@ -271,7 +278,7 @@
         height: auto;
         display: flex;
         flex-direction: row-reverse;
-        width: 90%;
+        width: 100%;
         button {
             padding: 10px 24px;
             gap: 10px;

@@ -13,6 +13,7 @@
     apiToken,
     apiDomain,
     eventsDomain,
+    assetsUrl
   } from "../../js/store";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
@@ -77,13 +78,13 @@
       <div class="message-counter">
         {#if message || (message && message !== "")}
           <img
-            src={`${$apiDomain}/micwc-external/assets/envelope-solid.ab8c231d.svg`}
+            src={`${$assetsUrl}/svgs/envelope-solid.ab8c231d.svg`}
             alt=""
           />
           <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
         {:else}
           <img
-            src={`${$apiDomain}/micwc-external/assets/envelope-solid.ab8c231d.svg`}
+            src={`${$assetsUrl}/svgs/envelope-solid.ab8c231d.svg`}
             alt=""
           />
           <span id="unreaded-msgs">&nbsp;{0}&nbsp;</span>
@@ -91,7 +92,7 @@
       </div>
       <h4 id="title">Important Message</h4>
       <img
-        src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+        src={`${$assetsUrl}/svgs/cr.9226f20f.svg`}
         alt=""
         id={svgId}
       />
@@ -135,14 +136,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 560px;
     max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
-    box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
+    box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
     background-color: white;
-    overflow: hidden;
     @media screen and (max-width: 830px) {
       width: 100%;
     }
@@ -183,7 +182,15 @@
     background: #da1e28;
     border-radius: 50%;
     border: 2px solid white;
-  }
+    width: 20px;
+    height: 20px;
+    /* text-align: center; */
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
   .message .message-body {
     display: flex;
     flex-direction: column;
@@ -249,7 +256,7 @@
     height: auto;
     display: flex;
     flex-direction: row-reverse;
-    width: 90%;
+    width: 100%;
   }
 
   /* acordion style */

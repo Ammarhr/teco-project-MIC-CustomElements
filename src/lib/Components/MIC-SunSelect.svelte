@@ -13,6 +13,7 @@
         eventsDomain,
         newToken,
         sunSelectServicesArray,
+        assetsUrl,
     } from "../../js/store";
     import { onMount } from "svelte";
     export let contractnum;
@@ -48,7 +49,7 @@
                     <h5 class="title">SUN SELECT</h5>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img
-                        src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+                        src={`${$assetsUrl}/svgs/cr.9226f20f.svg`}
                         alt=""
                         id={"rotate-svg-" + arrayOfToggles[i]}
                     />
@@ -62,7 +63,7 @@
                             <h2 id="percentage" style="font-size: 8.5rem;">
                                 {sunSelectObj.SunSelectValue.split("%")[0]}
                                 <img
-                                    src={`${$apiDomain}/micwc-external/assets/percentage-icon.d50d3669.svg`}
+                                    src={`${$assetsUrl}/svgs/percentage-icon.d50d3669.svg`}
                                     alt=""
                                 />
                             </h2>

@@ -9,6 +9,8 @@
         eventsDomain,
         apiDomain,
         newToken,
+        assetsUrl,
+        persona,
     } from "../../js/store";
     // import thumbsUp from "../../assets/un-filled-awesome-thumbs-up.svg";
     // import thumbsDown from "../../assets/un-filled-awesome-thumbs-down.svg";
@@ -46,13 +48,13 @@
     function toggleModal() {
         showModal = !showModal;
     }
-    
+
     // feedback fun
     const likeDislike = (e, id, i) => {
         let feedbackURL;
         arrOfPopUp[i] = !arrOfPopUp[i];
         thankMoadalShow = !thankMoadalShow;
-        
+
         feedbackURL = `${$apiDomain}/api/ibill/webcomponents/v1/Post/Recommendationfeedback?MessageId=${id}&Liked=${feedbackBolean}`;
         setFeedback(token, feedbackURL);
 
@@ -65,6 +67,7 @@
                     EventCode: "IN_Recommendation_Feedback_Like",
                     Outcome: `Recommendation ${id} Cast Submitted.`,
                     Feedback: comment,
+                    // Persona: $persona,
                 }
             );
         } else {
@@ -76,6 +79,7 @@
                     EventCode: "IN_Recommendation_Feedback_Dislike",
                     Outcome: `Recommendation ${id} Cast Submitted.`,
                     Feedback: comment,
+                    // Persona: $persona,
                 }
             );
         }
@@ -119,6 +123,7 @@
                     {
                         EventCode: "IN_Recommendation_View",
                         Outcome: "",
+                        // Persona: $persona,
                     }
                 );
             }}
@@ -143,6 +148,7 @@
                                     {
                                         EventCode: "IN_Recommendation_Close",
                                         Outcome: "",
+                                        // Persona: $persona,
                                     }
                                 );
                             }}>×</button
@@ -164,7 +170,7 @@
                                     <div class="next_btn" on:click={next}>
                                         <img
                                             class="img_btn"
-                                            src={`${$apiDomain}/micwc-external/assets/next-svgr.e0acfd1a.svg`}
+                                            src={`${$assetsUrl}/svgs/next-svgr.e0acfd1a.svg`}
                                         />
                                     </div>
                                     {#if index > 0}
@@ -176,7 +182,7 @@
                                             <img
                                                 class="img_btn"
                                                 id="prev-img"
-                                                src={`${$apiDomain}/micwc-external/assets/next-svgr.e0acfd1a.svg`}
+                                                src={`${$assetsUrl}/svgs/next-svgr.e0acfd1a.svg`}
                                             />
                                         </div>
                                     {/if}
@@ -223,13 +229,13 @@
                                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     {#if message.liked.toLowerCase() == "true" || message.liked.toLowerCase() == "false"}
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/disabled-feedback-button.fcfe0f97.svg`}
+                                            src={`${$assetsUrl}/svgs/disabled-feedback-button.fcfe0f97.svg`}
                                             alt=""
                                             style="cursor: auto;"
                                         />
                                     {:else}
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-up.293c3129.svg`}
+                                            src={`${$assetsUrl}/svgs/un-filled-awesome-thumbs-up.293c3129.svg`}
                                             on:click={(e) => {
                                                 showPopUpHandle(i, "true");
                                             }}
@@ -238,7 +244,7 @@
                                         />
                                         <hr class="hor-line" />
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-down.1aa7dac2.svg`}
+                                            src={`${$assetsUrl}/svgs/un-filled-awesome-thumbs-down.1aa7dac2.svg`}
                                             on:click={(e) => {
                                                 showPopUpHandle(i, "false");
                                             }}
@@ -264,6 +270,7 @@
                                                                 "IN_Recommendation_Feedback_Close",
                                                             Outcome: `Recommendation ${message.id} Cast Closed.`,
                                                             Feedback: comment,
+                                                            // Persona: $persona,
                                                         }
                                                     );
                                                 }}>×</button
@@ -296,6 +303,7 @@
                                                                 "IN_Recommendation_Feedback_Close",
                                                             Outcome: `Recommendation ${message.id} Cast Closed.`,
                                                             Feedback: comment,
+                                                            // Persona: $persona,
                                                         }
                                                     );
                                                 }}>CANCEL</button

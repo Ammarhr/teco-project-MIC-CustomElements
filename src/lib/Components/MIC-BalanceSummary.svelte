@@ -9,6 +9,7 @@
         apiToken,
         fetchAndRedirect,
         eventsDomain,
+        assetsUrl
     } from "../../js/store";
     //state
     var newElement;
@@ -79,7 +80,7 @@
     >
         <div
             class="tecoBalanceSum roundedRadius20"
-            style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bs.db60226b.svg`});"
+            style="background-image:url({`${$assetsUrl}/svgs/mask-bs.db60226b.svg`});"
         >
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>

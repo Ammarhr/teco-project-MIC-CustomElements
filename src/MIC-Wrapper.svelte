@@ -24,23 +24,29 @@
     showToolTipDetails,
     setEventDomain,
     newToken,
-    persona,
+    setAssetsUrl,
   } from "./js/store";
   export let token;
   export let domain;
   export let eventdomain;
-  // export let agent;
+  export let assetspath;
+  // export let personainput;
 
   const refresh = () => {
     newToken.set("");
   };
-  $: if (token && domain && eventdomain) {
+  $: if (token && domain && eventdomain && assetspath) {
     setToken(token);
     setDomain(domain);
     setEventDomain(eventdomain);
-    // persona.set(agent);
+    setAssetsUrl(assetspath);
+    // if (personainput == "Agent") {
+    //   persona.set("Agent");
+    // } else {
+    //   persona.set("customer");
+    // }
   }
-  
+
   // $: if ($showToolTipDetails) {
   //   console.log("wrapper", $showToolTipDetails);
   // }
@@ -53,37 +59,38 @@
 </script>
 
 {#key $showToolTipDetails}
-  {#if token && domain && eventdomain && $generalErr !== true && $showToolTipDetails !== true}
+  {#if token && domain && eventdomain && assetspath && $generalErr !== true && $showToolTipDetails !== true}
     <div class="wrapper">
-      <mic-headerinformation />
+      <!-- <mic-headerinformation /> -->
       <!-- <MicHeaderInformation /> -->
       <div class="important-balance">
         <div class="balance">
           <mic-balancesummary />
+          <!-- <MicBalanceSummary /> -->
         </div>
         <div class="messages">
           <mic-importentmessage />
+          <!-- <MicImportantMessage /> -->
         </div>
-        <!-- <MicBalanceSummary /> -->
-        <!-- <MicImportantMessage /> -->
       </div>
       <mic-billselector />
       <!-- <MicBillSelectorAndDownload /> -->
       <div class="refreshable">
         <div class="charge-detailes">
-          <mic-billingsummary />
+          <!-- <mic-billingsummary /> -->
           <!-- <MicBillingSummary /> -->
         </div>
         <div class="insights">
-          <mic-insights style="width:100%; max-width:410px" />
+          <mic-insights class="mic-insights" />
           <mic-yearlyenergy />
-          <!-- <MicInsights /> -->
-          <!-- <MicYearlyEnergy /> -->
-          <!-- <MicBulkDownload /> -->
+          <!-- <MicInsights />
+          <MicYearlyEnergy />
+          <MicBulkDownload /> -->
         </div>
       </div>
       <div class="blk-container">
         <mic-bulkdownload style="max-width:460px" />
+        <!-- <MicBulkDownload /> -->
       </div>
       <!-- <MicMeterTable /> -->
     </div>
@@ -105,27 +112,24 @@
     background-color: #f4f5f7;
   }
   .important-balance {
-    display: flex;
+    display: grid;
     flex-direction: row;
-    gap: 30px;
+    column-gap: 30px;
+    grid-template-columns: calc(66.66% - 30px) 33.33%;
     width: 100%;
-    justify-content: space-between;
-    @media screen and (max-width: 833px) {
-      flex-direction: column;
-      align-items: flex-end;
+    @media screen and (max-width: 992px) {
+      gap: 30px;
+      grid-template-columns: 100%;
     }
   }
   .balance {
     width: 100%;
-    @media screen and (max-width: 833px) {
+    @media screen and (max-width: 992px) {
       width: 100%;
-      flex-direction: column;
-      align-items: flex-end;
     }
   }
   .messages {
-    width: 35%;
-    @media screen and (max-width: 833px) {
+    @media screen and (max-width: 992px) {
       width: 100%;
       flex-direction: column;
       align-items: flex-end;
@@ -135,7 +139,7 @@
     display: grid;
     flex-direction: row;
     column-gap: 30px;
-    grid-template-columns: calc(66% - 30px) 33%;
+    grid-template-columns: calc(66.66% - 30px) 33.33%;
     width: 100%;
     @media screen and (max-width: 992px) {
       grid-template-columns: 100%;
@@ -144,6 +148,13 @@
   .charge-detailes {
     @media screen and (max-width: 992px) {
       width: 100%;
+    }
+  }
+  .mic-insights {
+    width: 100%;
+    max-width: 410px;
+    @media screen and (max-width: 767px) {
+      max-width: unset;
     }
   }
   .insights {

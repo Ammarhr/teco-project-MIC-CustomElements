@@ -29,6 +29,8 @@
     apiToken,
     latestBill,
     eventsDomain,
+    persona,
+    assetsUrl,
     sunSelectServicesArray,
   } from "../../js/store";
   import { onMount } from "svelte";
@@ -175,7 +177,7 @@
         <div id="header" on:click={() => toggle(i)}>
           <h5 class="insights-title">MY BILLING INSIGHTS</h5>
           <img
-            src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+            src={`${$assetsUrl}/svgs/cr.9226f20f.svg`}
             alt="toggle"
             id={`${svgId}${toggleArray[i]}`}
           />
@@ -195,6 +197,8 @@
                     {
                       EventCode: "IN_Yearly_Compare",
                       Outcome: "",
+                      Feedback: "",
+                      // Persona: $persona,
                     }
                   );
                 }}
@@ -214,6 +218,8 @@
                     {
                       EventCode: "IN_Monthly_Compare",
                       Outcome: "",
+                      Feedback: "",
+                      // Persona: $persona,
                     }
                   );
                 }}
@@ -266,7 +272,7 @@
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
+                          src={`${$assetsUrl}/svgs/redArrow.d29aff4f.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -280,7 +286,7 @@
                         style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/greenArrow.7e8b9860.svg`}
+                          src={`${$assetsUrl}/svgs/greenArrow.7e8b9860.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -312,7 +318,7 @@
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/arrowUp.7240fadd.svg`}
+                          src={`${$assetsUrl}/svgs/arrowUp.7240fadd.svg`}
                           class="arrow"
                           alt=""
                         />{insightsService?.yearly?.valueTemp + "°"}</span
@@ -357,7 +363,7 @@
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
+                          src={`${$assetsUrl}/svgs/redArrow.d29aff4f.svg`}
                           class="arrow"
                           alt="arrow icon"
                         />
@@ -371,7 +377,7 @@
                         style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/greenArrow.7e8b9860.svg`}
+                          src={`${$assetsUrl}/svgs/greenArrow.7e8b9860.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -438,7 +444,7 @@
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
+                          src={`${$assetsUrl}/svgs/redArrow.d29aff4f.svg`}
                           class="arrow"
                           alt="arrow icon"
                         />
@@ -452,7 +458,7 @@
                         style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/greenArrow.7e8b9860.svg`}
+                          src={`${$assetsUrl}/svgs/greenArrow.7e8b9860.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -484,7 +490,7 @@
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/arrowUp.7240fadd.svg`}
+                          src={`${$assetsUrl}/svgs/arrowUp.7240fadd.svg`}
                           class="arrow"
                           alt=""
                         />{insightsService?.monthly?.valueTemp + "°"}</span
@@ -530,7 +536,7 @@
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/redArrow.d29aff4f.svg`}
+                          src={`${$assetsUrl}/svgs/redArrow.d29aff4f.svg`}
                           class="arrow"
                           alt="arrow icon"
                         />
@@ -544,7 +550,7 @@
                         style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/greenArrow.7e8b9860.svg`}
+                          src={`${$assetsUrl}/svgs/greenArrow.7e8b9860.svg`}
                           class="arrow"
                           alt=""
                         />

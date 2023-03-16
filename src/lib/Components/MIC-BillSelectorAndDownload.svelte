@@ -16,6 +16,7 @@
     latestBill,
     eventsDomain,
     newToken,
+    assetsUrl
   } from "../../js/store";
   import MicSunSelect from "./MIC-SunSelect.svelte";
   // state
@@ -146,7 +147,7 @@
               )}
           >
             <img
-              src={`${$apiDomain}/micwc-external/assets/DownloadIcon.9e9f8186.svg`}
+              src={`${$assetsUrl}/svgs/DownloadIcon.9e9f8186.svg`}
               alt="DI"
             />DOWNLOAD BILL
           </button>

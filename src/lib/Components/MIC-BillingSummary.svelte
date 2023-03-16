@@ -15,6 +15,7 @@
     eventsDomain,
     showToolTipDetails,
     newToken,
+    assetsUrl
   } from "../../js/store";
 
   let toggleArray = [];
@@ -159,7 +160,7 @@
           >
             <h4 id="title">BILLING SUMMARY</h4>
             <img
-              src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+              src={`${$assetsUrl}/svgs/cr.9226f20f.svg`}
               alt=""
               id={"rotate-svg-" + !toggleArray[i]}
             />
@@ -170,19 +171,19 @@
               <span>
                 {#if billService.Lable == "Electric"}
                   <img
-                    src={`${$apiDomain}/micwc-external/assets/electric.a02f37b0.svg`}
+                    src={`${$assetsUrl}/svgs/electric.a02f37b0.svg`}
                     alt=""
                     style="width: 15px;"
                   />
                 {:else if billService.ServiceType && billService.ServiceType == "GAS"}
                   <img
-                    src={`${$apiDomain}/micwc-external/assets/Fire.f0f8bb01.svg`}
+                    src={`${$assetsUrl}/svgs/Fire.f0f8bb01.svg`}
                     alt=""
                     style="width: 15px;"
                   />
                 {:else if billService.ServiceType && billService.ServiceType == "Lighting"}
                   <img
-                    src={`${$apiDomain}/micwc-external/assets/lighting.0131cc59.svg`}
+                    src={`${$assetsUrl}/svgs/lighting.0131cc59.svg`}
                     alt=""
                     style="width: 15px;"
                   />
@@ -441,14 +442,17 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #eaecee;
-    padding: 10px 0 10px 0;
     display: grid;
     grid-template-columns: 45% auto 1fr auto;
     @media screen and (max-width: 767px) {
       justify-content: unset;
       align-items: center;
-      border-bottom: 1px solid #eaecee;
-      padding: 10px 0 10px 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    @media screen and (min-width: 993px) and (max-width: 1100px) {
+      justify-content: unset;
+      align-items: center;
       display: flex;
       flex-wrap: wrap;
     }
@@ -619,6 +623,9 @@
     @media screen and (max-width: 767px) {
       order: 3;
     }
+    @media screen and (min-width: 993px) and (max-width: 1100px) {
+      order: 3;
+    }
   }
   .level3 {
     color: #005faa;
@@ -628,6 +635,9 @@
     font-size: 18px;
     font-style: italic;
     @media screen and (max-width: 767px) {
+      order: 4;
+    }
+    @media screen and (min-width: 993px) and (max-width: 1100px) {
       order: 4;
     }
   }
@@ -645,7 +655,10 @@
     margin: 0;
     position: relative;
     @media screen and (max-width: 767px) {
-      flex: 1 0 75%;
+      flex: 1 0 66%;
+    }
+    @media screen and (min-width: 993px) and (max-width: 1100px) {
+      flex: 1 0 66%;
     }
   }
 
@@ -658,6 +671,9 @@
     grid-column-start: 4;
     text-align: right;
     @media screen and (max-width: 767px) {
+      flex: 1 0 25%;
+    }
+    @media screen and (min-width: 993px) and (max-width: 1100px) {
       flex: 1 0 25%;
     }
   }
