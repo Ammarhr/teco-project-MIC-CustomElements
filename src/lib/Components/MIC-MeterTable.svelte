@@ -48,30 +48,43 @@
             items = searchArray;
         }
     };
+    // let tableContainer;
+
+    // $: tableContainer = document.getElementById("table");
+
+    // $: if (tableContainer) {
+    //     console.log(tableContainer, "hello");
+    // }
+
     ////// change the charts reference
-    $: if (selectedMeter) {
-        let { gas, tempereature, x } = selectedMeter.settings;
-        options = renderMixChart(
-            [gas, tempereature],
-            x,
-            ["#044F8D"],
-            "100%",
-            650
-        );
-    }
+    // $: if (selectedMeter) {
+    //     let { gas, tempereature, x } = selectedMeter.settings;
+    //     options = renderMixChart(
+    //         [gas, tempereature],
+    //         x,
+    //         ["#044F8D"],
+    //         "100%",
+    //         650
+    //     );
+    // }
     ///////// pagination:
     let items;
     //////// first render
     onMount(() => {
         if ($apiToken && $apiDomain && !$data.results) {
-            get($apiToken, "../../data/meterDataUsage.json");
+            get($apiToken, 
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+            // "../../data/meterTable.json"
+            );
         }
+        console.log($apiToken, "from store");
     });
 
-    $: if ($data && $data.results) {
-        tableData = $data.results;
-        selectedMeter = $data.results[0];
-        items = $data.results;
+    $: if ($data && $data.MeterTabel) {
+        console.log($data);
+        tableData = $data.MeterTabel;
+        selectedMeter = $data.MeterTabel[0];
+        items = $data.MeterTabel;
         getPaginatedItems();
     }
     ////////// tabs functionality
@@ -106,7 +119,7 @@
         const endIndex = startIndex + pageSize;
         console.log("grommemteete :", items.slice(startIndex, endIndex));
         pagenateItems = items.slice(startIndex, endIndex);
-        handleSelectedMeter()
+        handleSelectedMeter();
     }
 
     function getCurrentPage() {
@@ -158,7 +171,7 @@
                 >
                     {#if items}
                         {#if tableData}
-                            <table class="table">
+                            <table class="table" id="table">
                                 <tr>
                                     <th>Service</th>
                                     <th>Meter Number</th>
@@ -175,9 +188,54 @@
                                             handleSelectedMeter(row);
                                         }}
                                     >
-                                        {#each Object.values(row.meterTable) as value}
-                                            <td>{value}</td>
-                                        {/each}
+                                        <!-- {console.log(row, "it's a row")} -->
+                                        <!-- {#each Object.values(row) as value} -->
+                                        <td>
+                                            <div class="td-value">
+                                                {row.Service}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="td-value">
+                                                #{row.MeterNumber}
+                                            </div></td
+                                        >
+                                        <td>
+                                            <div class="td-value">
+                                                {row.ReadDate}
+                                            </div></td
+                                        >
+                                        <td>
+                                            <div class="td-value">
+                                                {row.BillingPeriod}
+                                            </div></td
+                                        >
+                                        <td>
+                                            <div class="td-value">
+                                                <h4>
+                                                    {row.CurrentReading}
+                                                </h4>
+                                                <span>
+                                                    ({row.ReadType})
+                                                </span>
+                                            </div></td
+                                        >
+                                        <td>
+                                            <div class="td-value">
+                                                {row.PreviousReading}
+                                            </div></td
+                                        >
+                                        <td>
+                                            <div class="td-value">
+                                                <h4>
+                                                    {row.TotalUsed}
+                                                </h4>
+                                                <span>
+                                                    {row.OperandLabel}
+                                                </span>
+                                            </div></td
+                                        >
+                                        <!-- {/each} -->
                                     </tr>
                                 {/each}
                                 {#if $data.meterLocation}
@@ -189,34 +247,38 @@
                                     </div>
                                 {/if}
                             </table>
-                            <div>
-                                <p>
-                                    Page {getCurrentPage()} of {getTotalPages()}
-                                </p>
-                                <button
-                                    on:click={prevPage}
-                                    disabled={currentPage === 0}
-                                >
-                                    Previous
-                                </button>
-
-                                {#each getPagesToShow() as pageIndex}
+                            <div class="pagination-options">
+                                <div>
+                                    <p>
+                                        Page {getCurrentPage()} of {getTotalPages()}
+                                    </p>
+                                </div>
+                                <div>
                                     <button
-                                        on:click={() => goToPage(pageIndex)}
-                                        class:selected={pageIndex ===
-                                            currentPage}
+                                        on:click={prevPage}
+                                        disabled={currentPage === 0}
                                     >
-                                        {pageIndex + 1}
+                                        Previous
                                     </button>
-                                {/each}
 
-                                <button
-                                    on:click={nextPage}
-                                    disabled={currentPage ===
-                                        getTotalPages() - 1}
-                                >
-                                    Next
-                                </button>
+                                    {#each getPagesToShow() as pageIndex}
+                                        <button
+                                            on:click={() => goToPage(pageIndex)}
+                                            class:selected={pageIndex ===
+                                                currentPage}
+                                        >
+                                            {pageIndex + 1}
+                                        </button>
+                                    {/each}
+
+                                    <button
+                                        on:click={nextPage}
+                                        disabled={currentPage ===
+                                            getTotalPages() - 1}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
                             </div>
                         {/if}
                     {/if}
@@ -227,7 +289,7 @@
                     transition:slide={{ duration: 300 }}
                 >
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div id="meter-tabs">
+                    <!-- <div id="meter-tabs">
                         <h6
                             id={"meter-btn" + tab1}
                             on:click={() => activateTab("1", "2")}
@@ -240,8 +302,8 @@
                         >
                             Monthly
                         </h6>
-                    </div>
-                    <div class="options">
+                    </div> -->
+                    <!-- <div class="options">
                         <input type="checkbox" name="trmprature" id="temp" />
                         <span>Temperature</span>
                         <img
@@ -249,8 +311,8 @@
                             alt="usage chart tool tip"
                             class="tool-tip"
                         />
-                    </div>
-                    <div id={"meter-tab1" + tab1}>
+                    </div> -->
+                    <!-- <div id={"meter-tab1" + tab1}>
                         {#if selectedMeter.settings.gas.data.length == 0}
                             <h1 class="no-data">No Data to display</h1>
                         {/if}
@@ -261,9 +323,9 @@
                             <h1 class="no-data">No Data to display</h1>
                         {/if}
                         <div class="chart" use:chart={options} />
-                    </div>
+                    </div> -->
                 </div>
-                <div class="information-box">
+                <!-- <div class="information-box">
                     <div>
                         <h6>AVG. COST PER DAY</h6>
                         <h4>$11,098.98</h4>
@@ -273,7 +335,7 @@
                         <h6>AVG. TEMP PER DAY</h6>
                         <h4>65°</h4>
                     </div>
-                </div>
+                </div> -->
             {/if}
         </div>
     {/key}
@@ -283,6 +345,7 @@
     * {
         font-family: "Interstate";
     }
+
     .no-data {
         position: absolute;
         left: 41.24%;
@@ -411,6 +474,7 @@
     }
 
     td {
+        padding: 12px;
         border: 1px solid rgba(194, 194, 194, 0.749);
         transition: background-color 0.4s;
     }
@@ -418,7 +482,23 @@
     td:hover {
         background-color: lightgrey;
     }
-
+    .td-value {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        column-gap: 5px;
+    }
+    .pagination-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+    h4 {
+        margin: 0;
+        padding: 0;
+    }
     .chart {
         width: 100%;
     }

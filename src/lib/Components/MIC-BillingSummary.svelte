@@ -15,7 +15,6 @@
     eventsDomain,
     showToolTipDetails,
     newToken,
-    assetsUrl
   } from "../../js/store";
 
   let toggleArray = [];
@@ -160,37 +159,37 @@
           >
             <h4 id="title">BILLING SUMMARY</h4>
             <img
-              src={`${$assetsUrl}/svgs/cr.9226f20f.svg`}
+              src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
               alt=""
               id={"rotate-svg-" + !toggleArray[i]}
             />
           </div>
           <!-- {#if toggleArray[i]} -->
           <div style={styleToggleArr[i]} class="bill-content">
-            <h3 id="sectiontitle">
-              <span>
-                {#if billService.Lable == "Electric"}
+            <span>
+              <h3 id="sectiontitle" style="color:{billService.Color}; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;">
+                {#if billService.ServiceType && billService.ServiceType == "Electric"}
                   <img
-                    src={`${$assetsUrl}/svgs/electric.a02f37b0.svg`}
+                    src={`${$apiDomain}/micwc-external/assets/electricCharge.svg`}
                     alt=""
-                    style="width: 15px;"
+                    style="width: 25px;"
                   />
                 {:else if billService.ServiceType && billService.ServiceType == "GAS"}
                   <img
-                    src={`${$assetsUrl}/svgs/Fire.f0f8bb01.svg`}
+                    src={`${$apiDomain}/micwc-external/assets/gasCharge.svg`}
                     alt=""
-                    style="width: 15px;"
+                    style="width: 25px;"
                   />
                 {:else if billService.ServiceType && billService.ServiceType == "Lighting"}
                   <img
-                    src={`${$assetsUrl}/svgs/lighting.0131cc59.svg`}
+                    src={`${$apiDomain}/micwc-external/assets/lighting.0131cc59.svg`}
                     alt=""
-                    style="width: 15px;"
+                    style="width: 25px;"
                   />
                 {/if}
                 {billService.Lable}
-              </span>
-            </h3>
+              </h3>
+            </span>
             {#if billService.servicePeriod}
               <p id="comment">
                 Service Period: {billService.servicePeriod}
@@ -201,7 +200,7 @@
                 {#each billService.Section_Level1s as section, j}
                   {#if section.SectionType == "Charge_Group"}
                     {#if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == true}
-                      {#if section.Lable && section.Lable != ""}
+                      <!-- {#if section.Lable && section.Lable != ""}
                         <div class="sub-title">
                           <div
                             class="sub-sec-header"
@@ -215,7 +214,7 @@
                             </h4>
                           </div>
                         </div>
-                      {/if}
+                      {/if} -->
                       <!-- <div
                         class="breakdown-header"
                         on:click={() => {
@@ -238,31 +237,31 @@
                             {#if level2Obj.Order == 1}
                               <p class={"level" + level2Obj.Order}>
                                 {level2Obj.Value}
-                                {#if level2Obj.tooltip && level2Obj.tooltip == ""}
+                                {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                   <div class="tooltip-icon">
                                     <img
-                                      src={toolTip}
+                                      src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
                                       alt=""
                                       on:pointerenter={() =>
                                         toolTipToggle(j, i)}
                                     />
-                                    <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
-                                    <div class="tooltip-description">
-                                      <!-- style={billsObjectsArray[i]
-                                      .toolTipStylleArray[j]} -->
-                                      <div class="tooltip-con">
-                                        Covers the costs of moving gas from its
-                                        source to your premise, other than the
-                                        cost of gas itself. <br />
-                                        <a
-                                          href="#"
-                                          on:click={() => {
-                                            showToolTipDetails.set(true);
-                                          }}>UNDERSTANDING YOUR CHARGES</a
-                                        >
+                                    {#if billsObjectsArray[i].toolTipStylleArray[j]}
+                                      <div
+                                        class="tooltip-description"
+                                        style={billsObjectsArray[i]
+                                          .toolTipStylleArray[j]}
+                                      >
+                                        <div class="tooltip-con">
+                                          {level2Obj.ToolTip} <br />
+                                          <a
+                                            href="#"
+                                            on:click={() => {
+                                              showToolTipDetails.set(true);
+                                            }}>UNDERSTANDING YOUR CHARGES</a
+                                          >
+                                        </div>
                                       </div>
-                                    </div>
-                                    <!-- {/if}   -->
+                                    {/if}
                                   </div>
                                 {/if}
                               </p>
@@ -303,10 +302,75 @@
                                 <p class={"level" + level2Obj.Order}>
                                   <!-- {console.log(level2Obj.tooltip)} -->
                                   {level2Obj.Value}
-                                  {#if level2Obj.tooltip && level2Obj.tooltip == ""}
+                                  {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <img
-                                        src={toolTip}
+                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        alt=""
+                                        on:pointerenter={() =>
+                                          toolTipToggle(j, i)}
+                                      />
+                                      {#if billsObjectsArray[i].toolTipStylleArray[j]}
+                                        <div
+                                          class="tooltip-description"
+                                          style={billsObjectsArray[i]
+                                            .toolTipStylleArray[j]}
+                                        >
+                                          <div class="tooltip-con">
+                                            {level2Obj.ToolTip}<br />
+                                            <a
+                                              href="#"
+                                              on:click={() => {
+                                                console.log("on tool tip");
+                                              }}>UNDERSTANDING YOUR CHARGES</a
+                                            >
+                                          </div>
+                                        </div>
+                                      {/if}
+                                    </div>
+                                  {/if}
+                                </p>
+                              {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
+                                <p class={"level" + level2Obj.Order}>
+                                  {level2Obj.Value}
+                                </p>
+                              {:else}
+                                <p class={"level" + level2Obj.Order}>
+                                  {level2Obj.Value}
+                                </p>
+                              {/if}
+                            {/if}
+                          {/each}
+                        </div>
+                      {/if}
+                    {/if}
+                  {:else if section.SectionType == "CustomeSection"}
+                    {#if section.Lable && section.Lable != ""}
+                      <div class="sub-title">
+                        <div
+                          class="sub-sec-header"
+                          style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                        >
+                          {#if section.IconPath && section.IconPath != ""}
+                            <img src={percentageGas} alt="" />
+                          {/if}
+                          <h4 tyle="font-size:{section.FontSize}px">
+                            {section.Lable}
+                          </h4>
+                        </div>
+                      </div>
+                      <div class="charges-container">
+                        {#each section.Section_Level2s as subSection}
+                          {#each subSection.Section_Level3s as level2Obj}
+                            <!-- {section.SectionType} -->
+                            {#if level2Obj.SectionType == "Charge"}
+                              {#if level2Obj.Order == 1}
+                                <p class={"level" + level2Obj.Order}>
+                                  {level2Obj.Value}
+                                  {#if level2Obj.tooltip && level2Obj.tooltip != ""}
+                                    <div class="tooltip-icon">
+                                      <img
+                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
                                         alt=""
                                         on:pointerenter={() =>
                                           toolTipToggle(j, i)}
@@ -314,7 +378,7 @@
                                       <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
                                       <div class="tooltip-description">
                                         <!-- style={billsObjectsArray[i]
-                              .toolTipStylleArray[j]} -->
+                                      .toolTipStylleArray[j]} -->
                                         <div class="tooltip-con">
                                           Covers the costs of moving gas from
                                           its source to your premise, other than
@@ -342,8 +406,8 @@
                               {/if}
                             {/if}
                           {/each}
-                        </div>
-                      {/if}
+                        {/each}
+                      </div>
                     {/if}
                   {:else if section.SectionType == "Total"}
                     <div
@@ -358,11 +422,20 @@
               {/if}
             </div>
             {#if i == $data.Sections.length - 2}
-              <div class="total">
+              <div
+                class="total"
+                style="background-color:{$data.Sections[
+                  $data.Sections.length - 1
+                ].Color} ;"
+              >
                 <h6 class="total-label">
                   {$data.Sections[$data.Sections.length - 1].Lable}
                 </h6>
-                <h6 class="total-value">
+                <h6
+                  class="total-value"
+                  style="font-size: {$data.Sections[$data.Sections.length - 1]
+                    .FontSize}px;"
+                >
                   {$data.Sections[$data.Sections.length - 1].Value}
                 </h6>
               </div>
@@ -705,7 +778,6 @@
     align-items: center;
     font-weight: 300;
     font-size: 24px;
-    line-height: 29px;
     letter-spacing: -0.02em;
     color: #ffffff;
   }
@@ -713,15 +785,10 @@
     font-family: "Interstate";
     font-style: normal;
     font-weight: 400;
-    font-size: 35px;
     line-height: 42px;
     display: flex;
     align-items: center;
     text-align: right;
     color: #ffffff;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-    margin: 0;
   }
 </style>

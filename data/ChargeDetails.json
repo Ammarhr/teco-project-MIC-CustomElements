@@ -1,7 +1,7 @@
 {
   "Sections": [
     {
-      "Order": 1,
+      "Order": 2,
       "Lable": "Electric Service",
       "Value": "",
       "FontSize": 30,
@@ -9,10 +9,11 @@
       "IsItalic": false,
       "IsBreakdown": false,
       "SectionType": "Service",
+      "ServiceType": "Electric",
       "Section_Level1s": [
         {
           "Order": 1,
-          "Value": "5200070577",
+          "Value": "5100742577",
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
@@ -28,7 +29,54 @@
           "Section_Level2s": [
             {
               "Order": 1,
-              "Value": "Basic Service Charge",
+              "Value": "Daily Basic Service Charge",
+              "FontSize": 20,
+              "Color": "#000000",
+              "ToolTip": "Billing Demand Charge\n\n",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "31 days",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $1.07000",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$33.17",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Billing Demand Charge",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -36,8 +84,26 @@
               "SectionType": "Charge"
             },
             {
+              "Order": 2,
+              "Value": "550 kW",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $13.75000/kW",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
               "Order": 4,
-              "Value": "$16.62",
+              "Value": "$7,562.50",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -62,29 +128,10 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge"
-            }
-          ]
-        },
-        {
-          "Order": 2,
-          "Value": "",
-          "FontSize": 0,
-          "IsItalic": false,
-          "IsBreakdown": false,
-          "SectionType": "Charge_Group",
-          "Section_Level2s": [
-            {
-              "Order": 1,
-              "Value": "First 1,000 kWh",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": true,
-              "SectionType": "Charge"
             },
             {
               "Order": 2,
-              "Value": "1,000 kWh",
+              "Value": "408,650 kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -93,7 +140,7 @@
             },
             {
               "Order": 3,
-              "Value": "@ $0.05902/kWh",
+              "Value": "@ $0.00730/kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -102,53 +149,7 @@
             },
             {
               "Order": 4,
-              "Value": "$59.02",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": false,
-              "SectionType": "Charge"
-            }
-          ]
-        },
-        {
-          "Order": 2,
-          "Value": "",
-          "FontSize": 0,
-          "IsItalic": false,
-          "IsBreakdown": false,
-          "SectionType": "Charge_Group",
-          "Section_Level2s": [
-            {
-              "Order": 1,
-              "Value": "Above 1,000 kWh",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": true,
-              "SectionType": "Charge"
-            },
-            {
-              "Order": 2,
-              "Value": "971 kWh",
-              "FontSize": 18,
-              "Color": "#005FAA",
-              "IsItalic": true,
-              "IsBreakdown": false,
-              "SectionType": "Charge"
-            },
-            {
-              "Order": 3,
-              "Value": "@ $0.07010/kWh",
-              "FontSize": 18,
-              "Color": "#005FAA",
-              "IsItalic": true,
-              "IsBreakdown": false,
-              "SectionType": "Charge"
-            },
-            {
-              "Order": 4,
-              "Value": "$68.07",
+              "Value": "$2,983.15",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -173,29 +174,10 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge"
-            }
-          ]
-        },
-        {
-          "Order": 2,
-          "Value": "",
-          "FontSize": 0,
-          "IsItalic": false,
-          "IsBreakdown": false,
-          "SectionType": "Charge_Group",
-          "Section_Level2s": [
-            {
-              "Order": 1,
-              "Value": "First 1,000 kWh",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": true,
-              "SectionType": "Charge"
             },
             {
               "Order": 2,
-              "Value": "1,000 kWh",
+              "Value": "408,650 kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -204,7 +186,7 @@
             },
             {
               "Order": 3,
-              "Value": "@ $0.02642/kWh",
+              "Value": "@ $0.03057/kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -213,7 +195,7 @@
             },
             {
               "Order": 4,
-              "Value": "$26.42",
+              "Value": "$12,492.43",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -232,16 +214,16 @@
           "Section_Level2s": [
             {
               "Order": 1,
-              "Value": "Above 1,000 kWh",
+              "Value": "Capacity Charge",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
-              "IsBreakdown": true,
+              "IsBreakdown": false,
               "SectionType": "Charge"
             },
             {
               "Order": 2,
-              "Value": "971 kWh",
+              "Value": "550 kW",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -250,7 +232,7 @@
             },
             {
               "Order": 3,
-              "Value": "@ $0.03642/kWh",
+              "Value": "@ $0.09000/kW",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -259,7 +241,237 @@
             },
             {
               "Order": 4,
-              "Value": "$35.36",
+              "Value": "$49.50",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Storm Protection Charge",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "550 kW",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $0.59000/kW",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$324.50",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Energy Conservation Charge",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "550 kW",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $0.81000/kW",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$445.50",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Environmental Cost Recovery",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "408,650 kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $0.00130/kWh",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$531.25",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Clean Energy Transition Mechanism",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "550 kW",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $1.10000/kW",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$605.00",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Value": "",
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Sun to Go Recurring",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 2,
+              "Value": "5  blocks",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 3,
+              "Value": "@ $5",
+              "FontSize": 18,
+              "Color": "#005FAA",
+              "IsItalic": true,
+              "IsBreakdown": false,
+              "SectionType": "Charge"
+            },
+            {
+              "Order": 4,
+              "Value": "$25.00",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -287,7 +499,7 @@
             },
             {
               "Order": 4,
-              "Value": "$5.27",
+              "Value": "$642.36",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -299,7 +511,7 @@
         {
           "Order": 3,
           "Lable": "Electric Charges Subtotal",
-          "Value": "$210.76",
+          "Value": "$25,694.36",
           "FontSize": 20,
           "Color": "#005FAA",
           "IsItalic": false,
@@ -314,33 +526,130 @@
           "Color": "#5EB0F4",
           "IsItalic": false,
           "IsBreakdown": false,
-          "SectionType": "Charge_Group",
+          "SectionType": "CustomeSection",
           "Section_Level2s": [
             {
               "Order": 1,
-              "Value": "Electric Late Payment Fee",
-              "FontSize": 20,
-              "Color": "#000000",
+              "Value": "",
+              "FontSize": 0,
               "IsItalic": false,
               "IsBreakdown": false,
-              "SectionType": "Charge"
-            },
-            {
-              "Order": 4,
-              "Value": "$5.00",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": false,
-              "SectionType": "Charge"
+              "SectionType": "Charge_Group",
+              "Section_Level3s": [
+                {
+                  "Order": 1,
+                  "Value": "Electric Late Payment Fee",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge"
+                },
+                {
+                  "Order": 4,
+                  "Value": "$32,385.96",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge"
+                }
+              ]
             }
           ]
         },
         {
           "Order": 5,
           "Lable": "Sub Total",
-          "Value": "$5.00",
+          "Value": "$32,385.96",
           "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Total"
+        },
+        {
+          "Order": 6,
+          "Lable": "Zap Cap System",
+          "Value": "",
+          "FontSize": 28,
+          "Color": "#005FAA",
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "CustomeSection",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "",
+              "FontSize": 0,
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge_Group",
+              "Section_Level3s": [
+                {
+                  "Order": 1,
+                  "Value": "Business Surge MST3277 Monthly",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge"
+                },
+                {
+                  "Order": 2,
+                  "Value": "2 units",
+                  "FontSize": 18,
+                  "Color": "#005FAA",
+                  "IsItalic": true,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge"
+                },
+                {
+                  "Order": 4,
+                  "Value": "$80.00",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge"
+                }
+              ]
+            },
+            {
+              "Order": 1,
+              "Value": "",
+              "FontSize": 0,
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge_Group",
+              "Section_Level3s": [
+                {
+                  "Order": 1,
+                  "Value": "State Tax",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge"
+                },
+                {
+                  "Order": 4,
+                  "Value": "$6.00",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Order": 7,
+          "Lable": "Zap Cap System Cost",
+          "Value": "$86.00",
+          "FontSize": 20,
+          "Color": "#005FAA",
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Total"
@@ -348,9 +657,9 @@
       ]
     },
     {
-      "Order": 2,
+      "Order": 3,
       "Lable": "Total Current Charges",
-      "Value": "$393.15",
+      "Value": "$2,744,696.72",
       "FontSize": 35,
       "Color": "#005FAA",
       "IsItalic": false,

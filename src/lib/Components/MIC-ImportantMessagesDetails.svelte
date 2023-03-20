@@ -14,7 +14,6 @@
         eventsDomain,
         apiDomain,
         persona,
-        assetsUrl
     } from "../../js/store";
 
     export let messages;
@@ -27,25 +26,25 @@
         if (toggle == "view") {
             fetchAndRedirect(
                 $apiToken,
-                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
                 null,
                 {
                     EventCode: "IN_Important_Messages_view",
                     Outcome: `Number Of Messsages: ${messages.length}`,
                     Feedback: "",
-                    // Persona: $persona,
+                    Persona: $persona,
                 }
             );
         } else {
             fetchAndRedirect(
                 $apiToken,
-                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
                 null,
                 {
                     EventCode: "IN_Important_Messages_Close",
                     Outcome: "",
                     Feedback: "",
-                    // Persona: $persona,
+                    Persona: $persona,
                 }
             );
         }
@@ -56,13 +55,13 @@
                 show = false;
                 fetchAndRedirect(
                     $apiToken,
-                    `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
                     null,
                     {
                         EventCode: "IN_Important_Messages_Close",
                         Outcome: "",
                         Feedback: "",
-                        // Persona: $persona,
+                        Persona: $persona,
                     }
                 );
             }
@@ -92,7 +91,7 @@
                     <div class="message-header">
                         <div class="message-logo">
                             <img
-                                src={`${$assetsUrl}/svgs/envelope-solid.ab8c231d.svg`}
+                                src={`${$apiDomain}/micwc-external/assets/envelope-solid.svg`}
                                 alt=""
                             />
                             <span id="unreaded-msgs"

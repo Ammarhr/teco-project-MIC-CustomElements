@@ -16,7 +16,6 @@
     latestBill,
     eventsDomain,
     newToken,
-    assetsUrl
   } from "../../js/store";
   import MicSunSelect from "./MIC-SunSelect.svelte";
   // state
@@ -101,7 +100,7 @@
                 handleChange(e);
                 fetchAndRedirect(
                   $apiToken,
-                  `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                  `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
                   null,
                   {
                     EventCode: "Select_New_Bill",
@@ -138,7 +137,7 @@
             on:click={() =>
               fetchAndRedirect(
                 $apiToken,
-                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
                 `${$data.download_link}${$billNumber}`,
                 {
                   EventCode: "Bill_Download",
@@ -147,7 +146,7 @@
               )}
           >
             <img
-              src={`${$assetsUrl}/svgs/DownloadIcon.9e9f8186.svg`}
+              src={`${$apiDomain}/micwc-external/assets/DownloadIcon.svg`}
               alt="DI"
             />DOWNLOAD BILL
           </button>
@@ -163,7 +162,7 @@
                 }
                 fetchAndRedirect(
                   $apiToken,
-                  `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                  `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
                   null,
                   {
                     EventCode: "Select_Latest_Bill",

@@ -11,7 +11,6 @@
         apiDomain,
         eventsDomain,
         newToken,
-        assetsUrl
     } from "../../js/store";
     import { onMount } from "svelte";
     let newTokenTrigger;
@@ -64,7 +63,7 @@
                     <h5 class="title">YOUR GENERATED ENERGY SUMMARY</h5>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img
-                        src={`${$assetsUrl}/svgs/cr.9226f20f.svg`}
+                        src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
                         alt=""
                         id={"rotate-svg-" + arrayOfToggles[i]}
                         on:click={() => toggle(i)}

@@ -2,7 +2,7 @@
 
 <script>
   // @ts-nocheck
-  import { fetchstore, apiDomain, apiToken ,assetsUrl} from "../../js/store";
+  import { fetchstore, apiDomain, apiToken } from "../../js/store";
   //state
   let account;
   let statusClass = "Inactive";
@@ -54,7 +54,7 @@
               Change Account</button
             ><img
               class="spacing-outer-left-medium"
-              src={`${$assetsUrl}/svgs/Vector.3d07a0fc.svg`}
+              src={`${$apiDomain}/micwc-external/assets/favIcon.svg`}
               alt="favorite logo"
             />
           </div>
@@ -66,13 +66,13 @@
         >
           <div class="oneLined">
             {#if account.IsElectric}
-              <img class="spacing-outer-right-medium" src={`${$assetsUrl}/svgs/electric.a02f37b0.svg`} />
+              <img class="spacing-outer-right-medium" src={`${$apiDomain}/micwc-external/assets/electricService.svg`} />
             {/if}
             {#if account.IsGas}
-              <img class="spacing-outer-right-medium" src={`${$assetsUrl}/svgs/Fire.f0f8bb01.svg`} />
+              <img class="spacing-outer-right-medium" src={`${$apiDomain}/micwc-external/assets/GasService.svg`} />
             {/if}
             {#if account.IsLighting}
-              <img class="lighting" src={`${$assetsUrl}/svgs/lighting.0131cc59.svg`} />
+              <img class="lighting" src={`${$apiDomain}/micwc-external/assets/lightingService.svg`} />
             {/if}
             <div>
               <div class="account-id">

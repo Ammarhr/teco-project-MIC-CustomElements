@@ -9,7 +9,6 @@
         apiDomain,
         apiToken,
         generalErr,
-        assetsUrl
     } from "../../js/store";
     //mocking data
     const [data, loading, error, get] = fetchstore();
@@ -34,7 +33,7 @@
 {:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
-        style="background-image:url({`${$assetsUrl}/svgs/mask-bd.78a6b58f.svg`});"
+        style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bd.svg`});"
     >
         <div class="tecoBillBannerBody">
             <p>

@@ -29,22 +29,22 @@
   export let token;
   export let domain;
   export let eventdomain;
-  export let assetspath;
+  // export let assetspath;
   // export let personainput;
 
   const refresh = () => {
     newToken.set("");
   };
-  $: if (token && domain && eventdomain && assetspath) {
+  $: if (token && domain && eventdomain ) {
     setToken(token);
     setDomain(domain);
     setEventDomain(eventdomain);
-    setAssetsUrl(assetspath);
-    // if (personainput == "Agent") {
-    //   persona.set("Agent");
-    // } else {
-    //   persona.set("customer");
-    // }
+    // setAssetsUrl(assetspath);
+    if (personainput == "Agent") {
+      persona.set("Agent");
+    } else {
+      persona.set("customer");
+    }
   }
 
   // $: if ($showToolTipDetails) {
@@ -59,9 +59,9 @@
 </script>
 
 {#key $showToolTipDetails}
-  {#if token && domain && eventdomain && assetspath && $generalErr !== true && $showToolTipDetails !== true}
+  {#if token && domain && eventdomain && $generalErr !== true && $showToolTipDetails !== true}
     <div class="wrapper">
-      <!-- <mic-headerinformation /> -->
+      <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
       <div class="important-balance">
         <div class="balance">
@@ -77,7 +77,7 @@
       <!-- <MicBillSelectorAndDownload /> -->
       <div class="refreshable">
         <div class="charge-detailes">
-          <!-- <mic-billingsummary /> -->
+          <mic-billingsummary />
           <!-- <MicBillingSummary /> -->
         </div>
         <div class="insights">
@@ -92,6 +92,7 @@
         <mic-bulkdownload style="max-width:460px" />
         <!-- <MicBulkDownload /> -->
       </div>
+      <mic-metertable />
       <!-- <MicMeterTable /> -->
     </div>
   {:else if $generalErr === true}
