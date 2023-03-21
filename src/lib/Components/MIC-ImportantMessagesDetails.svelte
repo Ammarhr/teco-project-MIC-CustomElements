@@ -26,7 +26,7 @@
         if (toggle == "view") {
             fetchAndRedirect(
                 $apiToken,
-                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 null,
                 {
                     EventCode: "IN_Important_Messages_view",
@@ -38,7 +38,7 @@
         } else {
             fetchAndRedirect(
                 $apiToken,
-                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 null,
                 {
                     EventCode: "IN_Important_Messages_Close",
@@ -55,7 +55,7 @@
                 show = false;
                 fetchAndRedirect(
                     $apiToken,
-                    `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                     null,
                     {
                         EventCode: "IN_Important_Messages_Close",

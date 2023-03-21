@@ -100,7 +100,7 @@
                 handleChange(e);
                 fetchAndRedirect(
                   $apiToken,
-                  `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                   null,
                   {
                     EventCode: "Select_New_Bill",
@@ -137,7 +137,7 @@
             on:click={() =>
               fetchAndRedirect(
                 $apiToken,
-                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 `${$data.download_link}${$billNumber}`,
                 {
                   EventCode: "Bill_Download",
@@ -162,7 +162,7 @@
                 }
                 fetchAndRedirect(
                   $apiToken,
-                  `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                   null,
                   {
                     EventCode: "Select_Latest_Bill",

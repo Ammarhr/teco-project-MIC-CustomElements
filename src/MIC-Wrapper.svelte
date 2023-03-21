@@ -24,13 +24,14 @@
     showToolTipDetails,
     setEventDomain,
     newToken,
+    persona,
     setAssetsUrl,
   } from "./js/store";
   export let token;
   export let domain;
   export let eventdomain;
   // export let assetspath;
-  // export let personainput;
+  export let personainput;
 
   const refresh = () => {
     newToken.set("");
@@ -58,10 +59,10 @@
   refresh();
 </script>
 
-{#key $showToolTipDetails}
-  {#if token && domain && eventdomain && $generalErr !== true && $showToolTipDetails !== true}
+<!-- {#key $showToolTipDetails} -->
+  {#if token && domain && eventdomain && $generalErr !== true}
     <div class="wrapper">
-      <mic-headerinformation />
+      <!-- <mic-headerinformation /> -->
       <!-- <MicHeaderInformation /> -->
       <div class="important-balance">
         <div class="balance">
@@ -93,7 +94,7 @@
         <!-- <MicBulkDownload /> -->
       </div>
       <mic-metertable />
-      <!-- <MicMeterTable /> -->
+      <MicMeterTable />
     </div>
   {:else if $generalErr === true}
     <mic-generalerror {token} />
@@ -102,7 +103,7 @@
       <MicToolTipDetails />
     </div> -->
   {/if}
-{/key}
+<!-- {/key} -->
 
 <style lang="scss">
   .wrapper {

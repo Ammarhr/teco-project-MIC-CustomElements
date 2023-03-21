@@ -113,7 +113,7 @@
                             if (btnStatus == "enable") {
                                 fetchAndRedirect(
                                     $apiToken,
-                                    `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                                     $data.pay_now_link,
                                     {
                                         EventCode: "Payment",

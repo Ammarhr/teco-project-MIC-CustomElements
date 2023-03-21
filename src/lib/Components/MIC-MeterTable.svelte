@@ -6,20 +6,37 @@
     import toolTip from "../../assets/toolTip.svg";
     import verticalLine from "../../assets/vertical-line.svg";
     import { slide } from "svelte/transition";
-    import { fetchstore, apiDomain, apiToken } from "../../js/store";
+    import {
+        fetchstore,
+        apiDomain,
+        apiToken,
+        fetchUsageChart,
+    } from "../../js/store";
     import { chart } from "svelte-apexcharts";
     import { renderMixChart } from "../../js/MIC-chart-bundle";
     import { onMount } from "svelte";
 
+    let items;
     let tableData;
-    let options;
     let selectedMeter;
-    const [data, loading, error, get] = fetchstore();
-
-    // acordion functionality
+    let tab1 = "1";
+    let tab2 = "2";
     let isOpen = true;
     let svgId = "rotate-svg-" + isOpen;
 
+    const [data, loading, error, get] = fetchstore();
+    const [usageData, usageLoading, usageError, UsageGet] = fetchUsageChart();
+
+    onMount(() => {
+        if ($apiToken && $apiDomain && !$data.results) {
+            get(
+                $apiToken,
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+                "../../data/meterTable.json"
+            );
+        }
+        console.log($apiToken, "from store");
+    });
     const toggleContainer = () => {
         isOpen = !isOpen;
         svgId = "rotate-svg-" + isOpen;
@@ -29,10 +46,57 @@
     const handleSelectedMeter = (meterObject) => {
         if (meterObject) {
             selectedMeter = meterObject;
+            console.log(selectedMeter, "selected");
         } else {
             selectedMeter = pagenateItems[0];
+            console.log(selectedMeter, "selected");
         }
+        let {
+            DLN,
+            DAP_StartDate,
+            DAP_EndDate,
+            intp = "",
+            DAP_dkwh,
+            DAP_rkwh,
+            DAP_pf,
+            DAP_kw,
+            DAP_dtoun,
+            DAP_dtouf,
+            BilledAmount,
+        } = selectedMeter;
+
+        UsageGet(
+            $apiToken,
+            // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+            "../../data/meterUsageDaily.json",
+            {
+                DLN,
+                DAP_StartDate,
+                DAP_EndDate,
+                intp,
+                DAP_dkwh,
+                DAP_rkwh,
+                DAP_pf,
+                DAP_kw,
+                DAP_dtoun,
+                DAP_dtouf,
+            }
+        );
     };
+    $: if ($usageData && $usageData.DailyUsage) {
+        // console.log($usageData.DailyUsage);
+        // if (
+        //     $usageData.DailyUsage.DailyDetails &&
+        //     $usageData.DailyUsage.DailyDetails.length == 0
+        // ) {
+        //     console.log("hello");
+        //     tab1 = "2";
+        //     tab2 = "1";
+        // } else {
+        //     tab1 = "1";
+        //     tab2 = "2";
+        // }
+    }
     ////// search & filter
     const handleSearch = () => {
         let str = event.target.value;
@@ -68,18 +132,7 @@
     //     );
     // }
     ///////// pagination:
-    let items;
     //////// first render
-    onMount(() => {
-        if ($apiToken && $apiDomain && !$data.results) {
-            get($apiToken, 
-            `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-            // "../../data/meterTable.json"
-            );
-        }
-        console.log($apiToken, "from store");
-    });
-
     $: if ($data && $data.MeterTabel) {
         console.log($data);
         tableData = $data.MeterTabel;
@@ -88,8 +141,7 @@
         getPaginatedItems();
     }
     ////////// tabs functionality
-    let tab1 = "1";
-    let tab2 = "2";
+
     const activateTab = (num1, num2) => {
         tab2 = num2;
         tab1 = num1;
@@ -142,9 +194,9 @@
 
 <!------ html ------->
 {#if $loading}
-    <h1>loading..</h1>
+    <mic-loading />
 {:else if $error}
-    <h1>{error}</h1>
+    <h1 />
 {:else if $data && pagenateItems && pagenateItems.length > 0}
     {#key $apiToken}
         <div class="meter-card">
@@ -155,7 +207,11 @@
                 aria-expanded={isOpen}
             >
                 <h4 id="title">Usage Details</h4>
-                <img src={toggle} alt="" id={svgId} />
+                <img
+                    src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
+                    alt="toggle"
+                    id={svgId}
+                />
             </div>
             {#if isOpen}
                 <div class="search">
@@ -216,7 +272,7 @@
                                                     {row.CurrentReading}
                                                 </h4>
                                                 <span>
-                                                    ({row.ReadType})
+                                                    {row.ReadType}
                                                 </span>
                                             </div></td
                                         >
@@ -289,53 +345,89 @@
                     transition:slide={{ duration: 300 }}
                 >
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <!-- <div id="meter-tabs">
-                        <h6
-                            id={"meter-btn" + tab1}
-                            on:click={() => activateTab("1", "2")}
-                        >
-                            Daily
-                        </h6>
-                        <h6
-                            id={"meter-btn" + tab2}
-                            on:click={() => activateTab("2", "1")}
-                        >
-                            Monthly
-                        </h6>
-                    </div> -->
-                    <!-- <div class="options">
-                        <input type="checkbox" name="trmprature" id="temp" />
-                        <span>Temperature</span>
-                        <img
-                            src={toolTip}
-                            alt="usage chart tool tip"
-                            class="tool-tip"
-                        />
-                    </div> -->
-                    <!-- <div id={"meter-tab1" + tab1}>
-                        {#if selectedMeter.settings.gas.data.length == 0}
-                            <h1 class="no-data">No Data to display</h1>
-                        {/if}
-                        <div class="chart" use:chart={options} />
-                    </div>
-                    <div id={"meter-tab1" + tab2}>
-                        {#if selectedMeter.settings.gas.data.length == 0 && selectedMeter.settings.tempereature.data.length == 0}
-                            <h1 class="no-data">No Data to display</h1>
-                        {/if}
-                        <div class="chart" use:chart={options} />
-                    </div> -->
+                    {#if $usageData && $usageData.DailyUsage}
+                        <div id="meter-tabs">
+                            <!-- {#if $usageData.DailyUsage.DailyDetails && $usageData.DailyUsage.DailyDetails.length > 0} -->
+                            <h6
+                                id={"meter-btn" + tab1}
+                                on:click={() => activateTab("1", "2")}
+                            >
+                                Daily
+                            </h6>
+                            <!-- {/if} -->
+                            <h6
+                                id={"meter-btn" + tab2}
+                                on:click={() => activateTab("2", "1")}
+                            >
+                                Monthly
+                            </h6>
+                        </div>
+                        <div class="options">
+                            <input
+                                type="checkbox"
+                                name="trmprature"
+                                id="temp"
+                            />
+                            <span>Temperature</span>
+                            <img
+                                src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                alt="usage chart tool tip"
+                                class="tool-tip"
+                            />
+                        </div>
+                        <div id={"meter-tab1" + tab1}>
+                            {#if $usageData.DailyUsage.DailyDetails && $usageData.DailyUsage.DailyDetails.length == 0}
+                                <!-- <h1 class="no-data">No Data to display</h1> -->
+                                <div
+                                    class="chart"
+                                    use:chart={renderMixChart([])}
+                                />
+                            {:else}
+                                <!-- <div
+                                    class="chart"
+                                    use:chart={renderBarChart([
+                                        $usageData.DailyUsage.DailyDetails,
+                                    ])}
+                                /> -->
+                            {/if}
+                        </div>
+                        <div id={"meter-tab1" + tab2}>
+                            {#if $usageData.DailyUsage.DailyDetails && $usageData.DailyUsage.DailyDetails.length == 0}
+                                <div
+                                    class="chart"
+                                    use:chart={renderMixChart([])}
+                                />
+                            {:else}
+                                <div
+                                    class="chart"
+                                    use:chart={renderMixChart(
+                                        $usageData.DailyUsage.DailyDetails,
+                                        ["#044F8D"],
+                                        "1410px",
+                                        650
+                                    )}
+                                />
+                            {/if}
+                        </div>
+                    {/if}
                 </div>
-                <!-- <div class="information-box">
-                    <div>
-                        <h6>AVG. COST PER DAY</h6>
-                        <h4>$11,098.98</h4>
+                {#if $usageData.DailyUsage}
+                    <div class="information-box">
+                        {#if $usageData.DailyUsage.AVGCost}
+                            <div>
+                                <h6>AVG. COST PER DAY</h6>
+                                <h4>{$usageData.DailyUsage.AVGCost}</h4>
+                            </div>
+                        {/if}
+                        <img src={verticalLine} alt="" />
+                        {#if $usageData.DailyUsage.AVGTemp}
+                            <div>
+                                <h6>AVG. TEMP PER DAY</h6>
+                                <h4>{$usageData.DailyUsage.AVGCost}</h4>
+                            </div>
+                        {/if}
                     </div>
-                    <img src={verticalLine} alt="" />
-                    <div>
-                        <h6>AVG. TEMP PER DAY</h6>
-                        <h4>65°</h4>
-                    </div>
-                </div> -->
+                {/if}
             {/if}
         </div>
     {/key}
@@ -374,6 +466,7 @@
         border-radius: 16px;
         min-width: 95%;
         padding: 20px;
+        background-color: #ffffff;
     }
     #title {
         margin: 3px 0;
@@ -587,14 +680,12 @@
         align-items: flex-start;
         padding: 16px;
         gap: 16px;
+        width: fit-content;
         max-width: 500px;
         height: 97px;
         background: #ffffff;
         border: 1px solid #e5e7eb;
         border-radius: 8px;
-        flex: none;
-        order: 0;
-        flex-grow: 0;
     }
 
     .information-box div {
@@ -605,9 +696,6 @@
         gap: 8px;
         max-width: 300px;
         height: 65px;
-        flex: none;
-        order: 0;
-        flex-grow: 0;
     }
     .information-box div h6 {
         display: inline-block;

@@ -1,0 +1,197 @@
+{
+    "DailyUsage": {
+        "AVGTemp": "N/A",
+        "AVGCost": "N/A",
+        "FooterDisclaimer": "The graph developed by",
+        "HitPeakDemand": "December 14 2022",
+        "DailyDetails": [
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "70",
+                "UOM": "KWH",
+                "Usage": "95",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "20",
+                "UOM": "KWH",
+                "Usage": "1",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "15",
+                "UOM": "KWH",
+                "Usage": "111",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "35",
+                "UOM": "KWH",
+                "Usage": "27",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "40",
+                "UOM": "KWH",
+                "Usage": "255",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "39",
+                "UOM": "KWH",
+                "Usage": "300",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "50",
+                "UOM": "KWH",
+                "Usage": "150",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "78",
+                "UOM": "KWH",
+                "Usage": "500",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "32",
+                "UOM": "KWH",
+                "Usage": "777",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "20",
+                "UOM": "KWH",
+                "Usage": "17",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "25",
+                "UOM": "KWH",
+                "Usage": "50",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "61",
+                "UOM": "KWH",
+                "Usage": "150",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "61",
+                "UOM": "KWH",
+                "Usage": "150",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "61",
+                "UOM": "KWH",
+                "Usage": "",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "61",
+                "UOM": "KWH",
+                "Usage": "",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "61",
+                "UOM": "KWH",
+                "Usage": "",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            },
+            {
+                "Perioddate": "DEC 14",
+                "FullDate": "December 14 2022",
+                "Temperature": "61",
+                "UOM": "KWH",
+                "Usage": "450",
+                "status": "S",
+                "CloudIcon": "X",
+                "Dtype": "dkwh",
+                "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
+            }
+        ]
+    }
+}

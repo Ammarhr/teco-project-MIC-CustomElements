@@ -9,7 +9,7 @@
         eventsDomain,
         apiDomain,
         newToken,
-        persona
+        persona,
     } from "../../js/store";
     // import thumbsUp from "../../assets/un-filled-awesome-thumbs-up.svg";
     // import thumbsDown from "../../assets/un-filled-awesome-thumbs-down.svg";
@@ -60,7 +60,7 @@
         if (feedbackBolean == "true") {
             fetchAndRedirect(
                 token,
-                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 null,
                 {
                     EventCode: "IN_Recommendation_Feedback_Like",
@@ -72,7 +72,7 @@
         } else {
             fetchAndRedirect(
                 token,
-                `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 null,
                 {
                     EventCode: "IN_Recommendation_Feedback_Dislike",
@@ -117,7 +117,7 @@
                 toggleModal();
                 fetchAndRedirect(
                     token,
-                    `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                     null,
                     {
                         EventCode: "IN_Recommendation_View",
@@ -142,7 +142,7 @@
                                 toggleModal();
                                 fetchAndRedirect(
                                     token,
-                                    `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                                     null,
                                     {
                                         EventCode: "IN_Recommendation_Close",
@@ -262,7 +262,7 @@
                                                     showPopUpHandle(i);
                                                     fetchAndRedirect(
                                                         token,
-                                                        `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                                        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                                                         null,
                                                         {
                                                             EventCode:
@@ -295,7 +295,7 @@
                                                     showPopUpHandle(i);
                                                     fetchAndRedirect(
                                                         token,
-                                                        `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                                        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                                                         null,
                                                         {
                                                             EventCode:
@@ -376,17 +376,22 @@
     }
     .feedback_modal {
         position: fixed;
-        top: 40%;
+        top: 50%;
+        transform: translate(0, -50%);
         background-color: white;
         padding: 20px;
         border-radius: 10px;
         max-width: 62vw;
+        max-height: 100vh;
     }
     .feedback_modal_header {
         display: flex;
         flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
+        @media screen and (max-width: 767px) {
+            align-items: start;
+        }
         h4 {
             font-weight: 400;
             font-size: 24px;
@@ -479,7 +484,9 @@
     }
     .modal-content {
         position: fixed;
-        top: 25px;
+        // top: 50%;
+        // left: 50%;
+        // transform: translate(-50%, -50%);
         background-color: white;
         /* padding: 20px; */
         border-radius: 10px;
@@ -636,11 +643,23 @@
             line-height: 30px;
             a {
                 word-wrap: break-word !important;
+                max-width: 200px !important;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
         a {
             word-wrap: break-word !important;
+            max-width: 200px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis;
         }
+    }
+    a {
+        word-wrap: break-word !important;
+        max-width: 200px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     .react {
         display: flex;

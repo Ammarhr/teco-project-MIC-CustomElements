@@ -186,7 +186,7 @@
                   activateTab(i, 0);
                   fetchAndRedirect(
                     recoToken,
-                    `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                     null,
                     {
                       EventCode: "IN_Yearly_Compare",
@@ -207,7 +207,7 @@
                   activateTab(i, 1);
                   fetchAndRedirect(
                     recoToken,
-                    `${$apiDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                     null,
                     {
                       EventCode: "IN_Monthly_Compare",
