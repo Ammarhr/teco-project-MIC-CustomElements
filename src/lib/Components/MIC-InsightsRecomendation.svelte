@@ -9,6 +9,7 @@
         eventsDomain,
         apiDomain,
         newToken,
+        persona,
     } from "../../js/store";
     // import thumbsUp from "../../assets/un-filled-awesome-thumbs-up.svg";
     // import thumbsDown from "../../assets/un-filled-awesome-thumbs-down.svg";
@@ -53,30 +54,31 @@
         arrOfPopUp[i] = !arrOfPopUp[i];
         thankMoadalShow = !thankMoadalShow;
 
-        feedbackURL = `${$eventsDomain}/rest/recommendationsfeedback/v1/Feedback?MessageId=${id}&Liked=${feedbackBolean}`;
-
+        feedbackURL = `${$apiDomain}/api/ibill/webcomponents/v1/Post/Recommendationfeedback?MessageId=${id}&Liked=${feedbackBolean}`;
         setFeedback(token, feedbackURL);
 
         if (feedbackBolean == "true") {
             fetchAndRedirect(
                 token,
-                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 null,
                 {
                     EventCode: "IN_Recommendation_Feedback_Like",
                     Outcome: `Recommendation ${id} Cast Submitted.`,
                     Feedback: comment,
+                    Persona: $persona,
                 }
             );
         } else {
             fetchAndRedirect(
                 token,
-                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 null,
                 {
                     EventCode: "IN_Recommendation_Feedback_Dislike",
                     Outcome: `Recommendation ${id} Cast Submitted.`,
                     Feedback: comment,
+                    Persona: $persona,
                 }
             );
         }
@@ -115,11 +117,12 @@
                 toggleModal();
                 fetchAndRedirect(
                     token,
-                    `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                     null,
                     {
                         EventCode: "IN_Recommendation_View",
                         Outcome: "",
+                        Persona: $persona,
                     }
                 );
             }}
@@ -139,11 +142,12 @@
                                 toggleModal();
                                 fetchAndRedirect(
                                     token,
-                                    `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                                     null,
                                     {
                                         EventCode: "IN_Recommendation_Close",
                                         Outcome: "",
+                                        Persona: $persona,
                                     }
                                 );
                             }}>×</button
@@ -165,7 +169,7 @@
                                     <div class="next_btn" on:click={next}>
                                         <img
                                             class="img_btn"
-                                            src={`${$apiDomain}/micwc-external/assets/next-svgr.e0acfd1a.svg`}
+                                            src={`${$apiDomain}/micwc-external/assets/next-prev.svg`}
                                         />
                                     </div>
                                     {#if index > 0}
@@ -177,7 +181,7 @@
                                             <img
                                                 class="img_btn"
                                                 id="prev-img"
-                                                src={`${$apiDomain}/micwc-external/assets/next-svgr.e0acfd1a.svg`}
+                                                src={`${$apiDomain}/micwc-external/assets/next-prev.svg`}
                                             />
                                         </div>
                                     {/if}
@@ -222,15 +226,15 @@
                                 {@html message.message}
                                 <div class="react">
                                     <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                    {#if message.liked.toLowerCase() == "true" || message.liked.toLowerCase() == "false"}
+                                    {#if message.liked.toLowerCase() == "true" || message.liked.toLowerCase() == "false" || $persona == "Agent"}
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/disabled-feedback-button.fcfe0f97.svg`}
+                                            src={`${$apiDomain}/micwc-external/assets/disabled-feedback-button.svg`}
                                             alt=""
                                             style="cursor: auto;"
                                         />
                                     {:else}
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-up.293c3129.svg`}
+                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-up.svg`}
                                             on:click={(e) => {
                                                 showPopUpHandle(i, "true");
                                             }}
@@ -239,7 +243,7 @@
                                         />
                                         <hr class="hor-line" />
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-down.1aa7dac2.svg`}
+                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-down.svg`}
                                             on:click={(e) => {
                                                 showPopUpHandle(i, "false");
                                             }}
@@ -258,13 +262,14 @@
                                                     showPopUpHandle(i);
                                                     fetchAndRedirect(
                                                         token,
-                                                        `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                                        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                                                         null,
                                                         {
                                                             EventCode:
                                                                 "IN_Recommendation_Feedback_Close",
                                                             Outcome: `Recommendation ${message.id} Cast Closed.`,
                                                             Feedback: comment,
+                                                            Persona: $persona,
                                                         }
                                                     );
                                                 }}>×</button
@@ -290,13 +295,14 @@
                                                     showPopUpHandle(i);
                                                     fetchAndRedirect(
                                                         token,
-                                                        `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                                                        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                                                         null,
                                                         {
                                                             EventCode:
                                                                 "IN_Recommendation_Feedback_Close",
                                                             Outcome: `Recommendation ${message.id} Cast Closed.`,
                                                             Feedback: comment,
+                                                            Persona: $persona,
                                                         }
                                                     );
                                                 }}>CANCEL</button
@@ -370,17 +376,22 @@
     }
     .feedback_modal {
         position: fixed;
-        top: 40%;
+        top: 50%;
+        transform: translate(0, -50%);
         background-color: white;
         padding: 20px;
         border-radius: 10px;
         max-width: 62vw;
+        max-height: 100vh;
     }
     .feedback_modal_header {
         display: flex;
         flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
+        @media screen and (max-width: 767px) {
+            align-items: start;
+        }
         h4 {
             font-weight: 400;
             font-size: 24px;
@@ -468,12 +479,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 10;
+        z-index: 1001;
         overflow-y: auto;
     }
     .modal-content {
         position: fixed;
-        top: 25px;
+        // top: 50%;
+        // left: 50%;
+        // transform: translate(-50%, -50%);
         background-color: white;
         /* padding: 20px; */
         border-radius: 10px;
@@ -630,11 +643,23 @@
             line-height: 30px;
             a {
                 word-wrap: break-word !important;
+                max-width: 200px !important;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
         a {
             word-wrap: break-word !important;
+            max-width: 200px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis;
         }
+    }
+    a {
+        word-wrap: break-word !important;
+        max-width: 200px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     .react {
         display: flex;

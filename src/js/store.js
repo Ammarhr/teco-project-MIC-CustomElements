@@ -34,14 +34,24 @@ export const eventsDomain = writable('')
 export const setEventDomain = (domain) => {
     eventsDomain.set(domain)
 }
+export const assetsUrl = writable('')
+export const setAssetsUrl = (domain) => {
+    assetsUrl.set(domain)
+}
+
 export const getDate = derived(
     date,
     $date => $date
 );
-
-//* fetch function
+//* Sunselect array;
+export const sunSelectServicesArray = writable([]);
+//*geral error flag;
 export const generalErr = writable(false);
 
+//* Agint persona:
+export const persona = writable('')
+
+//* fetch function
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
@@ -68,7 +78,7 @@ export function fetchstore() {
                     },
                     body: JSON.stringify({}),
                 });
-                // if (Publishresponse.status !== 204)
+                // if (Publishresponse.status !== 204)  
                 data.set(await Publishresponse.json());
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
@@ -82,7 +92,46 @@ export function fetchstore() {
 
     return [data, loading, error, get]
 }
+export const fetchUsageChart = () => {
+    const loading = writable(false);
+    const error = writable(false);
+    const data = writable({});
+    // generalErr.set(false)
+    const get = async (token, url, body) => {
+        loading.set(true);
+        error.set(false);
+        try {
+            if (!token) {
+                data.set({ errrorMessage: "No Token provided!" });
+                throw new Error("No Token provided!");
+            } else if (token) {
+                //* test data
+                // const Publishresponse = await fetch(url)
+                //* real api hit with jwt token:
+                const Publishresponse = await fetch(url, {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(body),
+                });
+                // if (Publishresponse.status !== 204)  
+                data.set(await Publishresponse.json());
+            } else {
+                data.set({ errrorMessage: "Invalid Token" });
+            }
+        } catch (e) {
+            error.set(e);
+            // generalErr.set(true);
+        }
+        loading.set(false);
+    }
 
+    return [data, loading, error, get]
+}
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
     fetch(fetchUrl, {
         method: "POST",
@@ -181,9 +230,8 @@ export function errorCallback() {
         } catch (e) {
             error.set(e);
         }
-        loading.set(false)
-
     }
+    loading.set(false)
 
     return [data, loading, error, errorHandler]
 }

@@ -12,8 +12,11 @@
         apiDomain,
         eventsDomain,
         newToken,
+        sunSelectServicesArray,
     } from "../../js/store";
     import { onMount } from "svelte";
+    export let contractnum;
+
     let arrayOfToggles = [];
     let newTokenTrigger;
     let sunSelectData;
@@ -23,41 +26,17 @@
         arrayOfToggles[i] = !arrayOfToggles[i];
     };
     ////////////////////////
-    const [data, loading, error, get] = fetchstore();
-    onMount(() => {
-        if ($apiToken && !sunSelectData) {
-            get(
-                $apiToken,
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-                // "../../data/sunSelect.json"
-            );
-        }
-        newTokenTrigger = $apiToken;
-    });
-    $: if (
-        $newToken &&
-        $newToken.token &&
-        (newTokenTrigger == $apiToken || newTokenTrigger !== $newToken.token)
-    ) {
-        get(
-            $newToken.token,
-            // "../../data/yearlyEnergy.json"
-            `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-        );
-        newTokenTrigger = $newToken.token;
-    }
-    $: if ($data && $data.SunSelect) {
-        sunSelectData = $data.SunSelect;
-        for (let i = 0; i < sunSelectData.length; i++) {
+    $: if (contractnum && contractnum.length > 0) {
+        // sunSelectServicesArray.set($data.SunSelect);
+        // console.log($sunSelectServicesArray);
+        for (let i = 0; i < contractnum.length; i++) {
             arrayOfToggles.push(true);
         }
     }
 </script>
 
-{#if $loading}
-    <mic-loading />
-{:else if sunSelectData && sunSelectData[0] && sunSelectData[0].SunSelectValue && sunSelectData[0].SunSelectValue !== ""}
-    {#each sunSelectData as sunSelectObj, i}
+{#if contractnum && contractnum[0]}
+    {#each contractnum as sunSelectObj, i}
         {#if sunSelectObj.SunSelectValue && sunSelectObj.SunSelectValue !== ""}
             <div class="card">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -69,7 +48,7 @@
                     <h5 class="title">SUN SELECT</h5>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img
-                        src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`}
+                        src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
                         alt=""
                         id={"rotate-svg-" + arrayOfToggles[i]}
                     />
@@ -79,14 +58,19 @@
                         class="sun-select-content"
                         transition:slide={{ duration: 300 }}
                     >
-                        <h2 id="percentage">
-                            {#if sunSelectObj.SunSelectValue.includes("%")}
+                        {#if sunSelectObj.SunSelectValue.includes("%")}
+                            <h2 id="percentage" style="font-size: 8.5rem;">
                                 {sunSelectObj.SunSelectValue.split("%")[0]}
-                                <img src={`${$apiDomain}/micwc-external/assets/percentage-icon.d50d3669.svg`} alt="" />
-                            {:else}
+                                <img
+                                    src={`${$apiDomain}/micwc-external/assets/sunselectPercentage.svg`}
+                                    alt=""
+                                />
+                            </h2>
+                        {:else}
+                            <h2 id="percentage">
                                 {sunSelectObj.SunSelectValue}
-                            {/if}
-                        </h2>
+                            </h2>
+                        {/if}
                         <p>{sunSelectObj.SunSelectMessage}</p>
                     </div>
                     <div
@@ -114,8 +98,8 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 370px;
-        max-width: calc(100% - 40px);
+        // width: 370px;
+        // max-width: calc(100% - 40px);
         padding: 20px;
         transition: 0.3s;
         border-radius: 16px;
@@ -124,7 +108,7 @@
         background-color: #ffff;
         overflow: hidden;
         @media screen and (max-width: 767px) {
-            width: 100%;
+            // width: 100%;
         }
     }
     #header {
@@ -183,7 +167,7 @@
         font-family: "Interstate";
         font-style: normal;
         font-weight: 700;
-        font-size: 70px;
+        font-size: 5.5rem;
         line-height: 106px;
         color: #005faa;
         margin: 0;

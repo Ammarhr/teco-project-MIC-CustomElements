@@ -9,12 +9,13 @@
         apiToken,
         fetchAndRedirect,
         eventsDomain,
+        persona,
     } from "../../js/store";
     //state
     var newElement;
     let color; // this change the charge color depend in the its value
     let tries = 3;
-
+    let btnStatus;
     //mocking data
     const [data, loading, error, get] = fetchstore();
 
@@ -27,7 +28,11 @@
         );
         tries--;
     }
-
+    $: if ($persona && $persona == "Agent") {
+        btnStatus = "disable";
+    } else {
+        btnStatus = "enable";
+    }
     $: newElement = document.getElementById("info-container"); // trigger "info-container" mounting
     $: if (newElement && $data && $data.html_masseges) {
         // create elements fro html_masseges
@@ -79,7 +84,7 @@
     >
         <div
             class="tecoBalanceSum roundedRadius20"
-            style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bs.db60226b.svg`});"
+            style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bs.svg`});"
         >
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>
@@ -103,17 +108,24 @@
                 <div>
                     <button
                         type="button"
-                        class="payBtn btn"
-                        on:click={() =>
-                            fetchAndRedirect(
-                                $apiToken,
-                                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
-                                $data.pay_now_link,
-                                {
-                                    EventCode: "Payment",
-                                    Outcome: "",
-                                }
-                            )}>PAY NOW</button
+                        class="payBtn btn {btnStatus}"
+                        on:click={() => {
+                            if (btnStatus == "enable") {
+                                fetchAndRedirect(
+                                    $apiToken,
+                                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                    $data.pay_now_link,
+                                    {
+                                        EventCode: "Payment",
+                                        Outcome: "",
+                                        Feedback: "",
+                                        Persona: $persona,
+                                    }
+                                );
+                            } else {
+                                return;
+                            }
+                        }}>PAY NOW</button
                     >
                 </div>
             </div>
@@ -231,9 +243,9 @@
     .m_1 {
         margin-top: 10px;
     }
-    .btn {
-        cursor: pointer;
-    }
+    // .btn {
+    //     cursor: pointer;
+    // }
     .tecoCard {
         margin: 0 !important;
         margin-top: 15px;
@@ -269,13 +281,23 @@
                     font-size: 64px;
                 }
             }
-            .payBtn {
+            .enable {
                 color: $teco-white;
                 background-color: #005faa;
                 width: 145px;
                 border: none;
                 padding: 8px 18px;
                 border-radius: 6px;
+                cursor: pointer;
+            }
+            .disable {
+                color: #adb3c0;
+                background-color: #fff;
+                width: 145px;
+                border: 2px solid #adb3c0;
+                padding: 8px 18px;
+                border-radius: 6px;
+                cursor: none;
             }
         }
         .tecoMessagesSection {

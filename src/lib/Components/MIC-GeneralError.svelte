@@ -3,7 +3,7 @@
 <script>
     // @ts-nocheck
 
-    import { generalErr, errorCallback, eventsDomain } from "../../js/store";
+    import { generalErr, errorCallback, apiDomain } from "../../js/store";
     import { onMount } from "svelte";
     export let token;
     const [data, loading, err, errorHandler] = errorCallback();
@@ -12,17 +12,20 @@
             errorHandler(
                 token,
                 // "../../../data/generalErr.json"
-                `${$eventsDomain}/rest/recommendationsfeedback/v1/Feedback/ErrorMessages?Code=ER_General_001`
-            );
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/GetErrorMessages?Code=ER_General_001`
+            ).then(() => loading.set(false));
         }
     });
+    // $: if ($loading) {
+    //     console.log("loaaaaaaaaaaaaaaaaaaaading from general error", $loading);
+    // }
 </script>
 
-{#if $loading}
-    <h1>loadingg..</h1>
+{#if $loading == true}
+    <mic-loading />
 {:else if $err}
-    <div />
-{:else if $data.HTMLBody}
+    <div>Error..</div>
+{:else if $data && $data.HTMLBody}
     <div class="container">
         <p>Oops! Something went wrong.</p>
 
@@ -31,13 +34,10 @@
             alt=""
             class="err-img"
         />
-
         <p id="err-body">
             {@html $data.HTMLBody}
         </p>
     </div>
-{:else}
-    <h1 />
 {/if}
 
 <style lang="scss">

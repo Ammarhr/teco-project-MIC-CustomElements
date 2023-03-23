@@ -1,5 +1,4 @@
-export const renderBarChart = (data, labels, colorsArr, width, height, unit) => {
-
+export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
     let options = {
         series: data,
         fill: {
@@ -7,15 +6,16 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
         },
         colors: colorsArr,
         chart: {
-            type: "bar",
+            type: 'bar',
             height: height,
-            width: width,
+            width: "100%",
             toolbar: {
                 show: false,
             },
         },
         legend: {
             show: false
+
         },
         stroke: {
             show: true,
@@ -26,8 +26,8 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
         },
         plotOptions: {
             bar: {
-                // columnWidth: '120px',
                 borderRadius: 10,
+                barHeight: 100,
                 dataLabels: {
                     position: "top", // top, center, bottom,
                 },
@@ -41,7 +41,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
             },
             offsetY: -30,
             style: {
-                fontSize: '14px',
+                fontSize: '16px',
                 fontFamily: 'Interstate',
                 colors: '#bbbb'
             },
@@ -62,6 +62,8 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
             },
         },
         yaxis: {
+            min: 0,
+            max: max,
             axisBorder: {
                 show: false,
             },
@@ -71,7 +73,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit) => 
             labels: {
                 show: true,
                 formatter: function ( /** @type {Number} */ val) {
-                    return val;
+                    return Math.floor(val);
                 },
             },
         },
@@ -84,9 +86,7 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
         series: seriesArr,
         chart: {
             width: width + 5,
-            // height: "auto",
             type: "radialBar",
-            offsetY: -10,
         },
         plotOptions: {
             radialBar: {
@@ -100,119 +100,233 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
                     name: {
                         fontSize: "16px",
                         color: "#6C6C6C",
-                        offsetY: 40,
+                        offsetY: 15,
                         fontFamily: "Interstate",
                     },
                     value: {
-                        offsetY: 0,
-                        fontSize: "22px",
+                        offsetY: -25,
+                        fontSize: "18px",
                         color: "#005FAA",
                         fontFamily: "Interstate",
                         formatter: function (val) {
                             return val + "%";
-},
+                        },
                     },
                 },
             },
         },
-fill: {
-    colors: color,
+        fill: {
+            colors: color,
         },
-stroke: {
-    lineCap: "round",
+        stroke: {
+            lineCap: "round",
         },
-labels: labels,
+        labels: labels,
     };
-return options;
+    return options;
 }
 
 
-export const renderMixChart = (data, labels, colorsArr, width, height, unit) => {
+export const renderMixChart = (data, color, width, height, service, unit) => {
 
-    let options = {
-        series: data,
-        fill: {
-            opacity: 100,
-            colors: colorsArr,
-        },
-        chart: {
-            height: height,
-            width: width,
-            toolbar: {
-                show: false,
+    let colWidth;
+    let serviceData;
+    let catArray = [];
+    if (data && data.length > 0) {
+        serviceData = data.filter((results) => {
+            if (results.Usage !== "")
+                return results.Usage
+        })
+        catArray = data.map((results) => {
+            return results.Perioddate
+        })
+    }
+    console.log("serviceData", serviceData);
+    //* configure column width depend on the data 
+    if (data && data.length < 5) {
+        colWidth = "5%"
+    } else {
+        colWidth = undefined
+    }
+
+    let options
+    if (!serviceData || serviceData.length == 0) {
+        options = {
+            annotations: {
+                position: 'front',
+                yaxis: [
+                    {
+                        y: undefined,
+                    },
+                ],
             },
-        },
-        stroke: {
-            width: [0, 4],
-            curve: 'smooth',
-        },
-        markers: {
-            size: 5,
-            colors: "#fff",
-            strokeDashArray: 50,
-            strokeWidth: 3,
-            strokeColors: "#FF832B",
-        },
-        plotOptions: {
-            bar: {
-                borderRadius: 10,
-                dataLabels: {
-                    position: "top", // top, center, bottom,
+            chart: {
+                height: 400,
+                width: 1200,
+                type: "bar"
+            },
+            noData: {
+                text: "No Data to display",
+                align: "center",
+                verticalAlign: "middle",
+            },
+            series: [
+                {
+                    name: "Series 1",
+                    data: []
+                }
+            ],
+        }
+    } else {
+        options = {
+            series: [
+                {
+                    type: "column",
+                    name: service,
+                    color: "#005FAA",
+                    data: serviceData
                 },
-                distributed: false,
+                {
+                    type: "line",
+                    name: "tempereature",
+                    color: "#FF832B",
+                    data: data.map((results) => {
+                        return results.Temperature
+                    }),
+                }
+
+            ],
+            fill: {
+                opacity: 100,
+                colors: color,
             },
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-                if (unit) {
-                    return val + unit;
-                } else {
-                    return
+            chart: {
+                height: height,
+                marginLeft: 0,
+                width: 1200,
+                zoom: {
+                    enabled: false // Disable chart zooming
+                },
+                toolbar: {
+                    show: false,
+                },
+            },
+            stroke: {
+                width: [0, 4],
+                curve: 'smooth',
+            },
+            markers: {
+                size: 5,
+                colors: "#fff",
+                strokeDashArray: 50,
+                strokeWidth: 3,
+                strokeColors: "#FF832B",
+            },
+            plotOptions: {
+                bar: {
+                    position: 'left',
+                    borderRadiusWhenStacked: 'last',
+                    borderRadius: 10,
+                    columnWidth: colWidth || "70%",
+                    dataLabels: {
+                        position: "top", // top, center, bottom,
+                    },
+
+                    distributed: false,
+                },
+            },
+            dataLabels: {
+                enabled: false,
+                offsetY: -20,
+            },
+            legend: {
+                show: true,
+                horizontalAlign: 'right',
+            },
+            tooltip: {
+                enabled: true,
+                followCursor: true,
+                custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                    let arr;
+                    arr = data.map((results) => {
+                        return results.FullDate
+                    })
+                    return (
+                        '<div class=" apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
+                        '<div style="padding-bottom:8px">' +
+                        "<span style='font-weight:700; color:#005FAA; border-bottom:1px solid #EAECEE;'>" +
+                        arr[dataPointIndex - 1] +
+                        "</div>"
+                        +
+                        `<div class="apexcharts-tooltip-text">` +
+                        '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
+                        "<span style='font-weight:700; color:#000000;'>" +
+                        "Energy Used: " +
+                        "</span>" +
+                        "<span style='font-weight:300;color:#000000;'>" + " "
+                        +
+                        series[0][dataPointIndex] + " " + unit
+                        +
+                        "</div>"
+                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                        + `<span style='font-weight:700;'>` +
+                        "Avg.Temp: " +
+                        "</span>"
+                        +
+                        "<span style='font-weight:300;'>"
+                        + series[1][dataPointIndex] + "°"
+                    );
+                },
+                onDatasetHover: {
+                    highlightDataSeries: true,
+                },
+                y: {
+                    show: true,
+                    style: {
+                        cssClass: 'apexcharts-yaxis-annotation-label',
+                    },
+                },
+                x: {
+                    show: false,
                 }
             },
-            offsetY: -20,
-        },
-        legend: {
-            show: true,
-            horizontalAlign: 'right',
-            markers: {
-                width: 12,
-                height: 2,
-                strokeWidth: 0,
-                strokeColor: '#fff',
-                radius: 0,
+            xaxis: {
+                type: "category",
+                categories: catArray
             },
-        },
-
-        xaxis: {
-            categories: labels,
-            position: "bottom",
-            axisBorder: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
-            crosshairs: {},
-            tooltip: {
-                enabled: false,
-            },
-        },
-        yaxis: {
-            axisBorder: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
-            labels: {
-                show: true,
-                formatter: function (val) {
-                    return val;
+            yaxis: [
+                {
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: true,
+                        formatter: function (val) {
+                            return val;
+                        },
+                    }
                 },
-            },
-        },
+                {
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: true,
+                        formatter: function (val) {
+                            return val;
+                        },
+                    }
+                }
+            ],
+
+        }
     }
+
     return options;
 }

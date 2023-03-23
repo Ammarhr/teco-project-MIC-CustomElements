@@ -5,7 +5,7 @@
 
   //svg imports
   import circyle from "../../assets/cr.svg";
-  import messageNotification from "../../assets/messages-notification.svg";
+  import messageNotification from "../../assets/envelope-solid.svg";
 
   //unreaded messages counter
   import {
@@ -13,10 +13,11 @@
     apiToken,
     apiDomain,
     eventsDomain,
+    assetsUrl,
+    generalErr,
   } from "../../js/store";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
-  import MicImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
 
   //state
   let state = {};
@@ -26,7 +27,7 @@
 
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiToken && !$data.messages) {
+    if ($apiToken && !$data.messages && $generalErr !== true) {
       get(
         $apiToken,
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
@@ -38,16 +39,19 @@
   $: if ($data && $data.messages) {
     state = $data;
   }
-
+  //hello fro
   //slice long message
   $: if (
     state &&
     state.messages &&
     state.messages[0] &&
     state.messages[0].message &&
+    state.messages[0].message.length &&
     state.messages[0].message.length > 237
   ) {
-    message = state.messages[0].message.slice(0, 237) + "...";
+    message =
+      state.messages[0].message.slice(0, 237 - state.messages[0].Title.length) +
+      "...";
   } else if (
     state &&
     state.messages &&
@@ -56,6 +60,8 @@
     state.messages[0].message !== ""
   ) {
     message = state.messages[0].message;
+  } else {
+    ("");
   }
 
   const toggle = () => {
@@ -68,39 +74,57 @@
   <mic-loading />
 {:else if $error}
   Error: {$error}
-{:else if state.messages && message && message !== ""}
+{:else if $data && $data.messages && state && state.messages && state.messages[0] && $generalErr !== true}
   <div class="container">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div id="message-header" on:click={toggle} aria-expanded={isOpen}>
+    <div id="message-header" on:click={toggle}>
       <div class="message-counter">
-        <img src={`${$apiDomain}/micwc-external/assets/messages-notification.26af3974.svg`} alt="" />
-        <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
+        {#if message || (message && message !== "")}
+          <img
+            src={`${$apiDomain}/micwc-external/assets/envelope-solid.svg`}
+            alt=""
+          />
+          <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
+        {:else}
+          <img
+            src={`${$apiDomain}/micwc-external/assets/envelope-solid.svg`}
+            alt=""
+          />
+          <span id="unreaded-msgs">&nbsp;{0}&nbsp;</span>
+        {/if}
       </div>
       <h4 id="title">Important Message</h4>
-      <img src={`${$apiDomain}/micwc-external/assets/cr.9226f20f.svg`} alt="" id={svgId} />
+      <img
+        src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
+        alt=""
+        id={svgId}
+      />
     </div>
     {#if state.messages}
       {#if isOpen}
         <div class="message-body" transition:slide={{ duration: 300 }}>
-          <p class="msg-data">
-            {#if state.messages[0] && (state.messages[0].Title !== "") !== ""}
-              <span>
-                <span class="msg-title">
-                  {state.messages[0].Title}
+          {#if message && message !== ""}
+            <p class="msg-data">
+              {#if !state.messages[0].empty && state.messages[0] && (state.messages[0].Title !== "") !== ""}
+                <span>
+                  <span class="msg-title">
+                    {state.messages[0].Title}
+                  </span>
+                  {@html message}
                 </span>
+              {:else}
                 {@html message}
-              </span>
-            {:else}
-              {@html message}
-            {/if}
-          </p>
+              {/if}
+            </p>
+          {:else}
+            <p class="msg-data" style="height: 105px;">No Messages</p>
+          {/if}
         </div>
         <div class="message-footer">
-          {#if state.messages.length > 0 || state.messages[0].length > 237}
-            <mic-messagesdetails
-              messages={state.messages}
-              messagesCount={state.messages.length}
-            />
+          {#if state.messages[0].empty}
+            <span />
+          {:else}
+            <mic-messagesdetails messages={state.messages} />
             <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
           {/if}
         </div>
@@ -115,15 +139,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 560px;
     max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
-    box-shadow: 0px 0px 10px rgb(34 34 34 / 24%);
+    box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
     background-color: white;
-    overflow: hidden;
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 830px) {
       width: 100%;
     }
   }
@@ -154,12 +176,21 @@
   }
   #unreaded-msgs {
     position: absolute;
-    right: 0;
+    right: -10px;
+    top: -8px;
     color: #ffffff;
     background: #da1e28;
     border-radius: 50%;
     border: 2px solid white;
+    width: 20px;
+    height: 20px;
+    /* text-align: center; */
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+
   .message .message-body {
     display: flex;
     flex-direction: column;
@@ -168,10 +199,7 @@
     padding: 0px;
     gap: 499px;
     width: 392px;
-    height: auto;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    max-height: 310px;
   }
   .msg-data {
     font-style: normal;
@@ -179,10 +207,9 @@
     font-size: 20px;
     line-height: 30px;
     display: flex;
-    align-items: center;
     color: rgb(0, 0, 0);
-    flex-grow: 0;
-    height: auto;
+    max-height: 180px;
+    overflow: hidden;
   }
   .msg-title {
     font-weight: 700;
@@ -205,9 +232,6 @@
     height: 50px;
     background: #005faa;
     border-radius: 6px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
   }
   button span {
     width: 45px;
@@ -220,16 +244,13 @@
     align-items: center;
     text-align: center;
     color: #ffffff;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
   }
 
   .message-footer {
     height: auto;
     display: flex;
     flex-direction: row-reverse;
-    width: 90%;
+    width: 100%;
   }
 
   /* acordion style */

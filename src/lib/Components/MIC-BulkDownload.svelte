@@ -33,7 +33,7 @@
 {:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
-        style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bd.78a6b58f.svg`});"
+        style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bd.svg`});"
     >
         <div class="tecoBillBannerBody">
             <p>
@@ -162,7 +162,10 @@
     .tecoCard {
         margin: 0 !important;
         padding: 15px;
-        max-width: 412px;
+        // max-width: 412px;
+        @media screen and (max-width: 992px) {
+            max-width: unset;
+        }
     }
     .tecoBillBanner {
         // image and color

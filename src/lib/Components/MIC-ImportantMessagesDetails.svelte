@@ -4,13 +4,16 @@
     // @ts-nocheck
 
     import circyle from "../../assets/cr.svg";
-    import messageNotification from "../../assets/messages-notification.svg";
+    // import messageNotification from "../../assets/messages-notification.svg";
+    import messageNotification from "../../assets/envelope-solid.svg";
+
     import { slide } from "svelte/transition";
     import {
         fetchAndRedirect,
         apiToken,
         eventsDomain,
         apiDomain,
+        persona,
     } from "../../js/store";
 
     export let messages;
@@ -20,24 +23,28 @@
 
     const showMessages = (toggle) => {
         show = !show;
-        if (toggle) {
+        if (toggle == "view") {
             fetchAndRedirect(
                 $apiToken,
-                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 null,
                 {
                     EventCode: "IN_Important_Messages_view",
-                    Outcome: "",
+                    Outcome: `Number Of Messsages: ${messages.length}`,
+                    Feedback: "",
+                    Persona: $persona,
                 }
             );
         } else {
             fetchAndRedirect(
                 $apiToken,
-                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 null,
                 {
                     EventCode: "IN_Important_Messages_Close",
                     Outcome: "",
+                    Feedback: "",
+                    Persona: $persona,
                 }
             );
         }
@@ -48,11 +55,13 @@
                 show = false;
                 fetchAndRedirect(
                     $apiToken,
-                    `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                     null,
                     {
                         EventCode: "IN_Important_Messages_Close",
                         Outcome: "",
+                        Feedback: "",
+                        Persona: $persona,
                     }
                 );
             }
@@ -82,7 +91,7 @@
                     <div class="message-header">
                         <div class="message-logo">
                             <img
-                                src={`${$apiDomain}/micwc-external/assets/messages-notification.26af3974.svg`}
+                                src={`${$apiDomain}/micwc-external/assets/envelope-solid.svg`}
                                 alt=""
                             />
                             <span id="unreaded-msgs"
@@ -90,7 +99,7 @@
                             >
                         </div>
                         <div class="message-lable">Important Message</div>
-                        <button on:click={showMessages}>×</button>
+                        <button on:click={() => showMessages()}>×</button>
                     </div>
                     {#if messages}
                         <div class="message-body">
@@ -213,6 +222,9 @@
             font-weight: 400;
             font-size: 21px;
             line-height: 29px;
+            @media screen and (max-width: 4803px) {
+                margin-left: 28px;
+            }
         }
     }
     #notification {
@@ -235,11 +247,18 @@
     }
     #unreaded-msgs {
         position: absolute;
-        right: 0;
+        right: -10px;
+        top: -8px;
         color: #ffffff;
         background: #da1e28;
         border-radius: 50%;
         border: 2px solid white;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .message-body {
         display: flex;
@@ -264,7 +283,7 @@
         height: auto;
         display: flex;
         flex-direction: row-reverse;
-        width: 90%;
+        width: 100%;
         button {
             padding: 10px 24px;
             gap: 10px;

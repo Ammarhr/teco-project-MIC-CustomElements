@@ -17,7 +17,7 @@
     eventsDomain,
     newToken,
   } from "../../js/store";
-
+  import MicSunSelect from "./MIC-SunSelect.svelte";
   // state
   let selectedBill;
   let selectedLabelBill;
@@ -30,25 +30,22 @@
       $apiToken,
       // "../../data/BillSelector.json"
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`
-      // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/BillSelector.json`
     );
   }
 
   const handleChange = (e, latest1) => {
-    console.log($billNumber, $latestBill, ":campared bills");
     if (latest1 && $billNumber !== $latestBill) {
       selectedBill = latest1;
       newToken.set("");
       getToken(
         $apiToken,
-        // "../../data/Token.son"
+        // "../../data/Token.json"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
       );
       setTimeout(() => {
         changeBillNumber(selectedBill);
       }, 500);
     } else if (!latest1) {
-      console.log("here");
       selectedBill = e.target.value;
       newToken.set("");
       getToken(
@@ -103,7 +100,7 @@
                 handleChange(e);
                 fetchAndRedirect(
                   $apiToken,
-                  `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                   null,
                   {
                     EventCode: "Select_New_Bill",
@@ -140,7 +137,7 @@
             on:click={() =>
               fetchAndRedirect(
                 $apiToken,
-                `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                 `${$data.download_link}${$billNumber}`,
                 {
                   EventCode: "Bill_Download",
@@ -149,7 +146,7 @@
               )}
           >
             <img
-              src={`${$apiDomain}/micwc-external/assets/DownloadIcon.9e9f8186.svg`}
+              src={`${$apiDomain}/micwc-external/assets/DownloadIcon.svg`}
               alt="DI"
             />DOWNLOAD BILL
           </button>
@@ -165,7 +162,7 @@
                 }
                 fetchAndRedirect(
                   $apiToken,
-                  `${$eventsDomain}/api/admin/MiJourney/v1/Create/Event`,
+                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                   null,
                   {
                     EventCode: "Select_Latest_Bill",
@@ -292,7 +289,10 @@
     margin: 0 !important;
     padding: 15px;
     container-type: inline-size;
-    width: 100%;
+    width: calc(66% - 30px);
+    @media screen and (max-width: 992px) {
+      width: 100%;
+    }
   }
   // web component "tecoBillSelector" style
   .tecoBillSelector-v2 {
@@ -405,26 +405,26 @@
       }
     }
     // too large
-    @media screen and (min-width: 1024px) {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      .tecoBillSelect {
-        width: 250px;
-      }
-      .tecoInfoLabel {
-        margin-right: 4%;
-        h4 {
-          color: $teco-dark-grey;
-          display: block !important;
-          margin: 0;
-        }
-      }
-      .tecobillSelectorDetailRow {
-        flex-grow: 2;
-        width: unset;
-      }
-    }
+    // @media screen and (min-width: 1024px) {
+    //   flex-direction: row;
+    //   justify-content: space-between;
+    //   align-items: center;
+    //   .tecoBillSelect {
+    //     width: 250px;
+    //   }
+    //   .tecoInfoLabel {
+    //     margin-right: 4%;
+    //     h4 {
+    //       color: $teco-dark-grey;
+    //       display: block !important;
+    //       margin: 0;
+    //     }
+    //   }
+    //   .tecobillSelectorDetailRow {
+    //     flex-grow: 2;
+    //     width: unset;
+    //   }
+    // }
     a {
       text-decoration: none;
       color: $teco-dark-grey;

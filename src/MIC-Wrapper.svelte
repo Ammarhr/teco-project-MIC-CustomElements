@@ -11,9 +11,12 @@
   import MicGeneralError from "./lib/Components/MIC-GeneralError.svelte";
   import MicSunSelect from "./lib/Components/MIC-SunSelect.svelte";
   import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
+  import MicImportantMessagesDetails from "./lib/Components/MIC-ImportantMessagesDetails.svelte";
   import MicYearlyEnergy from "./lib/Components/MIC-YearlyEnergy.svelte";
   import MicBillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import MicToolTipDetails from "./lib/Components/MIC-ToolTipDetails.svelte";
+  import MicPagination from "./lib/Components/mic-pagination.svelte";
+  import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -22,21 +25,33 @@
     showToolTipDetails,
     setEventDomain,
     newToken,
+    persona,
+    setAssetsUrl,
   } from "./js/store";
   export let token;
   export let domain;
   export let eventdomain;
+  // export let assetspath;
+  export let personainput;
+
   const refresh = () => {
     newToken.set("");
   };
-  $: if (token && domain && eventdomain) {
+  $: if (token && domain && eventdomain ) {
     setToken(token);
     setDomain(domain);
     setEventDomain(eventdomain);
+    // setAssetsUrl(assetspath);
+    if (personainput == "Agent") {
+      persona.set("Agent");
+    } else {
+      persona.set("customer");
+    }
   }
-  $: if ($showToolTipDetails) {
-    console.log("wrapper", $showToolTipDetails);
-  }
+
+  // $: if ($showToolTipDetails) {
+  //   console.log("wrapper", $showToolTipDetails);
+  // }
   onMount(() => {
     generalErr.set(false);
     newToken.set("");
@@ -45,48 +60,52 @@
   refresh();
 </script>
 
-{#key $showToolTipDetails}
-  {#if token && domain && eventdomain && $generalErr !== true && $showToolTipDetails !== true}
+<!-- {#key $showToolTipDetails} -->
+  {#if token && domain && eventdomain && $generalErr !== true}
     <div class="wrapper">
       <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
-      <MicBillingSummary />
       <div class="important-balance">
         <div class="balance">
           <mic-balancesummary />
+          <!-- <MicBalanceSummary /> -->
         </div>
         <div class="messages">
           <mic-importentmessage />
+          <!-- <MicImportantMessage /> -->
         </div>
-        <!-- <MicBalanceSummary /> -->
-        <!-- <MicImportantMessage /> -->
       </div>
       <mic-billselector />
       <!-- <MicBillSelectorAndDownload /> -->
       <div class="refreshable">
-        <div class="charge-detailes" />
+        <div class="charge-detailes">
+          <mic-billingsummary />
+          <!-- <MicBillingSummary /> -->
+        </div>
         <div class="insights">
-          <mic-insights />
-          <mic-sunselect />
-          <mic-yearlyenergy />
+          <mic-insights class="mic-insights" />
+          <mic-yearlyenergy class="mic-insights"/>
           <!-- <MicInsights /> -->
-          <!-- <MicSunSelect />
-          <MicYearlyEnergy /> -->
+          <!-- <MicYearlyEnergy /> -->
           <!-- <MicBulkDownload /> -->
+          <mic-bulkdownload class="mic-insights"/>
         </div>
       </div>
       <div class="blk-container">
-        <mic-bulkdownload style="max-width:460px" />
+        <!-- <MicBulkDownload /> -->
       </div>
+      <mic-metertable />
+      <!-- <MicMeterTable /> -->
     </div>
   {:else if $generalErr === true}
     <mic-generalerror {token} />
-  {:else if $showToolTipDetails === true}
+    <!-- <MicGeneralError {token} /> -->
+    <!-- {:else if $showToolTipDetails === true}
     <div class="wrapper">
       <MicToolTipDetails />
-    </div>
+    </div> -->
   {/if}
-{/key}
+<!-- {/key} -->
 
 <style lang="scss">
   .wrapper {
@@ -94,58 +113,64 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+    background-color: #f4f5f7;
   }
   .important-balance {
-    display: flex;
+    display: grid;
     flex-direction: row;
-    gap: 30px;
+    column-gap: 30px;
+    grid-template-columns: calc(66.66% - 30px) 33.33%;
     width: 100%;
-    justify-content: space-between;
-    @media screen and (max-width: 833px) {
-      flex-direction: column;
-      align-items: flex-end;
+    @media screen and (max-width: 992px) {
+      gap: 30px;
+      grid-template-columns: 100%;
     }
   }
   .balance {
     width: 100%;
-    @media screen and (max-width: 833px) {
+    @media screen and (max-width: 992px) {
       width: 100%;
-      flex-direction: column;
-      align-items: flex-end;
     }
   }
   .messages {
-    width: 35%;
-    @media screen and (max-width: 833px) {
+    @media screen and (max-width: 992px) {
       width: 100%;
       flex-direction: column;
       align-items: flex-end;
     }
   }
   .refreshable {
-    display: flex;
+    display: grid;
     flex-direction: row;
-    gap: 30px;
-    @media screen and (max-width: 767px) {
-      flex-direction: column;
-      align-items: flex-end;
+    column-gap: 30px;
+    grid-template-columns: calc(66.66% - 30px) 33.33%;
+    width: 100%;
+    @media screen and (max-width: 992px) {
+      grid-template-columns: 100%;
     }
   }
   .charge-detailes {
-    width: -webkit-fill-available;
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 992px) {
       width: 100%;
+    }
+  }
+  .mic-insights {
+    width: 100%;
+    // max-width: 410px;
+    @media screen and (max-width: 767px) {
+      max-width: unset;
     }
   }
   .insights {
     display: flex;
     flex-direction: column;
-    max-width: 40%;
+    width: 100%;
     align-items: end;
-    @media screen and (max-width: 767px) {
-      max-width: unset;
-      display: grid;
-      grid-template-columns: 1fr;
+    @media screen and (max-width: 992px) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }
 

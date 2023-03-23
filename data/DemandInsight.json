@@ -2,7 +2,7 @@
   "services": [
     {
       "serviceName": "Electric",
-      "BillContractNo": "654646545646556",
+      "BillContractNo": "5101296049",
       "monthly": {
         "VisibilityTab": true,
         "unit": "KWH",
@@ -12,8 +12,8 @@
         "percentageTemp": 5,
         "y": {
           "data": [
-            2500,
-            1000
+            64,
+            34
           ]
         },
         "x": [
@@ -37,8 +37,8 @@
         "percentageTemp": 6,
         "y": {
           "data": [
-            1400,
-            900
+            2,
+            1
           ]
         },
         "x": [
@@ -56,7 +56,7 @@
     },
     {
       "serviceName": "Gas",
-      "BillContractNo": "654654654646",
+      "BillContractNo": "5101296048",
       "monthly": {
         "VisibilityTab": true,
         "unit": "KWH",
@@ -66,7 +66,7 @@
         "percentageTemp": 5,
         "y": {
           "data": [
-            2500,
+            6000,
             1000
           ]
         },
