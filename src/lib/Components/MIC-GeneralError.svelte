@@ -13,19 +13,22 @@
                 token,
                 // "../../../data/generalErr.json"
                 `${$apiDomain}/api/ibill/webcomponents/v1/Post/GetErrorMessages?Code=ER_General_001`
-            );
+            ).then(() => loading.set(false));
         }
     });
+    // $: if ($loading) {
+    //     console.log("loaaaaaaaaaaaaaaaaaaaading from general error", $loading);
+    // }
 </script>
 
-{#if $loading}
-    <h1>loadingg..</h1>
+{#if $loading == true}
+    <mic-loading />
 {:else if $err}
-    <div />
-{:else if $data.HTMLBody}
+    <div>Error..</div>
+{:else if $data && $data.HTMLBody}
     <div class="container">
         <p>Oops! Something went wrong.</p>
-        
+
         <img
             src={`data:image/png;base64,${$data.RecommendationImage}`}
             alt=""
@@ -35,8 +38,6 @@
             {@html $data.HTMLBody}
         </p>
     </div>
-{:else}
-    <h1 />
 {/if}
 
 <style lang="scss">

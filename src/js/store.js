@@ -230,9 +230,8 @@ export function errorCallback() {
         } catch (e) {
             error.set(e);
         }
-        loading.set(false)
-
     }
+    loading.set(false)
 
     return [data, loading, error, errorHandler]
 }

@@ -98,8 +98,8 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 370px;
-        max-width: calc(100% - 40px);
+        // width: 370px;
+        // max-width: calc(100% - 40px);
         padding: 20px;
         transition: 0.3s;
         border-radius: 16px;
@@ -108,7 +108,7 @@
         background-color: #ffff;
         overflow: hidden;
         @media screen and (max-width: 767px) {
-            width: 100%;
+            // width: 100%;
         }
     }
     #header {

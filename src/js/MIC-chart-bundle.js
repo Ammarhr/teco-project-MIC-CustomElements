@@ -15,6 +15,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
         },
         legend: {
             show: false
+
         },
         stroke: {
             show: true,
@@ -126,17 +127,30 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
 }
 
 
-export const renderMixChart = (data, color, width, height) => {
+export const renderMixChart = (data, color, width, height, service, unit) => {
+
     let colWidth;
-    if (data.length == 1) {
+    let serviceData;
+    let catArray = [];
+    if (data && data.length > 0) {
+        serviceData = data.filter((results) => {
+            if (results.Usage !== "")
+                return results.Usage
+        })
+        catArray = data.map((results) => {
+            return results.Perioddate
+        })
+    }
+    console.log("serviceData", serviceData);
+    //* configure column width depend on the data 
+    if (data && data.length < 5) {
         colWidth = "5%"
     } else {
         colWidth = undefined
-
     }
 
     let options
-    if (data.length == 0) {
+    if (!serviceData || serviceData.length == 0) {
         options = {
             annotations: {
                 position: 'front',
@@ -147,8 +161,8 @@ export const renderMixChart = (data, color, width, height) => {
                 ],
             },
             chart: {
-                height: height,
-                width: "100%",
+                height: 400,
+                width: 1200,
                 type: "bar"
             },
             noData: {
@@ -161,18 +175,16 @@ export const renderMixChart = (data, color, width, height) => {
                     name: "Series 1",
                     data: []
                 }
-            ]
+            ],
         }
     } else {
         options = {
             series: [
                 {
                     type: "column",
-                    name: "gas",
+                    name: service,
                     color: "#005FAA",
-                    data: data.map((results) => {
-                        return results.Usage
-                    })
+                    data: serviceData
                 },
                 {
                     type: "line",
@@ -181,7 +193,6 @@ export const renderMixChart = (data, color, width, height) => {
                     data: data.map((results) => {
                         return results.Temperature
                     }),
-
                 }
 
             ],
@@ -192,7 +203,7 @@ export const renderMixChart = (data, color, width, height) => {
             chart: {
                 height: height,
                 marginLeft: 0,
-                width: "100%",
+                width: 1200,
                 zoom: {
                     enabled: false // Disable chart zooming
                 },
@@ -210,9 +221,6 @@ export const renderMixChart = (data, color, width, height) => {
                 strokeDashArray: 50,
                 strokeWidth: 3,
                 strokeColors: "#FF832B",
-                customHTML: function () {
-                    return '<span style="width:14px; height: 5px; border: 2px solid #FF832B;"></span>'
-                }
             },
             plotOptions: {
                 bar: {
@@ -229,16 +237,7 @@ export const renderMixChart = (data, color, width, height) => {
             },
             dataLabels: {
                 enabled: false,
-                // formatter: function (val, { seriesIndex, w }) {
-                //     if (val && w.config.series[seriesIndex].name == "tempereature") {
-                //         return val + "°";
-                //     } else if (val && w.config.series[seriesIndex].name == "gas") {
-                //         return val + "Kwl"
-                //     } else {
-                //         return
-                //     }
-                // },
-                // offsetY: -20,
+                offsetY: -20,
             },
             legend: {
                 show: true,
@@ -246,18 +245,54 @@ export const renderMixChart = (data, color, width, height) => {
             },
             tooltip: {
                 enabled: true,
+                followCursor: true,
+                custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                    let arr;
+                    arr = data.map((results) => {
+                        return results.FullDate
+                    })
+                    return (
+                        '<div class=" apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
+                        '<div style="padding-bottom:8px">' +
+                        "<span style='font-weight:700; color:#005FAA; border-bottom:1px solid #EAECEE;'>" +
+                        arr[dataPointIndex - 1] +
+                        "</div>"
+                        +
+                        `<div class="apexcharts-tooltip-text">` +
+                        '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
+                        "<span style='font-weight:700; color:#000000;'>" +
+                        "Energy Used: " +
+                        "</span>" +
+                        "<span style='font-weight:300;color:#000000;'>" + " "
+                        +
+                        series[0][dataPointIndex] + " " + unit
+                        +
+                        "</div>"
+                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                        + `<span style='font-weight:700;'>` +
+                        "Avg.Temp: " +
+                        "</span>"
+                        +
+                        "<span style='font-weight:300;'>"
+                        + series[1][dataPointIndex] + "°"
+                    );
+                },
                 onDatasetHover: {
                     highlightDataSeries: true,
-                    y: {
-                        show: true,
+                },
+                y: {
+                    show: true,
+                    style: {
+                        cssClass: 'apexcharts-yaxis-annotation-label',
                     },
                 },
+                x: {
+                    show: false,
+                }
             },
             xaxis: {
-                type:"category",
-                categories: data.map((results) => {
-                    return results.Perioddate
-                })
+                type: "category",
+                categories: catArray
             },
             yaxis: [
                 {
@@ -282,7 +317,7 @@ export const renderMixChart = (data, color, width, height) => {
                         show: false,
                     },
                     labels: {
-                        show: false,
+                        show: true,
                         formatter: function (val) {
                             return val;
                         },

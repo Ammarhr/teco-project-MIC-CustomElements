@@ -5,12 +5,14 @@
     import toggle from "../../assets/cr.svg";
     import toolTip from "../../assets/toolTip.svg";
     import verticalLine from "../../assets/vertical-line.svg";
+    import elictric from "../../assets/electric.svg";
     import { slide } from "svelte/transition";
     import {
         fetchstore,
         apiDomain,
         apiToken,
         fetchUsageChart,
+        newToken,
     } from "../../js/store";
     import { chart } from "svelte-apexcharts";
     import { renderMixChart } from "../../js/MIC-chart-bundle";
@@ -19,11 +21,12 @@
     let items;
     let tableData;
     let selectedMeter;
+    let reGeneratedToken;
     let tab1 = "1";
     let tab2 = "2";
     let isOpen = true;
     let svgId = "rotate-svg-" + isOpen;
-
+    let styleSelectedRows = [];
     const [data, loading, error, get] = fetchstore();
     const [usageData, usageLoading, usageError, UsageGet] = fetchUsageChart();
 
@@ -31,11 +34,11 @@
         if ($apiToken && $apiDomain && !$data.results) {
             get(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-                "../../data/meterTable.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+                // "../../data/meterTable.json"
             );
         }
-        console.log($apiToken, "from store");
+        reGeneratedToken = $apiToken;
     });
     const toggleContainer = () => {
         isOpen = !isOpen;
@@ -43,60 +46,78 @@
     };
 
     //////// change the selected meter + call Dap Api
-    const handleSelectedMeter = (meterObject) => {
+    const handleSelectedMeter = (meterObject, i) => {
+        styleSelectedRows = [];
         if (meterObject) {
             selectedMeter = meterObject;
-            console.log(selectedMeter, "selected");
         } else {
             selectedMeter = pagenateItems[0];
-            console.log(selectedMeter, "selected");
         }
-        let {
-            DLN,
-            DAP_StartDate,
-            DAP_EndDate,
-            intp = "",
-            DAP_dkwh,
-            DAP_rkwh,
-            DAP_pf,
-            DAP_kw,
-            DAP_dtoun,
-            DAP_dtouf,
-            BilledAmount,
-        } = selectedMeter;
-
-        UsageGet(
-            $apiToken,
-            // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-            "../../data/meterUsageDaily.json",
-            {
+        if (i) {
+            styleSelectedRows[i] =
+                "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
+        } else {
+            styleSelectedRows[0] =
+                "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
+        }
+        if (selectedMeter) {
+            let {
                 DLN,
                 DAP_StartDate,
                 DAP_EndDate,
-                intp,
+                intp = "D",
                 DAP_dkwh,
                 DAP_rkwh,
                 DAP_pf,
                 DAP_kw,
                 DAP_dtoun,
                 DAP_dtouf,
-            }
-        );
+                BilledAmount,
+            } = selectedMeter;
+
+            UsageGet(
+                $apiToken,
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+                // "../../data/meterUsageDaily.json",
+                {
+                    dln: DLN,
+                    sdt: DAP_StartDate,
+                    edt: DAP_EndDate,
+                    intp: intp,
+                    dkwh: DAP_dkwh,
+                    rkwh: DAP_rkwh,
+                    pf: DAP_pf,
+                    kw: DAP_kw,
+                    dtoun: DAP_dtoun,
+                    dtouf: DAP_dtouf,
+                }
+            );
+        }
     };
-    $: if ($usageData && $usageData.DailyUsage) {
-        // console.log($usageData.DailyUsage);
-        // if (
-        //     $usageData.DailyUsage.DailyDetails &&
-        //     $usageData.DailyUsage.DailyDetails.length == 0
-        // ) {
-        //     console.log("hello");
-        //     tab1 = "2";
-        //     tab2 = "1";
-        // } else {
-        //     tab1 = "1";
-        //     tab2 = "2";
-        // }
+    $: if (
+        $newToken &&
+        $newToken.token &&
+        (reGeneratedToken == $apiToken || reGeneratedToken !== $newToken.token)
+    ) {
+        get(
+            $newToken.token,
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+            // "../../data/meterTable.json"
+        );
+        reGeneratedToken = $newToken.token;
     }
+    // $: if ($usageData && $usageData.DailyUsage) {
+    // if (
+    //     $usageData.DailyUsage.DailyDetails &&
+    //     $usageData.DailyUsage.DailyDetails.length == 0
+    // ) {
+    //     tab1 = "2";
+    //     tab2 = "1";
+    // } else {
+    //     tab1 = "1";
+    //     tab2 = "2";
+    // }
+    // }
     ////// search & filter
     const handleSearch = () => {
         let str = event.target.value;
@@ -112,43 +133,23 @@
             items = searchArray;
         }
     };
-    // let tableContainer;
 
-    // $: tableContainer = document.getElementById("table");
-
-    // $: if (tableContainer) {
-    //     console.log(tableContainer, "hello");
-    // }
-
-    ////// change the charts reference
-    // $: if (selectedMeter) {
-    //     let { gas, tempereature, x } = selectedMeter.settings;
-    //     options = renderMixChart(
-    //         [gas, tempereature],
-    //         x,
-    //         ["#044F8D"],
-    //         "100%",
-    //         650
-    //     );
-    // }
     ///////// pagination:
     //////// first render
     $: if ($data && $data.MeterTabel) {
-        console.log($data);
         tableData = $data.MeterTabel;
         selectedMeter = $data.MeterTabel[0];
         items = $data.MeterTabel;
         getPaginatedItems();
     }
-    ////////// tabs functionality
 
+    ////////// tabs functionality
     const activateTab = (num1, num2) => {
         tab2 = num2;
         tab1 = num1;
     };
 
     ////////////////////////////
-    // export let items = []; // array of items to paginate
     export let pageSize = 5; // number of items per page
     let pagenateItems = [];
     let currentPage = 0;
@@ -169,7 +170,6 @@
     function getPaginatedItems() {
         const startIndex = currentPage * pageSize;
         const endIndex = startIndex + pageSize;
-        console.log("grommemteete :", items.slice(startIndex, endIndex));
         pagenateItems = items.slice(startIndex, endIndex);
         handleSelectedMeter();
     }
@@ -214,13 +214,15 @@
                 />
             </div>
             {#if isOpen}
-                <div class="search">
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        on:change={handleSearch}
-                    />
-                </div>
+                {#if tableData && tableData.length > 5}
+                    <div class="search">
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            on:change={handleSearch}
+                        />
+                    </div>
+                {/if}
                 <div
                     class="table-container"
                     transition:slide={{ duration: 300 }}
@@ -237,18 +239,21 @@
                                     <th>Previous Reading</th>
                                     <th>Total Used</th>
                                 </tr>
-                                {#each pagenateItems as row}
+                                {#each pagenateItems as row, i}
                                     <tr
+                                        style={styleSelectedRows[i]}
                                         class="table-row"
                                         on:click={() => {
-                                            handleSelectedMeter(row);
+                                            handleSelectedMeter(row, i);
                                         }}
                                     >
-                                        <!-- {console.log(row, "it's a row")} -->
-                                        <!-- {#each Object.values(row) as value} -->
                                         <td>
                                             <div class="td-value">
-                                                {row.Service}
+                                                <!-- src={elictric} -->
+                                                <img
+                                                    src={`${$apiDomain}/micwc-external/assets/${row.Service.toLowerCase()}Service.svg`}
+                                                    alt={row.Service}
+                                                />
                                             </div>
                                         </td>
                                         <td>
@@ -268,12 +273,12 @@
                                         >
                                         <td>
                                             <div class="td-value">
-                                                <h4>
-                                                    {row.CurrentReading}
-                                                </h4>
                                                 <span>
-                                                    {row.ReadType}
+                                                    {row.CurrentReading}
                                                 </span>
+                                                <h4 style="color: black;">
+                                                    {row.ReadType}
+                                                </h4>
                                             </div></td
                                         >
                                         <td>
@@ -283,63 +288,62 @@
                                         >
                                         <td>
                                             <div class="td-value">
-                                                <h4>
-                                                    {row.TotalUsed}
-                                                </h4>
                                                 <span>
-                                                    {row.OperandLabel}
+                                                    {row.TotalUsed}{" "}{row.UOF}
                                                 </span>
+                                                <h4 style="color: black;">
+                                                    {row.OperandLabel}
+                                                </h4>
                                             </div></td
                                         >
-                                        <!-- {/each} -->
                                     </tr>
                                 {/each}
-                                {#if $data.meterLocation}
-                                    <div id="location">
-                                        <span
-                                            ><strong> Meter Location:</strong>
-                                            {$data.meterLocation}</span
-                                        >
-                                    </div>
-                                {/if}
                             </table>
-                            <div class="pagination-options">
-                                <div>
-                                    <p>
-                                        Page {getCurrentPage()} of {getTotalPages()}
-                                    </p>
-                                </div>
-                                <div>
-                                    <button
-                                        on:click={prevPage}
-                                        disabled={currentPage === 0}
-                                    >
-                                        Previous
-                                    </button>
-
-                                    {#each getPagesToShow() as pageIndex}
-                                        <button
-                                            on:click={() => goToPage(pageIndex)}
-                                            class:selected={pageIndex ===
-                                                currentPage}
-                                        >
-                                            {pageIndex + 1}
-                                        </button>
-                                    {/each}
-
-                                    <button
-                                        on:click={nextPage}
-                                        disabled={currentPage ===
-                                            getTotalPages() - 1}
-                                    >
-                                        Next
-                                    </button>
-                                </div>
-                            </div>
                         {/if}
                     {/if}
                 </div>
-                <div class="options" />
+                {#if selectedMeter && selectedMeter.MeterLocation}
+                    <div id="location">
+                        <span
+                            ><strong> Meter Location:</strong>
+                            {selectedMeter.MeterLocation}</span
+                        >
+                    </div>
+                {/if}
+                {#if tableData && tableData.length > 5}
+                    <div class="pagination-options">
+                        <div>
+                            <p>
+                                Page {getCurrentPage()} of {getTotalPages()}
+                            </p>
+                        </div>
+                        <div>
+                            <button
+                                on:click={prevPage}
+                                disabled={currentPage === 0}
+                            >
+                                Previous
+                            </button>
+
+                            {#each getPagesToShow() as pageIndex}
+                                <button
+                                    on:click={() => goToPage(pageIndex)}
+                                    class:selected={pageIndex === currentPage}
+                                >
+                                    {pageIndex + 1}
+                                </button>
+                            {/each}
+
+                            <button
+                                on:click={nextPage}
+                                disabled={currentPage === getTotalPages() - 1}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                {/if}
+                <!-- <div class="options" /> -->
                 <div
                     id="meter-tab-container"
                     transition:slide={{ duration: 300 }}
@@ -355,14 +359,14 @@
                                 Daily
                             </h6>
                             <!-- {/if} -->
-                            <h6
+                            <!-- <h6
                                 id={"meter-btn" + tab2}
                                 on:click={() => activateTab("2", "1")}
                             >
                                 Monthly
-                            </h6>
+                            </h6> -->
                         </div>
-                        <div class="options">
+                        <!-- <div class="options">
                             <input
                                 type="checkbox"
                                 name="trmprature"
@@ -374,28 +378,29 @@
                                 alt="usage chart tool tip"
                                 class="tool-tip"
                             />
-                        </div>
-                        <div id={"meter-tab1" + tab1}>
+                        </div> -->
+                        <!-- <div id={"meter-tab1" + tab1}>
                             {#if $usageData.DailyUsage.DailyDetails && $usageData.DailyUsage.DailyDetails.length == 0}
-                                <!-- <h1 class="no-data">No Data to display</h1> -->
                                 <div
                                     class="chart"
                                     use:chart={renderMixChart([])}
                                 />
                             {:else}
-                                <!-- <div
-                                    class="chart"
-                                    use:chart={renderBarChart([
-                                        $usageData.DailyUsage.DailyDetails,
-                                    ])}
-                                /> -->
+
                             {/if}
-                        </div>
+                        </div> -->
                         <div id={"meter-tab1" + tab2}>
                             {#if $usageData.DailyUsage.DailyDetails && $usageData.DailyUsage.DailyDetails.length == 0}
                                 <div
                                     class="chart"
-                                    use:chart={renderMixChart([])}
+                                    use:chart={renderMixChart(
+                                        null,
+                                        ["#044F8D"],
+                                        "1410px",
+                                        400,
+                                        null,
+                                        null
+                                    )}
                                 />
                             {:else}
                                 <div
@@ -404,7 +409,9 @@
                                         $usageData.DailyUsage.DailyDetails,
                                         ["#044F8D"],
                                         "1410px",
-                                        650
+                                        400,
+                                        selectedMeter.Service,
+                                        selectedMeter.UOF
                                     )}
                                 />
                             {/if}
@@ -416,17 +423,29 @@
                         {#if $usageData.DailyUsage.AVGCost}
                             <div>
                                 <h6>AVG. COST PER DAY</h6>
-                                <h4>{$usageData.DailyUsage.AVGCost}</h4>
+                                <h4>${$usageData.DailyUsage.AVGCost}</h4>
                             </div>
                         {/if}
-                        <img src={verticalLine} alt="" />
                         {#if $usageData.DailyUsage.AVGTemp}
                             <div>
                                 <h6>AVG. TEMP PER DAY</h6>
-                                <h4>{$usageData.DailyUsage.AVGCost}</h4>
+                                <h4>{$usageData.DailyUsage.AVGTemp}°</h4>
+                            </div>
+                        {/if}
+                        {#if $usageData.DailyUsage.HitPeakDemand}
+                            <div>
+                                <h6>YOU HIT PEAK DEMAND</h6>
+                                <h4>{$usageData.DailyUsage.HitPeakDemand}</h4>
                             </div>
                         {/if}
                     </div>
+                    {#if $usageData.DailyUsage.FooterDisclaimer}
+                        <div class="diclimer">
+                            <span>
+                                {@html $usageData.DailyUsage.FooterDisclaimer}
+                            </span>
+                        </div>
+                    {/if}
                 {/if}
             {/if}
         </div>
@@ -438,19 +457,6 @@
         font-family: "Interstate";
     }
 
-    .no-data {
-        position: absolute;
-        left: 41.24%;
-        right: 37.43%;
-        top: 42.91%;
-        bottom: 45.6%;
-        font-weight: 300;
-        font-size: 32px;
-        line-height: 38px;
-        letter-spacing: -0.02em;
-        color: #6c6c6c;
-        z-index: 1;
-    }
     #meter-header {
         display: flex;
         flex-direction: row;
@@ -460,7 +466,7 @@
     .meter-card {
         display: flex;
         flex-direction: column;
-        row-gap: 2rem;
+        row-gap: 16px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         transition: 0.3s;
         border-radius: 16px;
@@ -527,10 +533,13 @@
         height: 19px;
     }
     table {
-        border-collapse: collapse;
-        border: 1px solid rgb(0, 0, 0, 0.2);
-        min-width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid rgb(0 0 0 / 5%);
+        min-width: 900px;
+        width: 100%;
         margin: 10px auto 20px auto;
+        border-radius: 6px;
     }
     th {
         box-sizing: border-box;
@@ -542,10 +551,17 @@
         font-size: 18px;
         font-style: normal;
         font-weight: 400;
-        border-radius: 6px 0px 0px 0px;
         flex: none;
         order: 0;
         flex-grow: 0;
+
+        &:first-child {
+            border-radius: 6px 0px 0px 0px;
+        }
+
+        &:last-child {
+            border-radius: 0px 6px 0px 0px;
+        }
     }
     .table-row {
         width: 45px;
@@ -563,7 +579,21 @@
         flex-grow: 0;
     }
     tr:hover {
-        background-color: #e8e8e8;
+        background-color: #e6eff7;
+    }
+
+    tr {
+        &:last-child {
+            td {
+                &:first-child {
+                    border-radius: 0 0 0 6px;
+                }
+
+                &:last-child {
+                    border-radius: 0 0 6px 0;
+                }
+            }
+        }
     }
 
     td {
@@ -571,16 +601,19 @@
         border: 1px solid rgba(194, 194, 194, 0.749);
         transition: background-color 0.4s;
     }
-
-    td:hover {
-        background-color: lightgrey;
+    .apexcharts-tooltip-y-group {
+        display: none !important;
     }
+
     .td-value {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         column-gap: 5px;
+        img {
+            width: 24px;
+        }
     }
     .pagination-options {
         display: flex;
@@ -595,6 +628,7 @@
     .chart {
         width: 100%;
     }
+
     .search {
         width: 100%;
         display: flex;
@@ -628,7 +662,7 @@
     }
     /*tabs*/
     #meter-tab-container {
-        width: 93%;
+        width: 100%;
     }
     #meter-tabs {
         display: flex;
@@ -640,17 +674,15 @@
 
     #meter-btn1 {
         font-style: normal;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 20px;
         line-height: 30px;
         display: flex;
         align-items: center;
         color: #000000;
-        flex: none;
-        order: 1;
-        flex-grow: 0;
         cursor: pointer;
         border-bottom: solid #005faa;
+        margin: 0;
     }
     #meter-btn2 {
         font-style: normal;
@@ -660,10 +692,8 @@
         display: flex;
         align-items: center;
         color: #6c6c6c;
-        flex: none;
-        order: 1;
-        flex-grow: 0;
         cursor: pointer;
+        margin: 0;
     }
     #meter-tab11 {
         display: none;
@@ -679,10 +709,9 @@
         flex-direction: row;
         align-items: flex-start;
         padding: 16px;
-        gap: 16px;
+        // gap: 16px;
         width: fit-content;
-        max-width: 500px;
-        height: 97px;
+        max-width: 550px;
         background: #ffffff;
         border: 1px solid #e5e7eb;
         border-radius: 8px;
@@ -692,16 +721,25 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        padding: 0px;
         gap: 8px;
         max-width: 300px;
-        height: 65px;
+        padding: 8px;
+
+        &:first-child {
+            padding-left: 0;
+        }
+        &:last-child {
+            padding-right: 0;
+        }
+        &:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+        }
     }
     .information-box div h6 {
         display: inline-block;
         font-style: normal;
         font-weight: 300;
-        font-size: 16px;
+        font-size: 14px;
         line-height: 19px;
         letter-spacing: -0.02em;
         color: #6c6c6c;
@@ -711,13 +749,22 @@
         display: inline-block;
         font-style: normal;
         font-weight: 300;
-        font-size: 32px;
+        font-size: 24px;
         line-height: 38px;
         color: #000000;
         margin: 0;
     }
+    .diclimer {
+        font-family: "Interstate";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14px;
+
+        color: #6c6c6c;
+    }
     @media screen and (max-width: 1000px) {
-        .mwter-card {
+        .meter-card {
             display: flex;
             flex-direction: column;
             row-gap: 2rem;
@@ -727,6 +774,10 @@
             padding: 20px;
         }
         .table-container {
+            overflow-x: scroll;
+        }
+        .chart {
+            overflow-y: hidden;
             overflow-x: scroll;
         }
         #tab12 {

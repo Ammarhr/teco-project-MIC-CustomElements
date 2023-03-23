@@ -253,6 +253,12 @@
         background: #da1e28;
         border-radius: 50%;
         border: 2px solid white;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .message-body {
         display: flex;

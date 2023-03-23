@@ -147,7 +147,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if $loading}
   <mic-loading />
-{:else if $data && $data.Sections && toggleArray}
+{:else if $data && $data.Sections && toggleArray && billsObjectsArray}
   <div class="billing-container">
     {#each $data.Sections as billService, i}
       {#if billService.SectionType == "Service"}
@@ -167,7 +167,10 @@
           <!-- {#if toggleArray[i]} -->
           <div style={styleToggleArr[i]} class="bill-content">
             <span>
-              <h3 id="sectiontitle" style="color:{billService.Color}; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;">
+              <h3
+                id="sectiontitle"
+                style="color:{billService.Color}; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
+              >
                 {#if billService.ServiceType && billService.ServiceType == "Electric"}
                   <img
                     src={`${$apiDomain}/micwc-external/assets/electricCharge.svg`}
@@ -242,10 +245,9 @@
                                     <img
                                       src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
                                       alt=""
-                                      on:pointerenter={() =>
-                                        toolTipToggle(j, i)}
+                                      on:click={() => toolTipToggle(j, i)}
                                     />
-                                    {#if billsObjectsArray[i].toolTipStylleArray[j]}
+                                    {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
                                       <div
                                         class="tooltip-description"
                                         style={billsObjectsArray[i]
@@ -307,10 +309,9 @@
                                       <img
                                         src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
                                         alt=""
-                                        on:pointerenter={() =>
-                                          toolTipToggle(j, i)}
+                                        on:click={() => toolTipToggle(j, i)}
                                       />
-                                      {#if billsObjectsArray[i].toolTipStylleArray[j]}
+                                      {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
                                         <div
                                           class="tooltip-description"
                                           style={billsObjectsArray[i]
@@ -372,8 +373,7 @@
                                       <img
                                         src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
                                         alt=""
-                                        on:pointerenter={() =>
-                                          toolTipToggle(j, i)}
+                                        on:click={() => toolTipToggle(j, i)}
                                       />
                                       <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
                                       <div class="tooltip-description">

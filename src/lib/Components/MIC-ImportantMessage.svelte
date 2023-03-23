@@ -13,11 +13,11 @@
     apiToken,
     apiDomain,
     eventsDomain,
-    assetsUrl
+    assetsUrl,
+    generalErr,
   } from "../../js/store";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
-  import MicImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
 
   //state
   let state = {};
@@ -27,7 +27,7 @@
 
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiToken && !$data.messages) {
+    if ($apiToken && !$data.messages && $generalErr !== true) {
       get(
         $apiToken,
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
@@ -39,13 +39,14 @@
   $: if ($data && $data.messages) {
     state = $data;
   }
-
+  //hello fro
   //slice long message
   $: if (
     state &&
     state.messages &&
     state.messages[0] &&
     state.messages[0].message &&
+    state.messages[0].message.length &&
     state.messages[0].message.length > 237
   ) {
     message =
@@ -59,6 +60,8 @@
     state.messages[0].message !== ""
   ) {
     message = state.messages[0].message;
+  } else {
+    ("");
   }
 
   const toggle = () => {
@@ -71,10 +74,10 @@
   <mic-loading />
 {:else if $error}
   Error: {$error}
-{:else if state && state.messages && state.messages[0]}
+{:else if $data && $data.messages && state && state.messages && state.messages[0] && $generalErr !== true}
   <div class="container">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div id="message-header" on:click={toggle} aria-expanded={isOpen}>
+    <div id="message-header" on:click={toggle}>
       <div class="message-counter">
         {#if message || (message && message !== "")}
           <img
@@ -120,7 +123,7 @@
         <div class="message-footer">
           {#if state.messages[0].empty}
             <span />
-          {:else if state.messages.length > 1 || state.messages[0].Title.length + state.messages[0].message.length > 237}
+          {:else}
             <mic-messagesdetails messages={state.messages} />
             <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
           {/if}
@@ -165,9 +168,6 @@
       text-transform: uppercase;
       color: #005faa;
       margin: 0;
-      @media screen and (max-width: 4803px) {
-        margin-left: 28px;
-      }
     }
   }
 
@@ -189,7 +189,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
+  }
 
   .message .message-body {
     display: flex;
@@ -207,9 +207,9 @@
     font-size: 20px;
     line-height: 30px;
     display: flex;
-    align-items: center;
     color: rgb(0, 0, 0);
-    max-height: 310px;
+    max-height: 180px;
+    overflow: hidden;
   }
   .msg-title {
     font-weight: 700;
@@ -232,9 +232,6 @@
     height: 50px;
     background: #005faa;
     border-radius: 6px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
   }
   button span {
     width: 45px;
@@ -247,9 +244,6 @@
     align-items: center;
     text-align: center;
     color: #ffffff;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
   }
 
   .message-footer {

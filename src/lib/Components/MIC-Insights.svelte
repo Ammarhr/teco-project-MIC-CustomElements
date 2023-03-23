@@ -7,7 +7,6 @@
   ///////// svg imports
   import dropDown from "../../assets/cr.svg";
 
-
   ///////// sub web components
   import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
   import MicSunSelect from "./MIC-SunSelect.svelte";
@@ -597,7 +596,7 @@
   {:else if $sunerror}
     <h1 />
   {:else if $sundata && $sundata.SunSelect.length > 0}
-    <mic-sunselect contractnum={$sundata.SunSelect} />
+    <mic-sunselect contractnum={$sundata.SunSelect} class="sun-select" />
   {/if}
 {:else}
   <div />
@@ -609,8 +608,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 370px;
-    max-width: calc(100% - 40px);
+    // width: 370px;
+    // max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
@@ -619,7 +618,14 @@
     background-color: #ffff;
     overflow: hidden;
     @media screen and (max-width: 767px) {
-      width: 100%;
+      // width: 100%;
+    }
+  }
+  .sun-select {
+    width: 100%;
+    // max-width: 410px;
+    @media screen and (max-width: 767px) {
+      max-width: unset;
     }
   }
   #header {

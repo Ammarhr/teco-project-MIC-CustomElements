@@ -162,7 +162,10 @@
     .tecoCard {
         margin: 0 !important;
         padding: 15px;
-        max-width: 412px;
+        // max-width: 412px;
+        @media screen and (max-width: 992px) {
+            max-width: unset;
+        }
     }
     .tecoBillBanner {
         // image and color

@@ -11,6 +11,7 @@
   import MicGeneralError from "./lib/Components/MIC-GeneralError.svelte";
   import MicSunSelect from "./lib/Components/MIC-SunSelect.svelte";
   import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
+  import MicImportantMessagesDetails from "./lib/Components/MIC-ImportantMessagesDetails.svelte";
   import MicYearlyEnergy from "./lib/Components/MIC-YearlyEnergy.svelte";
   import MicBillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
   import MicToolTipDetails from "./lib/Components/MIC-ToolTipDetails.svelte";
@@ -62,7 +63,7 @@
 <!-- {#key $showToolTipDetails} -->
   {#if token && domain && eventdomain && $generalErr !== true}
     <div class="wrapper">
-      <!-- <mic-headerinformation /> -->
+      <mic-headerinformation />
       <!-- <MicHeaderInformation /> -->
       <div class="important-balance">
         <div class="balance">
@@ -83,21 +84,22 @@
         </div>
         <div class="insights">
           <mic-insights class="mic-insights" />
-          <mic-yearlyenergy />
-          <!-- <MicInsights />
-          <MicYearlyEnergy />
-          <MicBulkDownload /> -->
+          <mic-yearlyenergy class="mic-insights"/>
+          <!-- <MicInsights /> -->
+          <!-- <MicYearlyEnergy /> -->
+          <!-- <MicBulkDownload /> -->
+          <mic-bulkdownload class="mic-insights"/>
         </div>
       </div>
       <div class="blk-container">
-        <mic-bulkdownload style="max-width:460px" />
         <!-- <MicBulkDownload /> -->
       </div>
       <mic-metertable />
-      <MicMeterTable />
+      <!-- <MicMeterTable /> -->
     </div>
   {:else if $generalErr === true}
     <mic-generalerror {token} />
+    <!-- <MicGeneralError {token} /> -->
     <!-- {:else if $showToolTipDetails === true}
     <div class="wrapper">
       <MicToolTipDetails />
@@ -154,7 +156,7 @@
   }
   .mic-insights {
     width: 100%;
-    max-width: 410px;
+    // max-width: 410px;
     @media screen and (max-width: 767px) {
       max-width: unset;
     }
@@ -166,8 +168,8 @@
     align-items: end;
     @media screen and (max-width: 992px) {
       display: flex;
-      flex-direction: row;
-      justify-content: end;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
     }
   }
