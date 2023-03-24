@@ -1,0 +1,164 @@
+{
+    "MonthlyUsage":{
+       "FooterDisclaimer":"<p>The data on this graph is represented for informational purposes</p>\n",
+       "MonthlyDetails":[
+          {
+             "Perioddate":"MAY",
+             "FullDate":"May 2022",
+             "Temperature":"74",
+             "UOM":"KWH",
+             "Usage":"339",
+             "Cost":"58.93",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"APR",
+             "FullDate":"April 2022",
+             "Temperature":"70",
+             "UOM":"KWH",
+             "Usage":"201",
+             "Cost":"44.43",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"MAR",
+             "FullDate":"February 2022",
+             "Temperature":"62",
+             "UOM":"KWH",
+             "Usage":"194",
+             "Cost":"39.39",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"FEB",
+             "FullDate":"February 2022",
+             "Temperature":"62",
+             "UOM":"KWH",
+             "Usage":"219",
+             "Cost":"43.3",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"JAN",
+             "FullDate":"January 2022",
+             "Temperature":"67",
+             "UOM":"KWH",
+             "Usage":"184",
+             "Cost":"43.42",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"DEC",
+             "FullDate":"December 2021",
+             "Temperature":"68",
+             "UOM":"KWH",
+             "Usage":"232",
+             "Cost":"39.25",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"NOV",
+             "FullDate":"November 2021",
+             "Temperature":"78",
+             "UOM":"KWH",
+             "Usage":"459",
+             "Cost":"62.55",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"OCT",
+             "FullDate":"October 2021",
+             "Temperature":"81",
+             "UOM":"KWH",
+             "Usage":"689",
+             "Cost":"86.15",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"SEP",
+             "FullDate":"September 2021",
+             "Temperature":"82",
+             "UOM":"KWH",
+             "Usage":"725",
+             "Cost":"89.85",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"AUG",
+             "FullDate":"August 2021",
+             "Temperature":"",
+             "UOM":"KWH",
+             "Usage":"687",
+             "Cost":"77.14",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"JUL",
+             "FullDate":"July 2021",
+             "Temperature":"",
+             "UOM":"KWH",
+             "Usage":"698",
+             "Cost":"78.12",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"JUN",
+             "FullDate":"Hune 2021",
+             "Temperature":"",
+             "UOM":"KWH",
+             "Usage":"506",
+             "Cost":"60.88",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          },
+          {
+             "Perioddate":"MAY",
+             "FullDate":"May 2021",
+             "Temperature":"",
+             "UOM":"KWH",
+             "Usage":"352",
+             "Cost":"47.05",
+             "CloudIcon":"X",
+             "Switcher":"",
+             "Operand":"KWH_R",
+             "ToolTipEstimated":"Meter is not responding; data wll be updated when available"
+          }
+       ]
+    }
+ }
+ 

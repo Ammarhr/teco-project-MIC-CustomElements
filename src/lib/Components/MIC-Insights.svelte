@@ -500,7 +500,6 @@
                       use:chart={renderRadialBar(
                         [insightsService?.monthly?.PreviousFactorValue],
                         [insightsService?.monthly?.PreviousFactorDate],
-
                         250,
                         "#005FAA"
                       )}

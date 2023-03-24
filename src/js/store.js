@@ -92,7 +92,7 @@ export function fetchstore() {
 
     return [data, loading, error, get]
 }
-export const fetchUsageChart = () => {
+export const fetchDailyUsageChart = () => {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
@@ -132,6 +132,47 @@ export const fetchUsageChart = () => {
 
     return [data, loading, error, get]
 }
+export const fetchMonthlyUsageChart = () => {
+    const loading = writable(false);
+    const error = writable(false);
+    const data = writable({});
+    // generalErr.set(false)
+    const get = async (token, url) => {
+        loading.set(true);
+        error.set(false);
+        try {
+            if (!token) {
+                data.set({ errrorMessage: "No Token provided!" });
+                throw new Error("No Token provided!");
+            } else if (token) {
+                //* test data
+                // const Publishresponse = await fetch(url)
+                //* real api hit with jwt token:
+                const Publishresponse = await fetch(url, {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({}),
+                });
+                // if (Publishresponse.status !== 204)  
+                data.set(await Publishresponse.json());
+            } else {
+                data.set({ errrorMessage: "Invalid Token" });
+            }
+        } catch (e) {
+            error.set(e);
+            // generalErr.set(true);
+        }
+        loading.set(false);
+    }
+
+    return [data, loading, error, get]
+}
+
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
     fetch(fetchUrl, {
         method: "POST",

@@ -11,11 +11,15 @@
         fetchstore,
         apiDomain,
         apiToken,
-        fetchUsageChart,
+        fetchDailyUsageChart,
+        fetchMonthlyUsageChart,
         newToken,
     } from "../../js/store";
     import { chart } from "svelte-apexcharts";
-    import { renderMixChart } from "../../js/MIC-chart-bundle";
+    import {
+        renderMixChart,
+        onPeakOffPeakChart,
+    } from "../../js/MIC-chart-bundle";
     import { onMount } from "svelte";
 
     let items;
@@ -28,14 +32,21 @@
     let svgId = "rotate-svg-" + isOpen;
     let styleSelectedRows = [];
     const [data, loading, error, get] = fetchstore();
-    const [usageData, usageLoading, usageError, UsageGet] = fetchUsageChart();
+    const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
+        fetchDailyUsageChart();
+    const [
+        monthlyUsageData,
+        monthlyUsageLoading,
+        monthlyUsageError,
+        monthlyUsageGet,
+    ] = fetchMonthlyUsageChart();
 
     onMount(() => {
         if ($apiToken && $apiDomain && !$data.results) {
             get(
                 $apiToken,
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-                // "../../data/meterTable.json"
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+                "../../data/meterTable.json"
             );
         }
         reGeneratedToken = $apiToken;
@@ -63,6 +74,7 @@
         if (selectedMeter) {
             let {
                 DLN,
+                ZipCode,
                 DAP_StartDate,
                 DAP_EndDate,
                 intp = "D",
@@ -75,10 +87,10 @@
                 BilledAmount,
             } = selectedMeter;
 
-            UsageGet(
+            dailyUsageGet(
                 $apiToken,
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-                // "../../data/meterUsageDaily.json",
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+                "../../data/meterUsageDaily.json",
                 {
                     dln: DLN,
                     sdt: DAP_StartDate,
@@ -91,6 +103,12 @@
                     dtoun: DAP_dtoun,
                     dtouf: DAP_dtouf,
                 }
+            );
+
+            monthlyUsageGet(
+                $apiToken,
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contrac[…]d1={Operand1}&Operand2={Operand2}&Dln=${Dln}&ZipCode=${ZipCode}`,
+                "../../data/meterUsageMonthly.json"
             );
         }
     };
@@ -106,18 +124,21 @@
         );
         reGeneratedToken = $newToken.token;
     }
-    // $: if ($usageData && $usageData.DailyUsage) {
-    // if (
-    //     $usageData.DailyUsage.DailyDetails &&
-    //     $usageData.DailyUsage.DailyDetails.length == 0
-    // ) {
-    //     tab1 = "2";
-    //     tab2 = "1";
-    // } else {
-    //     tab1 = "1";
-    //     tab2 = "2";
+    // $: if ($monthlyUsageData && $monthlyUsageData.MonthlyUsage) {
+    //     console.log("monthly :", $monthlyUsageData.MonthlyUsage);
     // }
-    // }
+    $: if ($dailyUsageData && $dailyUsageData.DailyUsage) {
+    if (
+        $dailyUsageData.DailyUsage.DailyDetails &&
+        $dailyUsageData.DailyUsage.DailyDetails.length == 0
+    ) {
+        tab1 = "2";
+        tab2 = "1";
+    } else {
+        tab1 = "1";
+        tab2 = "2";
+    }
+    }
     ////// search & filter
     const handleSearch = () => {
         let str = event.target.value;
@@ -220,10 +241,7 @@
             {#if isOpen}
                 {#if tableData && tableData.length > 5}
                     <div class="search">
-                        <input
-                            type="text"
-                            placeholder="Search"
-                        />
+                        <input type="text" placeholder="Search" />
                     </div>
                 {/if}
                 <div
@@ -261,41 +279,57 @@
                                         </td>
                                         <td>
                                             <div class="td-value">
-                                                #{row.MeterNumber}
+                                                {row.MeterNumber != ""
+                                                    ? "#" + row.MeterNumber
+                                                    : "-"}
                                             </div></td
                                         >
                                         <td>
                                             <div class="td-value">
-                                                {row.ReadDate}
+                                                {row.ReadDate != ""
+                                                    ? row.ReadDate
+                                                    : "-"}
                                             </div></td
                                         >
                                         <td>
                                             <div class="td-value">
-                                                {row.BillingPeriod}
+                                                {row.BillingPeriod != ""
+                                                    ? row.BillingPeriod
+                                                    : "-"}
                                             </div></td
                                         >
                                         <td>
                                             <div class="td-value">
                                                 <span>
-                                                    {row.CurrentReading}
+                                                    {row.CurrentReading != ""
+                                                        ? row.CurrentReading
+                                                        : "-"}
                                                 </span>
                                                 <h4 style="color: black;">
-                                                    {row.ReadType}
+                                                    {row.ReadType != ""
+                                                        ? row.ReadType
+                                                        : ""}
                                                 </h4>
                                             </div></td
                                         >
                                         <td>
                                             <div class="td-value">
-                                                {row.PreviousReading}
+                                                {row.PreviousReading != ""
+                                                    ? row.PreviousReading
+                                                    : "-"}
                                             </div></td
                                         >
                                         <td>
                                             <div class="td-value">
                                                 <span>
-                                                    {row.TotalUsed}{" "}{row.UOF}
+                                                    {row.TotalUsed != ""
+                                                        ? row.TotalUsed
+                                                        : "-"}
                                                 </span>
                                                 <h4 style="color: black;">
-                                                    {row.OperandLabel}
+                                                    {row.OperandLabel != ""
+                                                        ? row.OperandLabel
+                                                        : ""}
                                                 </h4>
                                             </div></td
                                         >
@@ -352,22 +386,22 @@
                     transition:slide={{ duration: 300 }}
                 >
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    {#if $usageData && $usageData.DailyUsage}
+                    {#if $dailyUsageData && $dailyUsageData.DailyUsage}
                         <div id="meter-tabs">
-                            <!-- {#if $usageData.DailyUsage.DailyDetails && $usageData.DailyUsage.DailyDetails.length > 0} -->
+                            {#if selectedMeter && selectedMeter.AMI_Flag != ""}
+                                <h6
+                                    id={"meter-btn" + tab1}
+                                    on:click={() => activateTab("1", "2")}
+                                >
+                                    Daily
+                                </h6>
+                            {/if}
                             <h6
-                                id={"meter-btn" + tab1}
-                                on:click={() => activateTab("1", "2")}
-                            >
-                                Daily
-                            </h6>
-                            <!-- {/if} -->
-                            <!-- <h6
                                 id={"meter-btn" + tab2}
                                 on:click={() => activateTab("2", "1")}
                             >
                                 Monthly
-                            </h6> -->
+                            </h6>
                         </div>
                         <!-- <div class="options">
                             <input
@@ -382,34 +416,13 @@
                                 class="tool-tip"
                             />
                         </div> -->
-                        <!-- <div id={"meter-tab1" + tab1}>
-                            {#if $usageData.DailyUsage.DailyDetails && $usageData.DailyUsage.DailyDetails.length == 0}
-                                <div
-                                    class="chart"
-                                    use:chart={renderMixChart([])}
-                                />
-                            {:else}
-
-                            {/if}
-                        </div> -->
-                        <div id={"meter-tab1" + tab2}>
-                            {#if $usageData.DailyUsage.DailyDetails && $usageData.DailyUsage.DailyDetails.length == 0}
+                        <div id={"meter-tab1" + tab1}>
+                            {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length > 0}
                                 <div
                                     class="chart"
                                     use:chart={renderMixChart(
-                                        null,
-                                        ["#044F8D"],
-                                        "1410px",
-                                        400,
-                                        null,
-                                        null
-                                    )}
-                                />
-                            {:else}
-                                <div
-                                    class="chart"
-                                    use:chart={renderMixChart(
-                                        $usageData.DailyUsage.DailyDetails,
+                                        $monthlyUsageData.MonthlyUsage
+                                            .MonthlyDetails,
                                         ["#044F8D"],
                                         "1410px",
                                         400,
@@ -419,37 +432,87 @@
                                 />
                             {/if}
                         </div>
+                        {#if selectedMeter && selectedMeter.AMI_Flag != ""}
+                            <div id={"meter-tab1" + tab2}>
+                                {#if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails.length == 0}
+                                    <div
+                                        class="chart"
+                                        use:chart={renderMixChart(
+                                            null,
+                                            ["#044F8D"],
+                                            "1410px",
+                                            400,
+                                            null,
+                                            null
+                                        )}
+                                    />
+                                {:else if selectedMeter.DAP_dkwh == "x"}
+                                    <!-- Daily usage simple chart -->
+                                    <div
+                                        class="chart"
+                                        use:chart={renderMixChart(
+                                            $dailyUsageData.DailyUsage
+                                                .DailyDetails,
+                                            ["#044F8D"],
+                                            "1410px",
+                                            400,
+                                            selectedMeter.Service,
+                                            selectedMeter.UOF
+                                        )}
+                                    />
+                                {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
+                                    <div
+                                        class="chart"
+                                        use:chart={onPeakOffPeakChart(
+                                            $dailyUsageData.DailyUsage
+                                                .DailyDetails,
+                                            selectedMeter.UOF
+                                        )}
+                                    />
+                                {/if}
+                            </div>
+                        {/if}
+                        {#if $dailyUsageData.DailyUsage}
+                            <div class="information-box">
+                                {#if $dailyUsageData.DailyUsage.AVGCost}
+                                    <div>
+                                        <h6>AVG. COST PER DAY</h6>
+                                        <h4>
+                                            ${$dailyUsageData.DailyUsage
+                                                .AVGCost}
+                                        </h4>
+                                    </div>
+                                {/if}
+                                {#if $dailyUsageData.DailyUsage.AVGTemp}
+                                    <div>
+                                        <h6>AVG. TEMP PER DAY</h6>
+                                        <h4>
+                                            {$dailyUsageData.DailyUsage
+                                                .AVGTemp}°
+                                        </h4>
+                                    </div>
+                                {/if}
+                                {#if $dailyUsageData.DailyUsage.HitPeakDemand}
+                                    <div>
+                                        <h6>YOU HIT PEAK DEMAND</h6>
+                                        <h4>
+                                            {$dailyUsageData.DailyUsage
+                                                .HitPeakDemand}
+                                        </h4>
+                                    </div>
+                                {/if}
+                            </div>
+                            {#if $dailyUsageData.DailyUsage.FooterDisclaimer}
+                                <div class="diclimer">
+                                    <span>
+                                        {@html $dailyUsageData.DailyUsage
+                                            .FooterDisclaimer}
+                                    </span>
+                                </div>
+                            {/if}
+                        {/if}
                     {/if}
                 </div>
-                {#if $usageData.DailyUsage}
-                    <div class="information-box">
-                        {#if $usageData.DailyUsage.AVGCost}
-                            <div>
-                                <h6>AVG. COST PER DAY</h6>
-                                <h4>${$usageData.DailyUsage.AVGCost}</h4>
-                            </div>
-                        {/if}
-                        {#if $usageData.DailyUsage.AVGTemp}
-                            <div>
-                                <h6>AVG. TEMP PER DAY</h6>
-                                <h4>{$usageData.DailyUsage.AVGTemp}°</h4>
-                            </div>
-                        {/if}
-                        {#if $usageData.DailyUsage.HitPeakDemand}
-                            <div>
-                                <h6>YOU HIT PEAK DEMAND </h6>
-                                <h4>{$usageData.DailyUsage.HitPeakDemand}</h4>
-                            </div>
-                        {/if}
-                    </div>
-                    {#if $usageData.DailyUsage.FooterDisclaimer}
-                        <div class="diclimer">
-                            <span>
-                                {@html $usageData.DailyUsage.FooterDisclaimer}
-                            </span>
-                        </div>
-                    {/if}
-                {/if}
             {/if}
         </div>
     {/key}

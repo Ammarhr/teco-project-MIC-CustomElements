@@ -1,3 +1,5 @@
+import { Options } from "svelte-preprocess/dist/types";
+
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
     let options = {
         series: data,
@@ -260,23 +262,23 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
                         arr[dataPointIndex - 1] +
                         "</div>"
                         +
-                        `<div class="apexcharts-tooltip-text">` +
-                        '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
-                        "<span style='font-weight:700; color:#000000;'>" +
-                        "Energy Used: " +
-                        "</span>" +
-                        "<span style='font-weight:300;color:#000000;'>" + " "
+                        (series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
+                            '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
+                            "<span style='font-weight:700; color:#000000;'>" +
+                            "Energy Used: " +
+                            "</span>" +
+                            "<span style='font-weight:300;color:#000000;'>" + " "
+                            +
+                            series[0][dataPointIndex] + " " + unit : "")
                         +
-                        series[0][dataPointIndex] + " " + unit
-                        +
-                        "</div>"
-                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
-                        + `<span style='font-weight:700;'>` +
-                        "Avg.Temp: " +
-                        "</span>"
-                        +
-                        "<span style='font-weight:300;'>"
-                        + series[1][dataPointIndex] + "°"
+                        (series[1][dataPointIndex] ? "</div>"
+                            + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                            + `<span style='font-weight:700;'>` +
+                            "Avg.Temp: " +
+                            "</span>"
+                            +
+                            "<span style='font-weight:300;'>"
+                            + series[1][dataPointIndex] + "°" : "")
                     );
                 },
                 onDatasetHover: {
@@ -294,7 +296,10 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
             },
             xaxis: {
                 type: "category",
-                categories: catArray
+                categories: catArray,
+                tooltip: {
+                    enabled: false
+                }
             },
             yaxis: [
                 {
@@ -330,5 +335,156 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
         }
     }
 
+    return options;
+}
+
+
+export const onPeakOffPeakChart = (data, unit) => {
+
+    let options = {
+        series: [{
+            name: 'OnPeak',
+            type: 'column',
+            color: "#00B6F0",
+            data: data.filter(result => result.Dtype == "dtoun").map(value => value.Usage)
+        }, {
+            name: 'OffPeak',
+            type: 'column',
+            color: "#00294A",
+            data: data.filter(result => result.Dtype == "dtouf").map(value => value.Usage)
+        }, {
+            name: 'Temperature',
+            type: 'line',
+            data: data.filter((result, i) => i % 2 == 0).map(value => value.Temperature)
+        }],
+        chart: {
+            height: 350,
+            type: 'line',
+            stacked: false,
+            zoom: {
+                enabled: false // Disable chart zooming
+            },
+            toolbar: {
+                show: false,
+            },
+        },
+        stroke: {
+            width: 3,
+            curve: 'smooth',
+        },
+        markers: {
+            size: 5,
+            colors: "#fff",
+            strokeDashArray: 50,
+            strokeWidth: 3,
+            strokeColors: "#FF832B",
+        },
+        fill: {
+            opacity: 100,
+        },
+        dataLabels: {
+            enabled: false
+        },
+        xaxis: {
+            categories: data.filter((result, i) => i % 2 == 0).map(value => value.Perioddate),
+            axisTicks: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            },
+            tooltip: {
+                enabled: false
+            }
+        },
+        yaxis: [
+            {
+                axisTicks: {
+                    show: false,
+                },
+                axisBorder: {
+                    show: false,
+                },
+                labels: {
+
+                },
+                tooltip: {
+                    enabled: false
+                }
+            }
+        ],
+        plotOptions: {
+            bar: {
+                position: 'left',
+                borderRadiusWhenStacked: 'last',
+                borderRadius: 10,
+                columnWidth: "70%",
+                dataLabels: {
+                    position: "top", // top, center, bottom,
+                },
+
+                distributed: false,
+            }
+        },
+
+        tooltip: {
+            enabled: true,
+            followCursor: true,
+            custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                let arr;
+                arr = data.filter((result, i) => i % 2 == 0).map(value => value.FullDate)
+                return (
+                    '<div class="apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
+                    '<div style="padding-bottom:8px width:100%; color:#005FAA; border-bottom:1px solid #EAECEE;">' +
+                    "<span style='font-weight:700;'>" +
+                    arr[dataPointIndex] +
+                    "</div>"
+                    +
+                    (series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text" style="margin-top: 8px;">` +
+                        '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
+                        "<span style='font-weight:700; color:#000000;'>" +
+                        "On Peak: " +
+                        "</span>" +
+                        "<span style='font-weight:300;color:#000000;'>" + " "
+                        +
+                        series[0][dataPointIndex] + " " + unit : "")
+                    +
+                    (series[1][dataPointIndex] ? "</div>"
+                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                        + `<span style='font-weight:700;'>` +
+                        "Off Peak:: " +
+                        "</span>"
+                        +
+                        "<span style='font-weight:300;'>"
+                        + series[1][dataPointIndex] + " " + unit : "")
+                    +
+                    (series[2][dataPointIndex] ? "</div>"
+                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                        + `<span style='font-weight:700;'>` +
+                        "Avg.Temp: " +
+                        "</span>"
+                        +
+                        "<span style='font-weight:300;'>"
+                        + series[2][dataPointIndex] + "°" : "")
+                );
+            },
+            onDatasetHover: {
+                highlightDataSeries: true,
+            },
+            y: {
+                show: true,
+                style: {
+                    cssClass: 'apexcharts-yaxis-annotation-label',
+                },
+            },
+            x: {
+                show: false,
+            }
+        },
+        legend: {
+            horizontalAlign: 'left',
+            offsetX: 40
+        }
+    }
     return options;
 }
