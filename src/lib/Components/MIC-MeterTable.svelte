@@ -2,10 +2,10 @@
 
 <script>
     // @ts-nocheck
-    import toggle from "../../assets/cr.svg";
-    import toolTip from "../../assets/toolTip.svg";
-    import verticalLine from "../../assets/vertical-line.svg";
-    import elictric from "../../assets/electric.svg";
+    // import toggle from "../../assets/cr.svg";
+    // import toolTip from "../../assets/toolTip.svg";
+    // import verticalLine from "../../assets/vertical-line.svg";
+    // import elictric from "../../assets/electric.svg";
     import { slide } from "svelte/transition";
     import {
         fetchstore,
@@ -121,16 +121,20 @@
     ////// search & filter
     const handleSearch = () => {
         let str = event.target.value;
-        let searchArray;
+        let searchArray = [];
         if (str == "") {
             items = $data.results;
             selectedMeter = $data.results[0];
+            getPaginatedItems();
+            handleSelectedMeter(selectedMeter);
         }
         searchArray = $data.results.filter((meter) => {
             return meter.meterTable.meterNumbeR.includes(str);
         });
         if (searchArray[0]) {
             items = searchArray;
+            getPaginatedItems();
+            handleSelectedMeter();
         }
     };
 
@@ -219,7 +223,6 @@
                         <input
                             type="text"
                             placeholder="Search"
-                            on:change={handleSearch}
                         />
                     </div>
                 {/if}
@@ -434,7 +437,7 @@
                         {/if}
                         {#if $usageData.DailyUsage.HitPeakDemand}
                             <div>
-                                <h6>YOU HIT PEAK DEMAND</h6>
+                                <h6>YOU HIT PEAK DEMAND </h6>
                                 <h4>{$usageData.DailyUsage.HitPeakDemand}</h4>
                             </div>
                         {/if}

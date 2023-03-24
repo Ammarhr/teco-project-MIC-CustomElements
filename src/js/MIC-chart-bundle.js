@@ -141,7 +141,7 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
             return results.Perioddate
         })
     }
-    console.log("serviceData", serviceData);
+    // console.log("serviceData", serviceData);
     //* configure column width depend on the data 
     if (data && data.length < 5) {
         colWidth = "5%"
@@ -184,7 +184,9 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
                     type: "column",
                     name: service,
                     color: "#005FAA",
-                    data: serviceData
+                    data: data.map((results) => {
+                        return results.Usage
+                    })
                 },
                 {
                     type: "line",
@@ -203,7 +205,7 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
             chart: {
                 height: height,
                 marginLeft: 0,
-                width: 1200,
+                width: "100%",
                 zoom: {
                     enabled: false // Disable chart zooming
                 },
@@ -303,7 +305,7 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
                         show: false,
                     },
                     labels: {
-                        show: true,
+                        show: false,
                         formatter: function (val) {
                             return val;
                         },

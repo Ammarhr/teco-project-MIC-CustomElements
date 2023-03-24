@@ -139,7 +139,7 @@
         "max-height: 200vh;opacity: 1;transition:200ms;";
     } else {
       billsObjectsArray[i].toolTipStylleArray[j] =
-        "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
+        "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
     }
   };
 </script>
@@ -615,7 +615,6 @@
     padding: 0px;
     width: 100%;
     height: 40px;
-    margin-bottom: 24px;
     cursor: pointer;
   }
   /*-----------------------*/
@@ -676,6 +675,8 @@
     color: #06182d;
     font-weight: 500;
     font-size: x-large;
+    margin-top: 24px;
+
   }
 
   #comment {
