@@ -37,7 +37,7 @@
   const refresh = () => {
     newToken.set("");
   };
-  $: if (token && domain && eventdomain ) {
+  $: if (token && domain && eventdomain) {
     setToken(token);
     setDomain(domain);
     setEventDomain(eventdomain);
@@ -61,51 +61,52 @@
 </script>
 
 <!-- {#key $showToolTipDetails} -->
-  {#if token && domain && eventdomain && $generalErr !== true}
-    <div class="wrapper">
-      <!-- <MicHeaderInformation /> -->
-      <div class="important-balance">
-        <div class="balance">
-          <mic-balancesummary />
-          <!-- <MicBalanceSummary /> -->
-        </div>
-        <div class="messages">
-          <mic-importentmessage />
-          <!-- <MicImportantMessage /> -->
-        </div>
+{#if token && domain && eventdomain && $generalErr !== true}
+  <div class="wrapper">
+    <mic-headerinformation />
+    <!-- <MicHeaderInformation /> -->
+    <div class="important-balance">
+      <div class="balance">
+        <mic-balancesummary />
+        <!-- <MicBalanceSummary /> -->
       </div>
-      <mic-billselector />
-      <!-- <MicBillSelectorAndDownload /> -->
-      <div class="refreshable">
-        <div class="charge-detailes">
-          <mic-billingsummary />
-          <!-- <MicBillingSummary /> -->
-        </div>
-        <div class="insights">
-          <mic-insights class="mic-insights" />
-          <mic-yearlyenergy class="mic-insights"/>
-          <!-- <MicInsights /> -->
-          <!-- <MicYearlyEnergy /> -->
-          <!-- <MicBulkDownload /> -->
-          <mic-bulkdownload class="mic-insights"/>
-        </div>
+      <div class="messages">
+        <mic-importentmessage />
+        <!-- <MicImportantMessage /> -->
       </div>
-      <div class="blk-container">
-        <!-- <MicBulkDownload /> -->
-      </div>
-      <mic-metertable />
-      <MicMeterTable />
     </div>
-  {:else if $generalErr === true}
-    <mic-generalerror {token} />
-    <!-- <MicGeneralError {token} /> -->
-    <!-- {:else if $showToolTipDetails === true}
+    <mic-billselector />
+    <!-- <MicBillSelectorAndDownload /> -->
+    <div class="refreshable">
+      <div class="charge-detailes">
+        <mic-billingsummary />
+        <!-- <MicBillingSummary /> -->
+      </div>
+      <div class="insights">
+        <mic-insights class="mic-insights" />
+        <mic-yearlyenergy class="mic-insights" />
+        <!-- <MicInsights /> -->
+        <!-- <MicYearlyEnergy /> -->
+        <!-- <MicBulkDownload /> -->
+        <mic-bulkdownload class="mic-insights" />
+      </div>
+    </div>
+    <div class="blk-container">
+      <!-- <MicBulkDownload /> -->
+    </div>
+    <mic-metertable />
+    <!-- <MicMeterTable /> -->
+  </div>
+{:else if $generalErr === true}
+  <mic-generalerror {token} />
+  <!-- <MicGeneralError {token} /> -->
+  <!-- {:else if $showToolTipDetails === true}
     <div class="wrapper">
       <MicToolTipDetails />
     </div> -->
-  {/if}
-<!-- {/key} -->
+{/if}
 
+<!-- {/key} -->
 <style lang="scss">
   .wrapper {
     width: 100%;

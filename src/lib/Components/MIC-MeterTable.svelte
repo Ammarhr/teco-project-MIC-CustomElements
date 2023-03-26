@@ -28,6 +28,7 @@
     let reGeneratedToken;
     let tab1 = "1";
     let tab2 = "2";
+    let activeSection;
     let isOpen = true;
     let svgId = "rotate-svg-" + isOpen;
     let styleSelectedRows = [];
@@ -45,8 +46,8 @@
         if ($apiToken && $apiDomain && !$data.results) {
             get(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-                "../../data/meterTable.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+                // "../../data/meterTable.json"
             );
         }
         reGeneratedToken = $apiToken;
@@ -85,12 +86,16 @@
                 DAP_dtoun,
                 DAP_dtouf,
                 BilledAmount,
+                Contract,
+                MeterNumber,
+                Operand,
+                OperandLabel,
             } = selectedMeter;
 
             dailyUsageGet(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-                "../../data/meterUsageDaily.json",
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+                // "../../data/meterUsageDaily.json",
                 {
                     dln: DLN,
                     sdt: DAP_StartDate,
@@ -107,8 +112,9 @@
 
             monthlyUsageGet(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contrac[…]d1={Operand1}&Operand2={Operand2}&Dln=${Dln}&ZipCode=${ZipCode}`,
-                "../../data/meterUsageMonthly.json"
+
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
+                // "../../data/meterUsageMonthly.json"
             );
         }
     };
@@ -127,17 +133,25 @@
     // $: if ($monthlyUsageData && $monthlyUsageData.MonthlyUsage) {
     //     console.log("monthly :", $monthlyUsageData.MonthlyUsage);
     // }
+    ////////// tabs functionality
+    const activateTab = (num1, num2, activeTab) => {
+        activeSection = activeTab;
+        tab2 = num2;
+        tab1 = num1;
+    };
     $: if ($dailyUsageData && $dailyUsageData.DailyUsage) {
-    if (
-        $dailyUsageData.DailyUsage.DailyDetails &&
-        $dailyUsageData.DailyUsage.DailyDetails.length == 0
-    ) {
-        tab1 = "2";
-        tab2 = "1";
-    } else {
-        tab1 = "1";
-        tab2 = "2";
-    }
+        if (
+            $dailyUsageData.DailyUsage.DailyDetails &&
+            $dailyUsageData.DailyUsage.DailyDetails.length == 0
+        ) {
+            activeSection = "monthly";
+            tab1 = "2";
+            tab2 = "1";
+        } else {
+            activeSection = "daily";
+            tab1 = "1";
+            tab2 = "2";
+        }
     }
     ////// search & filter
     const handleSearch = () => {
@@ -167,12 +181,6 @@
         items = $data.MeterTabel;
         getPaginatedItems();
     }
-
-    ////////// tabs functionality
-    const activateTab = (num1, num2) => {
-        tab2 = num2;
-        tab1 = num1;
-    };
 
     ////////////////////////////
     export let pageSize = 5; // number of items per page
@@ -381,6 +389,7 @@
                     </div>
                 {/if}
                 <!-- <div class="options" /> -->
+                <!-- Tabs container -->
                 <div
                     id="meter-tab-container"
                     transition:slide={{ duration: 300 }}
@@ -391,14 +400,16 @@
                             {#if selectedMeter && selectedMeter.AMI_Flag != ""}
                                 <h6
                                     id={"meter-btn" + tab1}
-                                    on:click={() => activateTab("1", "2")}
+                                    on:click={() =>
+                                        activateTab("1", "2", "daily")}
                                 >
                                     Daily
                                 </h6>
                             {/if}
                             <h6
                                 id={"meter-btn" + tab2}
-                                on:click={() => activateTab("2", "1")}
+                                on:click={() =>
+                                    activateTab("2", "1", "monthly")}
                             >
                                 Monthly
                             </h6>
@@ -416,8 +427,13 @@
                                 class="tool-tip"
                             />
                         </div> -->
+
+                        <!-- Monthly Chart -->
                         <div id={"meter-tab1" + tab1}>
                             {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length > 0}
+                                <span class="chart-unit">
+                                    {selectedMeter.UOF}
+                                </span>
                                 <div
                                     class="chart"
                                     use:chart={renderMixChart(
@@ -432,6 +448,7 @@
                                 />
                             {/if}
                         </div>
+                        <!-- Daily Chart -->
                         {#if selectedMeter && selectedMeter.AMI_Flag != ""}
                             <div id={"meter-tab1" + tab2}>
                                 {#if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails.length == 0}
@@ -448,6 +465,9 @@
                                     />
                                 {:else if selectedMeter.DAP_dkwh == "x"}
                                     <!-- Daily usage simple chart -->
+                                    <span class="chart-unit">
+                                        {selectedMeter.UOF}
+                                    </span>
                                     <div
                                         class="chart"
                                         use:chart={renderMixChart(
@@ -461,6 +481,10 @@
                                         )}
                                     />
                                 {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
+                                    <!-- Daily usage OnPeak & OffPeak chart -->
+                                    <span class="chart-unit">
+                                        {selectedMeter.UOF}
+                                    </span>
                                     <div
                                         class="chart"
                                         use:chart={onPeakOffPeakChart(
@@ -472,6 +496,7 @@
                                 {/if}
                             </div>
                         {/if}
+                        <!-- Boks of Information: Cost, Temp And Hit Peak -->
                         {#if $dailyUsageData.DailyUsage}
                             <div class="information-box">
                                 {#if $dailyUsageData.DailyUsage.AVGCost}
@@ -502,11 +527,17 @@
                                     </div>
                                 {/if}
                             </div>
-                            {#if $dailyUsageData.DailyUsage.FooterDisclaimer}
+                            <!-- Dis Claimer Footer -->
+                            {#if $dailyUsageData.DailyUsage.FooterDisclaimer || $monthlyUsageData.MonthlyUsage.FooterDisclaimer}
                                 <div class="diclimer">
                                     <span>
-                                        {@html $dailyUsageData.DailyUsage
-                                            .FooterDisclaimer}
+                                        {#if activeSection == "daily"}
+                                            {@html $dailyUsageData.DailyUsage
+                                                .FooterDisclaimer}
+                                        {:else if activeSection == "monthly"}
+                                            {@html $monthlyUsageData
+                                                .MonthlyUsage.FooterDisclaimer}
+                                        {/if}
                                     </span>
                                 </div>
                             {/if}
@@ -694,7 +725,15 @@
     .chart {
         width: 100%;
     }
-
+    .chart-unit {
+        margin-left: 36px;
+        font-family: "Interstate";
+        font-style: normal;
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 14px;
+        color: #005faa;
+    }
     .search {
         width: 100%;
         display: flex;
@@ -767,6 +806,9 @@
     #meter-tab12 {
         display: flex;
         position: relative;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 16px;
     }
     /*--------*/
     .information-box {

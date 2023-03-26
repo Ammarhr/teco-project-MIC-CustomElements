@@ -164,12 +164,11 @@
               id={"rotate-svg-" + !toggleArray[i]}
             />
           </div>
-          <!-- {#if toggleArray[i]} -->
           <div style={styleToggleArr[i]} class="bill-content">
             <span>
               <h3
                 id="sectiontitle"
-                style="color:{billService.Color}; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
+                style="color:{billService.Color}; font-size:{billService.FontSize}px; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
               >
                 {#if billService.ServiceType && billService.ServiceType == "Electric"}
                   <img
@@ -202,6 +201,7 @@
               {#if billService.Section_Level1s}
                 {#each billService.Section_Level1s as section, j}
                   {#if section.SectionType == "Charge_Group"}
+                    <!-- BreakDown sections -->
                     {#if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == true}
                       <!-- {#if section.Lable && section.Lable != ""}
                         <div class="sub-title">
@@ -258,7 +258,7 @@
                                           <a
                                             href="#"
                                             on:click={() => {
-                                              showToolTipDetails.set(true);
+                                              // redirect to UNDERSTANDING YOUR CHARGES URL
                                             }}>UNDERSTANDING YOUR CHARGES</a
                                           >
                                         </div>
@@ -268,7 +268,7 @@
                                 {/if}
                               </p>
                             {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
-                              <p class={"level" + level2Obj.Order}>
+                              <p class={"level" + level2Obj.Order} style="font-weight:300;">
                                 {level2Obj.Value}
                               </p>
                             {:else}
@@ -279,6 +279,7 @@
                           {/if}
                         {/each}
                       </div>
+                      <!-- General Charges -->
                     {:else if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == false}
                       {#if section.Section_Level2s}
                         {#if section.Lable && section.Lable != ""}
@@ -290,7 +291,7 @@
                               {#if section.IconPath && section.IconPath != ""}
                                 <img src={percentageGas} alt="" />
                               {/if}
-                              <h4 tyle="font-size:{section.FontSize}px">
+                              <h4 style="font-size:{section.FontSize}px">
                                 {section.Lable}
                               </h4>
                             </div>
@@ -322,7 +323,7 @@
                                             <a
                                               href="#"
                                               on:click={() => {
-                                                console.log("on tool tip");
+                                                // redirect to UNDERSTANDING YOUR CHARGES URL
                                               }}>UNDERSTANDING YOUR CHARGES</a
                                             >
                                           </div>
@@ -345,6 +346,7 @@
                         </div>
                       {/if}
                     {/if}
+                    <!-- Sub Section -->
                   {:else if section.SectionType == "CustomeSection"}
                     {#if section.Lable && section.Lable != ""}
                       <div class="sub-title">
@@ -386,7 +388,7 @@
                                           <a
                                             href="#"
                                             on:click={() => {
-                                              showToolTipDetails.set(true);
+                                              // redirect to UNDERSTANDING YOUR CHARGES URL
                                             }}>UNDERSTANDING YOUR CHARGES</a
                                           >
                                         </div>
@@ -409,6 +411,7 @@
                         {/each}
                       </div>
                     {/if}
+                    <!-- Sub Total -->
                   {:else if section.SectionType == "Total"}
                     <div
                       class="sub-row total-row"
@@ -421,6 +424,7 @@
                 {/each}
               {/if}
             </div>
+            <!-- Section Total -->
             {#if i == $data.Sections.length - 2}
               <div
                 class="total"
@@ -676,7 +680,6 @@
     font-weight: 500;
     font-size: x-large;
     margin-top: 24px;
-
   }
 
   #comment {

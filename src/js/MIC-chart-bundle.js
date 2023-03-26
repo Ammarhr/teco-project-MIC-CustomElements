@@ -314,6 +314,21 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
                         formatter: function (val) {
                             return val;
                         },
+                    },
+                    title: {
+                        text: undefined,
+                        rotate: 0,
+                        offsetX: 12,
+                        offsetY: -10,
+                        style: {
+                            fontFamily: 'Interstate',
+                            fontStyle: "normal",
+                            fontWeight: 300,
+                            fontSize: 12,
+                            lineHeight: "14px",
+                            color: "#005FAA",
+                            marginTop: 16
+                        },
                     }
                 },
                 {
@@ -399,17 +414,45 @@ export const onPeakOffPeakChart = (data, unit) => {
         },
         yaxis: [
             {
-                axisTicks: {
-                    show: false,
-                },
                 axisBorder: {
                     show: false,
                 },
-                labels: {
-
+                axisTicks: {
+                    show: false,
                 },
-                tooltip: {
-                    enabled: false
+                labels: {
+                    show: false,
+                    formatter: function (val) {
+                        return val;
+                    },
+                },
+                title: {
+                    text: undefined,
+                    rotate: 0,
+                    offsetX: 0,
+                    offsetY: 0,
+                    style: {
+                        fontFamily: 'Interstate',
+                        fontStyle: "normal",
+                        fontWeight: 300,
+                        fontSize: 12,
+                        lineHeight: "14px",
+                        color: "#005FAA",
+                    },
+                }
+            },
+            {
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    show: true,
+                    formatter: function (val) {
+                        return val;
+                    },
                 }
             }
         ],
@@ -482,7 +525,7 @@ export const onPeakOffPeakChart = (data, unit) => {
             }
         },
         legend: {
-            horizontalAlign: 'left',
+            horizontalAlign: 'right',
             offsetX: 40
         }
     }
