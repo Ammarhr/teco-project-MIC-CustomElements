@@ -46,8 +46,8 @@
         if ($apiToken && $apiDomain && !$data.results) {
             get(
                 $apiToken,
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-                // "../../data/meterTable.json"
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+                "../../data/meterTable.json"
             );
         }
         reGeneratedToken = $apiToken;
@@ -94,8 +94,8 @@
 
             dailyUsageGet(
                 $apiToken,
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-                // "../../data/meterUsageDaily.json",
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+                "../../data/meterUsageDaily.json",
                 {
                     dln: DLN,
                     sdt: DAP_StartDate,
@@ -113,8 +113,8 @@
             monthlyUsageGet(
                 $apiToken,
 
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
-                // "../../data/meterUsageMonthly.json"
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
+                "../../data/meterUsageMonthly.json"
             );
         }
     };
@@ -141,16 +141,17 @@
     };
     $: if ($dailyUsageData && $dailyUsageData.DailyUsage) {
         if (
-            $dailyUsageData.DailyUsage.DailyDetails &&
-            $dailyUsageData.DailyUsage.DailyDetails.length == 0
+            ($dailyUsageData.DailyUsage.DailyDetails &&
+                $dailyUsageData.DailyUsage.DailyDetails.length == 0) ||
+            (selectedMeter && selectedMeter.AMI_Flag != "")
         ) {
             activeSection = "monthly";
-            tab1 = "2";
-            tab2 = "1";
-        } else {
-            activeSection = "daily";
             tab1 = "1";
             tab2 = "2";
+        } else {
+            activeSection = "daily";
+            tab1 = "2";
+            tab2 = "1";
         }
     }
     ////// search & filter
@@ -406,13 +407,15 @@
                                     Daily
                                 </h6>
                             {/if}
-                            <h6
-                                id={"meter-btn" + tab2}
-                                on:click={() =>
-                                    activateTab("2", "1", "monthly")}
-                            >
-                                Monthly
-                            </h6>
+                            {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage}
+                                <h6
+                                    id={"meter-btn" + tab2}
+                                    on:click={() =>
+                                        activateTab("2", "1", "monthly")}
+                                >
+                                    Monthly
+                                </h6>
+                            {/if}
                         </div>
                         <!-- <div class="options">
                             <input
@@ -527,8 +530,8 @@
                                     </div>
                                 {/if}
                             </div>
-                            <!-- Dis Claimer Footer -->
-                            {#if $dailyUsageData.DailyUsage.FooterDisclaimer || $monthlyUsageData.MonthlyUsage.FooterDisclaimer}
+                            <!-- DisClaimer Footer -->
+                            {#if (activeSection == "daily" && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.FooterDisclaimer) || (activeSection == "monthly" && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.FooterDisclaimer)}
                                 <div class="diclimer">
                                     <span>
                                         {#if activeSection == "daily"}

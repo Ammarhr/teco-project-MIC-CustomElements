@@ -30,8 +30,8 @@
     if ($apiToken && !$data.messages && $generalErr !== true) {
       get(
         $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
-        // "../../data/messages.json"
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
+        "../../data/messages.json"
       );
     }
   });

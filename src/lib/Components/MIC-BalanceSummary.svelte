@@ -16,6 +16,8 @@
     let color; // this change the charge color depend in the its value
     let tries = 3;
     let btnStatus;
+    let totalAmmountFontSize = "64px";
+    let subTotalAmmountFontSize = "32px";
     //mocking data
     const [data, loading, error, get] = fetchstore();
 
@@ -23,8 +25,8 @@
     $: if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
         get(
             $apiToken,
-            // "../../../data/AccountBalanceData.json"
-            `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            "../../../data/AccountBalanceData.json"
+            // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
         );
         tries--;
     }
@@ -68,6 +70,12 @@
         } else {
             color = $data.postive_color;
         }
+        console.log("size: ", $data.totalAmmount[0].length);
+        // dynamic font size
+        if ($data.totalAmmount[0] && $data.totalAmmount[0].length >= 8) {
+            totalAmmountFontSize = "36px";
+            subTotalAmmountFontSize = "20px";
+        }
     }
 </script>
 
@@ -89,16 +97,25 @@
             <div class="tecoBalanceSection">
                 <span>{$data.title}</span>
                 <div class="amount">
-                    <span style="color: {color};">$</span>
-                    <span style="color: {color};"
+                    <span
+                        style="color: {color}; font-size:{subTotalAmmountFontSize}"
+                        >$</span
+                    >
+                    <span
+                        style="color: {color}; font-size:{totalAmmountFontSize}"
                         >{$data.totalAmmount.split(".")[0]}</span
                     >
                     {#if $data.totalAmmount.toString().split(".")[1]}
-                        <span style="color: {color};"
-                            >{$data.totalAmmount.toString().split(".")[1]}</span
+                        <span
+                            style="color: {color}; font-size:{subTotalAmmountFontSize}"
+                        >
+                            {$data.totalAmmount.toString().split(".")[1]}</span
                         >
                     {:else}
-                        <span style="color: {color};">00</span>
+                        <span
+                            style="color: {color}; font-size:{subTotalAmmountFontSize}"
+                            >00</span
+                        >
                     {/if}
                 </div>
                 <div>

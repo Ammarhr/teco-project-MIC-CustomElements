@@ -1,5 +1,4 @@
-import { Options } from "svelte-preprocess/dist/types";
-
+import cloudIcon from "../assets/usage-cloud.svg"
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
     let options = {
         series: data,
@@ -240,8 +239,19 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
                 },
             },
             dataLabels: {
-                enabled: false,
+                enabled: true,
                 offsetY: -20,
+                formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
+                    let arr;
+                    arr = data.filter(res => res.CloudIcon)
+                    console.log(val, data[dataPointIndex], "from data label");
+                    if (data[dataPointIndex] && data[dataPointIndex].CloudIcon == "X")
+                        return (
+                        '<div>' 
+                        // +
+                        // `<img src=${cloudIcon} alt="cloud icon" />`
+                        )
+                },
             },
             legend: {
                 show: true,
@@ -259,7 +269,7 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
                         '<div class=" apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
                         '<div style="padding-bottom:8px">' +
                         "<span style='font-weight:700; color:#005FAA; border-bottom:1px solid #EAECEE;'>" +
-                        arr[dataPointIndex - 1] +
+                        arr[dataPointIndex] +
                         "</div>"
                         +
                         (series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
@@ -303,6 +313,9 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
             },
             yaxis: [
                 {
+                    dataLabels: {
+                        show: true,
+                    },
                     axisBorder: {
                         show: false,
                     },

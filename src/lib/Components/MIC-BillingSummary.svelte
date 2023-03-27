@@ -34,8 +34,8 @@
     if ($apiToken && $apiDomain && !$data.Sections) {
       get(
         $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-        // "../../data/ChargeDetails.json"
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+        "../../data/ChargeDetails.json"
       );
     }
     refreshToken = $apiToken;
@@ -109,7 +109,7 @@
       styleToggleArr[i] = "max-height: 200vh;opacity: 1;transition:200ms;";
     } else {
       styleToggleArr[i] =
-        "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
+        "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
     }
   };
 
@@ -203,22 +203,7 @@
                   {#if section.SectionType == "Charge_Group"}
                     <!-- BreakDown sections -->
                     {#if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == true}
-                      <!-- {#if section.Lable && section.Lable != ""}
-                        <div class="sub-title">
-                          <div
-                            class="sub-sec-header"
-                            style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
-                          >
-                            {#if section.IconPath && section.IconPath != ""}
-                              <img src={percentageGas} alt="" />
-                            {/if}
-                            <h4 tyle="font-size:{section.FontSize}px">
-                              {section.Lable}
-                            </h4>
-                          </div>
-                        </div>
-                      {/if} -->
-                      <!-- <div
+                      <div
                         class="breakdown-header"
                         on:click={() => {
                           subSectionToggle(j, i);
@@ -231,54 +216,61 @@
                           id={"rotate-svg-" +
                             billsObjectsArray[i].subSectionArray[j]}
                         />
-                      </div> -->
-                      <!-- style={billsObjectsArray[i].subToggleStyleArray[j]} -->
-                      <div class="charges-container break-down">
-                        {#each section.Section_Level2s as level2Obj}
-                          <!-- {section.SectionType} -->
-                          {#if level2Obj.SectionType == "Charge"}
-                            {#if level2Obj.Order == 1}
-                              <p class={"level" + level2Obj.Order}>
-                                {level2Obj.Value}
-                                {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
-                                  <div class="tooltip-icon">
-                                    <img
-                                      src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
-                                      alt=""
-                                      on:click={() => toolTipToggle(j, i)}
-                                    />
-                                    {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
-                                      <div
-                                        class="tooltip-description"
-                                        style={billsObjectsArray[i]
-                                          .toolTipStylleArray[j]}
-                                      >
-                                        <div class="tooltip-con">
-                                          {level2Obj.ToolTip} <br />
-                                          <a
-                                            href="#"
-                                            on:click={() => {
-                                              // redirect to UNDERSTANDING YOUR CHARGES URL
-                                            }}>UNDERSTANDING YOUR CHARGES</a
-                                          >
-                                        </div>
-                                      </div>
-                                    {/if}
-                                  </div>
-                                {/if}
-                              </p>
-                            {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
-                              <p class={"level" + level2Obj.Order} style="font-weight:300;">
-                                {level2Obj.Value}
-                              </p>
-                            {:else}
-                              <p class={"level" + level2Obj.Order}>
-                                {level2Obj.Value}
-                              </p>
-                            {/if}
-                          {/if}
-                        {/each}
                       </div>
+                      <!-- {console.log(billsObjectsArray[i].subToggleStyleArray[j])} -->
+                      {#if billsObjectsArray[i]}
+                        <div
+                          class="charges-container break-down"
+                          style={billsObjectsArray[i].subToggleStyleArray[j]}
+                        >
+                          {#each section.Section_Level2s as level2Obj}
+                            {#if level2Obj.SectionType == "Charge"}
+                              {#if level2Obj.Order == 1}
+                                <p class={"level" + level2Obj.Order}>
+                                  {level2Obj.Value}
+                                  {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
+                                    <div class="tooltip-icon">
+                                      <img
+                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        alt=""
+                                        on:click={() => toolTipToggle(j, i)}
+                                      />
+                                      {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
+                                        <div
+                                          class="tooltip-description"
+                                          style={billsObjectsArray[i]
+                                            .toolTipStylleArray[j]}
+                                        >
+                                          <div class="tooltip-con">
+                                            {level2Obj.ToolTip} <br />
+                                            <a
+                                              href="#"
+                                              on:click={() => {
+                                                // redirect to UNDERSTANDING YOUR CHARGES URL
+                                              }}>UNDERSTANDING YOUR CHARGES</a
+                                            >
+                                          </div>
+                                        </div>
+                                      {/if}
+                                    </div>
+                                  {/if}
+                                </p>
+                              {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
+                                <p
+                                  class={"level" + level2Obj.Order}
+                                  style="font-weight:300;"
+                                >
+                                  {level2Obj.Value}
+                                </p>
+                              {:else}
+                                <p class={"level" + level2Obj.Order}>
+                                  {level2Obj.Value}
+                                </p>
+                              {/if}
+                            {/if}
+                          {/each}
+                        </div>
+                      {/if}
                       <!-- General Charges -->
                     {:else if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == false}
                       {#if section.Section_Level2s}
@@ -303,8 +295,17 @@
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
                                 <p class={"level" + level2Obj.Order}>
+                                  {#if level2Obj.Value && level2Obj.Value[0] == " "}
+                                    <span
+                                      style="padding-left: 6px; margin:0; display:block"
+                                    >
+                                      {level2Obj.Value.trim()}
+                                    </span>
+                                  {:else}
+                                    {level2Obj.Value}
+                                  {/if}
                                   <!-- {console.log(level2Obj.tooltip)} -->
-                                  {level2Obj.Value}
+                                  <!-- {level2Obj.Value} -->
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <img
@@ -365,7 +366,6 @@
                       <div class="charges-container">
                         {#each section.Section_Level2s as subSection}
                           {#each subSection.Section_Level3s as level2Obj}
-                            <!-- {section.SectionType} -->
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
                                 <p class={"level" + level2Obj.Order}>
@@ -470,7 +470,6 @@
     padding: 5px 0 32px 6px;
     font-weight: 400;
     font-size: 18px;
-    line-height: 28px;
     background: #cbe8ff;
     color: #000000;
     clip-path: polygon(
@@ -511,7 +510,6 @@
   .sub-title {
     h4 {
       font-weight: 400;
-      line-height: 29px;
       margin: 16px 0 16px 0;
     }
   }
@@ -523,13 +521,13 @@
     grid-template-columns: 45% auto 1fr auto;
     @media screen and (max-width: 767px) {
       justify-content: unset;
-      align-items: center;
+      align-items: flex-start;
       display: flex;
       flex-wrap: wrap;
     }
     @media screen and (min-width: 993px) and (max-width: 1100px) {
       justify-content: unset;
-      align-items: center;
+      align-items: flex-start;
       display: flex;
       flex-wrap: wrap;
     }
@@ -550,7 +548,6 @@
       font-style: normal;
       font-weight: 300;
       font-size: 14px;
-      line-height: 17px;
       display: flex;
       align-items: center;
       color: #005faa;
@@ -583,7 +580,6 @@
     font-style: normal;
     font-weight: 300;
     font-size: 18px;
-    line-height: 28px;
     color: #000000;
     flex: none;
     order: 0;
@@ -595,7 +591,6 @@
     font-style: italic;
     font-weight: 300;
     font-size: 18px;
-    line-height: 22px;
     display: flex;
     align-items: center;
     color: #005faa;
@@ -606,7 +601,6 @@
     font-style: normal;
     font-weight: 300;
     font-size: 18px;
-    line-height: 28px;
     text-align: right;
     color: #000000;
     margin: 0;
@@ -664,7 +658,6 @@
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
-    line-height: 29px;
     display: flex;
     align-items: center;
     letter-spacing: -0.02em;
@@ -748,9 +741,11 @@
     grid-column-start: 4;
     text-align: right;
     @media screen and (max-width: 767px) {
+      padding: 5px 0;
       flex: 1 0 25%;
     }
     @media screen and (min-width: 993px) and (max-width: 1100px) {
+      padding: 5px 0;
       flex: 1 0 25%;
     }
   }
@@ -776,6 +771,14 @@
     height: 70px;
     background: #005faa;
     border-radius: 6px;
+    @media screen and (max-width: 767px) {
+      // flex-direction: column;
+      // justify-content: center;
+      padding: 12px 12px 2px 8px;
+      font-size: 18px !important;
+      align-items: flex-start;
+      gap: 4px;
+    }
   }
   .total-label {
     display: flex;
@@ -784,15 +787,22 @@
     font-size: 24px;
     letter-spacing: -0.02em;
     color: #ffffff;
+    margin: 0;
+    @media screen and (max-width: 767px) {
+      font-size: 18px !important;
+    }
   }
   .total-value {
     font-family: "Interstate";
     font-style: normal;
     font-weight: 400;
-    line-height: 42px;
     display: flex;
     align-items: center;
     text-align: right;
     color: #ffffff;
+    margin: 0;
+    @media screen and (max-width: 767px) {
+      font-size: 18px !important;
+    }
   }
 </style>

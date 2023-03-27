@@ -9,7 +9,7 @@
             "CurrentReading": "2,521",
             "PreviousReading": "4,370",
             "TotalUsed": "144 kWh",
-            "AMI_Flag": "x",
+            "AMI_Flag": "",
             "UOF": "kWh",
             "ZipCode":"33534",
             "DLN": "54135454",

@@ -640,26 +640,16 @@
         p {
             font-weight: 400;
             font-size: 20px;
-            line-height: 30px;
             a {
-                word-wrap: break-word !important;
-                max-width: 200px !important;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                overflow-wrap: anywhere !important;
             }
         }
         a {
-            word-wrap: break-word !important;
-            max-width: 200px !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis;
+            overflow-wrap: anywhere !important;
         }
     }
     a {
-        word-wrap: break-word !important;
-        max-width: 200px !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        overflow-wrap: anywhere !important;
     }
     .react {
         display: flex;

@@ -23,7 +23,7 @@
                 "UOM": "KWH",
                 "Usage": "550",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -34,7 +34,7 @@
                 "UOM": "KWH",
                 "Usage": "360",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -45,7 +45,7 @@
                 "UOM": "KWH",
                 "Usage": "400",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -56,7 +56,7 @@
                 "UOM": "KWH",
                 "Usage": "105",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -67,7 +67,7 @@
                 "UOM": "KWH",
                 "Usage": "780",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -78,7 +78,7 @@
                 "UOM": "KWH",
                 "Usage": "800",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -89,7 +89,7 @@
                 "UOM": "KWH",
                 "Usage": "1010",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -100,7 +100,7 @@
                 "UOM": "KWH",
                 "Usage": "2100",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -111,7 +111,7 @@
                 "UOM": "KWH",
                 "Usage": "900",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -122,7 +122,7 @@
                 "UOM": "KWH",
                 "Usage": "950",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -133,7 +133,7 @@
                 "UOM": "KWH",
                 "Usage": "240",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -144,7 +144,7 @@
                 "UOM": "KWH",
                 "Usage": "600",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -155,7 +155,7 @@
                 "UOM": "KWH",
                 "Usage": "300",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -166,7 +166,7 @@
                 "UOM": "KWH",
                 "Usage": "150",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -177,7 +177,7 @@
                 "UOM": "KWH",
                 "Usage": "195",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -188,7 +188,7 @@
                 "UOM": "KWH",
                 "Usage": "795",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -199,7 +199,7 @@
                 "UOM": "KWH",
                 "Usage": "155",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -210,7 +210,7 @@
                 "UOM": "KWH",
                 "Usage": "951",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             },
@@ -221,7 +221,7 @@
                 "UOM": "KWH",
                 "Usage": "552",
                 "status": "S",
-                "CloudIcon": "X",
+                "CloudIcon": "",
                 "Dtype": "dtouf",
                 "ToolTipEstimated": "Meter is not responding; data wll be updated when available"
             }

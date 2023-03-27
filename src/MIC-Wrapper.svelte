@@ -68,11 +68,11 @@
     <div class="important-balance">
       <div class="balance">
         <mic-balancesummary />
-        <!-- <MicBalanceSummary /> -->
+        <MicBalanceSummary />
       </div>
       <div class="messages">
         <mic-importentmessage />
-        <!-- <MicImportantMessage /> -->
+        <MicImportantMessage />
       </div>
     </div>
     <mic-billselector />
@@ -80,7 +80,7 @@
     <div class="refreshable">
       <div class="charge-detailes">
         <mic-billingsummary />
-        <!-- <MicBillingSummary /> -->
+        <MicBillingSummary />
       </div>
       <div class="insights">
         <mic-insights class="mic-insights" />
@@ -95,7 +95,7 @@
       <!-- <MicBulkDownload /> -->
     </div>
     <mic-metertable />
-    <!-- <MicMeterTable /> -->
+    <MicMeterTable />
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />
