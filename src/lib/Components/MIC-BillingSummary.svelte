@@ -203,7 +203,7 @@
                   {#if section.SectionType == "Charge_Group"}
                     <!-- BreakDown sections -->
                     {#if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == true}
-                      <div
+                      <!-- <div
                         class="breakdown-header"
                         on:click={() => {
                           subSectionToggle(j, i);
@@ -216,7 +216,7 @@
                           id={"rotate-svg-" +
                             billsObjectsArray[i].subSectionArray[j]}
                         />
-                      </div>
+                      </div> -->
                       <!-- {console.log(billsObjectsArray[i].subToggleStyleArray[j])} -->
                       {#if billsObjectsArray[i]}
                         <div
@@ -226,12 +226,13 @@
                           {#each section.Section_Level2s as level2Obj}
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
-                                <p class={"level" + level2Obj.Order}>
-                                  {level2Obj.Value}
+                                <div class={"level" + level2Obj.Order}>
+                                  <p>{level2Obj.Value}</p>
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
+                                      <!--  src="{toolTip}" -->
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        src={toolTip}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -254,7 +255,7 @@
                                       {/if}
                                     </div>
                                   {/if}
-                                </p>
+                                </div>
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
                                 <p
                                   class={"level" + level2Obj.Order}
@@ -309,7 +310,7 @@
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        src={toolTip}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -372,8 +373,9 @@
                                   {level2Obj.Value}
                                   {#if level2Obj.tooltip && level2Obj.tooltip != ""}
                                     <div class="tooltip-icon">
+                                      <!-- src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`} -->
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                      src={toolTip}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -455,9 +457,11 @@
   * {
     font-family: "Interstate";
   }
+  p {
+    margin: 0;
+  }
   .tooltip-icon {
-    display: inline;
-    // position: relative;
+    margin-top: 3px;
     cursor: pointer;
   }
   .tooltip-description {
@@ -500,19 +504,24 @@
   .bill-content {
     display: flex;
     flex-direction: column;
-    row-gap: 26px;
+    row-gap: 24px;
     hr {
       height: 3px;
       background-color: #eaecee;
       border: none;
     }
+    @media screen and (max-width: 480px) {
+      row-gap: 16px;
+    }
   }
+
   .sub-title {
     h4 {
       font-weight: 400;
       margin: 16px 0 16px 0;
     }
   }
+
   .charges-container {
     justify-content: space-between;
     align-items: center;
@@ -559,13 +568,6 @@
   .break-down {
     background: #f4f5f7;
     padding: 8px;
-    h6 {
-      margin: 13px 0;
-    }
-    p {
-      font-weight: 300;
-      font-size: 18px;
-    }
   }
   .sub-container {
     display: flex;
@@ -612,7 +614,6 @@
     align-items: center;
     padding: 0px;
     width: 100%;
-    height: 40px;
     cursor: pointer;
   }
   /*-----------------------*/
@@ -654,25 +655,30 @@
   }
 
   #title {
-    height: 29px;
+    // height: 29px;
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
     display: flex;
     align-items: center;
-    letter-spacing: -0.02em;
     color: #005faa;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    margin: 0;
+    @media screen and (max-width: 480px) {
+      font-size: 20px;
+    }
   }
 
   #sectiontitle {
     margin: 3px 0;
+    margin-top: 24px;
     color: #06182d;
     font-weight: 500;
-    font-size: x-large;
-    margin-top: 24px;
+    @media screen and (max-width: 767px) {
+      margin-top: 16px;
+    }
+    @media screen and (max-width: 480px) {
+      font-size: 24px !important;
+    }
   }
 
   #comment {
@@ -683,32 +689,60 @@
     font-size: 12px;
   }
 
+  .level1 {
+    font-weight: 400;
+    font-size: 20px;
+    color: #000000;
+    padding: 5px 0;
+    margin: 0;
+    position: relative;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    @media screen and (min-width: 993px) and (max-width: 1100px) {
+      flex: 1 0 60%;
+    }
+    @media screen and (max-width: 767px) {
+      flex: 1 0 60%;
+    }
+    @media screen and (max-width: 480px) {
+      flex: 1 0 60%;
+      font-size: 16px;
+    }
+  }
   .level2 {
     color: #005faa;
     font-style: italic;
     font-weight: 300;
     margin: 0;
     font-size: 18px;
-    font-style: italic;
+    padding-bottom: 5px;
+    @media screen and (min-width: 993px) and (max-width: 1100px) {
+      order: 3;
+    }
     @media screen and (max-width: 767px) {
       order: 3;
     }
-    @media screen and (min-width: 993px) and (max-width: 1100px) {
+    @media screen and (max-width: 480px) {
       order: 3;
+      font-size: 14px;
     }
   }
   .level3 {
     color: #005faa;
     font-style: italic;
     font-weight: 300;
-    margin: 0;
     font-size: 18px;
-    font-style: italic;
+    margin: 0;
+    padding-bottom: 5px;
+    @media screen and (min-width: 993px) and (max-width: 1100px) {
+      order: 4;
+    }
     @media screen and (max-width: 767px) {
       order: 4;
     }
-    @media screen and (min-width: 993px) and (max-width: 1100px) {
-      order: 4;
+    @media screen and (max-width: 480px) {
+      font-size: 14px;
     }
   }
 
@@ -716,37 +750,23 @@
     font-weight: 500;
   }
 
-  .level1 {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 30px;
-    color: #000000;
-    padding: 5px 0;
-    margin: 0;
-    position: relative;
-    @media screen and (max-width: 767px) {
-      flex: 1 0 66%;
-    }
-    @media screen and (min-width: 993px) and (max-width: 1100px) {
-      flex: 1 0 66%;
-    }
-  }
-
   .level4 {
     font-weight: 400;
     font-size: 20px;
-    line-height: 24px;
     color: #000000;
     margin: 0;
     grid-column-start: 4;
     text-align: right;
-    @media screen and (max-width: 767px) {
-      padding: 5px 0;
-      flex: 1 0 25%;
-    }
     @media screen and (min-width: 993px) and (max-width: 1100px) {
       padding: 5px 0;
-      flex: 1 0 25%;
+      flex: 1 0 40%;
+    }
+    @media screen and (max-width: 767px) {
+      padding: 5px 0;
+      flex: 1 0 40%;
+    }
+    @media screen and (max-width: 480px) {
+      font-size: 16px;
     }
   }
   #electric-charges-subtotal {
@@ -761,6 +781,9 @@
     display: flex;
     align-items: center;
     color: #005faa;
+    @media screen and (max-width: 767px) {
+      font-size: 18px;
+    }
   }
   .total {
     display: flex;
@@ -768,15 +791,12 @@
     justify-content: space-between;
     align-items: center;
     padding: 22px 30px;
-    height: 70px;
     background: #005faa;
     border-radius: 6px;
     @media screen and (max-width: 767px) {
-      // flex-direction: column;
-      // justify-content: center;
-      padding: 12px 12px 2px 8px;
-      font-size: 18px !important;
-      align-items: flex-start;
+      flex-direction: column;
+      justify-content: center;
+    padding: 18px 26px;
       gap: 4px;
     }
   }
@@ -789,7 +809,7 @@
     color: #ffffff;
     margin: 0;
     @media screen and (max-width: 767px) {
-      font-size: 18px !important;
+      font-size: 22px;
     }
   }
   .total-value {
@@ -802,7 +822,7 @@
     color: #ffffff;
     margin: 0;
     @media screen and (max-width: 767px) {
-      font-size: 18px !important;
+      font-size: 24px !important;
     }
   }
 </style>
