@@ -239,17 +239,16 @@ export const renderMixChart = (data, color, width, height, service, unit) => {
                 },
             },
             dataLabels: {
-                enabled: true,
+                enabled: false,
                 offsetY: -20,
                 formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
                     let arr;
                     arr = data.filter(res => res.CloudIcon)
-                    console.log(val, data[dataPointIndex], "from data label");
                     if (data[dataPointIndex] && data[dataPointIndex].CloudIcon == "X")
-                        return (
-                        '<div>' 
-                        // +
-                        // `<img src=${cloudIcon} alt="cloud icon" />`
+                        return (""
+                        // '<div>' 
+                        // // +
+                        // // `<img src=${cloudIcon} alt="cloud icon" />`
                         )
                 },
             },

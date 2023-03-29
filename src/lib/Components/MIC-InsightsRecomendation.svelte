@@ -129,7 +129,6 @@
         >
             VIEW</button
         >
-        <div />
     </div>
     {#if showModal == true}
         <div class="modal-container">
@@ -570,7 +569,6 @@
         cursor: pointer;
     }
     #hr-footer {
-        margin: 5%;
         border: 1px solid #eaecee;
         width: 100%;
     }

@@ -5,7 +5,8 @@
   // @ts-ignore
 
   ///////// svg imports
-  import dropDown from "../../assets/cr.svg";
+  // import dropDown from "../../assets/cr.svg";
+  import arrow from "../../assets/arrowUp.svg";
 
   ///////// sub web components
   import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
@@ -306,16 +307,32 @@
                       <p class="insights-value">
                         {insightsService?.yearly?.valueTemp + "°"}
                       </p>
-                      <span
-                        class="red"
-                        style="background: #E6EFF7; border: 1px solid #005FAA;"
-                      >
-                        <img
-                          src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
-                          class="arrow"
-                          alt=""
-                        />{insightsService?.yearly?.valueTemp + "°"}</span
-                      >
+                      {#if insightsService.yearly.percentageTemp >= 0}
+                        <span
+                          class="red"
+                          style="background: #E6EFF7; border: 1px solid #005FAA;"
+                        >
+                          <img
+                            src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
+                            class="arrow"
+                            alt="arrow"
+                          />{Math.abs(insightsService?.yearly?.percentageTemp) +
+                            "°"}</span
+                        >
+                      {:else if insightsService.yearly.percentageTemp < 0}
+                        <span
+                          class="red"
+                          style="background: rgba(36, 161, 72, 0.03); border: 1px solid rgb(36, 161, 72);"
+                        >
+                          <img
+                            src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
+                            style="rotate:calc(180deg)"
+                            class="arrow"
+                            alt="arrow"
+                          />{Math.abs(insightsService?.yearly?.percentageTemp) +
+                            "°"}</span
+                        >
+                      {/if}
                     </div>
                   </div>
                 {/if}
@@ -478,16 +495,32 @@
                       <p class="insights-value">
                         {insightsService?.monthly?.valueTemp + "°"}
                       </p>
-                      <span
-                        class="red"
-                        style="background: #E6EFF7; border: 1px solid #005FAA;"
-                      >
-                        <img
-                          src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
-                          class="arrow"
-                          alt=""
-                        />{insightsService?.monthly?.valueTemp + "°"}</span
-                      >
+                      {#if insightsService.monthly.percentageTemp >= 0}
+                        <span
+                          class="red"
+                          style="background: #E6EFF7; border: 1px solid #005FAA;"
+                        >
+                          <img
+                            src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
+                            class="arrow"
+                            alt="arrow"
+                          />{Math.abs(insightsService?.monthly?.percentageTemp) +
+                            "°"}</span
+                        >
+                      {:else if insightsService.monthly.percentageTemp < 0}
+                        <span
+                          class="red"
+                          style="background: rgba(36, 161, 72, 0.03); border: 1px solid rgb(36, 161, 72);"
+                        >
+                          <img
+                            src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
+                            style="rotate:calc(180deg)"
+                            class="arrow"
+                            alt="arrow"
+                          />{Math.abs(insightsService?.monthly?.percentageTemp) +
+                            "°"}</span
+                        >
+                      {/if}
                     </div>
                   </div>
                 {/if}

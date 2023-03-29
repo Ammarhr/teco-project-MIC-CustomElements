@@ -15,6 +15,8 @@
     eventsDomain,
     showToolTipDetails,
     newToken,
+    fetchAndRedirect,
+    persona,
   } from "../../js/store";
 
   let toggleArray = [];
@@ -34,8 +36,8 @@
     if ($apiToken && $apiDomain && !$data.Sections) {
       get(
         $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-        "../../data/ChargeDetails.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+        // "../../data/ChargeDetails.json"
       );
     }
     refreshToken = $apiToken;
@@ -141,10 +143,21 @@
       billsObjectsArray[i].toolTipStylleArray[j] =
         "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
     }
+    fetchAndRedirect(
+      $apiToken,
+      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      null,
+      {
+        EventCode: "CD_ChargeTooltipClick",
+        Outcome: "Helper x Is Active",
+        Persona: $persona,
+      }
+    );
   };
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-missing-attribute -->
 {#if $loading}
   <mic-loading />
 {:else if $data && $data.Sections && toggleArray && billsObjectsArray}
@@ -227,12 +240,13 @@
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
                                 <div class={"level" + level2Obj.Order}>
-                                  <p>{level2Obj.Value}</p>
+                                  {level2Obj.Value}
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <!--  src="{toolTip}" -->
+                                      <!-- src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`} -->
                                       <img
-                                        src={toolTip}
+                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -245,9 +259,19 @@
                                           <div class="tooltip-con">
                                             {level2Obj.ToolTip} <br />
                                             <a
-                                              href="#"
                                               on:click={() => {
-                                                // redirect to UNDERSTANDING YOUR CHARGES URL
+                                                fetchAndRedirect(
+                                                  $apiToken,
+                                                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                  billService.URL,
+                                                  {
+                                                    EventCode:
+                                                      "CD_ChargeExplanationClick",
+                                                    Outcome:
+                                                      "Charge Exeplination Page Loaded",
+                                                    Persona: $persona,
+                                                  }
+                                                );
                                               }}>UNDERSTANDING YOUR CHARGES</a
                                             >
                                           </div>
@@ -295,22 +319,20 @@
                             <!-- {section.SectionType} -->
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
-                                <p class={"level" + level2Obj.Order}>
+                                <div class={"level" + level2Obj.Order}>
                                   {#if level2Obj.Value && level2Obj.Value[0] == " "}
-                                    <span
+                                    <p
                                       style="padding-left: 6px; margin:0; display:block"
                                     >
                                       {level2Obj.Value.trim()}
-                                    </span>
+                                    </p>
                                   {:else}
                                     {level2Obj.Value}
                                   {/if}
-                                  <!-- {console.log(level2Obj.tooltip)} -->
-                                  <!-- {level2Obj.Value} -->
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <img
-                                        src={toolTip}
+                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -323,9 +345,19 @@
                                           <div class="tooltip-con">
                                             {level2Obj.ToolTip}<br />
                                             <a
-                                              href="#"
                                               on:click={() => {
-                                                // redirect to UNDERSTANDING YOUR CHARGES URL
+                                                fetchAndRedirect(
+                                                  $apiToken,
+                                                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                  billService.URL,
+                                                  {
+                                                    EventCode:
+                                                      "CD_ChargeExplanationClick",
+                                                    Outcome:
+                                                      "Charge Exeplination Page Loaded",
+                                                    Persona: $persona,
+                                                  }
+                                                );
                                               }}>UNDERSTANDING YOUR CHARGES</a
                                             >
                                           </div>
@@ -333,7 +365,7 @@
                                       {/if}
                                     </div>
                                   {/if}
-                                </p>
+                                </div>
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
                                 <p class={"level" + level2Obj.Order}>
                                   {level2Obj.Value}
@@ -348,6 +380,7 @@
                         </div>
                       {/if}
                     {/if}
+
                     <!-- Sub Section -->
                   {:else if section.SectionType == "CustomeSection"}
                     {#if section.Lable && section.Lable != ""}
@@ -364,54 +397,86 @@
                           </h4>
                         </div>
                       </div>
-                      <div class="charges-container">
-                        {#each section.Section_Level2s as subSection}
-                          {#each subSection.Section_Level3s as level2Obj}
-                            {#if level2Obj.SectionType == "Charge"}
-                              {#if level2Obj.Order == 1}
-                                <p class={"level" + level2Obj.Order}>
-                                  {level2Obj.Value}
-                                  {#if level2Obj.tooltip && level2Obj.tooltip != ""}
+                      {#each section.Section_Level2s as subSection}
+                        <div class="charges-container">
+                          {#each subSection.Section_Level3s as level3Obj}
+                            {#if level3Obj.SectionType == "Charge"}
+                              {#if level3Obj.Order == 1}
+                                <div class={"level" + level3Obj.Order}>
+                                  {level3Obj.Value}
+                                  {#if level3Obj.tooltip && level3Obj.tooltip != ""}
                                     <div class="tooltip-icon">
                                       <!-- src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`} -->
                                       <img
-                                      src={toolTip}
+                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
-                                      <!-- {#if billsObjectsArray[i].toolTipStylleArray[j]} -->
-                                      <div class="tooltip-description">
-                                        <!-- style={billsObjectsArray[i]
-                                      .toolTipStylleArray[j]} -->
-                                        <div class="tooltip-con">
-                                          Covers the costs of moving gas from
-                                          its source to your premise, other than
-                                          the cost of gas itself. <br />
-                                          <a
-                                            href="#"
-                                            on:click={() => {
-                                              // redirect to UNDERSTANDING YOUR CHARGES URL
-                                            }}>UNDERSTANDING YOUR CHARGES</a
+                                      {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
+                                        <div class="tooltip-description">
+                                          <div
+                                            class="tooltip-con"
+                                            style={billsObjectsArray[i]
+                                              .toolTipStylleArray[j]}
                                           >
+                                            Covers the costs of moving gas from
+                                            its source to your premise, other
+                                            than the cost of gas itself. <br />
+                                            <a
+                                              on:click={() => {
+                                                fetchAndRedirect(
+                                                  $apiToken,
+                                                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                  billService.URL,
+                                                  {
+                                                    EventCode:
+                                                      "CD_ChargeExplanationClick",
+                                                    Outcome:
+                                                      "Charge Exeplination Page Loaded",
+                                                    Persona: $persona,
+                                                  }
+                                                );
+                                              }}>UNDERSTANDING YOUR CHARGES</a
+                                            >
+                                          </div>
                                         </div>
-                                      </div>
-                                      <!-- {/if}   -->
+                                      {/if}
                                     </div>
                                   {/if}
-                                </p>
-                              {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
-                                <p class={"level" + level2Obj.Order}>
-                                  {level2Obj.Value}
+                                </div>
+                              {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
+                                <p class={"level" + level3Obj.Order}>
+                                  {level3Obj.Value}
                                 </p>
                               {:else}
-                                <p class={"level" + level2Obj.Order}>
-                                  {level2Obj.Value}
+                                <p class={"level" + level3Obj.Order}>
+                                  {level3Obj.Value}
                                 </p>
+                              {/if}
+                            {:else if subSection.SectionType == "CombinedGroup"}
+                              {#if level3Obj.Order == 1}
+                                <div style="flex: 1 0 20%;">
+                                  <p
+                                    class="service-for{level3Obj.Order}"
+                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                  >
+                                    {level3Obj.Lable}
+                                  </p>
+                                </div>
+                              {:else if level3Obj.Order == 2}
+                                <div>
+                                  <p
+                                    class="service-for{level3Obj.Order}"
+                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                  >
+                                    {level3Obj.Value}
+                                  </p>
+                                </div>
                               {/if}
                             {/if}
                           {/each}
-                        {/each}
-                      </div>
+                        </div>
+                      {/each}
                     {/if}
                     <!-- Sub Total -->
                   {:else if section.SectionType == "Total"}
@@ -462,37 +527,37 @@
   }
   .tooltip-icon {
     margin-top: 3px;
+    margin-left: 3px;
+    display:inline-block;
     cursor: pointer;
+  }
+  .toolTipToggle {
+    position: relative;
+    &::after {
+      content: "";
+      width: 5px;
+      height: 5px;
+      background-color: #005faa;
+      top: 0;
+      left: 50%;
+      z-index: 2;
+      transform: translate(-50%, 0);
+    }
   }
   .tooltip-description {
     position: absolute;
-    right: -100%;
     bottom: 100%;
     z-index: 1;
-    min-width: 320px;
+    max-width: 100vw;
+    max-width: 440px;
     border-radius: 6px;
-    padding: 5px 0 32px 6px;
+    padding: 6px;
     font-weight: 400;
-    font-size: 18px;
-    background: #cbe8ff;
+    font-size: 16px;
+    background: rgb(203 232 255 / 96%);
     color: #000000;
-    clip-path: polygon(
-      50% 0%,
-      100% 0,
-      100% 35%,
-      100% 86%,
-      54% 86%,
-      50% 100%,
-      47% 85%,
-      0 85%,
-      0% 35%,
-      0 0
-    );
-
-    @media screen and (max-width: 480px) {
-      left: 0;
-      right: unset;
-    }
+    box-shadow: 0 0 8px 1px #9e9e9e96;
+    left: 0;
     .tooltip-con {
       padding: 8px;
       > a {
@@ -514,15 +579,14 @@
       row-gap: 16px;
     }
   }
-
   .sub-title {
     h4 {
       font-weight: 400;
       margin: 16px 0 16px 0;
     }
   }
-
   .charges-container {
+    position: relative;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #eaecee;
@@ -552,7 +616,6 @@
     flex-direction: row;
     align-items: center;
     padding: 0px;
-
     h6 {
       font-style: normal;
       font-weight: 300;
@@ -568,6 +631,7 @@
   .break-down {
     background: #f4f5f7;
     padding: 8px;
+    grid-template-columns: 40% auto 1fr auto;
   }
   .sub-container {
     display: flex;
@@ -647,13 +711,11 @@
     align-items: center;
     justify-content: space-between;
   }
-
   .sub-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-
   #title {
     // height: 29px;
     font-style: normal;
@@ -667,7 +729,6 @@
       font-size: 20px;
     }
   }
-
   #sectiontitle {
     margin: 3px 0;
     margin-top: 24px;
@@ -680,7 +741,6 @@
       font-size: 24px !important;
     }
   }
-
   #comment {
     color: rgba(128, 128, 128, 0.7);
     text-decoration: none;
@@ -688,17 +748,12 @@
     font-weight: 500;
     font-size: 12px;
   }
-
   .level1 {
     font-weight: 400;
     font-size: 20px;
     color: #000000;
     padding: 5px 0;
     margin: 0;
-    position: relative;
-    display: flex;
-    gap: 10px;
-    justify-content: flex-start;
     @media screen and (min-width: 993px) and (max-width: 1100px) {
       flex: 1 0 60%;
     }
@@ -745,11 +800,9 @@
       font-size: 14px;
     }
   }
-
   .total-row {
     font-weight: 500;
   }
-
   .level4 {
     font-weight: 400;
     font-size: 20px;
@@ -767,6 +820,18 @@
     }
     @media screen and (max-width: 480px) {
       font-size: 16px;
+    }
+  }
+  .service-for1 {
+    margin: 8px 0;
+    @media screen and (max-width: 480px) {
+      font-size: 16px !important;
+    }
+  }
+  .service-for2 {
+    margin: 8px 0;
+    @media screen and (max-width: 480px) {
+      font-size: 14px !important;
     }
   }
   #electric-charges-subtotal {
@@ -796,7 +861,7 @@
     @media screen and (max-width: 767px) {
       flex-direction: column;
       justify-content: center;
-    padding: 18px 26px;
+      padding: 18px 26px;
       gap: 4px;
     }
   }

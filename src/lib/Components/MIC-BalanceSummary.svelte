@@ -2,7 +2,7 @@
 
 <script>
     // @ts-nocheck
-    // import mask from "https://miportaldev.tecoenergy.com/micwc-external/assets/mask-bs.db60226b.svg";
+    // import mask from "../../assets/mask-bs.svg";
     import {
         fetchstore,
         apiDomain,
@@ -20,13 +20,12 @@
     let subTotalAmmountFontSize = "32px";
     //mocking data
     const [data, loading, error, get] = fetchstore();
-
     // trigger token existence
     $: if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
         get(
             $apiToken,
-            "../../../data/AccountBalanceData.json"
-            // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
+            // "../../../data/AccountBalanceData.json"
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`
         );
         tries--;
     }
@@ -66,13 +65,15 @@
         }
         // dynamic totalAmmount colors
         if ($data.totalAmmount.includes("-")) {
-            color = $data.negative_color;
+            color = "#24A148";
         } else {
-            color = $data.postive_color;
+            color = "#005FAA";
         }
-        console.log("size: ", $data.totalAmmount[0].length);
         // dynamic font size
-        if ($data.totalAmmount[0] && $data.totalAmmount[0].length >= 8) {
+        if (
+            $data.totalAmmount[0] &&
+            $data.totalAmmount.split(".")[0].length >= 8
+        ) {
             totalAmmountFontSize = "36px";
             subTotalAmmountFontSize = "20px";
         }
@@ -95,7 +96,7 @@
             style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bs.svg`});"
         >
             <div class="tecoBalanceSection">
-                <span>{$data.title}</span>
+                <span>Total Amount Due</span>
                 <div class="amount">
                     <span
                         style="color: {color}; font-size:{subTotalAmmountFontSize}"
@@ -105,11 +106,25 @@
                         style="color: {color}; font-size:{totalAmmountFontSize}"
                         >{$data.totalAmmount.split(".")[0]}</span
                     >
-                    {#if $data.totalAmmount.toString().split(".")[1]}
+                    {#if $data.totalAmmount
+                        .toString()
+                        .split(".")[1] && $data.totalAmmount
+                            .toString()
+                            .split(".")[1].length >= 2}
                         <span
                             style="color: {color}; font-size:{subTotalAmmountFontSize}"
                         >
                             {$data.totalAmmount.toString().split(".")[1]}</span
+                        >
+                    {:else if $data.totalAmmount
+                        .toString()
+                        .split(".")[1] && $data.totalAmmount
+                            .toString()
+                            .split(".")[1].length < 2}
+                        <span
+                            style="color: {color}; font-size:{subTotalAmmountFontSize}"
+                        >
+                            {$data.totalAmmount.toString().split(".")[1]}0</span
                         >
                     {:else}
                         <span

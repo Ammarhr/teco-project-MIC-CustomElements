@@ -46,8 +46,8 @@
         if ($apiToken && $apiDomain && !$data.results) {
             get(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-                "../../data/meterTable.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+                // "../../data/meterTable.json"
             );
         }
         reGeneratedToken = $apiToken;
@@ -94,8 +94,8 @@
 
             dailyUsageGet(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-                "../../data/meterUsageDaily.json",
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+                // "../../data/meterUsageDaily.json",
                 {
                     dln: DLN,
                     sdt: DAP_StartDate,
@@ -113,8 +113,8 @@
             monthlyUsageGet(
                 $apiToken,
 
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
-                "../../data/meterUsageMonthly.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
+                // "../../data/meterUsageMonthly.json"
             );
         }
     };

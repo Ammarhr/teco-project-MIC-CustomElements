@@ -63,16 +63,16 @@
 <!-- {#key $showToolTipDetails} -->
 {#if token && domain && eventdomain && $generalErr !== true}
   <div class="wrapper">
-    <!-- <mic-headerinformation /> -->
+    <mic-headerinformation />
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
         <mic-balancesummary />
-        <MicBalanceSummary />
+        <!-- <MicBalanceSummary /> -->
       </div>
       <div class="messages">
         <mic-importentmessage />
-        <MicImportantMessage />
+        <!-- <MicImportantMessage /> -->
       </div>
     </div>
     <mic-billselector />
@@ -80,7 +80,7 @@
     <div class="refreshable">
       <div class="charge-detailes">
         <mic-billingsummary />
-        <MicBillingSummary />
+        <!-- <MicBillingSummary /> -->
       </div>
       <div class="insights">
         <mic-insights class="mic-insights" />
@@ -91,19 +91,15 @@
         <mic-bulkdownload class="mic-insights" />
       </div>
     </div>
-    <div class="blk-container">
-      <!-- <MicBulkDownload /> -->
-    </div>
+    <!-- <div class="blk-container"> -->
+    <!-- <MicBulkDownload /> -->
+    <!-- </div> -->
     <mic-metertable />
-    <MicMeterTable />
+    <!-- <MicMeterTable /> -->
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />
   <!-- <MicGeneralError {token} /> -->
-  <!-- {:else if $showToolTipDetails === true}
-    <div class="wrapper">
-      <MicToolTipDetails />
-    </div> -->
 {/if}
 
 <!-- {/key} -->

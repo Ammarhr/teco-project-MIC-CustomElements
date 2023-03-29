@@ -16,6 +16,7 @@
     latestBill,
     eventsDomain,
     newToken,
+    persona,
   } from "../../js/store";
   import MicSunSelect from "./MIC-SunSelect.svelte";
   // state
@@ -105,6 +106,7 @@
                   {
                     EventCode: "Select_New_Bill",
                     Outcome: $billNumber,
+                    Persona: $persona,
                   }
                 );
               }}
