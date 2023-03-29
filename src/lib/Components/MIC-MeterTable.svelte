@@ -3,7 +3,7 @@
 <script>
     // @ts-nocheck
     // import toggle from "../../assets/cr.svg";
-    // import toolTip from "../../assets/toolTip.svg";
+    import toolTip from "../../assets/toolTip.svg";
     // import verticalLine from "../../assets/vertical-line.svg";
     // import elictric from "../../assets/electric.svg";
     import { slide } from "svelte/transition";
@@ -46,8 +46,8 @@
         if ($apiToken && $apiDomain && !$data.results) {
             get(
                 $apiToken,
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-                // "../../data/meterTable.json"
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+                "../../data/meterTable.json"
             );
         }
         reGeneratedToken = $apiToken;
@@ -94,8 +94,8 @@
 
             dailyUsageGet(
                 $apiToken,
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-                // "../../data/meterUsageDaily.json",
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+                "../../data/meterUsageDaily.json",
                 {
                     dln: DLN,
                     sdt: DAP_StartDate,
@@ -113,8 +113,8 @@
             monthlyUsageGet(
                 $apiToken,
 
-                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
-                // "../../data/meterUsageMonthly.json"
+                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
+                "../../data/meterUsageMonthly.json"
             );
         }
     };
@@ -417,20 +417,25 @@
                                 </h6>
                             {/if}
                         </div>
-                        <!-- <div class="options">
+                        <div />
+                        <div class="options">
                             <input
                                 type="checkbox"
                                 name="trmprature"
                                 id="temp"
                             />
                             <span>Temperature</span>
+                            <!-- `${$apiDomain}/micwc-external/assets/tool-tip-icon.svg` -->
                             <img
-                                src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                src={toolTip}
                                 alt="usage chart tool tip"
                                 class="tool-tip"
                             />
-                        </div> -->
-
+                            <div class="switch">
+                                <button class=""> Cost </button>
+                                <button class=""> Usage </button>
+                            </div>
+                        </div>
                         <!-- Monthly Chart -->
                         <div id={"meter-tab1" + tab1}>
                             {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length > 0}
