@@ -183,25 +183,11 @@
                 id="sectiontitle"
                 style="color:{billService.Color}; font-size:{billService.FontSize}px; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
               >
-                {#if billService.ServiceType && billService.ServiceType == "Electric"}
-                  <img
-                    src={`${$apiDomain}/micwc-external/assets/electricCharge.svg`}
-                    alt=""
-                    style="width: 25px;"
-                  />
-                {:else if billService.ServiceType && billService.ServiceType == "GAS"}
-                  <img
-                    src={`${$apiDomain}/micwc-external/assets/gasCharge.svg`}
-                    alt=""
-                    style="width: 25px;"
-                  />
-                {:else if billService.ServiceType && billService.ServiceType == "Lighting"}
-                  <img
-                    src={`${$apiDomain}/micwc-external/assets/lighting.0131cc59.svg`}
-                    alt=""
-                    style="width: 25px;"
-                  />
-                {/if}
+              <img
+                src={`${$apiDomain}/micwc-external/assets/${billService.IconPath}`}
+                alt=""
+                style="width: 25px;"
+              />
                 {billService.Lable}
               </h3>
             </span>

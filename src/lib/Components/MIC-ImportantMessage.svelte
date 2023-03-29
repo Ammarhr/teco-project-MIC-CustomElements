@@ -4,8 +4,8 @@
   // @ts-nocheck
 
   //svg imports
-  import circyle from "../../assets/cr.svg";
-  import messageNotification from "../../assets/envelope-solid.svg";
+  // import circyle from "../../assets/cr.svg";
+  // import messageNotification from "../../assets/envelope-solid.svg";
 
   //unreaded messages counter
   import {
@@ -219,7 +219,11 @@
     height: 1.5rem;
   }
   p {
-    display: contents;
+    // display: contents;
+    margin: 0;
+    @media screen and (max-width: 480px) {
+      font-size: 18px !important;
+    }
   }
   button {
     display: flex;

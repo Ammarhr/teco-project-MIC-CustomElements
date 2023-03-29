@@ -326,7 +326,6 @@
                         >
                           <img
                             src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
-                            style="rotate:calc(180deg)"
                             class="arrow"
                             alt="arrow"
                           />{Math.abs(insightsService?.yearly?.percentageTemp) +
@@ -504,8 +503,9 @@
                             src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
                             class="arrow"
                             alt="arrow"
-                          />{Math.abs(insightsService?.monthly?.percentageTemp) +
-                            "°"}</span
+                          />{Math.abs(
+                            insightsService?.monthly?.percentageTemp
+                          ) + "°"}</span
                         >
                       {:else if insightsService.monthly.percentageTemp < 0}
                         <span
@@ -517,8 +517,9 @@
                             style="rotate:calc(180deg)"
                             class="arrow"
                             alt="arrow"
-                          />{Math.abs(insightsService?.monthly?.percentageTemp) +
-                            "°"}</span
+                          />{Math.abs(
+                            insightsService?.monthly?.percentageTemp
+                          ) + "°"}</span
                         >
                       {/if}
                     </div>
@@ -599,12 +600,22 @@
             </div>
           {/if}
           {#if $billNumber === $latestBill && insightsService.BillContractNo && recoToken == $apiToken}
+            <!-- <MicInsightsRecomendation
+              token={$apiToken}
+              url={$apiDomain}
+              billcontractnumber={insightsService.BillContractNo}
+            /> -->
             <mic-recomendation
               token={$apiToken}
               url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
             />
           {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo}
+            <!-- <MicInsightsRecomendation
+              token={$newToken.token}
+              url={$apiDomain}
+              billcontractnumber={insightsService.BillContractNo}
+            /> -->
             <mic-recomendation
               token={$newToken.token}
               url={$apiDomain}

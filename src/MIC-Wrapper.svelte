@@ -95,7 +95,7 @@
     <!-- <MicBulkDownload /> -->
     <!-- </div> -->
     <mic-metertable />
-    <MicMeterTable />
+    <!-- <MicMeterTable /> -->
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />

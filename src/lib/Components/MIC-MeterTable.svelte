@@ -2,7 +2,7 @@
 
 <script>
     // @ts-nocheck
-    // import toggle from "../../assets/cr.svg";
+    import toggle from "../../assets/cr.svg";
     import toolTip from "../../assets/toolTip.svg";
     // import verticalLine from "../../assets/vertical-line.svg";
     // import elictric from "../../assets/electric.svg";
@@ -24,47 +24,51 @@
 
     let items;
     let tableData;
+    let pageSize = 5; // number of items per page
+    let pagenateItems = [];
+    let currentPage = 0;
     let selectedMeter;
     let reGeneratedToken;
     let tab1 = "1";
     let tab2 = "2";
-    let activeSection;
+    let activeSection = "daily";
     let isOpen = true;
     let svgId = "rotate-svg-" + isOpen;
+    let toolTipShow = false;
+    let toolTipStyle = "display:none; position: absolute; top:20px";
     let styleSelectedRows = [];
-    const [data, loading, error, get] = fetchstore();
+
+    const [data, loading, error, get] = fetchstore(); // meterTable fetch
     const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
-        fetchDailyUsageChart();
+        fetchDailyUsageChart(); // daily usage fetch
     const [
         monthlyUsageData,
         monthlyUsageLoading,
         monthlyUsageError,
         monthlyUsageGet,
-    ] = fetchMonthlyUsageChart();
+    ] = fetchMonthlyUsageChart(); // monthly usage fetch
 
+    // fetch meterTable fetch api on component mount
     onMount(() => {
         if ($apiToken && $apiDomain && !$data.results) {
             get(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-                "../../data/meterTable.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
+                // "../../data/meterTable.json"
             );
         }
         reGeneratedToken = $apiToken;
     });
-    const toggleContainer = () => {
-        isOpen = !isOpen;
-        svgId = "rotate-svg-" + isOpen;
-    };
-
     //////// change the selected meter + call Dap Api
     const handleSelectedMeter = (meterObject, i) => {
+        first = false;
         styleSelectedRows = [];
         if (meterObject) {
             selectedMeter = meterObject;
         } else {
             selectedMeter = pagenateItems[0];
         }
+        // change the style of the selected table row:
         if (i) {
             styleSelectedRows[i] =
                 "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
@@ -94,8 +98,8 @@
 
             dailyUsageGet(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-                "../../data/meterUsageDaily.json",
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+                // "../../data/meterUsageDaily.json",
                 {
                     dln: DLN,
                     sdt: DAP_StartDate,
@@ -113,11 +117,13 @@
             monthlyUsageGet(
                 $apiToken,
 
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
-                "../../data/meterUsageMonthly.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
+                // "../../data/meterUsageMonthly.json"
             );
         }
     };
+
+    // refresh the component depend on the new generated token
     $: if (
         $newToken &&
         $newToken.token &&
@@ -130,52 +136,24 @@
         );
         reGeneratedToken = $newToken.token;
     }
-    // $: if ($monthlyUsageData && $monthlyUsageData.MonthlyUsage) {
-    //     console.log("monthly :", $monthlyUsageData.MonthlyUsage);
-    // }
-    ////////// tabs functionality
-    const activateTab = (num1, num2, activeTab) => {
-        activeSection = activeTab;
-        tab2 = num2;
-        tab1 = num1;
-    };
-    $: if ($dailyUsageData && $dailyUsageData.DailyUsage) {
-        if (
-            ($dailyUsageData.DailyUsage.DailyDetails &&
-                $dailyUsageData.DailyUsage.DailyDetails.length == 0) ||
-            (selectedMeter && selectedMeter.AMI_Flag != "")
-        ) {
-            activeSection = "monthly";
-            tab1 = "1";
-            tab2 = "2";
-        } else {
-            activeSection = "daily";
-            tab1 = "2";
-            tab2 = "1";
-        }
+    // select the dafault active tab
+    $: if (selectedMeter && selectedMeter.AMI_Flag == "" && first == false) {
+        activeSection = "monthly";
+        tab1 = "2";
+        tab2 = "1";
+        first = true;
+    } else if (
+        selectedMeter &&
+        selectedMeter.AMI_Flag != "" &&
+        first == false
+    ) {
+        activeSection = "daily";
+        tab1 = "1";
+        tab2 = "2";
+        first = true;
     }
-    ////// search & filter
-    const handleSearch = () => {
-        let str = event.target.value;
-        let searchArray = [];
-        if (str == "") {
-            items = $data.results;
-            selectedMeter = $data.results[0];
-            getPaginatedItems();
-            handleSelectedMeter(selectedMeter);
-        }
-        searchArray = $data.results.filter((meter) => {
-            return meter.meterTable.meterNumbeR.includes(str);
-        });
-        if (searchArray[0]) {
-            items = searchArray;
-            getPaginatedItems();
-            handleSelectedMeter();
-        }
-    };
 
-    ///////// pagination:
-    //////// first render
+    //////// table first render
     $: if ($data && $data.MeterTabel) {
         tableData = $data.MeterTabel;
         selectedMeter = $data.MeterTabel[0];
@@ -183,11 +161,7 @@
         getPaginatedItems();
     }
 
-    ////////////////////////////
-    export let pageSize = 5; // number of items per page
-    let pagenateItems = [];
-    let currentPage = 0;
-
+    ///////// pagination:
     function nextPage() {
         currentPage++;
         getPaginatedItems();
@@ -224,6 +198,81 @@
             .fill()
             .map((_, idx) => startPageIndex + idx);
     }
+    /// card toggle
+    const cardToggle = () => {
+        isOpen = !isOpen;
+        svgId = "rotate-svg-" + isOpen;
+    };
+
+    ////////// tabs functionality
+    let first = false; // trigger first render for the tabs
+    const activateTab = (num1, num2, activeTab) => {
+        activeSection = activeTab;
+        tab2 = num2;
+        tab1 = num1;
+    };
+
+    ////// search & filter
+    const handleSearch = () => {
+        let str = event.target.value;
+        let searchArray = [];
+        if (str == "") {
+            items = $data.results;
+            selectedMeter = $data.results[0];
+            getPaginatedItems();
+            handleSelectedMeter(selectedMeter);
+        }
+        searchArray = $data.results.filter((meter) => {
+            return meter.meterTable.meterNumbeR.includes(str);
+        });
+        if (searchArray[0]) {
+            items = searchArray;
+            getPaginatedItems();
+            handleSelectedMeter();
+        }
+    };
+
+    // toolt tip toggle function
+    function tooltipToggle(close) {
+        if (close == true) {
+            toolTipShow = false;
+        } else {
+            toolTipShow = !toolTipShow;
+        }
+        if (toolTipShow == true) {
+            toolTipStyle = "position: absolute; top:20px";
+        } else {
+            toolTipStyle =
+                "opacity: 0;margin: 0; transition:200ms; padding:0; position: absolute; top:20px";
+        }
+    }
+    let container;
+    let toolTipIconCon;
+    $: toolTipIconCon = document.querySelector(".tool-tip");
+    $: container = document.querySelector(".meter-card");
+    $: if (container) {
+        container.addEventListener("click", function (event) {
+            // check if the click event originated from the container
+            if (event.target != toolTipIconCon) {
+                // do something when the container is clicked
+                tooltipToggle(true);
+            }
+        });
+    }
+    // cost/usage chart toggle function
+    let costBtnClass = "sw-btn-inactive";
+    let usageBtnClass = "sw-btn-active";
+    let chartDisplayUnit = "usage";
+    function costUsageToggle(activeBtn) {
+        chartDisplayUnit = activeBtn;
+        if (activeBtn == "cost") {
+            costBtnClass = "sw-btn-active";
+            usageBtnClass = "sw-btn-inactive";
+        } else if (activeBtn == "usage") {
+            usageBtnClass = "sw-btn-active";
+            costBtnClass = "sw-btn-inactive";
+        }
+    }
 </script>
 
 <!------ html ------->
@@ -233,13 +282,9 @@
     <h1 />
 {:else if $data && pagenateItems && pagenateItems.length > 0}
     {#key $apiToken}
-        <div class="meter-card">
+        <div class="meter-card" bind:this={container}>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div
-                id="meter-header"
-                on:click={toggleContainer}
-                aria-expanded={isOpen}
-            >
+            <div id="meter-header" on:click={cardToggle} aria-expanded={isOpen}>
                 <h4 id="title">Usage Details</h4>
                 <img
                     src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
@@ -418,30 +463,75 @@
                             {/if}
                         </div>
                         <div />
-                        <div class="options">
-                            <input
-                                type="checkbox"
-                                name="trmprature"
-                                id="temp"
-                            />
-                            <span>Temperature</span>
-                            <!-- `${$apiDomain}/micwc-external/assets/tool-tip-icon.svg` -->
-                            <img
-                                src={toolTip}
-                                alt="usage chart tool tip"
-                                class="tool-tip"
-                            />
-                            <div class="switch">
-                                <button class=""> Cost </button>
-                                <button class=""> Usage </button>
-                            </div>
+                        <!-- option for Hadi to style -->
+                        <div class="options" style="position: relative;">
+                            {#if (activeSection == "daily" && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.TempTooltip) || (activeSection == "monthly" && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.TempTooltip)}
+                                <input
+                                    type="checkbox"
+                                    name="trmprature"
+                                    id="temp"
+                                />
+                                <span>Temperature</span>
+                                <img
+                                    src={toolTip}
+                                    alt="usage chart tool tip"
+                                    class="tool-tip"
+                                    on:click={tooltipToggle}
+                                    bind:this={toolTipIconCon}
+                                />
+
+                                {#if $monthlyUsageData.MonthlyUsage.TempTooltip && activeSection == "monthly"}
+                                    <div
+                                        class="tooltip-content"
+                                        style={toolTipStyle}
+                                    >
+                                        {@html $monthlyUsageData.MonthlyUsage
+                                            .TempTooltip}
+                                    </div>
+                                {:else if $dailyUsageData.DailyUsage.TempTooltip && activeSection == "daily"}
+                                    <div
+                                        class="tooltip-content"
+                                        style={toolTipStyle}
+                                    >
+                                        {@html $dailyUsageData.DailyUsage
+                                            .TempTooltip}
+                                    </div>
+                                {/if}
+                                <!--  -->
+                            {/if}
+                            {#if activeSection == "monthly"}
+                                <div class="switch">
+                                    <button
+                                        class={usageBtnClass}
+                                        on:click={() => {
+                                            costUsageToggle("usage");
+                                        }}
+                                    >
+                                        Usage
+                                    </button>
+                                    <button
+                                        class={costBtnClass}
+                                        on:click={() => {
+                                            costUsageToggle("cost");
+                                        }}
+                                    >
+                                        Cost
+                                    </button>
+                                </div>
+                            {/if}
                         </div>
+                        <span class="chart-unit">
+                            {#if chartDisplayUnit == "usage"}
+                                {selectedMeter.UOF}
+                            {:else if chartDisplayUnit == "cost"}
+                                $
+                            {:else}
+                                {selectedMeter.UOF}
+                            {/if}
+                        </span>
                         <!-- Monthly Chart -->
                         <div id={"meter-tab1" + tab1}>
                             {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length > 0}
-                                <span class="chart-unit">
-                                    {selectedMeter.UOF}
-                                </span>
                                 <div
                                     class="chart"
                                     use:chart={renderMixChart(
@@ -451,7 +541,8 @@
                                         "1410px",
                                         400,
                                         selectedMeter.Service,
-                                        selectedMeter.UOF
+                                        selectedMeter.UOF,
+                                        chartDisplayUnit
                                     )}
                                 />
                             {/if}
@@ -473,9 +564,6 @@
                                     />
                                 {:else if selectedMeter.DAP_dkwh == "x"}
                                     <!-- Daily usage simple chart -->
-                                    <span class="chart-unit">
-                                        {selectedMeter.UOF}
-                                    </span>
                                     <div
                                         class="chart"
                                         use:chart={renderMixChart(
@@ -490,9 +578,6 @@
                                     />
                                 {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
                                     <!-- Daily usage OnPeak & OffPeak chart -->
-                                    <span class="chart-unit">
-                                        {selectedMeter.UOF}
-                                    </span>
                                     <div
                                         class="chart"
                                         use:chart={onPeakOffPeakChart(
@@ -561,7 +646,6 @@
     * {
         font-family: "Interstate";
     }
-
     #meter-header {
         display: flex;
         flex-direction: row;
@@ -595,15 +679,14 @@
     }
     #rotate-svg-false {
         cursor: pointer;
-        transform: rotate(0.25turn);
+        transform: rotate(180deg);
         transition: transform 0.2s ease-in;
     }
     #rotate-svg-true {
         cursor: pointer;
         transition: transform 0.2s ease-in;
-        transform: rotate(0.5turn);
+        // transform: rotate(180deg);
     }
-
     .table-container {
         transition: 0.3s;
         display: flex;
@@ -623,6 +706,8 @@
         flex-direction: row;
         justify-content: flex-end;
         gap: 6px;
+        margin-top: 12px;
+        align-items: center;
     }
     .options span {
         font-style: normal;
@@ -659,11 +744,9 @@
         flex: none;
         order: 0;
         flex-grow: 0;
-
         &:first-child {
             border-radius: 6px 0px 0px 0px;
         }
-
         &:last-child {
             border-radius: 0px 6px 0px 0px;
         }
@@ -686,21 +769,18 @@
     tr:hover {
         background-color: #e6eff7;
     }
-
     tr {
         &:last-child {
             td {
                 &:first-child {
                     border-radius: 0 0 0 6px;
                 }
-
                 &:last-child {
                     border-radius: 0 0 6px 0;
                 }
             }
         }
     }
-
     td {
         padding: 12px;
         border: 1px solid rgba(194, 194, 194, 0.749);
@@ -709,7 +789,6 @@
     .apexcharts-tooltip-y-group {
         display: none !important;
     }
-
     .td-value {
         display: flex;
         flex-direction: column;
@@ -735,11 +814,9 @@
     }
     .chart-unit {
         margin-left: 36px;
-        font-family: "Interstate";
         font-style: normal;
         font-weight: 300;
         font-size: 12px;
-        line-height: 14px;
         color: #005faa;
     }
     .search {
@@ -784,7 +861,6 @@
         gap: 2%;
         width: 100%;
     }
-
     #meter-btn1 {
         font-style: normal;
         font-weight: 400;
@@ -832,7 +908,6 @@
         border: 1px solid #e5e7eb;
         border-radius: 8px;
     }
-
     .information-box div {
         display: flex;
         flex-direction: column;
@@ -840,7 +915,6 @@
         gap: 8px;
         max-width: 300px;
         padding: 8px;
-
         &:first-child {
             padding-left: 0;
         }
@@ -876,7 +950,6 @@
         font-weight: 400;
         font-size: 12px;
         line-height: 14px;
-
         color: #6c6c6c;
     }
     @media screen and (max-width: 1000px) {
@@ -899,6 +972,48 @@
         #tab12 {
             display: flex;
             overflow-x: auto;
+        }
+    }
+    .tooltip-content {
+        top: 35px !important;
+        background-color: white;
+        z-index: 5;
+        border-radius: 12px;
+        padding: 16px;
+        right: 0;
+        box-shadow: 0px 10px 15px rgba(16, 24, 40, 0.1),
+            0px 4px 6px rgba(16, 24, 40, 0.1);
+        max-width: 400px;
+        &::before {
+            content: "";
+            position: absolute;
+            z-index: 0;
+            height: 10px;
+            width: 14px;
+            background-color: #005faa;
+            top: -10px;
+            /* transform: rotate(45deg); */
+            right: 110px;
+            clip-path: inset(0 0 0px 0);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+    }
+    .switch {
+        background: #e6eff7;
+        padding: 4px;
+        border-radius: 6px;
+        .sw-btn-active {
+            cursor: pointer;
+            background: white;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 6px;
+        }
+        .sw-btn-inactive {
+            cursor: pointer;
+            border: none;
+            background: unset;
+            color: #005faa;
         }
     }
 </style>
