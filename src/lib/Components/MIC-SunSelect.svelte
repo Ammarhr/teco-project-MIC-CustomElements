@@ -59,7 +59,7 @@
                         transition:slide={{ duration: 300 }}
                     >
                         {#if sunSelectObj.SunSelectValue.includes("%")}
-                            <h2 id="percentage" style="font-size: 8.5rem;">
+                            <h2 id="percentage" style="font-size: 5.5rem;">
                                 {sunSelectObj.SunSelectValue.split("%")[0]}
                                 <img
                                     src={`${$apiDomain}/micwc-external/assets/sunselectPercentage.svg`}
@@ -167,7 +167,7 @@
         font-family: "Interstate";
         font-style: normal;
         font-weight: 700;
-        font-size: 5.5rem;
+        font-size: 3.5rem;
         line-height: 106px;
         color: #005faa;
         margin: 0;

@@ -186,7 +186,6 @@
               <img
                 src={`${$apiDomain}/micwc-external/assets/${billService.IconPath}`}
                 alt=""
-                style="width: 25px;"
               />
                 {billService.Lable}
               </h3>
@@ -292,7 +291,7 @@
                               style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
                             >
                               {#if section.IconPath && section.IconPath != ""}
-                                <img src={percentageGas} alt="" />
+                                <img src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`} alt="" />
                               {/if}
                               <h4 style="font-size:{section.FontSize}px">
                                 {section.Lable}
@@ -376,7 +375,7 @@
                           style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
                         >
                           {#if section.IconPath && section.IconPath != ""}
-                            <img src={percentageGas} alt="" />
+                            <img src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`} alt="" />
                           {/if}
                           <h4 tyle="font-size:{section.FontSize}px">
                             {section.Lable}
@@ -578,6 +577,7 @@
     border-bottom: 1px solid #eaecee;
     display: grid;
     grid-template-columns: 45% auto 1fr auto;
+    padding: 10px 0;
     @media screen and (max-width: 767px) {
       justify-content: unset;
       align-items: flex-start;
@@ -822,6 +822,7 @@
   }
   #electric-charges-subtotal {
     border-top: 2px solid #bbb;
+    padding: 10px 0;
   }
   #electric-charges-subtotal p {
     font-family: "Interstate";

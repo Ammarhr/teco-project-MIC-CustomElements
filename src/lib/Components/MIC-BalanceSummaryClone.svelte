@@ -1,4 +1,4 @@
-<svelte:options tag="mic-balancesummary" />
+<svelte:options tag="mic-balancesummary-clone" />
 
 <script>
     // @ts-nocheck
@@ -11,8 +11,8 @@
         fetchAndRedirect,
         eventsDomain,
         persona,
+        passThroughServiceFetch
     } from "../../js/store";
-    
     //state
     var newElement;
     let color; // this change the charge color depend in the its value
@@ -21,7 +21,7 @@
     let totalAmmountFontSize = "64px";
     let subTotalAmmountFontSize = "32px";
     //mocking data
-    const [data, loading, error, get] = fetchstore();
+    const [data, loading, error, get] = passThroughServiceFetch();
     // trigger token existence
     onMount(() => {
         if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
@@ -89,7 +89,7 @@
     <mic-loading />
 {:else if $error}
     <!--error regarding to fetch-->
-    <mic-render-error />
+    <!-- <mic-render-error /> -->
     <!-- {:else if $generalErr == true}
     <div /> -->
 {:else if $data.html_masseges}

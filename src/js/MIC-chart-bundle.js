@@ -38,7 +38,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
         dataLabels: {
             enabled: true,
             formatter: function (/** @type {Number} */ val) {
-                return val + unit;
+                return val.toLocaleString() + unit;
             },
             offsetY: -30,
             style: {
@@ -131,12 +131,13 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
 export const renderMixChart = (data, color, width, height, service, unit, chartUnit) => {
     let filtedData;
     if (chartUnit == "cost") {
+        unit = "$"
         filtedData = data.map((results) => {
-            return results.Usage
+            return results.Cost
         })
     } else if (chartUnit == "usage") {
         filtedData = data.map((results) => {
-            return results.Cost
+            return results.Usage
         })
     } else {
         filtedData = data.map((results) => {

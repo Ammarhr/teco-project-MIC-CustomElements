@@ -42,7 +42,7 @@
                 null,
                 {
                     EventCode: "IN_Important_Messages_Close",
-                    Outcome: "",
+                    Outcome: `Number Of Messsages: ${messages.length}`,
                     Feedback: "",
                     Persona: $persona,
                 }
@@ -59,7 +59,7 @@
                     null,
                     {
                         EventCode: "IN_Important_Messages_Close",
-                        Outcome: "",
+                        Outcome: `Number Of Messsages: ${messages.length}`,
                         Feedback: "",
                         Persona: $persona,
                     }

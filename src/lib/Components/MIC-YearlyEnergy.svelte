@@ -127,7 +127,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 370px;
         max-width: calc(100% - 40px);
         padding: 20px;
         transition: 0.3s;
@@ -229,7 +228,6 @@
         color: #005faa;
     }
     .tool-tip {
-        max-width: 392px;
         height: 66px;
         font-family: "Interstate";
         font-style: italic;

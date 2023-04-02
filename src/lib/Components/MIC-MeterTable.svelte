@@ -499,7 +499,7 @@
                                 {/if}
                                 <!--  -->
                             {/if}
-                            {#if activeSection == "monthly"}
+                            {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && activeSection == "monthly"}
                                 <div class="switch">
                                     <button
                                         class={usageBtnClass}
