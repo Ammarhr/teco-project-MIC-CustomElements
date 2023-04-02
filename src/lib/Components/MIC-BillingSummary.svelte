@@ -183,25 +183,10 @@
                 id="sectiontitle"
                 style="color:{billService.Color}; font-size:{billService.FontSize}px; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
               >
-                {#if billService.ServiceType && billService.ServiceType == "Electric"}
-                  <img
-                    src={`${$apiDomain}/micwc-external/assets/electricCharge.svg`}
-                    alt=""
-                    style="width: 25px;"
-                  />
-                {:else if billService.ServiceType && billService.ServiceType == "GAS"}
-                  <img
-                    src={`${$apiDomain}/micwc-external/assets/gasCharge.svg`}
-                    alt=""
-                    style="width: 25px;"
-                  />
-                {:else if billService.ServiceType && billService.ServiceType == "Lighting"}
-                  <img
-                    src={`${$apiDomain}/micwc-external/assets/lighting.0131cc59.svg`}
-                    alt=""
-                    style="width: 25px;"
-                  />
-                {/if}
+              <img
+                src={`${$apiDomain}/micwc-external/assets/${billService.IconPath}`}
+                alt=""
+              />
                 {billService.Lable}
               </h3>
             </span>
@@ -306,7 +291,7 @@
                               style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
                             >
                               {#if section.IconPath && section.IconPath != ""}
-                                <img src={percentageGas} alt="" />
+                                <img src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`} alt="" />
                               {/if}
                               <h4 style="font-size:{section.FontSize}px">
                                 {section.Lable}
@@ -390,7 +375,7 @@
                           style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
                         >
                           {#if section.IconPath && section.IconPath != ""}
-                            <img src={percentageGas} alt="" />
+                            <img src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`} alt="" />
                           {/if}
                           <h4 tyle="font-size:{section.FontSize}px">
                             {section.Lable}
@@ -592,6 +577,7 @@
     border-bottom: 1px solid #eaecee;
     display: grid;
     grid-template-columns: 45% auto 1fr auto;
+    padding: 10px 0;
     @media screen and (max-width: 767px) {
       justify-content: unset;
       align-items: flex-start;
@@ -836,6 +822,7 @@
   }
   #electric-charges-subtotal {
     border-top: 2px solid #bbb;
+    padding: 10px 0;
   }
   #electric-charges-subtotal p {
     font-family: "Interstate";

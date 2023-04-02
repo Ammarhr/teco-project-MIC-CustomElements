@@ -10,6 +10,7 @@
         apiDomain,
         newToken,
         persona,
+        fetchRecommendations,
     } from "../../js/store";
     // import thumbsUp from "../../assets/un-filled-awesome-thumbs-up.svg";
     // import thumbsDown from "../../assets/un-filled-awesome-thumbs-down.svg";
@@ -18,7 +19,7 @@
     import { onMount } from "svelte";
     // import MicCoursel from "./MIC-Coursel.svelte";
     export let token;
-    // export let url;
+    export let body;
     export let billcontractnumber;
     let messages = [];
     let arrOfPopUp = [];
@@ -27,15 +28,23 @@
     let index = 0;
 
     //mocking data
-    const [data, loading, error, get] = fetchstore();
+    const [data, loading, error, get] = fetchRecommendations();
     const [feedbackData, feedbackLoading, feedbackError, setFeedback] =
         feedbackCall();
 
     onMount(() => {
-        if (token && token !== "" && billcontractnumber && !$data.messages) {
-            let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
+        // console.log("this is nody from recommendations: ",body);
+        if (
+            body &&
+            token &&
+            token !== "" &&
+            billcontractnumber &&
+            !$data.messages
+        ) {
+            // let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
+            let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages_New`;
             // let devUrl = "../../../data/recomendationMessages.json";
-            get(token, devUrl);
+            get(token, devUrl, body);
         }
     });
     // getting the data ready
@@ -82,9 +91,9 @@
                 }
             );
         }
-
-        let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
-        get(token, devUrl);
+        let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages_New`;
+        // let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
+        get(token, devUrl, body);
     };
     function showPopUpHandle(i, fed) {
         feedbackBolean = "";
@@ -347,7 +356,6 @@
         background-color: white;
         padding: 13px;
         border-radius: 10px;
-        max-width: 30vw;
         button {
             margin: 0 !important;
             padding: 0 !important;

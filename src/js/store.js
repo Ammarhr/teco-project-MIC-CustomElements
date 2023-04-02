@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict';
 
 import { writable, derived } from 'svelte/store';
@@ -172,7 +173,45 @@ export const fetchMonthlyUsageChart = () => {
 
     return [data, loading, error, get]
 }
+export const fetchRecommendations = () => {
+    const loading = writable(false);
+    const error = writable(false);
+    const data = writable({});
+    // generalErr.set(false)
+    const get = async (token, url, body) => {
+        loading.set(true);
+        error.set(false);
+        try {
+            if (!token) {
+                data.set({ errrorMessage: "No Token provided!" });
+                throw new Error("No Token provided!");
+            } else if (token) {
+                //* test data
+                //* real api hit with jwt token:
+                const Publishresponse = await fetch(url, {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(body),
+                });
+                // if (Publishresponse.status !== 204)  
+                data.set(await Publishresponse.json());
+            } else {
+                data.set({ errrorMessage: "Invalid Token" });
+            }
+        } catch (e) {
+            error.set(e);
+            // generalErr.set(true);
+        }
+        loading.set(false);
+    }
 
+    return [data, loading, error, get]
+}
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
     fetch(fetchUrl, {
         method: "POST",
@@ -318,4 +357,52 @@ export function reGenerateToken() {
     }
 
     return [data, loading, error, getToken]
+}
+
+
+export function passThroughServiceFetch() {
+    const loading = writable(false);
+    const error = writable(false);
+    const data = writable({});
+    // generalErr.set(false)
+    const get = async (token, url) => {
+        loading.set(true);
+        error.set(false);
+        try {
+            if (!token) {
+                data.set({ errrorMessage: "No Token provided!" });
+                throw new Error("No Token provided!");
+            } else if (token) {
+                let fetchBody = window.AddAntiForgeryToken({
+                    model: {
+                        target: url,
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: false
+                    }
+                })
+                const Publishresponse = await fetch('/InteractiveBill/GetWebComponentData', {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(fetchBody)
+                });
+                // if (Publishresponse.status !== 204)  
+                data.set(await Publishresponse.json());
+            } else {
+                data.set({ errrorMessage: "Invalid Token" });
+            }
+        } catch (e) {
+            error.set(e);
+        }
+        loading.set(false);
+    }
+
+    return [data, loading, error, get]
 }

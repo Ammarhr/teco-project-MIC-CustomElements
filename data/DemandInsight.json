@@ -6,14 +6,14 @@
       "monthly": {
         "VisibilityTab": true,
         "unit": "KWH",
-        "valueConsumption": 1358,
+        "valueConsumption": 1365465458,
         "percentageConsumption": -105,
         "valueTemp": 56,
         "percentageTemp": 55,
         "y": {
           "data": [
-            64,
-            34
+            522525555,
+            341115
           ]
         },
         "x": [
@@ -25,7 +25,7 @@
         "PreviousFactorValue": 20,
         "PreviousFactorDate": "FEP 22",
         "LoadFactorArrowComparison": 50,
-        "CurrentDemandValue": 920,
+        "CurrentDemandValue": 925000,
         "DemandUnit": "KW"
       },
       "yearly": {

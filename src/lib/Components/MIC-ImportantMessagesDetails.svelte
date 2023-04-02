@@ -42,7 +42,7 @@
                 null,
                 {
                     EventCode: "IN_Important_Messages_Close",
-                    Outcome: "",
+                    Outcome: `Number Of Messsages: ${messages.length}`,
                     Feedback: "",
                     Persona: $persona,
                 }
@@ -59,7 +59,7 @@
                     null,
                     {
                         EventCode: "IN_Important_Messages_Close",
-                        Outcome: "",
+                        Outcome: `Number Of Messsages: ${messages.length}`,
                         Feedback: "",
                         Persona: $persona,
                     }
@@ -159,10 +159,6 @@
         overflow-y: auto;
         max-height: 75%;
         padding: 20px 20px 25px 20px;
-        // width: 80%;
-        @media screen and (max-width: 450px) {
-            width: 80%;
-        }
         button {
             background: none;
             border: none;
@@ -243,7 +239,11 @@
         height: 1.5rem;
     }
     p {
-        display: contents;
+        // display: contents;
+        margin: 0;
+        @media screen and (max-width: 480px) {
+            font-size: 18px !important;
+        }
     }
     #unreaded-msgs {
         position: absolute;

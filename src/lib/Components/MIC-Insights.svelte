@@ -103,6 +103,7 @@
   };
   ////////////////////////
   let newArr;
+  let arrayOfbody = [];
   $: if (
     $data.services &&
     $data.services.length > 0 &&
@@ -116,6 +117,23 @@
       });
       sunSelectArray.push(sunArrayVal);
     }
+    // console.log("this is body array: ", arrayOfbody);
+  }
+  
+  /// data for recommendation:
+  $: if ($data.services && $data.services.length > 0) {
+    for (let i = 0; i < $data.services.length; i++) {
+      let serviceObj = $data.services[i];
+      arrayOfbody.push({
+        TempPreviousValue: serviceObj.monthly?.percentageTemp || 0,
+        TempLastyearValue: serviceObj.yearly?.percentageTemp || 0,
+        BillingClass: $data.services[i].ZInstallBillClass,
+        Division: $data.services[i].serviceName,
+        MonthlyUsageConsumption: serviceObj.monthly?.percentageConsumption || 0,
+        YearlyUsageConsumption: serviceObj.yearly?.percentageConsumption || 0,
+      });
+    }
+    // console.log("this is body array: ", arrayOfbody);
   }
 
   $: if ($data.services && !tabsToggleArr[0]) {
@@ -257,7 +275,7 @@
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
                     <p class="insights-value">
-                      {insightsService?.yearly?.valueConsumption}
+                      {insightsService?.yearly?.valueConsumption.toLocaleString()}
                       {insightsService?.yearly?.unit}
                     </p>
                     {#if insightsService.yearly.percentageConsumption > 0}
@@ -326,7 +344,6 @@
                         >
                           <img
                             src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
-                            style="rotate:calc(180deg)"
                             class="arrow"
                             alt="arrow"
                           />{Math.abs(insightsService?.yearly?.percentageTemp) +
@@ -364,7 +381,7 @@
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
                     <p class="insights-value">
-                      {insightsService?.yearly?.CurrentDemandValue}
+                      {insightsService?.yearly?.CurrentDemandValue.toLocaleString()}
                       {insightsService?.yearly?.DemandUnit}
                     </p>
                     {#if insightsService.yearly.LoadFactorArrowComparison > 0}
@@ -445,7 +462,7 @@
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
                     <p class="insights-value">
-                      {insightsService?.monthly?.valueConsumption}
+                      {insightsService?.monthly?.valueConsumption.toLocaleString()}
                       {insightsService?.monthly?.unit}
                     </p>
                     {#if insightsService.monthly.percentageConsumption > 0}
@@ -504,8 +521,9 @@
                             src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
                             class="arrow"
                             alt="arrow"
-                          />{Math.abs(insightsService?.monthly?.percentageTemp) +
-                            "°"}</span
+                          />{Math.abs(
+                            insightsService?.monthly?.percentageTemp
+                          ) + "°"}</span
                         >
                       {:else if insightsService.monthly.percentageTemp < 0}
                         <span
@@ -517,8 +535,9 @@
                             style="rotate:calc(180deg)"
                             class="arrow"
                             alt="arrow"
-                          />{Math.abs(insightsService?.monthly?.percentageTemp) +
-                            "°"}</span
+                          />{Math.abs(
+                            insightsService?.monthly?.percentageTemp
+                          ) + "°"}</span
                         >
                       {/if}
                     </div>
@@ -552,7 +571,7 @@
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
                     <p class="insights-value">
-                      {insightsService?.monthly?.CurrentDemandValue}
+                      {insightsService?.monthly?.CurrentDemandValue.toLocaleString()}
                       {insightsService?.monthly?.DemandUnit}
                     </p>
                     {#if insightsService.monthly.LoadFactorArrowComparison > 0}
@@ -598,17 +617,30 @@
               {/if}
             </div>
           {/if}
-          {#if $billNumber === $latestBill && insightsService.BillContractNo && recoToken == $apiToken}
+          {#if $billNumber === $latestBill && arrayOfbody && arrayOfbody.length > 0 && recoToken == $apiToken && insightsService.BillContractNo}
+            <!-- <MicInsightsRecomendation
+              token={$apiToken}
+              url={$apiDomain}
+              billcontractnumber={insightsService.BillContractNo}
+            /> -->
             <mic-recomendation
               token={$apiToken}
               url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
+              body={arrayOfbody[i]}
             />
-          {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo}
+            <!-- body={} -->
+          {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo && arrayOfbody.length > 0}
+            <!-- <MicInsightsRecomendation
+              token={$newToken.token}
+              url={$apiDomain}
+              billcontractnumber={insightsService.BillContractNo}
+            /> -->
             <mic-recomendation
               token={$newToken.token}
               url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
+              body={arrayOfbody[i]}
             />
           {/if}
         </div>
