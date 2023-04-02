@@ -11,7 +11,7 @@
         fetchAndRedirect,
         eventsDomain,
         persona,
-        passThroughServiceFetch
+        passThroughServiceFetch,
     } from "../../js/store";
     //state
     var newElement;
@@ -33,7 +33,13 @@
             tries--;
         }
     });
-
+    $: $data = $data;
+    $: if ($data) {
+        console.log("this the data from data:", $data);
+    }
+    $: if ($data && $data.html_masseges) {
+        console.log($data.html_masseges, "html message from response");
+    }
     $: if ($persona && $persona == "Agent") {
         btnStatus = "disable";
     } else {

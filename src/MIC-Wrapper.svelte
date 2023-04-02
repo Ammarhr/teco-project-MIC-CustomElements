@@ -17,7 +17,7 @@
   import MicToolTipDetails from "./lib/Components/MIC-ToolTipDetails.svelte";
   import MicPagination from "./lib/Components/mic-pagination.svelte";
   import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
-  import MicBalanceSummaryTest from "./lib/Components/MIC-BalanceSummaryClone.svelte";
+  import MicBalanceSummaryClone from "./lib/Components/MIC-BalanceSummaryClone.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -60,13 +60,14 @@
 
 {#if token && domain && eventdomain && $generalErr !== true}
   <div class="wrapper">
-    <mic-headerinformation />
+    <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
         <mic-balancesummary />
         <!-- <MicBalanceSummary /> -->
-        <!-- <mic-balancesummary-clone />   -->
+        <mic-balancesummary-clone />  
+        <!-- <MicBalanceSummaryClone /> -->
       </div>
       <div class="messages">
         <mic-importentmessage />

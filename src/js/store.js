@@ -366,6 +366,8 @@ export function passThroughServiceFetch() {
     const data = writable({});
     // generalErr.set(false)
     const get = async (token, url) => {
+        console.log("here start fetch");
+
         loading.set(true);
         error.set(false);
         try {
@@ -373,6 +375,7 @@ export function passThroughServiceFetch() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
+                // console.log(token, "this is the token")
                 let fetchBody = window.AddAntiForgeryToken({
                     model: {
                         target: url,
@@ -383,6 +386,7 @@ export function passThroughServiceFetch() {
                         body: false
                     }
                 })
+                // console.log("before calling");
                 const Publishresponse = await fetch('/InteractiveBill/GetWebComponentData', {
                     method: 'POST',
                     cache: 'no-cache',
@@ -393,13 +397,20 @@ export function passThroughServiceFetch() {
                     },
                     body: JSON.stringify(fetchBody)
                 });
-                // if (Publishresponse.status !== 204)  
-                data.set(await Publishresponse.json());
+                // console.log("after calling");
+                // console.log("response: ", await Publishresponse);
+                let stringResponse = await Publishresponse.text();
+                // console.log("this is the string response:", stringResponse);
+                let parseResponse = JSON.parse(stringResponse);
+                // console.log("this is the parsed response:", await parseResponse);
+                data.set(await parseResponse.json());
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
+                console.log("we have error regarding to parse!!!!");
             }
         } catch (e) {
             error.set(e);
+            console.log("hello from error");
         }
         loading.set(false);
     }

@@ -1,366 +1,433 @@
 {
-    "services": [
+    "Sections": [
         {
-            "Lable": "Electric Service",
-            "Value": "",
-            "ToolTip": "",
-            "Order": 1,
-            "Color": "",
-            "IconPath": "22",
-            "FontSize": 0,
+            "Order": 2,
+            "Lable": "Electric Charges",
+            "FontSize": 30,
+            "IconPath": "electricCharge.svg",
+            "Color": "#00294A",
             "IsItalic": false,
+            "IsBreakdown": false,
             "SectionType": "Service",
             "ServiceType": "Electric",
-            "IsBreakdown": false,
+            "URL": "https://www.tampaelectric.com/residential/billing-options/understanding-your-bill/",
             "Section_Level1s": [
                 {
-                    "Lable": "",
-                    "Value": "5100491072",
-                    "ToolTip": "hello",
                     "Order": 1,
-                    "Color": "",
-                    "IconPath": "",
+                    "Value": "5101915013",
                     "FontSize": 0,
                     "IsItalic": false,
-                    "SectionType": "Config",
-                    "IsBreakdown": false
-                },
-                {
-                    "Lable": "",
-                    "Order": 2,
-                    "FontSize": 0,
-                    "IsItalic": false,
-                    "SectionType": "Charge_Group",
-                    "IsBreakdown": true,
-                    "Section_Level2s": [
-                        {
-                            "Value": "First 1,000 kWh",
-                            "Order": 1,
-                            "FontSize": 0,
-                            "IsItalic": false,
-                            "SectionType": "Charge",
-                            "IsBreakdown": true
-                        },
-                        {
-                            "Value": "1,000 kWh",
-                            "Order": 2,
-                            "FontSize": 0,
-                            "IsItalic": true,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        },
-                        {
-                            "Value": "@ $0.05674/kWh",
-                            "Order": 3,
-                            "FontSize": 0,
-                            "IsItalic": true,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        },
-                        {
-                            "Value": "$56.74",
-                            "Order": 4,
-                            "FontSize": 0,
-                            "IsItalic": false,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        }
-                    ]
-                },
-                {
-                    "Lable": "",
-                    "Order": 2,
-                    "FontSize": 0,
-                    "IsItalic": false,
-                    "SectionType": "Charge_Group",
-                    "IsBreakdown": true,
-                    "Section_Level2s": [
-                        {
-                            "Value": "Basic Service Charge",
-                            "Order": 1,
-                            "tooltip": "545",
-                            "FontSize": 0,
-                            "IsItalic": false,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        },
-                        {
-                            "Value": "$15.12",
-                            "Order": 4,
-                            "FontSize": 0,
-                            "IsItalic": false,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        }
-                    ]
-                },
-                {
-                    "Lable": "",
-                    "Order": 2,
-                    "FontSize": 0,
-                    "IsItalic": false,
-                    "SectionType": "Charge_Group",
                     "IsBreakdown": false,
+                    "SectionType": "Config"
+                },
+                {
+                    "Order": 2,
+                    "FontSize": 0,
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge_Group",
                     "Section_Level2s": [
                         {
+                            "Order": 1,
+                            "Value": "Daily Basic Service Charge",
+                            "FontSize": 20,
+                            "Color": "#000000",
+                            "IsItalic": false,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "400"
+                        },
+                        {
+                            "Order": 2,
+                            "Value": "29 days",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
+                            "IsItalic": true,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "300"
+                        },
+                        {
+                            "Order": 3,
+                            "Value": "@ $0.70000",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
+                            "IsItalic": true,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "300"
+                        },
+                        {
+                            "Order": 4,
+                            "Value": "$20.30",
+                            "FontSize": 20,
+                            "Color": "#000000",
+                            "IsItalic": false,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "400"
+                        }
+                    ]
+                },
+                {
+                    "Order": 2,
+                    "FontSize": 0,
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge_Group",
+                    "Section_Level2s": [
+                        {
+                            "Order": 1,
                             "Value": "Energy Charge",
-                            "Order": 1,
-                            "FontSize": 0,
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         },
                         {
-                            "Value": "$56.74",
-                            "Order": 4,
-                            "FontSize": 0,
-                            "IsItalic": false,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        }
-                    ]
-                },
-                {
-                    "Lable": "",
-                    "Order": 2,
-                    "FontSize": 0,
-                    "IsItalic": false,
-                    "SectionType": "Charge_Group",
-                    "IsBreakdown": false,
-                    "Section_Level2s": [
-                        {
-                            "Value": "First 1,000 kWh",
-                            "Order": 1,
-                            "FontSize": 0,
-                            "IsItalic": false,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        },
-                        {
-                            "Value": "1,000 kWh",
                             "Order": 2,
-                            "FontSize": 0,
+                            "Value": "769 kWh",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
                             "IsItalic": true,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "300"
                         },
                         {
-                            "Value": "@ $0.05674/kWh",
                             "Order": 3,
-                            "FontSize": 0,
+                            "Value": "@ $0.06196/kWh",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
                             "IsItalic": true,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "300"
                         },
                         {
-                            "Value": "$56.74",
                             "Order": 4,
-                            "FontSize": 0,
+                            "Value": "$47.65",
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         }
                     ]
                 },
                 {
-                    "Lable": "",
                     "Order": 2,
                     "FontSize": 0,
                     "IsItalic": false,
-                    "SectionType": "Charge_Group",
                     "IsBreakdown": false,
+                    "SectionType": "Charge_Group",
                     "Section_Level2s": [
                         {
-                            "Value": "Above 1,000 kWh",
                             "Order": 1,
-                            "FontSize": 0,
-                            "IsItalic": false,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        },
-                        {
-                            "Value": "434 kWh",
-                            "Order": 2,
-                            "FontSize": 0,
-                            "IsItalic": true,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        },
-                        {
-                            "Value": "@ $0.06674/kWh",
-                            "Order": 3,
-                            "FontSize": 0,
-                            "IsItalic": true,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        },
-                        {
-                            "Value": "$28.97",
-                            "Order": 4,
-                            "FontSize": 0,
-                            "IsItalic": false,
-                            "SectionType": "Charge",
-                            "IsBreakdown": false
-                        }
-                    ]
-                },
-                {
-                    "Lable": "",
-                    "Order": 2,
-                    "FontSize": 0,
-                    "IsItalic": false,
-                    "SectionType": "Charge_Group",
-                    "IsBreakdown": false,
-                    "Section_Level2s": [
-                        {
                             "Value": "Fuel Charge",
-                            "Order": 1,
-                            "FontSize": 0,
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         },
                         {
-                            "Value": "717 kWh",
                             "Order": 2,
-                            "FontSize": 0,
+                            "Value": "769 kWh",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
                             "IsItalic": true,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "300"
                         },
                         {
-                            "Value": "@ $0.02913/kWh",
                             "Order": 3,
-                            "FontSize": 0,
+                            "Value": "@ $0.03791/kWh",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
                             "IsItalic": true,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "300"
                         },
                         {
-                            "Value": "$20.89",
                             "Order": 4,
-                            "FontSize": 0,
+                            "Value": "$29.15",
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         }
                     ]
                 },
                 {
-                    "Lable": "",
                     "Order": 2,
                     "FontSize": 0,
                     "IsItalic": false,
-                    "SectionType": "Charge_Group",
                     "IsBreakdown": false,
+                    "SectionType": "Charge_Group",
                     "Section_Level2s": [
                         {
-                            "Value": "Sun Select Charge",
                             "Order": 1,
-                            "FontSize": 0,
+                            "Value": "Storm Protection Charge",
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         },
                         {
-                            "Value": "717 kWh",
                             "Order": 2,
-                            "FontSize": 0,
+                            "Value": "769 kWh",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
                             "IsItalic": true,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "300"
                         },
                         {
-                            "Value": "@ $0.06300/kWh",
                             "Order": 3,
-                            "FontSize": 0,
+                            "Value": "@ $0.00329/kWh",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
                             "IsItalic": true,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "300"
                         },
                         {
-                            "Value": "$45.17",
                             "Order": 4,
-                            "FontSize": 0,
+                            "Value": "$2.53",
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         }
                     ]
                 },
                 {
-                    "Lable": "",
                     "Order": 2,
                     "FontSize": 0,
                     "IsItalic": false,
-                    "SectionType": "Charge_Group",
                     "IsBreakdown": false,
+                    "SectionType": "Charge_Group",
                     "Section_Level2s": [
                         {
+                            "Order": 1,
+                            "Value": "Clean Energy Transition Mechanism",
+                            "FontSize": 20,
+                            "Color": "#000000",
+                            "IsItalic": false,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "400"
+                        },
+                        {
+                            "Order": 2,
+                            "Value": "769 kWh",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
+                            "IsItalic": true,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "300"
+                        },
+                        {
+                            "Order": 3,
+                            "Value": "@ $0.00441/kWh",
+                            "FontSize": 18,
+                            "Color": "#005FAA",
+                            "IsItalic": true,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "300"
+                        },
+                        {
+                            "Order": 4,
+                            "Value": "$3.39",
+                            "FontSize": 20,
+                            "Color": "#000000",
+                            "IsItalic": false,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "400"
+                        }
+                    ]
+                },
+                {
+                    "Order": 2,
+                    "FontSize": 0,
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge_Group",
+                    "Section_Level2s": [
+                        {
+                            "Order": 1,
                             "Value": "Florida Gross Receipt Tax",
-                            "Order": 1,
-                            "FontSize": 0,
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         },
                         {
-                            "Value": "$4.28",
                             "Order": 4,
-                            "FontSize": 0,
+                            "Value": "$2.64",
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         }
                     ]
                 },
                 {
-                    "Lable": "Electric Charges Subtotal",
-                    "Value": "$171.17",
                     "Order": 3,
-                    "FontSize": 0,
+                    "Lable": "Electric Service Cost",
+                    "Value": "$105.66",
+                    "FontSize": 20,
+                    "Color": "#005FAA",
                     "IsItalic": false,
-                    "SectionType": "SubTotal",
-                    "IsBreakdown": false
+                    "IsBreakdown": false,
+                    "SectionType": "Total",
+                    "FontWeight": "400"
                 },
                 {
-                    "Lable": "Taxes & Other Fees",
-                    "Order": 2,
-                    "FontSize": 24,
-                    "IsItalic": false,
-                    "SectionType": "Charge_Group",
-                    "IsBreakdown": false,
+                    "Order": 6,
+                    "Lable": "Other Fees & Charges",
+                    "FontSize": 28,
                     "Color": "#5EB0F4",
-                    "IconPath": "6354",
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "CustomeSection",
                     "Section_Level2s": [
                         {
-                            "Value": "Florida Gross Receipt Tax",
                             "Order": 1,
                             "FontSize": 0,
                             "IsItalic": false,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge_Group",
+                            "Section_Level3s": [
+                                {
+                                    "Order": 1,
+                                    "Value": "Electric Late Payment Fee",
+                                    "FontSize": 20,
+                                    "Color": "#000000",
+                                    "IsItalic": false,
+                                    "IsBreakdown": false,
+                                    "SectionType": "Charge",
+                                    "FontWeight": "400"
+                                },
+                                {
+                                    "Order": 4,
+                                    "Value": "$5.00",
+                                    "FontSize": 20,
+                                    "Color": "#000000",
+                                    "IsItalic": false,
+                                    "IsBreakdown": false,
+                                    "SectionType": "Charge",
+                                    "FontWeight": "400"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Order": 7,
+                    "Lable": "Total Other Fees and Charges",
+                    "Value": "$5.00",
+                    "FontSize": 20,
+                    "Color": "#005FAA",
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Total",
+                    "FontWeight": "400"
+                },
+                {
+                    "Order": 12,
+                    "FontSize": 0,
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge_Group",
+                    "Section_Level2s": [
+                        {
+                            "Order": 1,
+                            "Value": "Budget Billing Amount",
+                            "ToolTip": "test tooltip",
+                            "FontSize": 20,
+                            "Color": "#000000",
+                            "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
                         },
                         {
-                            "Value": "$4.28",
                             "Order": 4,
-                            "FontSize": 0,
+                            "Value": "$74.00",
+                            "FontSize": 20,
+                            "Color": "#000000",
                             "IsItalic": false,
+                            "IsBreakdown": false,
                             "SectionType": "Charge",
-                            "IsBreakdown": false
+                            "FontWeight": "400"
+                        }
+                    ]
+                },
+                {
+                    "Order": 13,
+                    "FontSize": 0,
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge_Group",
+                    "Section_Level2s": [
+                        {
+                            "Order": 1,
+                            "Value": "   Year-To-Date Deferred Balance",
+                            "ToolTip": "Year-To-Date Deferred Balance",
+                            "FontSize": 20,
+                            "Color": "#000000",
+                            "IsItalic": false,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "300"
+                        },
+                        {
+                            "Order": 4,
+                            "Value": "76.95",
+                            "FontSize": 20,
+                            "Color": "#000000",
+                            "IsItalic": false,
+                            "IsBreakdown": false,
+                            "SectionType": "Charge",
+                            "FontWeight": "300"
                         }
                     ]
                 }
             ]
+        },
+        {
+            "Order": 3,
+            "Lable": "Total Current Month's Charges",
+            "Value": "$79.00",
+            "FontSize": 35,
+            "Color": "#005FAA",
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "InvoiceTotal",
+            "FontWeight": "400"
         }
-    ],
-    "total": {
-        "Lable": "Total Current Charges",
-        "Value": "$198.97",
-        "Order": 2,
-        "FontSize": 0,
-        "IsItalic": false,
-        "SectionType": "Total",
-        "IsBreakdown": false
-    }
+    ]
 }

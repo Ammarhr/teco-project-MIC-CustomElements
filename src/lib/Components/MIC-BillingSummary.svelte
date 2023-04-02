@@ -37,7 +37,7 @@
       get(
         $apiToken,
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-        // "../../data/ChargeDetails.json"
+        // "../../data/BillingSummary.json"
       );
     }
     refreshToken = $apiToken;
@@ -183,10 +183,10 @@
                 id="sectiontitle"
                 style="color:{billService.Color}; font-size:{billService.FontSize}px; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
               >
-              <img
-                src={`${$apiDomain}/micwc-external/assets/${billService.IconPath}`}
-                alt=""
-              />
+                <img
+                  src={`${$apiDomain}/micwc-external/assets/${billService.IconPath}`}
+                  alt=""
+                />
                 {billService.Lable}
               </h3>
             </span>
@@ -225,13 +225,17 @@
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
                                 <div class={"level" + level2Obj.Order}>
-                                  {level2Obj.Value}
+                                  <p
+                                    style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                                  >
+                                    {level2Obj.Value}
+                                  </p>
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <!--  src="{toolTip}" -->
                                       <!-- src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`} -->
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        src={toolTip}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -291,7 +295,10 @@
                               style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
                             >
                               {#if section.IconPath && section.IconPath != ""}
-                                <img src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`} alt="" />
+                                <img
+                                  src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`}
+                                  alt=""
+                                />
                               {/if}
                               <h4 style="font-size:{section.FontSize}px">
                                 {section.Lable}
@@ -307,17 +314,21 @@
                                 <div class={"level" + level2Obj.Order}>
                                   {#if level2Obj.Value && level2Obj.Value[0] == " "}
                                     <p
-                                      style="padding-left: 6px; margin:0; display:block"
+                                      style="padding-left: 16px; margin:0; display:block;font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight} "
                                     >
                                       {level2Obj.Value.trim()}
                                     </p>
                                   {:else}
-                                    {level2Obj.Value}
+                                    <p
+                                      style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
+                                    >
+                                      {level2Obj.Value}
+                                    </p>
                                   {/if}
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        src={toolTip}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -375,7 +386,10 @@
                           style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
                         >
                           {#if section.IconPath && section.IconPath != ""}
-                            <img src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`} alt="" />
+                            <img
+                              src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`}
+                              alt=""
+                            />
                           {/if}
                           <h4 tyle="font-size:{section.FontSize}px">
                             {section.Lable}
@@ -388,12 +402,16 @@
                             {#if level3Obj.SectionType == "Charge"}
                               {#if level3Obj.Order == 1}
                                 <div class={"level" + level3Obj.Order}>
-                                  {level3Obj.Value}
+                                  <p
+                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                  >
+                                    {level3Obj.Value}
+                                  </p>
                                   {#if level3Obj.tooltip && level3Obj.tooltip != ""}
                                     <div class="tooltip-icon">
                                       <!-- src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`} -->
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        src={toolTip}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -511,9 +529,6 @@
     margin: 0;
   }
   .tooltip-icon {
-    margin-top: 3px;
-    margin-left: 3px;
-    display:inline-block;
     cursor: pointer;
   }
   .toolTipToggle {
@@ -735,6 +750,9 @@
     font-size: 12px;
   }
   .level1 {
+    display: flex;
+    align-items: start;
+    gap: 8px;
     font-weight: 400;
     font-size: 20px;
     color: #000000;
