@@ -11,7 +11,7 @@
         fetchAndRedirect,
         eventsDomain,
         persona,
-        passThroughServiceFetch
+        passThroughServiceFetch,
     } from "../../js/store";
     //state
     var newElement;

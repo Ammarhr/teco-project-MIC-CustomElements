@@ -1,16 +1,13 @@
 {
-    "totalAmmount":"59.3",
-    "dueDate":"Jan 25, 2022",
-    "html_masseges":[
-       {
-          "message":"<h6 style=\"width:90%; height:44px; margin:5px; font-style:normal; font-weight:400; font-size:2.1rem; line-height:44px; color:#da1e28;\">Past Due</h6> <span style=\"width: 90%;height: 60px;font-style: normal;font-weight: 300;font-size: 20px;line-height: 30px; color: #000000; flex-grow: 0;\">Your bill is past due. You owe 842.76.</span>"
-       },
-       {
-          "message":"<span style=\"font-family: Lucida Sans Unicode,Lucida Grande,sans-serif; width: 90%;height: 60px;font-style: normal;font-weight: 400;font-size: 20px;line-height: 30px; color: #000000; flex-grow: 0;\">Your previous bill of 842.76 is past due on Dec. Jan 25, 2022</span>"
-       }
-    ],
-    "pay_now_link":"https://pay.teco.com",
-    "title":"Total Amount Due",
-    "postive_color":"#005faa",
-    "negative_color":"#24A148"
- }
+   "totalAmmount": "0.00",
+   "dueDate": "May 25, 2017",
+   "html_masseges": [
+      {
+         "message": "<p><span style=\"font-size:20px\">Your previous payment of <strong data-renderer-mark=\"true\">$</strong><strong>27.44</strong> was received on<strong> Apr 25, 2017</strong></span></p>\n"
+      }
+   ],
+   "pay_now_link": "https://dev.account.tecoenergy.com/Payment/PayNow",
+   "title": "Total Amount Due",
+   "postive_color": "#005faa",
+   "negative_color": "#24A148"
+}
