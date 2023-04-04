@@ -415,6 +415,17 @@
                             "FontWeight": "300"
                         }
                     ]
+                },
+                {
+                    "Order": 14,
+                    "Lable": "Total Current Month's Elictric Charges",
+                    "Value": "$27.00",
+                    "IsBreakdown": false,
+                    "SectionType": "ServiceTotal",
+                    "Color": "#00294a",
+                    "IsItalic": false,
+                    "FontSize": 35,
+                    "FontWeight": "400"
                 }
             ]
         },

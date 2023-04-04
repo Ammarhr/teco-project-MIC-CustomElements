@@ -325,31 +325,43 @@
                       <p class="insights-value">
                         {insightsService?.yearly?.valueTemp + "°"}
                       </p>
-                      {#if insightsService.yearly.percentageTemp >= 0}
-                        <span
-                          class="red"
-                          style="background: #E6EFF7; border: 1px solid #005FAA;"
-                        >
-                          <img
-                            src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
-                            class="arrow"
-                            alt="arrow"
-                          />{Math.abs(insightsService?.yearly?.percentageTemp) +
-                            "°"}</span
-                        >
-                      {:else if insightsService.yearly.percentageTemp < 0}
-                        <span
-                          class="red"
-                          style="background: rgba(36, 161, 72, 0.03); border: 1px solid rgb(36, 161, 72);"
-                        >
-                          <img
-                            src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
-                            class="arrow"
-                            alt="arrow"
-                          />{Math.abs(insightsService?.yearly?.percentageTemp) +
-                            "°"}</span
-                        >
-                      {/if}
+                      {#if insightsService.yearly.percentageTemp > 0}
+                      <span
+                        class="red"
+                        style="background: #E6EFF7; border: 1px solid #005FAA"
+                      >
+                        <img
+                          src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
+                          class="arrow"
+                          alt="arrow"
+                        />{Math.abs(
+                          insightsService?.yearly?.percentageTemp
+                        ) + "°"}</span
+                      >
+                    {:else if insightsService.yearly.percentageTemp < 0}
+                      <span
+                        class="red"
+                        style="background: #E6EFF7; border: 1px solid #005FAA"
+                      >
+                        <img
+                          src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
+                          style="rotate:calc(180deg)"
+                          class="arrow"
+                          alt="arrow"
+                        />{Math.abs(
+                          insightsService?.yearly?.percentageTemp
+                        ) + "°"}</span
+                      >
+                      {:else if insightsService.yearly.percentageTemp == 0}
+                      <span
+                        class="red"
+                        style="background: #E6EFF7; border: 1px solid #005FAA; width:64px"
+                      >{Math.abs(
+                          insightsService?.yearly?.percentageTemp
+                        ) + "°"}</span
+                      >
+                      
+                    {/if}
                     </div>
                   </div>
                 {/if}
@@ -362,7 +374,7 @@
                       use:chart={renderRadialBar(
                         [insightsService?.yearly?.PreviousFactorValue],
                         [insightsService?.yearly?.PreviousFactorDate],
-                        250,
+                        240,
                         "#005FAA"
                       )}
                     />
@@ -372,7 +384,7 @@
                     use:chart={renderRadialBar(
                       [insightsService?.yearly?.CurrentFactorValue],
                       [insightsService?.yearly?.CurrentFactorDate],
-                      250,
+                      240,
                       "#B1DBFD"
                     )}
                   />
@@ -512,10 +524,10 @@
                       <p class="insights-value">
                         {insightsService?.monthly?.valueTemp + "°"}
                       </p>
-                      {#if insightsService.monthly.percentageTemp >= 0}
+                      {#if insightsService.monthly.percentageTemp > 0}
                         <span
                           class="red"
-                          style="background: #E6EFF7; border: 1px solid #005FAA;"
+                          style="background: #E6EFF7; border: 1px solid #005FAA"
                         >
                           <img
                             src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
@@ -528,10 +540,10 @@
                       {:else if insightsService.monthly.percentageTemp < 0}
                         <span
                           class="red"
-                          style="background: rgba(36, 161, 72, 0.03); border: 1px solid rgb(36, 161, 72);"
+                          style="background: #E6EFF7; border: 1px solid #005FAA"
                         >
                           <img
-                            src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
+                            src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
                             style="rotate:calc(180deg)"
                             class="arrow"
                             alt="arrow"
@@ -539,6 +551,15 @@
                             insightsService?.monthly?.percentageTemp
                           ) + "°"}</span
                         >
+                        {:else if insightsService.monthly.percentageTemp == 0}
+                        <span
+                          class="red"
+                          style="background: #E6EFF7; border: 1px solid #005FAA; width:64px"
+                        >{Math.abs(
+                            insightsService?.monthly?.percentageTemp
+                          ) + "°"}</span
+                        >
+                        
                       {/if}
                     </div>
                   </div>
@@ -552,7 +573,7 @@
                       use:chart={renderRadialBar(
                         [insightsService?.monthly?.PreviousFactorValue],
                         [insightsService?.monthly?.PreviousFactorDate],
-                        250,
+                        240,
                         "#005FAA"
                       )}
                     />
@@ -562,7 +583,7 @@
                     use:chart={renderRadialBar(
                       [insightsService?.monthly?.CurrentFactorValue],
                       [insightsService?.monthly?.CurrentFactorDate],
-                      250,
+                      240,
                       "#B1DBFD"
                     )}
                   />
@@ -591,7 +612,7 @@
                     {:else if insightsService.monthly.LoadFactorArrowComparison < 0}
                       <span
                         class={avgClass}
-                        style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
+                        style="background: #E6EFF7; border: 1px solid #005FAA"
                       >
                         <img
                           src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}

@@ -366,7 +366,7 @@ export function passThroughServiceFetch() {
     const data = writable({});
     // generalErr.set(false)
     const get = async (token, url) => {
-        console.log("here start fetch");
+        // console.log("here start fetch");
 
         loading.set(true);
         error.set(false);
@@ -387,7 +387,7 @@ export function passThroughServiceFetch() {
                     }
                 })
                 // console.log("before calling");
-                const Publishresponse = await fetch('/InteractiveBill/GetWebComponentData', {
+                const Publishresponse = await fetch("/InteractiveBill/GetWebComponentData", {
                     method: 'POST',
                     cache: 'no-cache',
                     credentials: 'same-origin',
@@ -397,20 +397,20 @@ export function passThroughServiceFetch() {
                     },
                     body: JSON.stringify(fetchBody)
                 });
-                // console.log("after calling");
-                // console.log("response: ", await Publishresponse);
+                // console.log("response: ",await Publishresponse.json());
                 let stringResponse = await Publishresponse.text();
                 // console.log("this is the string response:", stringResponse);
-                let parseResponse = JSON.parse(stringResponse);
-                // console.log("this is the parsed response:", await parseResponse);
-                data.set(await parseResponse.json());
+                let parseResponse =  JSON.parse(stringResponse);
+                let secondParser = JSON.parse(parseResponse);
+                // console.log("this is the parsed response:", parseResponse);
+                data.set(secondParser);
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
-                console.log("we have error regarding to parse!!!!");
+                // console.log("we have error regarding to parse!!!!");
             }
         } catch (e) {
             error.set(e);
-            console.log("hello from error");
+            // console.log("hello from error");
         }
         loading.set(false);
     }

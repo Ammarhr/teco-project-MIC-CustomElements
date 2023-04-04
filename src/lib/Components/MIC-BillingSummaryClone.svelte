@@ -1,4 +1,4 @@
-<svelte:options tag="mic-billingsummary" />
+<svelte:options tag="mic-billingsummary-clone" />
 
 <script>
   // @ts-nocheck
@@ -19,12 +19,13 @@
     persona,
     billNumber,
     latestBill,
+    passThroughServiceFetch,
   } from "../../js/store";
 
   let toggleArray = [];
 
   //mocking data
-  const [data, loading, error, get] = fetchstore();
+  const [data, loading, error, get] = passThroughServiceFetch();
 
   ///////// acordion functionality
   import { onMount } from "svelte";
