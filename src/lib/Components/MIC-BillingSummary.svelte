@@ -3,11 +3,7 @@
 <script>
   // @ts-nocheck
   //svg imports
-  import toggle from "../../assets/cr.svg";
-  import breakdownToggle from "../../assets/breakdown-drop-icon.svg";
-  import electricityIcon from "../../assets/Iconawesome-bolt.svg";
-  import percentageGas from "../../assets/gas-percentage.svg";
-  import toolTip from "../../assets/tool-tip-icon.svg";
+
   import {
     fetchstore,
     apiDomain,
@@ -39,7 +35,7 @@
       get(
         $apiToken,
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-        // "../../data/BillingSummary.json"
+        // "../../data/ChargeDetails.json"
       );
     }
     refreshToken = $apiToken;
@@ -165,7 +161,7 @@
 {:else if $data && $data.Sections && toggleArray && billsObjectsArray}
   <div class="billing-container">
     {#each $data.Sections as billService, i}
-      {#if billService.SectionType == "Service"}
+      {#if billService.SectionType == "Service" || billService.SectionType == "AccountLevel"}
         <div class="card">
           <div
             id="bills-header"
@@ -174,7 +170,7 @@
           >
             <h4 id="title">BILLING SUMMARY</h4>
             <img
-              src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
+              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
               alt=""
               id={"rotate-svg-" + !toggleArray[i]}
             />
@@ -186,7 +182,7 @@
                 style="color:{billService.Color}; font-size:{billService.FontSize}px; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
               >
                 <img
-                  src={`${$apiDomain}/micwc-external/assets/${billService.IconPath}`}
+                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${billService.IconPath}`}
                   alt=""
                 />
                 {billService.Lable}
@@ -200,7 +196,32 @@
             <div id="content">
               {#if billService.Section_Level1s}
                 {#each billService.Section_Level1s as section, j}
-                  {#if section.SectionType == "Charge_Group"}
+                  {#if section.SectionType == "ServiceHeaderGroup"}
+                    <div class="headers-con">
+                      <div class="sub-headers">
+                        {#each section.Section_Level2s as level2Obj}
+                          {#if level2Obj.Order < 5}
+                            <p
+                              style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
+                            >
+                              {level2Obj.Value}
+                            </p>
+                          {/if}
+                        {/each}
+                      </div>
+                      <div class="sub-headers">
+                        {#each section.Section_Level2s as level2Obj}
+                          {#if level2Obj.Order >= 5}
+                            <p
+                              style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
+                            >
+                              {level2Obj.Value}
+                            </p>
+                          {/if}
+                        {/each}
+                      </div>
+                    </div>
+                  {:else if section.SectionType == "Charge_Group"}
                     <!-- BreakDown sections -->
                     {#if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == true}
                       <!-- <div
@@ -228,16 +249,16 @@
                               {#if level2Obj.Order == 1}
                                 <div class={"level" + level2Obj.Order}>
                                   <p
-                                    style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                                    style="display: flex; flex-direction:row; gap:10px; font-size:{level2Obj.FontSize}px; color:{section.Color}"
                                   >
                                     {level2Obj.Value}
                                   </p>
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <!--  src="{toolTip}" -->
-                                      <!-- src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`} -->
+                                      <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`} -->
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -298,7 +319,7 @@
                             >
                               {#if section.IconPath && section.IconPath != ""}
                                 <img
-                                  src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`}
+                                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`}
                                   alt=""
                                 />
                               {/if}
@@ -330,7 +351,7 @@
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
                                     <div class="tooltip-icon">
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -389,7 +410,7 @@
                         >
                           {#if section.IconPath && section.IconPath != ""}
                             <img
-                              src={`${$apiDomain}/micwc-external/assets/${section.IconPath}`}
+                              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`}
                               alt=""
                             />
                           {/if}
@@ -411,9 +432,9 @@
                                   </p>
                                   {#if level3Obj.tooltip && level3Obj.tooltip != ""}
                                     <div class="tooltip-icon">
-                                      <!-- src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`} -->
+                                      <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`} -->
                                       <img
-                                        src={`${$apiDomain}/micwc-external/assets/tool-tip-icon.svg`}
+                                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
                                         on:click={() => toolTipToggle(j, i)}
                                       />
@@ -460,23 +481,19 @@
                               {/if}
                             {:else if subSection.SectionType == "CombinedGroup"}
                               {#if level3Obj.Order == 1}
-                                <div style="flex: 1 0 20%;">
-                                  <p
-                                    class="service-for{level3Obj.Order}"
-                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
-                                  >
-                                    {level3Obj.Lable}
-                                  </p>
-                                </div>
+                                <p
+                                  class="service-for{level3Obj.Order} level1"
+                                  style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                >
+                                  {level3Obj.Lable}
+                                </p>
                               {:else if level3Obj.Order == 2}
-                                <div>
-                                  <p
-                                    class="service-for{level3Obj.Order}"
-                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
-                                  >
-                                    {level3Obj.Value}
-                                  </p>
-                                </div>
+                                <p
+                                  class="service-for{level3Obj.Order} level2"
+                                  style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                >
+                                  {level3Obj.Value}
+                                </p>
                               {/if}
                             {/if}
                           {/each}
@@ -623,6 +640,30 @@
       align-items: flex-start;
       display: flex;
       flex-wrap: wrap;
+    }
+  }
+  .headers-con {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
+    @media screen and (max-width: 480px) {
+      gap: 6px;
+    }
+  }
+  .sub-headers {
+    display: flex;
+    /* justify-content: space-between; */
+    flex-direction: row;
+    /* row-gap: 12px; */
+    align-items: end;
+    gap: 10px;
+    margin-bottom: 8px;
+    @media screen and (max-width: 480px) {
+      gap: 6px;
+      p {
+        font-size: 12px !important;
+      }
     }
   }
   .billing-container {
@@ -847,13 +888,20 @@
   }
   .service-for1 {
     margin: 8px 0;
+    position: relative;
     @media screen and (max-width: 480px) {
       font-size: 16px !important;
     }
   }
   .service-for2 {
     margin: 8px 0;
+    position: absolute;
+    left: 112px;
+    bottom: 10px;
+    font-size: 18px !important;
     @media screen and (max-width: 480px) {
+      top: 0;
+      left: 95px;
       font-size: 14px !important;
     }
   }

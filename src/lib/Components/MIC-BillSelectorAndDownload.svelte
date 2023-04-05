@@ -148,7 +148,7 @@
               )}
           >
             <img
-              src={`${$apiDomain}/micwc-external/assets/DownloadIcon.svg`}
+              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/DownloadIcon.svg`}
               alt="DI"
             />DOWNLOAD BILL
           </button>

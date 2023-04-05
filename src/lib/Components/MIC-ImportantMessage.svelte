@@ -81,13 +81,13 @@
       <div class="message-counter">
         {#if message || (message && message !== "")}
           <img
-            src={`${$apiDomain}/micwc-external/assets/envelope-solid.svg`}
+            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/envelope-solid.svg`}
             alt=""
           />
           <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
         {:else}
           <img
-            src={`${$apiDomain}/micwc-external/assets/envelope-solid.svg`}
+            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/envelope-solid.svg`}
             alt=""
           />
           <span id="unreaded-msgs">&nbsp;{0}&nbsp;</span>
@@ -95,7 +95,7 @@
       </div>
       <h4 id="title">Important Message</h4>
       <img
-        src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
+        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
         alt=""
         id={svgId}
       />

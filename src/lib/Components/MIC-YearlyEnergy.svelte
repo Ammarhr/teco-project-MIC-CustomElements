@@ -63,7 +63,7 @@
                     <h5 class="title">YOUR GENERATED ENERGY SUMMARY</h5>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img
-                        src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
+                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
                         alt=""
                         id={"rotate-svg-" + arrayOfToggles[i]}
                         on:click={() => toggle(i)}

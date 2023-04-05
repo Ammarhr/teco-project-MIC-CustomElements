@@ -91,7 +91,7 @@
                     <div class="message-header">
                         <div class="message-logo">
                             <img
-                                src={`${$apiDomain}/micwc-external/assets/envelope-solid.svg`}
+                                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/envelope-solid.svg`}
                                 alt=""
                             />
                             <span id="unreaded-msgs"

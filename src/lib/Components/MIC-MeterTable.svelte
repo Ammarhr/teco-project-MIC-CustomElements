@@ -14,6 +14,8 @@
         fetchDailyUsageChart,
         fetchMonthlyUsageChart,
         newToken,
+        persona,
+        fetchAndRedirect,
     } from "../../js/store";
     import { chart } from "svelte-apexcharts";
     import {
@@ -116,11 +118,21 @@
 
             monthlyUsageGet(
                 $apiToken,
-
                 `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=${OperandLabel}&Dln=${DLN}&ZipCode=${ZipCode}`
                 // "../../data/meterUsageMonthly.json"
             );
         }
+        fetchAndRedirect(
+            $apiToken,
+            `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+            null,
+            {
+                EventCode: "Click_Meter_Line",
+                Outcome: "",
+                Feedback: "",
+                Persona: $persona,
+            }
+        );
     };
 
     // refresh the component depend on the new generated token
@@ -210,6 +222,31 @@
         activeSection = activeTab;
         tab2 = num2;
         tab1 = num1;
+        if (activeTab == "Daily") {
+            fetchAndRedirect(
+                $apiToken,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                null,
+                {
+                    EventCode: "Click_Daily_Tab",
+                    Outcome: "",
+                    Feedback: "",
+                    Persona: $persona,
+                }
+            );
+        } else {
+            fetchAndRedirect(
+                $apiToken,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                null,
+                {
+                    EventCode: "Click_Monthly_Tab",
+                    Outcome: "",
+                    Feedback: "",
+                    Persona: $persona,
+                }
+            );
+        }
     };
 
     ////// search & filter
@@ -263,16 +300,53 @@
     let costBtnClass = "sw-btn-inactive";
     let usageBtnClass = "sw-btn-active";
     let chartDisplayUnit = "usage";
-    function costUsageToggle(activeBtn) {
+    let tempData = true;
+    const costUsageToggle = (activeBtn) => {
         chartDisplayUnit = activeBtn;
         if (activeBtn == "cost") {
             costBtnClass = "sw-btn-active";
             usageBtnClass = "sw-btn-inactive";
+            fetchAndRedirect(
+                $apiToken,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                null,
+                {
+                    EventCode: "Click_Cost_Switch",
+                    Outcome: "",
+                    Feedback: "",
+                    Persona: $persona,
+                }
+            );
         } else if (activeBtn == "usage") {
             usageBtnClass = "sw-btn-active";
             costBtnClass = "sw-btn-inactive";
+            fetchAndRedirect(
+                $apiToken,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                null,
+                {
+                    EventCode: "Click_Usage_Switch",
+                    Outcome: "",
+                    Feedback: "",
+                    Persona: $persona,
+                }
+            );
         }
-    }
+    };
+    const tempreatureShow = () => {
+        tempData = !tempData;
+        fetchAndRedirect(
+                $apiToken,
+                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                null,
+                {
+                    EventCode: "Click_Temp_Checkbox",
+                    Outcome: "",
+                    Feedback: "",
+                    Persona: $persona,
+                }
+            );
+    };
 </script>
 
 <!------ html ------->
@@ -287,7 +361,7 @@
             <div id="meter-header" on:click={cardToggle} aria-expanded={isOpen}>
                 <h4 id="title">Usage Details</h4>
                 <img
-                    src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
+                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
                     alt="toggle"
                     id={svgId}
                 />
@@ -326,7 +400,7 @@
                                             <div class="td-value">
                                                 <!-- src={elictric} -->
                                                 <img
-                                                    src={`${$apiDomain}/micwc-external/assets/${row.Service.toLowerCase()}Service.svg`}
+                                                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${row.Service.toLowerCase()}Service.svg`}
                                                     alt={row.Service}
                                                 />
                                             </div>
@@ -446,8 +520,9 @@
                             {#if selectedMeter && selectedMeter.AMI_Flag != ""}
                                 <h6
                                     id={"meter-btn" + tab1}
-                                    on:click={() =>
-                                        activateTab("1", "2", "daily")}
+                                    on:click={() => {
+                                        activateTab("1", "2", "daily");
+                                    }}
                                 >
                                     Daily
                                 </h6>
@@ -470,10 +545,12 @@
                                     type="checkbox"
                                     name="trmprature"
                                     id="temp"
+                                    checked
+                                    on:click={tempreatureShow}
                                 />
                                 <span>Temperature</span>
                                 <img
-                                    src={toolTip}
+                                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                     alt="usage chart tool tip"
                                     class="tool-tip"
                                     on:click={tooltipToggle}
@@ -520,18 +597,18 @@
                                 </div>
                             {/if}
                         </div>
-                        <span class="chart-unit">
-                            {#if chartDisplayUnit == "usage"}
-                                {selectedMeter.UOF}
-                            {:else if chartDisplayUnit == "cost"}
-                                $
-                            {:else}
-                                {selectedMeter.UOF}
-                            {/if}
-                        </span>
                         <!-- Monthly Chart -->
                         <div id={"meter-tab1" + tab1}>
                             {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length > 0}
+                                <span class="chart-unit">
+                                    {#if chartDisplayUnit == "usage"}
+                                        {selectedMeter.UOF}
+                                    {:else if chartDisplayUnit == "cost"}
+                                        $
+                                    {:else}
+                                        {selectedMeter.UOF}
+                                    {/if}
+                                </span>
                                 <div
                                     class="chart"
                                     use:chart={renderMixChart(
@@ -542,7 +619,9 @@
                                         400,
                                         selectedMeter.Service,
                                         selectedMeter.UOF,
-                                        chartDisplayUnit
+                                        chartDisplayUnit,
+                                        null,
+                                        tempData
                                     )}
                                 />
                             {/if}
@@ -551,6 +630,15 @@
                         {#if selectedMeter && selectedMeter.AMI_Flag != ""}
                             <div id={"meter-tab1" + tab2}>
                                 {#if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails.length == 0}
+                                    <span class="chart-unit">
+                                        {#if chartDisplayUnit == "usage"}
+                                            {selectedMeter.UOF}
+                                        {:else if chartDisplayUnit == "cost"}
+                                            $
+                                        {:else}
+                                            {selectedMeter.UOF}
+                                        {/if}
+                                    </span>
                                     <div
                                         class="chart"
                                         use:chart={renderMixChart(
@@ -559,7 +647,8 @@
                                             "1410px",
                                             400,
                                             null,
-                                            null
+                                            null,
+                                            tempData
                                         )}
                                     />
                                 {:else if selectedMeter.DAP_dkwh == "x"}
@@ -573,7 +662,9 @@
                                             "1410px",
                                             400,
                                             selectedMeter.Service,
-                                            selectedMeter.UOF
+                                            selectedMeter.UOF,
+                                            null,
+                                            tempData
                                         )}
                                     />
                                 {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
@@ -590,7 +681,7 @@
                             </div>
                         {/if}
                         <!-- Boks of Information: Cost, Temp And Hit Peak -->
-                        {#if $dailyUsageData.DailyUsage}
+                        {#if $dailyUsageData.DailyUsage && activeSection == "daily"}
                             <div class="information-box">
                                 {#if $dailyUsageData.DailyUsage.AVGCost}
                                     <div>
@@ -721,6 +812,7 @@
     #temp {
         width: 19px;
         height: 19px;
+        cursor: pointer;
     }
     table {
         border-collapse: separate;
@@ -811,6 +903,7 @@
     }
     .chart {
         width: 100%;
+        // overflow-x: scroll;
     }
     .chart-unit {
         margin-left: 36px;

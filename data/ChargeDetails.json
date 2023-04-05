@@ -25,6 +25,75 @@
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
+          "SectionType": "ServiceHeaderGroup",
+          "Section_Level2s": [
+            {
+              "Order": 1,
+              "Value": "Service Period:",
+              "FontSize": 20,
+              "Color": "#6C6C6C",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge",
+              "FontWeight": "400"
+            },
+            {
+              "Order": 2,
+              "Value": "Nov 25, 2021",
+              "FontSize": 18,
+              "Color": "#6C6C6C",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge",
+              "FontWeight": "300"
+            },
+            {
+              "Order": 3,
+              "Value": "-",
+              "FontSize": 18,
+              "Color": "#6C6C6C",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge",
+              "FontWeight": "300"
+            },
+            {
+              "Order": 4,
+              "Value": " Dec 28, 2021",
+              "FontSize": 18,
+              "Color": "#6C6C6C",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge",
+              "FontWeight": "300"
+            },
+            {
+              "Order": 5,
+              "Value": "Rate Schedule: ",
+              "FontSize": 20,
+              "Color": "#6C6C6C",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge",
+              "FontWeight": "400"
+            },
+            {
+              "Order": 6,
+              "Value": "General Service",
+              "FontSize": 18,
+              "Color": "#6C6C6C",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge",
+              "FontWeight": "300"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
           "SectionType": "Charge_Group",
           "Section_Level2s": [
             {

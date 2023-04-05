@@ -54,7 +54,7 @@
               Change Account</button
             ><img
               class="spacing-outer-left-medium"
-              src={`${$apiDomain}/micwc-external/assets/favIcon.svg`}
+              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/favIcon.svg`}
               alt="favorite logo"
             />
           </div>
@@ -66,13 +66,13 @@
         >
           <div class="oneLined">
             {#if account.IsElectric}
-              <img class="spacing-outer-right-medium" src={`${$apiDomain}/micwc-external/assets/electricService.svg`} />
+              <img class="spacing-outer-right-medium" src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`} />
             {/if}
             {#if account.IsGas}
-              <img class="spacing-outer-right-medium" src={`${$apiDomain}/micwc-external/assets/GasService.svg`} />
+              <img class="spacing-outer-right-medium" src={`https://tecocdn.azureedge.net/ibill/iBill-assets/GasService.svg`} />
             {/if}
             {#if account.IsLighting}
-              <img class="lighting" src={`${$apiDomain}/micwc-external/assets/lightingService.svg`} />
+              <img class="lighting" src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`} />
             {/if}
             <div>
               <div class="account-id">

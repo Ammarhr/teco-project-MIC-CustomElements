@@ -27,7 +27,9 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
         },
         plotOptions: {
             bar: {
-                borderRadius: 10,
+                borderRadius: 8,
+                borderRadiusApplication: 'end',
+                endingShape: 'rounded',
                 barHeight: 100,
                 dataLabels: {
                     position: "top", // top, center, bottom,
@@ -37,12 +39,25 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
         },
         dataLabels: {
             enabled: true,
-            formatter: function (/** @type {Number} */ val) {
+            formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
+                // let dataLabel = document.querySelector(".apexcharts-datalabel");
+                // let xaxisLabel = document.querySelector(".apexcharts-xaxis-label");
+                // // let text  = document.querySelector("text");
+                // console.log("this is s", dataLabel, xaxisLabel);
+                // if (dataPointIndex == 1 && dataLabel && xaxisLabel) {
+                //     dataLabel.setAttribute("style", "font-weight:600 !important; font-size:16px")
+                //     xaxisLabel.setAttribute("style", "font-weight:600 !important; font-size:16px")
+                //     return (
+                //         val.toLocaleString() + unit
+                //     )
+                // } else {
+                // }
                 return val.toLocaleString() + unit;
             },
             offsetY: -30,
             style: {
                 fontSize: '16px',
+                fontWeight: 400,
                 fontFamily: 'Interstate',
                 colors: '#bbbb'
             },
@@ -52,7 +67,12 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
             type: 'category',
             position: "bottom",
             axisBorder: {
-                show: false,
+                show: true,
+                color: '#000000',
+                height: 1,
+                width: '100%',
+                offsetX: 0,
+                offsetY: -0.5
             },
             axisTicks: {
                 show: false,
@@ -128,8 +148,9 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
 }
 
 
-export const renderMixChart = (data, color, width, height, service, unit, chartUnit) => {
+export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp) => {
     let filtedData;
+    let toolTipUsage = chartUnit == "usage" ? "Energy Used: " : "Cost"
     if (chartUnit == "cost") {
         unit = "$"
         filtedData = data.map((results) => {
@@ -161,7 +182,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
     if (data && data.length < 5) {
         colWidth = "5%"
     } else {
-        colWidth = undefined
+        colWidth = "70px"
     }
 
     let options
@@ -177,7 +198,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             },
             chart: {
                 height: 400,
-                width: 1200,
+                width: 2000,
                 type: "bar"
             },
             noData: {
@@ -203,11 +224,11 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 },
                 {
                     type: "line",
-                    name: "tempereature",
+                    name: temp == true ? "tempereature" : undefined,
                     color: "#FF832B",
-                    data: data.map((results) => {
+                    data: temp == true ? data.map((results) => {
                         return results.Temperature
-                    }),
+                    }) : [],
                 }
 
             ],
@@ -218,7 +239,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             chart: {
                 height: height,
                 marginLeft: 0,
-                width: "100%",
+                width: data && data.length > 30 ? 2500 : "100%",
                 zoom: {
                     enabled: false // Disable chart zooming
                 },
@@ -286,7 +307,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                         (series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
                             "<span style='font-weight:700; color:#000000;'>" +
-                            "Energy Used: " +
+                            toolTipUsage +
                             "</span>" +
                             "<span style='font-weight:300;color:#000000;'>" + " "
                             +

@@ -17,8 +17,8 @@
   import MicToolTipDetails from "./lib/Components/MIC-ToolTipDetails.svelte";
   import MicPagination from "./lib/Components/mic-pagination.svelte";
   import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
-  import MicBalanceSummaryClone from "./lib/Components/MIC-BalanceSummaryClone.svelte";
-  import MicBillingSummaryClone from "./lib/Components/MIC-BillingSummaryClone.svelte";
+  import MicBalanceSummaryClone from "./lib/Components/clone/MIC-BalanceSummaryClone.svelte";
+  import MicBillingSummaryClone from "./lib/Components/clone/MIC-BillingSummaryClone.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -65,9 +65,9 @@
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
-        <mic-balancesummary />
+        <!-- <mic-balancesummary /> -->
         <!-- <MicBalanceSummary /> -->
-        <!-- <mic-balancesummary-clone />   -->
+        <mic-balancesummary-clone />  
         <!-- <MicBalanceSummaryClone /> -->
       </div>
       <div class="messages">
@@ -79,8 +79,8 @@
     <!-- <MicBillSelectorAndDownload /> -->
     <div class="refreshable">
       <div class="charge-detailes">
-        <mic-billingsummary />
-        <!-- <mic-billingsummary-clone /> -->
+        <!-- <mic-billingsummary /> -->
+        <mic-billingsummary-clone />
         <!-- <MicBillingSummary /> -->
       </div>
       <div class="insights">
@@ -89,11 +89,11 @@
         <!-- <MicInsights/> -->
         <!-- <MicYearlyEnergy /> -->
         <!-- <MicBulkDownload /> -->
+        <!-- <MicBulkDownload /> -->
         <mic-bulkdownload class="mic-insights" />
       </div>
     </div>
     <!-- <div class="blk-container"> -->
-    <!-- <MicBulkDownload /> -->
     <!-- </div> -->
     <mic-metertable />
     <!-- <MicMeterTable /> -->

@@ -6,7 +6,7 @@
 
   ///////// svg imports
   // import dropDown from "../../assets/cr.svg";
-  import arrow from "../../assets/arrowUp.svg";
+  // import arrow from "../../assets/arrowUp.svg";
 
   ///////// sub web components
   import MicInsightsRecomendation from "./MIC-InsightsRecomendation.svelte";
@@ -38,7 +38,7 @@
   let isOpen = true; // toggle card status
   let svgId = "rotate-svg-" + isOpen; // toggle button rotate ID
   let avgClass = "red"; //toggle style class (complete it later)
-  let chartWidth = 310; // the width of the charts
+  let chartWidth = 300; // the width of the charts
   let tries = 3;
   const [data, loading, error, get] = fetchstore(); // store fetch
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
@@ -119,7 +119,7 @@
     }
     // console.log("this is body array: ", arrayOfbody);
   }
-  
+
   /// data for recommendation:
   $: if ($data.services && $data.services.length > 0) {
     for (let i = 0; i < $data.services.length; i++) {
@@ -189,7 +189,7 @@
         <div id="header" on:click={() => toggle(i)}>
           <h5 class="insights-title">MY BILLING INSIGHTS</h5>
           <img
-            src={`${$apiDomain}/micwc-external/assets/toggle.svg`}
+            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
             alt="toggle"
             id={`${svgId}${toggleArray[i]}`}
           />
@@ -284,7 +284,7 @@
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/redArrow.svg`}
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/redArrow.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -298,7 +298,7 @@
                         style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/greenArrow.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -326,42 +326,38 @@
                         {insightsService?.yearly?.valueTemp + "°"}
                       </p>
                       {#if insightsService.yearly.percentageTemp > 0}
-                      <span
-                        class="red"
-                        style="background: #E6EFF7; border: 1px solid #005FAA"
-                      >
-                        <img
-                          src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
-                          class="arrow"
-                          alt="arrow"
-                        />{Math.abs(
-                          insightsService?.yearly?.percentageTemp
-                        ) + "°"}</span
-                      >
-                    {:else if insightsService.yearly.percentageTemp < 0}
-                      <span
-                        class="red"
-                        style="background: #E6EFF7; border: 1px solid #005FAA"
-                      >
-                        <img
-                          src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
-                          style="rotate:calc(180deg)"
-                          class="arrow"
-                          alt="arrow"
-                        />{Math.abs(
-                          insightsService?.yearly?.percentageTemp
-                        ) + "°"}</span
-                      >
+                        <span
+                          class="red"
+                          style="background: #E6EFF7; border: 1px solid #005FAA"
+                        >
+                          <img
+                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/arrowUp.svg`}
+                            class="arrow"
+                            alt="arrow"
+                          />{Math.abs(insightsService?.yearly?.percentageTemp) +
+                            "°"}</span
+                        >
+                      {:else if insightsService.yearly.percentageTemp < 0}
+                        <span
+                          class="red"
+                          style="background: #E6EFF7; border: 1px solid #005FAA"
+                        >
+                          <img
+                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/arrowUp.svg`}
+                            style="rotate:calc(180deg)"
+                            class="arrow"
+                            alt="arrow"
+                          />{Math.abs(insightsService?.yearly?.percentageTemp) +
+                            "°"}</span
+                        >
                       {:else if insightsService.yearly.percentageTemp == 0}
-                      <span
-                        class="red"
-                        style="background: #E6EFF7; border: 1px solid #005FAA; width:64px"
-                      >{Math.abs(
-                          insightsService?.yearly?.percentageTemp
-                        ) + "°"}</span
-                      >
-                      
-                    {/if}
+                        <span
+                          class="red"
+                          style="background: #E6EFF7; border: 1px solid #005FAA; width:64px"
+                          >{Math.abs(insightsService?.yearly?.percentageTemp) +
+                            "°"}</span
+                        >
+                      {/if}
                     </div>
                   </div>
                 {/if}
@@ -402,7 +398,7 @@
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/redArrow.svg`}
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/redArrow.svg`}
                           class="arrow"
                           alt="arrow icon"
                         />
@@ -416,7 +412,7 @@
                         style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/greenArrow.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -483,7 +479,7 @@
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/redArrow.svg`}
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/redArrow.svg`}
                           class="arrow"
                           alt="arrow icon"
                         />
@@ -497,7 +493,7 @@
                         style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/greenArrow.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -530,7 +526,7 @@
                           style="background: #E6EFF7; border: 1px solid #005FAA"
                         >
                           <img
-                            src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
+                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/arrowUp.svg`}
                             class="arrow"
                             alt="arrow"
                           />{Math.abs(
@@ -543,7 +539,7 @@
                           style="background: #E6EFF7; border: 1px solid #005FAA"
                         >
                           <img
-                            src={`${$apiDomain}/micwc-external/assets/arrowUp.svg`}
+                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/arrowUp.svg`}
                             style="rotate:calc(180deg)"
                             class="arrow"
                             alt="arrow"
@@ -551,15 +547,13 @@
                             insightsService?.monthly?.percentageTemp
                           ) + "°"}</span
                         >
-                        {:else if insightsService.monthly.percentageTemp == 0}
+                      {:else if insightsService.monthly.percentageTemp == 0}
                         <span
                           class="red"
                           style="background: #E6EFF7; border: 1px solid #005FAA; width:64px"
-                        >{Math.abs(
-                            insightsService?.monthly?.percentageTemp
-                          ) + "°"}</span
+                          >{Math.abs(insightsService?.monthly?.percentageTemp) +
+                            "°"}</span
                         >
-                        
                       {/if}
                     </div>
                   </div>
@@ -601,7 +595,7 @@
                         style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/redArrow.svg`}
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/redArrow.svg`}
                           class="arrow"
                           alt="arrow icon"
                         />
@@ -615,7 +609,7 @@
                         style="background: #E6EFF7; border: 1px solid #005FAA"
                       >
                         <img
-                          src={`${$apiDomain}/micwc-external/assets/greenArrow.svg`}
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/greenArrow.svg`}
                           class="arrow"
                           alt=""
                         />
@@ -880,7 +874,7 @@
   }
   #btn1 {
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 18px;
     line-height: 30px;
     display: flex;
@@ -900,7 +894,14 @@
     align-items: center;
     color: #6c6c6c;
     cursor: pointer;
+    border-bottom: solid 2px transparent;
+    &:hover {
+      color: #0f0f0f;
+      font-weight: 300;
+      border-color: #005faa;
+    }
   }
+
   #tab11 {
     display: none;
   }

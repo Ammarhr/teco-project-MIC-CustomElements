@@ -177,7 +177,7 @@
                                     <div class="next_btn" on:click={next}>
                                         <img
                                             class="img_btn"
-                                            src={`${$apiDomain}/micwc-external/assets/next-prev.svg`}
+                                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next-prev.svg`}
                                         />
                                     </div>
                                     {#if index > 0}
@@ -189,7 +189,7 @@
                                             <img
                                                 class="img_btn"
                                                 id="prev-img"
-                                                src={`${$apiDomain}/micwc-external/assets/next-prev.svg`}
+                                                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next-prev.svg`}
                                             />
                                         </div>
                                     {/if}
@@ -236,13 +236,13 @@
                                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     {#if message.liked.toLowerCase() == "true" || message.liked.toLowerCase() == "false" || $persona == "Agent"}
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/disabled-feedback-button.svg`}
+                                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/disabled-feedback-button.svg`}
                                             alt=""
                                             style="cursor: auto;"
                                         />
                                     {:else}
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-up.svg`}
+                                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/un-filled-awesome-thumbs-up.svg`}
                                             on:click={(e) => {
                                                 showPopUpHandle(i, "true");
                                             }}
@@ -251,7 +251,7 @@
                                         />
                                         <hr class="hor-line" />
                                         <img
-                                            src={`${$apiDomain}/micwc-external/assets/un-filled-awesome-thumbs-down.svg`}
+                                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/un-filled-awesome-thumbs-down.svg`}
                                             on:click={(e) => {
                                                 showPopUpHandle(i, "false");
                                             }}
@@ -518,6 +518,7 @@
         display: flex;
         flex-direction: column;
         p {
+            font-weight: 300;
             margin: 5px;
             span {
                 color: #005faa;
@@ -527,6 +528,9 @@
     }
     ::-webkit-scrollbar {
         width: 5px;
+    }
+    p {
+        font-weight: 300 !important;
     }
 
     /* Track */

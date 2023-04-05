@@ -12,7 +12,7 @@
         "percentageTemp": 0,
         "y": {
           "data": [
-            522525555,
+            522525,
             341115
           ]
         },
@@ -34,7 +34,7 @@
         "valueConsumption": 1505,
         "percentageConsumption": -80,
         "valueTemp": 35,
-        "percentageTemp": 8,
+        "percentageTemp": 0,
         "y": {
           "data": [
             2,
@@ -52,37 +52,6 @@
         "LoadFactorArrowComparison": -150,
         "CurrentDemandValue": 580,
         "DemandUnit": "KW"
-      }
-    },
-    {
-      "serviceName": "Gas",
-      "BillContractNo": "5101296048",
-      "monthly": {
-        "VisibilityTab": true,
-        "unit": "KWH",
-        "valueConsumption": 1358,
-        "percentageConsumption": -105,
-        "valueTemp": 56,
-        "percentageTemp": 5,
-        "y": {
-          "data": [
-            6000,
-            1000
-          ]
-        },
-        "x": [
-          "Nov 2021",
-          "Dec 2021"
-        ],
-        "CurrentFactorValue": "",
-        "CurrentFactorDate": "",
-        "PreviousFactorValue": "",
-        "PreviousFactorDate": "",
-        "LoadFactorArrowComparison": "",
-        "ThiMonthValue": ""
-      },
-      "yearly": {
-        "VisibilityTab": false
       }
     }
   ]

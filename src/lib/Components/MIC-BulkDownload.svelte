@@ -33,20 +33,21 @@
 {:else if $data.BlkDownload}
     <div
         class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
-        style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bd.svg`});"
+        style="background-image:url({`https://tecocdn.azureedge.net/ibill/iBill-assets/mask-bd.svg`});"
     >
         <div class="tecoBillBannerBody">
             <p>
-                Looking to download more than one bill? Click here to download
-                multiple bills
+                Looking to Download Bills? Click Here to Download One or More
+                Bills.
             </p>
             <!-- svelte-ignore a11y-invalid-attribute -->
             <a class="reverseOrder m_1" href={$data.BlkDownload} role="button"
                 ><span
                     class="glyphicon glyphicon-chevron-right"
                     aria-hidden="true"
-                /> DOWNLOAD BILLS</a
-            >
+                />
+                {"< "} DOWNLOAD BILLS
+            </a>
         </div>
     </div>
 {:else if $generalErr == true}
@@ -161,7 +162,7 @@
     }
     .tecoCard {
         margin: 0 !important;
-        padding: 15px;
+        padding: 24px;
         // max-width: 412px;
         @media screen and (max-width: 992px) {
             max-width: unset;
@@ -179,6 +180,9 @@
             flex-direction: column;
             justify-content: space-between;
             > a {
+                font-size: 18px;
+                font-weight: 300;
+                text-decoration: none;
                 text-align: left;
                 color: white;
             }

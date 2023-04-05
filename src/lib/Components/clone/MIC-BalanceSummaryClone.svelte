@@ -5,14 +5,14 @@
     // import mask from "../../assets/mask-bs.svg";
     import { onMount } from "svelte";
     import {
-        fetchstore,
+        passThroughServiceFetch,
         apiDomain,
         apiToken,
         fetchAndRedirect,
         eventsDomain,
         persona,
-        passThroughServiceFetch,
-    } from "../../js/store";
+    } from "../../../js/store";
+
     //state
     var newElement;
     let color; // this change the charge color depend in the its value
@@ -20,6 +20,8 @@
     let btnStatus;
     let totalAmmountFontSize = "64px";
     let subTotalAmmountFontSize = "32px";
+    let absTotalAmmount;
+
     //mocking data
     const [data, loading, error, get] = passThroughServiceFetch();
     // trigger token existence
@@ -71,7 +73,11 @@
         // dynamic totalAmmount colors
         if ($data.totalAmmount.includes("-")) {
             color = "#24A148";
+            absTotalAmmount = parseFloat($data.totalAmmount);
+            absTotalAmmount = Math.abs(absTotalAmmount);
+            // console.log("total ammount: ", absTotalAmmount.toString().split());
         } else {
+            absTotalAmmount = $data.totalAmmount
             color = "#005FAA";
         }
         // dynamic font size
@@ -89,7 +95,7 @@
     <mic-loading />
 {:else if $error}
     <!--error regarding to fetch-->
-    <!-- <mic-render-error /> -->
+    <mic-render-error />
     <!-- {:else if $generalErr == true}
     <div /> -->
 {:else if $data.html_masseges}
@@ -98,38 +104,47 @@
     >
         <div
             class="tecoBalanceSum roundedRadius20"
-            style="background-image:url({`${$apiDomain}/micwc-external/assets/mask-bs.svg`});"
+            style="background-image:url({`https://tecocdn.azureedge.net/ibill/iBill-assets/mask-bs.svg`});"
         >
             <div class="tecoBalanceSection">
                 <span>Total Amount Due</span>
                 <div class="amount">
-                    <span
-                        style="color: {color}; font-size:{subTotalAmmountFontSize}"
-                        >$</span
-                    >
-                    <span
-                        style="color: {color}; font-size:{totalAmmountFontSize}"
-                        >{$data.totalAmmount.split(".")[0]}</span
-                    >
-                    {#if $data.totalAmmount
-                        .toString()
-                        .split(".")[1] && $data.totalAmmount
+                    {#if color == "#24A148"}
+                        <span
+                            style="color: {color}; font-size:{subTotalAmmountFontSize}"
+                            >-$</span
+                        >
+                    {:else if color == "#005FAA"}
+                        <span
+                            style="color: {color}; font-size:{subTotalAmmountFontSize}"
+                            >$</span
+                        >
+                    {/if}
+                    {#if absTotalAmmount}
+                        <span
+                            style="color: {color}; font-size:{totalAmmountFontSize}"
+                            >{absTotalAmmount.toString().split(".")[0]}</span
+                        >
+                    {/if}
+                    {#if absTotalAmmount && absTotalAmmount
+                            .toString()
+                            .split(".")[1] && absTotalAmmount
                             .toString()
                             .split(".")[1].length >= 2}
                         <span
                             style="color: {color}; font-size:{subTotalAmmountFontSize}"
                         >
-                            {$data.totalAmmount.toString().split(".")[1]}</span
+                            {absTotalAmmount.toString().split(".")[1]}</span
                         >
-                    {:else if $data.totalAmmount
-                        .toString()
-                        .split(".")[1] && $data.totalAmmount
+                    {:else if absTotalAmmount && absTotalAmmount
+                            .toString()
+                            .split(".")[1] && absTotalAmmount
                             .toString()
                             .split(".")[1].length < 2}
                         <span
                             style="color: {color}; font-size:{subTotalAmmountFontSize}"
                         >
-                            {$data.totalAmmount.toString().split(".")[1]}0</span
+                            {absTotalAmmount.toString().split(".")[1]}0</span
                         >
                     {:else}
                         <span
