@@ -334,7 +334,6 @@ export function reGenerateToken() {
                 throw new Error("No Token provided!");
             } else if (oldToken) {
                 //* test data
-                // const Publishresponse = await fetch(url)
                 //* real api hit with jwt token:
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
@@ -366,8 +365,8 @@ export function passThroughServiceFetch() {
     const data = writable({});
     // generalErr.set(false)
     const get = async (token, url) => {
-        // console.log("here start fetch");
 
+        // console.log("here start fetch");
         loading.set(true);
         error.set(false);
         try {
@@ -376,6 +375,7 @@ export function passThroughServiceFetch() {
                 throw new Error("No Token provided!");
             } else if (token) {
                 // console.log(token, "this is the token")
+                // var dotNetToken = document.querySelector('input[name="__RequestVerificationToken"]').value
                 let fetchBody = window.AddAntiForgeryToken({
                     model: {
                         target: url,
@@ -383,10 +383,12 @@ export function passThroughServiceFetch() {
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
-                        body: false
+                        body: false,
+
                     }
                 })
-                // console.log("before calling");
+                console.log(".Net Token:", dotNetToken);
+                console.log("before calling");
                 const Publishresponse = await fetch("/InteractiveBill/GetWebComponentData", {
                     method: 'POST',
                     cache: 'no-cache',
@@ -395,15 +397,24 @@ export function passThroughServiceFetch() {
                         'Content-Type': 'application/json',
                         "Authorization": `Bearer ${token}`
                     },
-                    body: JSON.stringify(fetchBody)
+                    data: JSON.stringify(fetchBody)
                 });
                 // console.log("response: ",await Publishresponse.json());
                 let stringResponse = await Publishresponse.text();
                 // console.log("this is the string response:", stringResponse);
-                let parseResponse =  JSON.parse(stringResponse);
+                let parseResponse = JSON.parse(stringResponse);
                 let secondParser = JSON.parse(parseResponse);
                 // console.log("this is the parsed response:", parseResponse);
                 data.set(secondParser);
+                // $.ajax({
+                //     url: "/InteractiveBill/GetWebComponentData",
+                //     type: "POST",
+                //     datatype: "json",
+                //     data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                //     success: function (data) {
+                //     }
+                // });
+
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
                 // console.log("we have error regarding to parse!!!!");

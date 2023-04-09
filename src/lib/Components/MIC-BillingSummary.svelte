@@ -152,6 +152,12 @@
       }
     );
   };
+  let chargesClass = "";
+  $: if ($billNumber == $latestBill) {
+    chargesClass = "";
+  } else {
+    chargesClass = "gray";
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -175,11 +181,11 @@
               id={"rotate-svg-" + !toggleArray[i]}
             />
           </div>
-          <div style={styleToggleArr[i]} class="bill-content">
+          <div style={styleToggleArr[i]} class="bill-content {chargesClass}">
             <span>
               <h3
                 id="sectiontitle"
-                style="color:{billService.Color}; font-size:{billService.FontSize}px; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
+                style="color:{billService.Color}; font-size:{billService.FontSize}px; font-weight:{billService.FontWeight}; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
               >
                 <img
                   src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${billService.IconPath}`}
@@ -241,15 +247,15 @@
                       <!-- {console.log(billsObjectsArray[i].subToggleStyleArray[j])} -->
                       {#if billsObjectsArray[i]}
                         <div
-                          class="charges-container break-down"
+                          class="charges-container break-down "
                           style={billsObjectsArray[i].subToggleStyleArray[j]}
                         >
                           {#each section.Section_Level2s as level2Obj}
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
-                                <div class={"level" + level2Obj.Order}>
+                                <div class="{'level' + level2Obj.Order} ">
                                   <p
-                                    style="display: flex; flex-direction:row; gap:10px; font-size:{level2Obj.FontSize}px; color:{section.Color}"
+                                    style="display: flex; flex-direction:row; gap:10px; font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
                                   >
                                     {level2Obj.Value}
                                   </p>
@@ -293,12 +299,12 @@
                                   {/if}
                                 </div>
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
-                                <p
+                                <span
                                   class={"level" + level2Obj.Order}
-                                  style="font-weight:300;"
+                                  style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
                                 >
                                   {level2Obj.Value}
-                                </p>
+                                </span>
                               {:else}
                                 <p class={"level" + level2Obj.Order}>
                                   {level2Obj.Value}
@@ -337,7 +343,7 @@
                                 <div class={"level" + level2Obj.Order}>
                                   {#if level2Obj.Value && level2Obj.Value[0] == " "}
                                     <p
-                                      style="padding-left: 16px; margin:0; display:block;font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight} "
+                                      style="padding-left: 16px; margin:0; display:block;font-size:{level2Obj.FontSize}px; font-weight:{level2Obj.FontWeight}; color:{level2Obj.Color};"
                                     >
                                       {level2Obj.Value.trim()}
                                     </p>
@@ -386,9 +392,12 @@
                                   {/if}
                                 </div>
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
-                                <p class={"level" + level2Obj.Order}>
+                                <span
+                                  class={"level" + level2Obj.Order}
+                                  style="font-size:{level2Obj.FontSize}px; color:{section.Color}; font-weight:{level2Obj.FontWeight};"
+                                >
                                   {level2Obj.Value}
-                                </p>
+                                </span>
                               {:else}
                                 <p class={"level" + level2Obj.Order}>
                                   {level2Obj.Value}
@@ -409,10 +418,8 @@
                           style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
                         >
                           {#if section.IconPath && section.IconPath != ""}
-                            <img
-                              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`}
-                              alt=""
-                            />
+                            <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`} -->
+                            <img src="/src/assets/{section.IconPath}" alt="" />
                           {/if}
                           <h4 tyle="font-size:{section.FontSize}px">
                             {section.Lable}
@@ -430,7 +437,7 @@
                                   >
                                     {level3Obj.Value}
                                   </p>
-                                  {#if level3Obj.tooltip && level3Obj.tooltip != ""}
+                                  {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
                                     <div class="tooltip-icon">
                                       <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`} -->
                                       <img
@@ -471,9 +478,12 @@
                                   {/if}
                                 </div>
                               {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
-                                <p class={"level" + level3Obj.Order}>
+                                <span
+                                  class={"level" + level3Obj.Order}
+                                  style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
+                                >
                                   {level3Obj.Value}
-                                </p>
+                                </span>
                               {:else}
                                 <p class={"level" + level3Obj.Order}>
                                   {level3Obj.Value}
@@ -960,6 +970,23 @@
     margin: 0;
     @media screen and (max-width: 767px) {
       font-size: 24px !important;
+    }
+  }
+
+  .gray {
+    color: #6c6c6c !important;
+    p {
+      color: #6c6c6c !important;
+    }
+    h4 {
+      color: #000000 !important;
+    }
+    h3 {
+      color: #000000 !important;
+    }
+    img {
+      -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+      filter: grayscale(100%);
     }
   }
 </style>

@@ -65,9 +65,9 @@
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
-        <!-- <mic-balancesummary /> -->
+        <mic-balancesummary />
         <!-- <MicBalanceSummary /> -->
-        <mic-balancesummary-clone />  
+        <!-- <mic-balancesummary-clone />   -->
         <!-- <MicBalanceSummaryClone /> -->
       </div>
       <div class="messages">
@@ -79,8 +79,8 @@
     <!-- <MicBillSelectorAndDownload /> -->
     <div class="refreshable">
       <div class="charge-detailes">
-        <!-- <mic-billingsummary /> -->
-        <mic-billingsummary-clone />
+        <mic-billingsummary />
+        <!-- <mic-billingsummary-clone /> -->
         <!-- <MicBillingSummary /> -->
       </div>
       <div class="insights">

@@ -635,12 +635,11 @@
           {#if $billNumber === $latestBill && arrayOfbody && arrayOfbody.length > 0 && recoToken == $apiToken && insightsService.BillContractNo}
             <!-- <MicInsightsRecomendation
               token={$apiToken}
-              url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
+              body={arrayOfbody[i]}
             /> -->
             <mic-recomendation
               token={$apiToken}
-              url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
               body={arrayOfbody[i]}
             />
@@ -650,6 +649,7 @@
               token={$newToken.token}
               url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
+              body={arrayOfbody[i]}
             /> -->
             <mic-recomendation
               token={$newToken.token}

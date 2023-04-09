@@ -181,7 +181,7 @@
         border-bottom: 1px solid #eaecee;
     }
     .yearly-label {
-        font-weight: 400;
+        font-weight: 300;
         font-size: 20px;
         line-height: 30px;
         display: flex;
