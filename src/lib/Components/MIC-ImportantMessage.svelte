@@ -144,6 +144,7 @@
     transition: 0.3s;
     border-radius: 16px;
     box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
+    height: 340px;
     background-color: white;
     @media screen and (max-width: 830px) {
       width: 100%;
@@ -191,15 +192,11 @@
     align-items: center;
   }
 
-  .message .message-body {
+  .message-body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px;
-    gap: 499px;
-    width: 392px;
-    max-height: 310px;
+    height: 100%;
+    margin: 12px 0;
   }
   .msg-data {
     font-style: normal;
@@ -208,7 +205,7 @@
     line-height: 30px;
     display: flex;
     color: rgb(0, 0, 0);
-    max-height: 180px;
+    max-height: 216px;
     overflow: hidden;
   }
   .msg-title {

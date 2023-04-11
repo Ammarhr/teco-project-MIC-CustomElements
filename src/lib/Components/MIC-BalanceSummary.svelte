@@ -77,7 +77,7 @@
             absTotalAmmount = Math.abs(absTotalAmmount);
             // console.log("total ammount: ", absTotalAmmount.toString().split());
         } else {
-            absTotalAmmount = $data.totalAmmount
+            absTotalAmmount = $data.totalAmmount;
             color = "#005FAA";
         }
         // dynamic font size
@@ -301,8 +301,10 @@
     .tecoCard {
         margin: 0 !important;
         margin-top: 15px;
-        padding: 15px;
         width: 100%;
+        @media (min-width: 767px) {
+            height: 380px;
+        }
     }
     .tecoBalanceSum {
         background-position: 98%;
@@ -312,7 +314,7 @@
         justify-content: space-around;
         flex-direction: row-reverse;
         align-items: center;
-        min-height: 275px;
+        min-height: 100%;
         padding: 30px 15px;
         .tecoBalanceSection {
             width: 50%;
@@ -357,7 +359,7 @@
             display: flex;
             flex-direction: column;
             padding: 0 20px;
-            max-height: 275px;
+            max-height: 320px;
             overflow-y: auto;
             .messageBox {
                 padding: 15px 0;

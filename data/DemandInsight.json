@@ -2,7 +2,7 @@
   "services": [
     {
       "serviceName": "Electric",
-      "BillContractNo": "5101296049",
+      "BillContractNo": "5100470566",
       "monthly": {
         "VisibilityTab": true,
         "unit": "KWH",
@@ -56,7 +56,7 @@
     },
      {
       "serviceName": "Electric",
-      "BillContractNo": "5101296050",
+      "BillContractNo": "5200021995",
       "monthly": {
         "VisibilityTab": true,
         "unit": "KWH",

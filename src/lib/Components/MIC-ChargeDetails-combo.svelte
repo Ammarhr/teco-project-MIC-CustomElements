@@ -67,19 +67,19 @@
         typeof toggleArray[0] !== "boolean"
     ) {
         for (let i = 0; i < charges.length; i++) {
-            // console.log("section mapped", charges[i].Section_Level1s);
-            // if (charges[i].Section_Level1s) {
-            //   charges[i].Section_Level1s.map((dataMapped, j) => {
-            //     if (dataMapped.Section_Level2s) {
+            // console.log("section mapped", charges[i].Section_Level1);
+            // if (charges[i].Section_Level1) {
+            //   charges[i].Section_Level1.map((dataMapped, j) => {
+            //     if (dataMapped.Section_Level2) {
             //       let resArray = [];
-            //       dataMapped.Section_Level2s.filter((result, k) => {
+            //       dataMapped.Section_Level2.filter((result, k) => {
             //         if (result.IsBreakdown == true) {
-            //           resArray = dataMapped.Section_Level2s;
+            //           resArray = dataMapped.Section_Level2;
             //         }
             //         // return
             //       });
             //       if (resArray.length == 0) {
-            //         arrOfBreakDown.push(dataMapped.Section_Level2s);
+            //         arrOfBreakDown.push(dataMapped.Section_Level2);
             //       }
             //       if (resArray.length > 0) {
             //         arrOfBreakDown.push(resArray);
@@ -171,18 +171,20 @@
         {#each charges as billService, i}
             {#if billService.SectionType == "Service" || billService.SectionType == "AccountLevel"}
                 <div class="card">
-                    <div
-                        id="bills-header"
-                        on:click={() => toggleContainer(i)}
-                        aria-expanded={isOpen}
-                    >
-                        <h4 id="title">BILLING SUMMARY</h4>
-                        <img
-                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
-                            alt=""
-                            id={"rotate-svg-" + !toggleArray[i]}
-                        />
-                    </div>
+                    {#if billService.Collapsible == false || !billService.Collapsible }
+                        <div
+                            id="bills-header"
+                            on:click={() => toggleContainer(i)}
+                            aria-expanded={isOpen}
+                        >
+                            <h4 id="title">BILLING SUMMARY</h4>
+                            <img
+                                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
+                                alt=""
+                                id={"rotate-svg-" + !toggleArray[i]}
+                            />
+                        </div>
+                    {/if}
                     <div
                         style={styleToggleArr[i]}
                         class="bill-content {chargesClass}"
@@ -205,12 +207,12 @@
                             </p>
                         {/if}
                         <div id="content">
-                            {#if billService.Section_Level1s}
-                                {#each billService.Section_Level1s as section, j}
+                            {#if billService.Section_Level1}
+                                {#each billService.Section_Level1 as section, j}
                                     {#if section.SectionType == "ServiceHeaderGroup"}
                                         <div class="headers-con">
                                             <div class="sub-headers">
-                                                {#each section.Section_Level2s as level2Obj}
+                                                {#each section.Section_Level2 as level2Obj}
                                                     {#if level2Obj.Order < 5}
                                                         <p
                                                             style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
@@ -221,7 +223,7 @@
                                                 {/each}
                                             </div>
                                             <div class="sub-headers">
-                                                {#each section.Section_Level2s as level2Obj}
+                                                {#each section.Section_Level2 as level2Obj}
                                                     {#if level2Obj.Order >= 5}
                                                         <p
                                                             style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
@@ -234,7 +236,7 @@
                                         </div>
                                     {:else if section.SectionType == "Charge_Group"}
                                         <!-- BreakDown sections -->
-                                        {#if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == true}
+                                        {#if section.Section_Level2 && section.Section_Level2[0] && section.Section_Level2[0].IsBreakdown == true}
                                             <!-- <div
                         class="breakdown-header"
                         on:click={() => {
@@ -256,7 +258,7 @@
                                                     style={billsObjectsArray[i]
                                                         .subToggleStyleArray[j]}
                                                 >
-                                                    {#each section.Section_Level2s as level2Obj}
+                                                    {#each section.Section_Level2 as level2Obj}
                                                         {#if level2Obj.SectionType == "Charge"}
                                                             {#if level2Obj.Order == 1}
                                                                 <div
@@ -346,8 +348,8 @@
                                                 </div>
                                             {/if}
                                             <!-- General Charges -->
-                                        {:else if section.Section_Level2s && section.Section_Level2s[0] && section.Section_Level2s[0].IsBreakdown == false}
-                                            {#if section.Section_Level2s}
+                                        {:else if section.Section_Level2 && section.Section_Level2[0] && section.Section_Level2[0].IsBreakdown == false}
+                                            {#if section.Section_Level2}
                                                 {#if section.Lable && section.Lable != ""}
                                                     <div class="sub-title">
                                                         <div
@@ -369,7 +371,7 @@
                                                     </div>
                                                 {/if}
                                                 <div class="charges-container">
-                                                    {#each section.Section_Level2s as level2Obj}
+                                                    {#each section.Section_Level2 as level2Obj}
                                                         <!-- {section.SectionType} -->
                                                         {#if level2Obj.SectionType == "Charge"}
                                                             {#if level2Obj.Order == 1}
@@ -448,7 +450,7 @@
                                                                 <span
                                                                     class={"level" +
                                                                         level2Obj.Order}
-                                                                    style="font-size:{level2Obj.FontSize}px; color:{section.Color}; font-weight:{level2Obj.FontWeight};"
+                                                                    style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
                                                                 >
                                                                     {level2Obj.Value}
                                                                 </span>
@@ -488,7 +490,7 @@
                                                     </h4>
                                                 </div>
                                             </div>
-                                            {#each section.Section_Level2s as subSection}
+                                            {#each section.Section_Level2 as subSection}
                                                 <div class="charges-container">
                                                     {#each subSection.Section_Level3s as level3Obj}
                                                         {#if level3Obj.SectionType == "Charge"}
@@ -647,7 +649,7 @@
                             {/if}
                         </div>
                         <!-- Section Total -->
-                        {#if invoicetotal  && typeof invoicetotal !== "string" && invoicetotal[0]}
+                        {#if invoicetotal && typeof invoicetotal !== "string" && invoicetotal[0]}
                             <div
                                 class="total"
                                 style="background-color:{$billNumber ===
@@ -660,7 +662,8 @@
                                 </h6>
                                 <h6
                                     class="total-value"
-                                    style="font-size: {invoicetotal[0].FontSize}px;"
+                                    style="font-size: {invoicetotal[0]
+                                        .FontSize}px;"
                                 >
                                     {invoicetotal[0].Value}
                                 </h6>
@@ -890,7 +893,7 @@
     }
     .sub-row {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
     }
     #title {
@@ -1034,6 +1037,7 @@
         display: flex;
         align-items: center;
         color: #005faa;
+        max-width: 275px;
         @media screen and (max-width: 767px) {
             font-size: 18px;
         }

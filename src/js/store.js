@@ -374,47 +374,30 @@ export function passThroughServiceFetch() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                // console.log(token, "this is the token")
-                // var dotNetToken = document.querySelector('input[name="__RequestVerificationToken"]').value
-                let fetchBody = window.AddAntiForgeryToken({
-                    model: {
+                let fetchBody = {
+                    modle: {
                         target: url,
                         method: "POST",
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                         body: false,
-
                     }
-                })
-                console.log(".Net Token:", dotNetToken);
-                console.log("before calling");
-                const Publishresponse = await fetch("/InteractiveBill/GetWebComponentData", {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    },
-                    data: JSON.stringify(fetchBody)
+                }
+                window.$.ajax({
+                    url: "/InteractiveBill/GetWebComponentData",
+                    type: "POST",
+                    datatype: "json",
+                    data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                    success: async function (responseData) {
+                        let stringResponse = responseData;
+                        let parseResponse = JSON.parse(stringResponse);
+                        // console.log("this is the string response:", stringResponse);
+                        // let secondParser = JSON.parse(parseResponse);
+                        // console.log("this is the parsed response:", parseResponse);
+                        data.set(parseResponse);
+                    }
                 });
-                // console.log("response: ",await Publishresponse.json());
-                let stringResponse = await Publishresponse.text();
-                // console.log("this is the string response:", stringResponse);
-                let parseResponse = JSON.parse(stringResponse);
-                let secondParser = JSON.parse(parseResponse);
-                // console.log("this is the parsed response:", parseResponse);
-                data.set(secondParser);
-                // $.ajax({
-                //     url: "/InteractiveBill/GetWebComponentData",
-                //     type: "POST",
-                //     datatype: "json",
-                //     data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
-                //     success: function (data) {
-                //     }
-                // });
-
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
                 // console.log("we have error regarding to parse!!!!");

@@ -24,27 +24,36 @@
     let invoiceTotal;
     let comboNewToken;
     let arrayOfBillInsights = [];
+    let sunSelectArray = [];
     let arrayOfCharges = [];
-    const [data, loading, error, get] = fetchstore();
-    const [chargeData, chargeLoading, chargeError, chargeGet] = fetchstore();
+    let emptyTabs = true; // make tabs array empty
+    const [data, loading, error, get] = fetchstore(); // bill insights select store fetch
+    const [sundata, sunloading, sunerror, sunget] = fetchstore(); // sun select store fetch
+    const [chargeData, chargeLoading, chargeError, chargeGet] = fetchstore(); // charge details select store fetch
+
     onMount(() => {
         if (
             $apiToken &&
             $apiDomain &&
-            !$chargeData.Sections &&
+            !$chargeData.Section &&
             !$data.services
         ) {
             chargeGet(
                 $apiToken,
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-                "../../../data/ChargeDetails.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+                // "../../../data/ChargeDetails.json"
             );
             get(
                 $apiToken,
-                "../../../data/DemandInsight.json"
-                // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
+                // "../../../data/DemandInsight.json"
+                `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
             );
         }
+        sunget(
+            $apiToken,
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+            // "../../data/sunSelect.json"
+        );
         comboNewToken = $apiToken;
     });
 
@@ -61,7 +70,7 @@
             insightsArray = [];
             chargesArray = [];
             console.log($chargeData, "data from charge details");
-            arrayOfCharges = $chargeData.Sections;
+            arrayOfCharges = $chargeData.Section;
         });
         get(
             $newToken.token,
@@ -74,45 +83,62 @@
             console.log($data, "data from insights");
             arrayOfBillInsights = $data.services;
         });
+        sunget(
+            $apiToken,
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+            // "../../data/sunSelect.json"
+        ).then(() => {
+            sunSelectArray = [];
+        });
         comboNewToken = $newToken.token;
     }
 
     $: if ($data && $data.services && $data.services.length) {
         arrayOfBillInsights = $data.services;
     }
-    $: if ($chargeData && $chargeData.Sections) {
-        arrayOfCharges = $chargeData.Sections;
-        invoiceTotal = $chargeData.Sections[$chargeData.Sections.length - 2];
+    let agencySection;
+    $: if ($chargeData && $chargeData.Section) {
+        arrayOfCharges = $chargeData.Section;
+        invoiceTotal = $chargeData.Section[$chargeData.Section.length - 2];
+    }
+
+    $: if ($sundata.SunSelect && $sundata.SunSelect.length > 0) {
+        sunSelectArray = $sundata.SunSelect;
     }
     let insight;
     let insightsArray = [];
     let chargesArray = [];
     $: if (
         $chargeData &&
-        $chargeData.Sections &&
+        $chargeData.Section &&
         arrayOfBillInsights.length > 0 &&
         insightsArray.length == 0
     ) {
-        let arryOfConfigue = $chargeData.Sections.map((res) => {
-            if (res.Section_Level1s) {
-                return res.Section_Level1s.filter((subSection) => {
-                    return subSection.SectionType == "Config";
-                });
-            }
+        let arryOfConfigue = $chargeData.Section.map((subSection) => {
+            console.log(subSection.ConfigValue, "subSection.ConfigValue");
+            return subSection.ConfigValue;
         });
         console.log(arryOfConfigue, "filtered configue");
-        for (let i = 0; i < $chargeData.Sections.length; i++) {
+        for (let i = 0; i < $chargeData.Section.length; i++) {
             insight = arrayOfBillInsights.filter((results) => {
-                if (arryOfConfigue[i] && arryOfConfigue[i][0]) {
-                    console.log(arryOfConfigue[i][0].Value, "con Number");
-                    return arryOfConfigue[i][0].Value == results.BillContractNo;
+                console.log(
+                    $chargeData.Section[i].Collapsible,
+                    "arryOfConfigue[i].Collapsible"
+                );
+                if (arryOfConfigue[i]) {
+                    return arryOfConfigue[i] == results.BillContractNo;
                 }
             });
+            if ($chargeData.Section[i].Collapsible == true) {
+                agencySection = $chargeData.Section[i];
+            }
             insightsArray.push(insight);
-            chargesArray.push([$chargeData.Sections[i]]);
+            if ($chargeData.Section[i].Collapsible == false) {
+                chargesArray.push([$chargeData.Section[i]]);
+            }
         }
         console.log(insightsArray, "insiiiiiiiiiiiiiiiiights");
-        console.log(chargesArray, "chaaaaaaaaaaaaaaaaaaarges");
+        // console.log(chargesArray, "chaaaaaaaaaaaaaaaaaaarges");
     }
 </script>
 
@@ -124,34 +150,44 @@
             {#if charge && charge.SectionType}
                 {#if charge.SectionType}
                     <div class="charge-detailes">
-                        {#if i == arrayOfCharges.length - 2}
-                            <MicChargeDetailsCombo
+                        {#if i == chargesArray.length - 2}
+                            <!-- <MicChargeDetailsCombo
                                 charges={chargesArray[i]}
-                                invoicetotal={chargesArray[chargesArray.length - 1]}
-                            />
+                                invoicetotal={chargesArray[
+                                    chargesArray.length - 1
+                                ]}
+                            /> -->
                             <mic-billingsummary-combo
-                                charges={chargesArray[i]}
-                                invoicetotal={invoiceTotal}
+                                charges={[charge]}
+                                invoicetotal={chargesArray[
+                                    chargesArray.length - 1
+                                ]}
                             />
                         {:else}
-                            <MicChargeDetailsCombo
+                            <!-- <MicChargeDetailsCombo
                                 charges={chargesArray[i]}
                                 invoicetotal={""}
-                            />
+                            /> -->
                             <mic-billingsummary-combo
-                                charges={chargesArray[i]}
+                                charges={[charge]}
                                 invoicetotal={""}
                             />
                         {/if}
                     </div>
-                    {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0}
+                    {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
                         <div class="insights">
-                            <MicBillInsightsCombo
+                            <!-- <MicBillInsightsCombo
                                 insightservices={insightsArray[i]}
-                            />
+                                sunselectdata={sunSelectArray}
+                            /> -->
                             <mic-insights-combo
                                 insightservices={insightsArray[i]}
+                                sunselectdata={sunSelectArray}
+                                emptytabs={emptyTabs}
                             />
+                            <!-- {#if i == insightsArray.length - 1}
+                                <mic-bulkdownload class="mic-insights" />
+                            {/if} -->
                         </div>
                     {:else}
                         <div class="insights" />
@@ -160,6 +196,14 @@
                 {/if}
             {/if}
         {/each}
+        <!-- {#if agencySection}
+            <div class="charge-detailes">
+                <mic-billingsummary-combo
+                    charges={[agencySection]}
+                    invoicetotal={""}
+                />
+            </div>
+        {/if} -->
     </div>
 {/if}
 
@@ -168,6 +212,7 @@
         display: grid;
         flex-direction: row;
         column-gap: 30px;
+        row-gap: 30px;
         grid-template-columns: calc(66.66% - 30px) 33.33%;
         width: 100%;
         @media screen and (max-width: 992px) {

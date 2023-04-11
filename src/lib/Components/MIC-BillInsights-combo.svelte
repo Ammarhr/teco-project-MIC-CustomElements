@@ -24,6 +24,9 @@
     sunSelectServicesArray,
   } from "../../js/store";
   import { onMount } from "svelte";
+  export let insightservices;
+  export let sunselectdata;
+  export let emptytabs;
   ///// important variables
   let toggleArray = []; // array of toggle statuses
   let styleToggleArr = []; // array of toggle style
@@ -36,57 +39,16 @@
   let avgClass = "red"; //toggle style class (complete it later)
   let chartWidth = 300; // the width of the charts
   let tries = 3;
-  export let insightservices;
   const [data, loading, error, get] = fetchstore(); // store fetch
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
   onMount(() => {
     console.log(insightservices, "insightservices");
-    // if (
-    //   $apiDomain &&
-    //   $apiToken &&
-    //   !insightservices &&
-    //   tries > 0 &&
-    //   $newToken === ""
-    // ) {
-    //   get(
-    //     $apiToken,
-    //     "../../../data/DemandInsight.json"
-    //     // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
-    //   );
-    //   sunget(
-    //     $apiToken,
-    //     // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-    //     "../../data/sunSelect.json"
-    //   );
-    //   tries--;
-    // }
-    // //////
-    // recoToken = $apiToken;
   });
-  $: if (
-    $newToken &&
-    $newToken.token &&
-    (recoToken == $apiToken || recoToken !== $newToken.token)
-  ) {
-    // get(
-    //   $newToken.token,
-    //   // "../../../data/Insights.json"
-    //   `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
-    // ).then(() => {
-    //   tabsToggleArr = [];
-    // });
-    /// sunSelect fetch:
-    // sunget(
-    //   $newToken.token,
-    //   `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-    //   // "../../data/sunSelect.json"
-    // ).then(() => {
-    //   sunSelectArray = [];
-    // });
-    // recoToken = $newToken.token;
+  $: if (typeof emptytabs == "boolean" && emptytabs === true) {
+    tabsToggleArr = [];
+    console.log(emptytabs, "emptytabs");
   }
-
   ///////// acordion functionality
   const toggle = (i) => {
     toggleArray[i] = !toggleArray[i];
@@ -105,17 +67,16 @@
   $: if (
     insightservices &&
     insightservices.length > 0 &&
-    $sundata.SunSelect &&
-    $sundata.SunSelect.length > 0
+    sunselectdata &&
+    sunselectdata.length > 0
   ) {
-    newArr = $sundata.SunSelect;
+    newArr = sunselectdata;
     for (let i = 0; i < insightservices.length; i++) {
       sunArrayVal = newArr.filter((results) => {
         return insightservices[i].BillContractNo == results.SunSelectContract;
       });
       sunSelectArray.push(sunArrayVal);
     }
-    // console.log("this is body array: ", arrayOfbody);
   }
 
   /// data for recommendation:
@@ -664,21 +625,18 @@
     {:else if $sunerror}
       <h1 />
     {:else if sunSelectArray && sunSelectArray.length > 0}
+      <!-- <MicSunSelect contractnum={sunSelectArray[i]} /> -->
       <mic-sunselect contractnum={sunSelectArray[i]} />
     {/if}
   {/each}
-{:else if $sundata && $sundata.SunSelect}
+  <!-- {:else if $sundata &&sunselectdata}
   {#if $sunloading}
     <mic-loading />
   {:else if $sunerror}
     <h1 />
-  {:else if $sundata && $sundata.SunSelect.length > 0}
+  {:else if $sundata &&sunselectdata.length > 0}
     <mic-sunselect contractnum={$sundata.SunSelect} class="sun-select" />
-  {/if}
-{:else}
-  <div>
-    hekki
-  </div>
+  {/if} -->
 {/if}
 
 <style lang="scss">
