@@ -1,4 +1,4 @@
-<svelte:options tag="mic-insights" />
+<svelte:options tag="mic-insights-combo" />
 
 <script>
   // @ts-nocheck
@@ -19,8 +19,8 @@
     apiDomain,
     apiToken,
     latestBill,
-    eventsDomain,
     persona,
+    eventsDomain,
     sunSelectServicesArray,
   } from "../../js/store";
   import { onMount } from "svelte";
@@ -36,53 +36,55 @@
   let avgClass = "red"; //toggle style class (complete it later)
   let chartWidth = 300; // the width of the charts
   let tries = 3;
+  export let insightservices;
   const [data, loading, error, get] = fetchstore(); // store fetch
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
   onMount(() => {
-    if (
-      $apiDomain &&
-      $apiToken &&
-      !$data.services &&
-      tries > 0 &&
-      $newToken === ""
-    ) {
-      get(
-        $apiToken,
-        // "../../../data/DemandInsight.json"
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
-      );
-      sunget(
-        $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-        // "../../data/sunSelect.json"
-      );
-      tries--;
-    }
-    //////
-    recoToken = $apiToken;
+    console.log(insightservices, "insightservices");
+    // if (
+    //   $apiDomain &&
+    //   $apiToken &&
+    //   !insightservices &&
+    //   tries > 0 &&
+    //   $newToken === ""
+    // ) {
+    //   get(
+    //     $apiToken,
+    //     "../../../data/DemandInsight.json"
+    //     // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
+    //   );
+    //   sunget(
+    //     $apiToken,
+    //     // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+    //     "../../data/sunSelect.json"
+    //   );
+    //   tries--;
+    // }
+    // //////
+    // recoToken = $apiToken;
   });
   $: if (
     $newToken &&
     $newToken.token &&
     (recoToken == $apiToken || recoToken !== $newToken.token)
   ) {
-    get(
-      $newToken.token,
-      // "../../../data/Insights.json"
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
-    ).then(() => {
-      tabsToggleArr = [];
-    });
+    // get(
+    //   $newToken.token,
+    //   // "../../../data/Insights.json"
+    //   `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
+    // ).then(() => {
+    //   tabsToggleArr = [];
+    // });
     /// sunSelect fetch:
-    sunget(
-      $newToken.token,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-      // "../../data/sunSelect.json"
-    ).then(() => {
-      sunSelectArray = [];
-    });
-    recoToken = $newToken.token;
+    // sunget(
+    //   $newToken.token,
+    //   `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+    //   // "../../data/sunSelect.json"
+    // ).then(() => {
+    //   sunSelectArray = [];
+    // });
+    // recoToken = $newToken.token;
   }
 
   ///////// acordion functionality
@@ -101,15 +103,15 @@
   let newArr;
   let arrayOfbody = [];
   $: if (
-    $data.services &&
-    $data.services.length > 0 &&
+    insightservices &&
+    insightservices.length > 0 &&
     $sundata.SunSelect &&
     $sundata.SunSelect.length > 0
   ) {
     newArr = $sundata.SunSelect;
-    for (let i = 0; i < $data.services.length; i++) {
+    for (let i = 0; i < insightservices.length; i++) {
       sunArrayVal = newArr.filter((results) => {
-        return $data.services[i].BillContractNo == results.SunSelectContract;
+        return insightservices[i].BillContractNo == results.SunSelectContract;
       });
       sunSelectArray.push(sunArrayVal);
     }
@@ -117,14 +119,14 @@
   }
 
   /// data for recommendation:
-  $: if ($data.services && $data.services.length > 0) {
-    for (let i = 0; i < $data.services.length; i++) {
-      let serviceObj = $data.services[i];
+  $: if (insightservices && insightservices.length > 0) {
+    for (let i = 0; i < insightservices.length; i++) {
+      let serviceObj = insightservices[i];
       arrayOfbody.push({
         TempPreviousValue: serviceObj.monthly?.percentageTemp || 0,
         TempLastyearValue: serviceObj.yearly?.percentageTemp || 0,
-        BillingClass: $data.services[i].ZInstallBillClass,
-        Division: $data.services[i].serviceName,
+        BillingClass: insightservices[i].ZInstallBillClass,
+        Division: insightservices[i].serviceName,
         MonthlyUsageConsumption: serviceObj.monthly?.percentageConsumption || 0,
         YearlyUsageConsumption: serviceObj.yearly?.percentageConsumption || 0,
       });
@@ -132,22 +134,22 @@
     // console.log("this is body array: ", arrayOfbody);
   }
 
-  $: if ($data.services && !tabsToggleArr[0]) {
+  $: if (insightservices && !tabsToggleArr[0]) {
     tabsToggleArr = [];
-    for (let i = 0; i < $data.services.length; i++) {
+    for (let i = 0; i < insightservices.length; i++) {
       if (
-        $data.services[i].monthly.VisibilityTab == true &&
-        $data.services[i].yearly.VisibilityTab == true
+        insightservices[i].monthly.VisibilityTab == true &&
+        insightservices[i].yearly.VisibilityTab == true
       ) {
         tabsToggleArr.push(["2", "1"]);
       } else if (
-        $data.services[i].monthly.VisibilityTab == false &&
-        $data.services[i].yearly.VisibilityTab == true
+        insightservices[i].monthly.VisibilityTab == false &&
+        insightservices[i].yearly.VisibilityTab == true
       ) {
         tabsToggleArr.push(["2", "1"]);
       } else if (
-        $data.services[i].monthly.VisibilityTab == true &&
-        $data.services[i].yearly.VisibilityTab == false
+        insightservices[i].monthly.VisibilityTab == true &&
+        insightservices[i].yearly.VisibilityTab == false
       ) {
         tabsToggleArr.push(["1", "2"]);
       } else {
@@ -177,8 +179,8 @@
 <!----------html----------->
 {#if $loading}
   <mic-loading />
-{:else if $billNumber && $data.services && tabsToggleArr.length == $data.services.length}
-  {#each $data.services as insightsService, i}
+{:else if $billNumber && insightservices && tabsToggleArr.length == insightservices.length}
+  {#each insightservices as insightsService, i}
     {#if insightsService.yearly.VisibilityTab == true || insightsService.monthly.VisibilityTab == true}
       <div class="insight-card">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -674,7 +676,9 @@
     <mic-sunselect contractnum={$sundata.SunSelect} class="sun-select" />
   {/if}
 {:else}
-  <div />
+  <div>
+    hekki
+  </div>
 {/if}
 
 <style lang="scss">

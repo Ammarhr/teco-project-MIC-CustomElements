@@ -30,16 +30,16 @@
   let refreshToken;
   let recoToken;
   ////////////////////////
-  onMount(() => {
-    if ($apiToken && $apiDomain && !$data.Sections) {
-      get(
-        $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-        // "../../data/ChargeDetails.json"
-      );
-    }
-    refreshToken = $apiToken;
-  });
+    onMount(() => {
+      if ($apiToken && $apiDomain && !$data.Sections) {
+        get(
+          $apiToken,
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+          "../../data/ChargeDetails.json"
+        );
+      }
+      refreshToken = $apiToken;
+    });
 
   $: if (
     $newToken &&

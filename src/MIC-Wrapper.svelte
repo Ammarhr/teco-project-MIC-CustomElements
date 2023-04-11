@@ -30,6 +30,7 @@
     persona,
     setAssetsUrl,
   } from "./js/store";
+    import MicComboBill from "./lib/Components/MIC-ComboBill.svelte";
   export let token;
   export let domain;
   export let eventdomain;
@@ -78,20 +79,22 @@
     <mic-billselector />
     <!-- <MicBillSelectorAndDownload /> -->
     <div class="refreshable">
-      <div class="charge-detailes">
-        <mic-billingsummary />
+      <mic-combo-bill />
+      <MicComboBill />
+      <!-- <div class="charge-detailes"> -->
+        <!-- <mic-billingsummary /> -->
         <!-- <mic-billingsummary-clone /> -->
         <!-- <MicBillingSummary /> -->
-      </div>
-      <div class="insights">
-        <mic-insights class="mic-insights" />
+      <!-- </div>
+      <div class="insights"> -->
+        <!-- <mic-insights class="mic-insights" /> -->
         <mic-yearlyenergy class="mic-insights" />
         <!-- <MicInsights/> -->
         <!-- <MicYearlyEnergy /> -->
         <!-- <MicBulkDownload /> -->
         <!-- <MicBulkDownload /> -->
-        <mic-bulkdownload class="mic-insights" />
-      </div>
+        <!-- <mic-bulkdownload class="mic-insights" /> -->
+      <!-- </div> -->
     </div>
     <!-- <div class="blk-container"> -->
     <!-- </div> -->
@@ -105,9 +108,10 @@
 
 <style lang="scss">
   .wrapper {
-    width: 100%;
     display: flex;
     flex-direction: column;
+    padding: 0px 16px 0 16px;
+    width: calc(100% - 32px);
     gap: 30px;
     background-color: #f4f5f7;
   }
@@ -139,7 +143,7 @@
     display: grid;
     flex-direction: row;
     column-gap: 30px;
-    grid-template-columns: calc(66.66% - 30px) 33.33%;
+    // grid-template-columns: calc(66.66% - 30px) 33.33%;
     width: 100%;
     @media screen and (max-width: 992px) {
       grid-template-columns: 100%;

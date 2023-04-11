@@ -25,6 +25,7 @@
     //mocking data
     const [data, loading, error, get] = passThroughServiceFetch();
     // trigger token existence
+    
     onMount(() => {
         if ($apiDomain && $apiToken && !$data.html_masseges && tries > 0) {
             get(

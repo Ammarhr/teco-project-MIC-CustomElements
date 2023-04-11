@@ -53,6 +53,60 @@
         "CurrentDemandValue": 580,
         "DemandUnit": "KW"
       }
+    },
+     {
+      "serviceName": "Electric",
+      "BillContractNo": "5101296050",
+      "monthly": {
+        "VisibilityTab": true,
+        "unit": "KWH",
+        "valueConsumption": 1365465458,
+        "percentageConsumption": -105,
+        "valueTemp": 56,
+        "percentageTemp": 0,
+        "y": {
+          "data": [
+            522525,
+            341115
+          ]
+        },
+        "x": [
+          "Nov 2021",
+          "Dec 2021"
+        ],
+        "CurrentFactorValue": 75,
+        "CurrentFactorDate": "MAR 22",
+        "PreviousFactorValue": 20,
+        "PreviousFactorDate": "FEP 22",
+        "LoadFactorArrowComparison": 50,
+        "CurrentDemandValue": 925000,
+        "DemandUnit": "KW"
+      },
+      "yearly": {
+        "VisibilityTab": true,
+        "unit": "KWH",
+        "valueConsumption": 1505,
+        "percentageConsumption": -80,
+        "valueTemp": 35,
+        "percentageTemp": 0,
+        "y": {
+          "data": [
+            2,
+            1
+          ]
+        },
+        "x": [
+          "Dec 2021",
+          "Dec 2020"
+        ],
+        "CurrentFactorValue": 70,
+        "CurrentFactorDate": "MAR 22",
+        "PreviousFactorValue": 50,
+        "PreviousFactorDate": "MAR 21",
+        "LoadFactorArrowComparison": -150,
+        "CurrentDemandValue": 580,
+        "DemandUnit": "KW"
+      }
     }
   ]
 }
