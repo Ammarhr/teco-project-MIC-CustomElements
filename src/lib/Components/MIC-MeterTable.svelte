@@ -408,7 +408,7 @@
                                         <td>
                                             <div class="td-value">
                                                 {row.MeterNumber != ""
-                                                    ? "#" + row.MeterNumber
+                                                    ?  row.MeterNumber
                                                     : "-"}
                                             </div></td
                                         >
@@ -663,6 +663,7 @@
                                             400,
                                             selectedMeter.Service,
                                             selectedMeter.UOF,
+                                            chartDisplayUnit,
                                             null,
                                             tempData
                                         )}

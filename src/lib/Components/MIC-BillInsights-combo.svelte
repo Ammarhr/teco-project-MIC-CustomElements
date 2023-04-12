@@ -43,11 +43,11 @@
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
   onMount(() => {
-    console.log(insightservices, "insightservices");
+    // console.log(insightservices, "insightservices");
   });
   $: if (typeof emptytabs == "boolean" && emptytabs === true) {
     tabsToggleArr = [];
-    console.log(emptytabs, "emptytabs");
+    // console.log(emptytabs, "emptytabs");
   }
   ///////// acordion functionality
   const toggle = (i) => {

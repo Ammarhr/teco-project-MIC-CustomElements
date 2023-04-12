@@ -171,7 +171,7 @@
         {#each charges as billService, i}
             {#if billService.SectionType == "Service" || billService.SectionType == "AccountLevel"}
                 <div class="card">
-                    {#if billService.Collapsible == false || !billService.Collapsible }
+                    {#if billService.Collapsible == false || !billService.Collapsible}
                         <div
                             id="bills-header"
                             on:click={() => toggleContainer(i)}
@@ -194,10 +194,12 @@
                                 id="sectiontitle"
                                 style="color:{billService.Color}; font-size:{billService.FontSize}px; font-weight:{billService.FontWeight}; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
                             >
-                                <img
-                                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${billService.IconPath}`}
-                                    alt=""
-                                />
+                                {#if billService.IconPath}
+                                    <img
+                                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${billService.IconPath}`}
+                                        alt=""
+                                    />
+                                {/if}
                                 {billService.Lable}
                             </h3>
                         </span>
@@ -477,9 +479,9 @@
                                                     style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
                                                 >
                                                     {#if section.IconPath && section.IconPath != ""}
-                                                        <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`} -->
+                                                        <!-- src="/src/assets/{section.IconPath}" -->
                                                         <img
-                                                            src="/src/assets/{section.IconPath}"
+                                                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`}
                                                             alt=""
                                                         />
                                                     {/if}
@@ -492,7 +494,7 @@
                                             </div>
                                             {#each section.Section_Level2 as subSection}
                                                 <div class="charges-container">
-                                                    {#each subSection.Section_Level3s as level3Obj}
+                                                    {#each subSection.Section_Level3 as level3Obj}
                                                         {#if level3Obj.SectionType == "Charge"}
                                                             {#if level3Obj.Order == 1}
                                                                 <div

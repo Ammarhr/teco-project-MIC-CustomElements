@@ -198,7 +198,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             },
             chart: {
                 height: 400,
-                width: 2000,
+                width: "100%",
                 type: "bar"
             },
             noData: {
@@ -224,13 +224,12 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 },
                 {
                     type: "line",
-                    name: temp == true ? "tempereature" : undefined,
+                    name: temp == true ? "temperature" : undefined,
                     color: "#FF832B",
                     data: temp == true ? data.map((results) => {
                         return results.Temperature
                     }) : [],
                 }
-
             ],
             fill: {
                 opacity: 100,
@@ -239,7 +238,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             chart: {
                 height: height,
                 marginLeft: 0,
-                width: data && data.length > 30 ? 2500 : "100%",
+                width:"100%",
                 zoom: {
                     enabled: false // Disable chart zooming
                 },

@@ -62,7 +62,7 @@
 
 {#if token && domain && eventdomain && $generalErr !== true}
   <div class="wrapper">
-    <!-- <mic-headerinformation /> -->
+    <mic-headerinformation />
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
@@ -79,22 +79,21 @@
     <mic-billselector />
     <!-- <MicBillSelectorAndDownload /> -->
     <mic-combo-bill />
-    <div class="refreshable">
+    <!-- <div class="refreshable"> -->
       <!-- <MicComboBill /> -->
       <!-- <div class="charge-detailes"> -->
       <!-- <mic-billingsummary /> -->
       <!-- <mic-billingsummary-clone /> -->
       <!-- <MicBillingSummary /> -->
       <!-- </div> -->
-      <div class="insights">
+      <!-- <div class="insights"> -->
         <!-- <mic-insights class="mic-insights" /> -->
-        <mic-yearlyenergy class="mic-insights" />
+        <!-- <mic-yearlyenergy class="mic-insights" /> -->
         <!-- <MicInsights/> -->
         <!-- <MicYearlyEnergy /> -->
         <!-- <MicBulkDownload /> -->
-        <mic-bulkdownload class="mic-insights" />
-      </div>
-    </div>
+      <!-- </div> -->
+    <!-- </div> -->
     <!-- <div class="blk-container"> -->
     <!-- </div> -->
     <mic-metertable />

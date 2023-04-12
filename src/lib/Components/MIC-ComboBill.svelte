@@ -69,7 +69,7 @@
         ).then(() => {
             insightsArray = [];
             chargesArray = [];
-            console.log($chargeData, "data from charge details");
+            // console.log($chargeData, "data from charge details");
             arrayOfCharges = $chargeData.Section;
         });
         get(
@@ -80,7 +80,7 @@
             insightsArray = [];
             chargesArray = [];
             arrayOfBillInsights = [];
-            console.log($data, "data from insights");
+            // console.log($data, "data from insights");
             arrayOfBillInsights = $data.services;
         });
         sunget(
@@ -108,6 +108,7 @@
     let insight;
     let insightsArray = [];
     let chargesArray = [];
+    let bulkPosition = 0;
     $: if (
         $chargeData &&
         $chargeData.Section &&
@@ -115,17 +116,20 @@
         insightsArray.length == 0
     ) {
         let arryOfConfigue = $chargeData.Section.map((subSection) => {
-            console.log(subSection.ConfigValue, "subSection.ConfigValue");
+            // console.log(subSection.ConfigValue, "subSection.ConfigValue");
             return subSection.ConfigValue;
         });
-        console.log(arryOfConfigue, "filtered configue");
+        // console.log(arryOfConfigue, "filtered configue");
         for (let i = 0; i < $chargeData.Section.length; i++) {
             insight = arrayOfBillInsights.filter((results) => {
-                console.log(
-                    $chargeData.Section[i].Collapsible,
-                    "arryOfConfigue[i].Collapsible"
-                );
+                // console.log(
+                //     $chargeData.Section[i].Collapsible,
+                //     "arryOfConfigue[i].Collapsible"
+                // );
                 if (arryOfConfigue[i]) {
+                    if (arryOfConfigue[i] == results.BillContractNo) {
+                        bulkPosition = i;
+                    }
                     return arryOfConfigue[i] == results.BillContractNo;
                 }
             });
@@ -137,7 +141,7 @@
                 chargesArray.push([$chargeData.Section[i]]);
             }
         }
-        console.log(insightsArray, "insiiiiiiiiiiiiiiiiights");
+        // console.log(insightsArray, "insiiiiiiiiiiiiiiiiights");
         // console.log(chargesArray, "chaaaaaaaaaaaaaaaaaaarges");
     }
 </script>
@@ -185,9 +189,10 @@
                                 sunselectdata={sunSelectArray}
                                 emptytabs={emptyTabs}
                             />
-                            <!-- {#if i == insightsArray.length - 1}
+                            {#if bulkPosition == i}
+                                <mic-yearlyenergy class="mic-insights" />
                                 <mic-bulkdownload class="mic-insights" />
-                            {/if} -->
+                            {/if}
                         </div>
                     {:else}
                         <div class="insights" />
