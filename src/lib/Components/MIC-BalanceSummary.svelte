@@ -160,7 +160,7 @@
                 <div>
                     <button
                         type="button"
-                        class="payBtn btn {btnStatus}"
+                        class="payBtn btn {btnStatus} teco-btn-fill"
                         on:click={() => {
                             if (btnStatus == "enable") {
                                 fetchAndRedirect(
@@ -343,6 +343,13 @@
                 padding: 8px 18px;
                 border-radius: 6px;
                 cursor: pointer;
+                &:hover {
+                    background-color: #145093;
+                }
+
+                &:active {
+                    background-color: #004083;
+                }
             }
             .disable {
                 color: #adb3c0;
@@ -351,7 +358,6 @@
                 border: 2px solid #adb3c0;
                 padding: 8px 18px;
                 border-radius: 6px;
-                cursor: none;
             }
         }
         .tecoMessagesSection {

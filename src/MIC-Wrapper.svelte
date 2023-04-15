@@ -19,6 +19,7 @@
   import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
   import MicBalanceSummaryClone from "./lib/Components/clone/MIC-BalanceSummaryClone.svelte";
   import MicBillingSummaryClone from "./lib/Components/clone/MIC-BillingSummaryClone.svelte";
+
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -62,7 +63,7 @@
 
 {#if token && domain && eventdomain && $generalErr !== true}
   <div class="wrapper">
-    <mic-headerinformation />
+    <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
@@ -80,24 +81,27 @@
     <!-- <MicBillSelectorAndDownload /> -->
     <mic-combo-bill />
     <!-- <div class="refreshable"> -->
-      <!-- <MicComboBill /> -->
-      <!-- <div class="charge-detailes"> -->
-      <!-- <mic-billingsummary /> -->
-      <!-- <mic-billingsummary-clone /> -->
-      <!-- <MicBillingSummary /> -->
-      <!-- </div> -->
-      <!-- <div class="insights"> -->
-        <!-- <mic-insights class="mic-insights" /> -->
-        <!-- <mic-yearlyenergy class="mic-insights" /> -->
-        <!-- <MicInsights/> -->
-        <!-- <MicYearlyEnergy /> -->
-        <!-- <MicBulkDownload /> -->
-      <!-- </div> -->
+    <!-- <MicComboBill /> -->
+    <!-- <div class="charge-detailes"> -->
+    <!-- <mic-billingsummary /> -->
+    <!-- <mic-billingsummary-clone /> -->
+    <!-- <MicBillingSummary /> -->
+    <!-- </div> -->
+    <!-- <div class="insights"> -->
+    <!-- <mic-insights class="mic-insights" /> -->
+    <!-- <mic-yearlyenergy class="mic-insights" /> -->
+    <!-- <MicInsights/> -->
+    <!-- <MicYearlyEnergy /> -->
+    <!-- <MicBulkDownload /> -->
+    <!-- </div> -->
     <!-- </div> -->
     <!-- <div class="blk-container"> -->
     <!-- </div> -->
+    <!-- <mic-yearlyenergy class="mic-insights" /> -->
     <mic-metertable />
+    <!-- <MicPagination /> -->
     <!-- <MicMeterTable /> -->
+    
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />

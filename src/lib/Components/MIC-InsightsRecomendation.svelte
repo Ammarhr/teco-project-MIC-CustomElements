@@ -121,7 +121,7 @@
     <div id="footer">
         <p>Recommendations</p>
         <button
-            class=""
+            class="enable"
             on:click={() => {
                 toggleModal();
                 fetchAndRedirect(
@@ -585,28 +585,37 @@
         padding: 0px;
         width: 100%;
         height: 50px;
+        p {
+            width: 239px;
+            height: 30px;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 30px;
+            display: flex;
+            align-items: center;
+            color: #6c6c6c;
+        }
+        .enable {
+            padding: 8px 20px;
+            background: #005faa;
+            border-radius: 6px;
+            color: white;
+            border: none;
+            font-weight: 400;
+            font-size: 18px;
+            cursor: pointer;
+            &:hover {
+                background-color: #145093;
+                /* darker */
+            }
+            &:active {
+                background-color: #004083;
+                /* darker */
+            }
+        }
     }
-    #footer p {
-        width: 239px;
-        height: 30px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 30px;
-        display: flex;
-        align-items: center;
-        color: #6c6c6c;
-    }
-    #footer button {
-        padding: 8px 20px;
-        background: #005faa;
-        border-radius: 6px;
-        color: white;
-        border: none;
-        font-weight: 400;
-        font-size: 18px;
-        cursor: pointer;
-    }
+
     #hr-footer {
         border: 1px solid #eaecee;
         width: 100%;

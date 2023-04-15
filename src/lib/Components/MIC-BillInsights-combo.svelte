@@ -591,7 +591,7 @@
               {/if}
             </div>
           {/if}
-          {#if $billNumber === $latestBill && arrayOfbody && arrayOfbody.length > 0 && recoToken == $apiToken && insightsService.BillContractNo}
+          {#if $billNumber === $latestBill && arrayOfbody && arrayOfbody.length > 0 && insightsService.BillContractNo}
             <!-- <MicInsightsRecomendation
               token={$apiToken}
               billcontractnumber={insightsService.BillContractNo}

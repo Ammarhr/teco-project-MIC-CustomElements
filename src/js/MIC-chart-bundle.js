@@ -151,19 +151,20 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
 export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp) => {
     let filtedData;
     let toolTipUsage = chartUnit == "usage" ? "Energy Used: " : "Cost"
-    if (chartUnit == "cost") {
+    if (data && chartUnit == "cost") {
         unit = "$"
         filtedData = data.map((results) => {
             return results.Cost
         })
-    } else if (chartUnit == "usage") {
+    } else if (data && chartUnit == "usage") {
         filtedData = data.map((results) => {
             return results.Usage
         })
     } else {
-        filtedData = data.map((results) => {
-            return results.Usage
-        })
+        if (data)
+            filtedData = data.map((results) => {
+                return results.Usage
+            })
     }
     let colWidth;
     let serviceData;
@@ -219,26 +220,29 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 {
                     type: "column",
                     name: service,
-                    color: "#005FAA",
+                    color: `#${color}`,
                     data: filtedData
                 },
-                {
+                data.map((results) => {
+                    return results.Temperature
+                }).length > 0 ? {
                     type: "line",
-                    name: temp == true ? "temperature" : undefined,
+                    name: temp == true ? "Temperature" : "Temperature",
                     color: "#FF832B",
                     data: temp == true ? data.map((results) => {
-                        return results.Temperature
+                        if (results.Temperature !== '')
+                            return results.Temperature
                     }) : [],
-                }
+                } : {}
             ],
             fill: {
                 opacity: 100,
-                colors: color,
+                colors: [`#${color}`],
             },
             chart: {
                 height: height,
                 marginLeft: 0,
-                width:"100%",
+                width: "100%",
                 zoom: {
                     enabled: false // Disable chart zooming
                 },

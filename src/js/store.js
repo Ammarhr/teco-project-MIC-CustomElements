@@ -52,6 +52,38 @@ export const generalErr = writable(false);
 //* Agint persona:
 export const persona = writable('')
 
+//* helper functions
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {
+    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+
+
+const mijCookie = "MIC-IBLL-MIJ";
+
+if (!getCookie(mijCookie)) {
+    const uuid = crypto.randomUUID();
+    setCookie(mijCookie, uuid, 365);
+}
 //* fetch function
 export function fetchstore() {
     const loading = writable(false);
@@ -68,27 +100,61 @@ export function fetchstore() {
             } else if (token) {
                 //* test data
                 // const Publishresponse = await fetch(url)
+                // console.log("window.mx", window.mx);
                 //* real api hit with jwt token:
-                const Publishresponse = await fetch(url, {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({}),
-                });
-                // if (Publishresponse.status !== 204)  
-                data.set(await Publishresponse.json());
+                if (window.mx === undefined || window.mx === "undefined") {
+                // if (token == "") {
+                    // send uuid to mij request
+                    console.log("hhhh");
+                    const uuid = getCookie(mijCookie);
+
+                    // REQUEST TO SEND
+                    let fetchBody = {
+                        modle: {
+                            target: url,
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "MIC-MIJ-TOKEN": uuid
+                            },
+                            body: false,
+                        }
+                    }
+                    window.$.ajax({
+                        url: "/InteractiveBill/GetWebComponentData",
+                        type: "POST",
+                        datatype: "json",
+                        data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                        success: async function (responseData) {
+                            let stringResponse = responseData;
+                            let parseResponse = JSON.parse(stringResponse);
+                            data.set(parseResponse);
+                            loading.set(false);
+                        }
+                    });
+                } else {
+                    const Publishresponse = await fetch(url, {
+                        method: 'POST',
+                        cache: 'no-cache',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify({}),
+                    });
+                    // if (Publishresponse.status !== 204)  
+                    data.set(await Publishresponse.json());
+                    loading.set(false);
+                }
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
             error.set(e);
             generalErr.set(true);
+            loading.set(false);
         }
-        loading.set(false);
     }
 
     return [data, loading, error, get]

@@ -42,10 +42,10 @@
         $apiToken,
         // "../../data/Token.json"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
-      );
-      setTimeout(() => {
-        changeBillNumber(selectedBill);
-      }, 500);
+      ).then(() => changeBillNumber(selectedBill));
+      // setTimeout(() => {
+      //   changeBillNumber(selectedBill);
+      // }, 500);
     } else if (!latest1) {
       selectedBill = e.target.value;
       newToken.set("");
@@ -53,10 +53,10 @@
         $apiToken,
         // "../../data/Token.json"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
-      );
-      setTimeout(() => {
-        changeBillNumber(selectedBill);
-      }, 500);
+      ).then(() => changeBillNumber(selectedBill));
+      // setTimeout(() => {
+      //   changeBillNumber(selectedBill);
+      // }, 500);
     }
   };
 
@@ -283,9 +283,7 @@
   .m_1 {
     margin-top: 10px;
   }
-  .btn {
-    cursor: pointer;
-  }
+
   // teco cards
   .tecoCard {
     margin: 0 !important;
@@ -348,6 +346,7 @@
         }
       }
     }
+
     .tecoBillSelectorDownloadButton {
       #btn-download {
         font-style: normal;
@@ -369,6 +368,10 @@
       align-items: center;
       background: white;
       min-width: max-content;
+      &:hover {
+        color: #145093;
+        border-color: #145093;
+      }
     }
     // small container
     @media screen and (max-width: 767px) {

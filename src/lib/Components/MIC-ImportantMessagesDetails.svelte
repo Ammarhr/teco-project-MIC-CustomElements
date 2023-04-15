@@ -80,7 +80,7 @@
 </script>
 
 <div class="message-footer" transition:slide={{ duration: 300 }}>
-    <button on:click={() => showMessages("view")}><span>View</span></button>
+    <button class="enable" on:click={() => showMessages("view")}>View</button>
 </div>
 {#if show}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -284,7 +284,7 @@
         display: flex;
         flex-direction: row-reverse;
         width: 100%;
-        button {
+        .enable {
             padding: 10px 24px;
             gap: 10px;
             width: 93px;
@@ -297,6 +297,14 @@
             border-radius: 6px;
             border: none;
             cursor: pointer;
+            &:hover {
+                background-color: #145093;
+                /* darker */
+            }
+            &:active {
+                background-color: #004083;
+                /* darker */
+            }
         }
     }
 </style>
