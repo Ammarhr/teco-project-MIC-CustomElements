@@ -368,9 +368,13 @@
       align-items: center;
       background: white;
       min-width: max-content;
+      cursor: pointer;
       &:hover {
         color: #145093;
         border-color: #145093;
+      }
+      &:active {
+        background: #e5eff6;
       }
     }
     // small container

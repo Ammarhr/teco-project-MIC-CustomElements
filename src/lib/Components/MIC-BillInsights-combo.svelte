@@ -162,7 +162,7 @@
                 on:click={(e) => {
                   activateTab(i, 0);
                   fetchAndRedirect(
-                    recoToken,
+                    $apiToken,
                     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                     null,
                     {
@@ -183,7 +183,7 @@
                 on:click={(e) => {
                   activateTab(i, 1);
                   fetchAndRedirect(
-                    recoToken,
+                    $apiToken,
                     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
                     null,
                     {
@@ -329,7 +329,7 @@
                       use:chart={renderRadialBar(
                         [insightsService?.yearly?.PreviousFactorValue],
                         [insightsService?.yearly?.PreviousFactorDate],
-                        240,
+                        220,
                         "#005FAA"
                       )}
                     />
@@ -339,7 +339,7 @@
                     use:chart={renderRadialBar(
                       [insightsService?.yearly?.CurrentFactorValue],
                       [insightsService?.yearly?.CurrentFactorDate],
-                      240,
+                      220,
                       "#B1DBFD"
                     )}
                   />

@@ -99,7 +99,6 @@
     <!-- </div> -->
     <!-- <mic-yearlyenergy class="mic-insights" /> -->
     <mic-metertable />
-    <!-- <MicPagination /> -->
     <!-- <MicMeterTable /> -->
     
   </div>

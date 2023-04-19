@@ -13,7 +13,7 @@
       "URL": "https://www.peoplesgas.com/residential/billing-options/understanding-your-bill/",
       "FontWeight": "400",
       "Collapsible": false,
-      "ConfigValue": "5100843149",
+      "ConfigValue":"5100470566",
       "Section_Level1": [
         {
           "Order": 1,
@@ -342,6 +342,7 @@
       "SectionType": "AccountLevel",
       "FontWeight": "400",
       "Collapsible": false,
+      
       "Section_Level1": [
         {
           "Order": 1,

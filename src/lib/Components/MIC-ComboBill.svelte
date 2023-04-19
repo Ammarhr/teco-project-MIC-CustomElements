@@ -118,10 +118,6 @@
     // console.log(arryOfConfigue, "filtered configue");
     for (let i = 0; i < $chargeData.Section.length; i++) {
       insight = arrayOfBillInsights.filter((results) => {
-        // console.log(
-        //     $chargeData.Section[i].Collapsible,
-        //     "arryOfConfigue[i].Collapsible"
-        // );
         if (arryOfConfigue[i]) {
           if (arryOfConfigue[i] == results.BillContractNo) {
             bulkPosition = i;
@@ -156,20 +152,15 @@
                                 ]}
                             /> -->
               <mic-billingsummary-combo
-                                charges={[charge]}
-                                invoicetotal={chargesArray[
-                                    chargesArray.length - 1
-                                ]}
-                            />
+                charges={[charge]}
+                invoicetotal={chargesArray[chargesArray.length - 1]}
+              />
             {:else}
               <!-- <MicChargeDetailsCombo
                                 charges={chargesArray[i]}
                                 invoicetotal={""}
                             /> -->
-              <mic-billingsummary-combo
-                                charges={[charge]}
-                                invoicetotal={""}
-                            />
+              <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
             {/if}
           </div>
           {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
@@ -179,10 +170,10 @@
                                 sunselectdata={sunSelectArray}
                             /> -->
               <mic-insights-combo
-                                insightservices={insightsArray[i]}
-                                sunselectdata={sunSelectArray}
-                                emptytabs={emptyTabs}
-                            />
+                insightservices={insightsArray[i]}
+                sunselectdata={sunSelectArray}
+                emptytabs={emptyTabs}
+              />
               {#if bulkPosition == i}
                 <mic-yearlyenergy class="mic-insights" />
                 <mic-bulkdownload class="mic-insights" />

@@ -99,13 +99,10 @@ export function fetchstore() {
                 throw new Error("No Token provided!");
             } else if (token) {
                 //* test data
-                // const Publishresponse = await fetch(url)
-                // console.log("window.mx", window.mx);
                 //* real api hit with jwt token:
                 if (window.mx === undefined || window.mx === "undefined") {
                 // if (token == "") {
                     // send uuid to mij request
-                    console.log("hhhh");
                     const uuid = getCookie(mijCookie);
 
                     // REQUEST TO SEND
@@ -172,9 +169,6 @@ export const fetchDailyUsageChart = () => {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                // const Publishresponse = await fetch(url)
-                //* real api hit with jwt token:
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
@@ -187,6 +181,7 @@ export const fetchDailyUsageChart = () => {
                 });
                 // if (Publishresponse.status !== 204)  
                 data.set(await Publishresponse.json());
+
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
@@ -212,21 +207,48 @@ export const fetchMonthlyUsageChart = () => {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                // const Publishresponse = await fetch(url)
-                //* real api hit with jwt token:
-                const Publishresponse = await fetch(url, {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({}),
-                });
-                // if (Publishresponse.status !== 204)  
-                data.set(await Publishresponse.json());
+                if (window.mx === undefined || window.mx === "undefined") {
+                // if (token == "") {
+                    const uuid = getCookie(mijCookie);
+
+                    // REQUEST TO SEND
+                    let fetchBody = {
+                        modle: {
+                            target: url,
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "MIC-MIJ-TOKEN": uuid
+                            },
+                            body: false,
+                        }
+                    }
+                    window.$.ajax({
+                        url: "/InteractiveBill/GetWebComponentData",
+                        type: "POST",
+                        datatype: "json",
+                        data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                        success: async function (responseData) {
+                            let stringResponse = responseData;
+                            let parseResponse = JSON.parse(stringResponse);
+                            data.set(parseResponse);
+                            loading.set(false);
+                        }
+                    });
+                } else {
+                    const Publishresponse = await fetch(url, {
+                        method: 'POST',
+                        cache: 'no-cache',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify({}),
+                    });
+                    // if (Publishresponse.status !== 204)  
+                    data.set(await Publishresponse.json());
+                }
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
@@ -252,20 +274,50 @@ export const fetchRecommendations = () => {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                //* real api hit with jwt token:
-                const Publishresponse = await fetch(url, {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify(body),
-                });
-                // if (Publishresponse.status !== 204)  
-                data.set(await Publishresponse.json());
+                // if (window.mx === undefined || window.mx === "undefined") {
+                if (token == "") {
+                    // send uuid to mij request
+                    // console.log("hhhh");
+                    const uuid = getCookie(mijCookie);
+
+                    // REQUEST TO SEND
+                    let fetchBody = {
+                        modle: {
+                            target: url,
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "MIC-MIJ-TOKEN": uuid
+                            },
+                            body: false,
+                        }
+                    }
+                    window.$.ajax({
+                        url: "/InteractiveBill/GetWebComponentData",
+                        type: "POST",
+                        datatype: "json",
+                        data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                        success: async function (responseData) {
+                            let stringResponse = responseData;
+                            let parseResponse = JSON.parse(stringResponse);
+                            data.set(parseResponse);
+                            loading.set(false);
+                        }
+                    });
+                } else {
+                    const Publishresponse = await fetch(url, {
+                        method: 'POST',
+                        cache: 'no-cache',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(body),
+                    });
+                    // if (Publishresponse.status !== 204)  
+                    data.set(await Publishresponse.json());
+                }
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
@@ -279,22 +331,59 @@ export const fetchRecommendations = () => {
     return [data, loading, error, get]
 }
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
-    fetch(fetchUrl, {
-        method: "POST",
-        mode: "cors",
-        cache: "no-cache",
-        headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify(fetchBody || {}),
-    })
-        .then((response) => {
-            return response.json();
+    // if (window.mx === undefined || window.mx === "undefined") {
+    if (token == "") {
+        // send uuid to mij request
+        // console.log("hhhh");
+        try {
+
+            const uuid = getCookie(mijCookie);
+
+            // REQUEST TO SEND
+            let fetchBody = {
+                modle: {
+                    target: fetchUrl,
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "MIC-MIJ-TOKEN": uuid
+                    },
+                    body: false,
+                }
+            }
+            window.$.ajax({
+                url: "/InteractiveBill/GetWebComponentData",
+                type: "POST",
+                datatype: "json",
+                data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                success: async function (responseData) {
+                    let stringResponse = responseData;
+                    let parseResponse = JSON.parse(stringResponse);
+                    data.set(parseResponse);
+                    loading.set(false);
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    } else {
+        fetch(fetchUrl, {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify(fetchBody || {}),
         })
-        .catch((error) => {
-            console.log(error);
-        })
+            .then((response) => {
+                return response.json();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
     if (redirectUrl) {
         window.open(
             redirectUrl,
@@ -316,20 +405,49 @@ export function feedbackCall() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                // const Publishresponse = await fetch(url)
-                //* real api hit with jwt token:
-                const Publishresponse = await fetch(url, {
-                    method: 'POST',
-                    mode: "cors",
-                    cache: "no-cache",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({}),
-                });
-                data.set(await Publishresponse.json());
+                // if (window.mx === undefined || window.mx === "undefined") {
+                if (token == "") {
+                    // send uuid to mij request
+                    // console.log("hhhh");
+                    const uuid = getCookie(mijCookie);
+
+                    // REQUEST TO SEND
+                    let fetchBody = {
+                        modle: {
+                            target: url,
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "MIC-MIJ-TOKEN": uuid
+                            },
+                            body: false,
+                        }
+                    }
+                    window.$.ajax({
+                        url: "/InteractiveBill/GetWebComponentData",
+                        type: "POST",
+                        datatype: "json",
+                        data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                        success: async function (responseData) {
+                            let stringResponse = responseData;
+                            let parseResponse = JSON.parse(stringResponse);
+                            data.set(parseResponse);
+                            loading.set(false);
+                        }
+                    });
+                } else {
+                    const Publishresponse = await fetch(url, {
+                        method: 'POST',
+                        mode: "cors",
+                        cache: "no-cache",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify({}),
+                    });
+                    data.set(await Publishresponse.json());
+                }
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
 
@@ -357,19 +475,48 @@ export function errorCallback() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                // const Publishresponse = await fetch(url)
-                //* real api hit with jwt token:
-                const Publishresponse = await fetch(url, {
-                    method: 'GET',
-                    mode: "cors",
-                    cache: "no-cache",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    },
-                });
-                data.set(await Publishresponse.json());
+                // if (window.mx === undefined || window.mx === "undefined") {
+                if (token == "") {
+                    // send uuid to mij request
+                    // console.log("hhhh");
+                    const uuid = getCookie(mijCookie);
+
+                    // REQUEST TO SEND
+                    let fetchBody = {
+                        modle: {
+                            target: url,
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "MIC-MIJ-TOKEN": uuid
+                            },
+                            body: false,
+                        }
+                    }
+                    window.$.ajax({
+                        url: "/InteractiveBill/GetWebComponentData",
+                        type: "POST",
+                        datatype: "json",
+                        data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                        success: async function (responseData) {
+                            let stringResponse = responseData;
+                            let parseResponse = JSON.parse(stringResponse);
+                            data.set(parseResponse);
+                            loading.set(false);
+                        }
+                    });
+                } else {
+                    const Publishresponse = await fetch(url, {
+                        method: 'GET',
+                        mode: "cors",
+                        cache: "no-cache",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${token}`
+                        },
+                    });
+                    data.set(await Publishresponse.json());
+                }
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
@@ -399,19 +546,49 @@ export function reGenerateToken() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (oldToken) {
-                //* test data
-                //* real api hit with jwt token:
-                const Publishresponse = await fetch(url, {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${oldToken}`
-                    },
-                    body: JSON.stringify({}),
-                });
-                newToken.set(await Publishresponse.json());
+                // if (window.mx === undefined || window.mx === "undefined") {
+                if (oldToken == "") {
+                    // send uuid to mij request
+                    // console.log("hhhh");
+                    const uuid = getCookie(mijCookie);
+
+                    // REQUEST TO SEND
+                    let fetchBody = {
+                        modle: {
+                            target: url,
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${oldToken}`,
+                                "MIC-MIJ-TOKEN": uuid
+                            },
+                            body: false,
+                        }
+                    }
+                    window.$.ajax({
+                        url: "/InteractiveBill/GetWebComponentData",
+                        type: "POST",
+                        datatype: "json",
+                        data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                        success: async function (responseData) {
+                            let stringResponse = responseData;
+                            let parseResponse = JSON.parse(stringResponse);
+                            newToken.set(parseResponse);
+                            loading.set(false);
+                        }
+                    });
+                } else {
+                    const Publishresponse = await fetch(url, {
+                        method: 'POST',
+                        cache: 'no-cache',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${oldToken}`
+                        },
+                        body: JSON.stringify({}),
+                    });
+                    newToken.set(await Publishresponse.json());
+                }
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }

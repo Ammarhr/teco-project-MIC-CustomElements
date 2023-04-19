@@ -31,33 +31,7 @@
   export let charges;
   export let invoicetotal;
   ////////////////////////
-  onMount(() => {
-    //   if ($apiToken && $apiDomain && !charges) {
-    //     get(
-    //       $apiToken,
-    //       // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-    //       "../../data/ChargeDetails.json"
-    //     );
-    //   }
-    //   refreshToken = $apiToken;
-  });
-
-  //   $: if (
-  //     $newToken &&
-  //     $newToken.token &&
-  //     (recoToken == $apiToken || recoToken !== $newToken.token)
-  //   ) {
-  //     get(
-  //       $newToken.token,
-  //       `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-  //       // "../../data/ChargeDetails.json"
-  //     ).then(() => {
-  //       styleToggleArr = [];
-  //       billsObjectsArray = [];
-  //       toggleArray = [];
-  //     });
-  //     recoToken = $newToken.token;
-  //   }
+  onMount(() => {});
 
   let arrOfBreakDown = [];
   let arr = [];
@@ -180,6 +154,7 @@
               />
             </div>
           {/if}
+
           <div style={styleToggleArr[i]} class="bill-content {chargesClass}">
             <span>
               <h3
@@ -201,7 +176,100 @@
               </p>
             {/if}
             <div id="content">
-              {#if billService.Section_Level1}
+              {#if billService.Lable && billService.Lable !== "" && billService.Lable.toLowerCase().includes("installments") === true}
+                <!-- special case regarding the Installments & Adjustments -->
+                {#each billService.Section_Level1 as section, k}
+                  {#each section.Section_Level2 as subSection, j}
+                    <div class="charges-container">
+                      {#each subSection.Section_Level3 as level3Obj}
+                        {#if level3Obj.SectionType == "Charge"}
+                          {#if level3Obj.Order == 1}
+                            <div class={"level" + level3Obj.Order}>
+                              <p
+                                style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                              >
+                                {level3Obj.Value}
+                              </p>
+                              {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
+                                <!-- {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
+                                  {billsObjectsArray[i].toolTipStylleArray[j]}
+                                {/if} -->
+                                <div class="tooltip-icon">
+                                  <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`} -->
+                                  <img
+                                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
+                                    alt=""
+                                    on:click={() => toolTipToggle(j, 0)}
+                                  />
+                                  {#if billsObjectsArray[0] && billsObjectsArray[0].toolTipStylleArray[j]}
+                                    <!-- {console.log(k, "index")} -->
+                                    <div
+                                      class="tooltip-description"
+                                      style={billsObjectsArray[0]
+                                        .toolTipStylleArray[j]}
+                                    >
+                                      <div class="tooltip-con">
+                                        {level3Obj.ToolTip}
+                                        <br />
+                                        {#if billService.URL && billService.URL != ""}
+                                          <a
+                                            on:click={() => {
+                                              fetchAndRedirect(
+                                                $apiToken,
+                                                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                billService.URL,
+                                                {
+                                                  EventCode:
+                                                    "CD_ChargeExplanationClick",
+                                                  Outcome:
+                                                    "Charge Exeplination Page Loaded",
+                                                  Persona: $persona,
+                                                }
+                                              );
+                                            }}>UNDERSTANDING YOUR CHARGES</a
+                                          >
+                                        {/if}
+                                      </div>
+                                    </div>
+                                  {/if}
+                                </div>
+                              {/if}
+                            </div>
+                          {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
+                            <span
+                              class={"level" + level3Obj.Order}
+                              style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
+                            >
+                              {level3Obj.Value}
+                            </span>
+                          {:else}
+                            <p class={"level" + level3Obj.Order}>
+                              {level3Obj.Value}
+                            </p>
+                          {/if}
+                        {:else if subSection.SectionType == "CombinedGroup"}
+                          {#if level3Obj.Order == 1}
+                            <p
+                              class="service-for{level3Obj.Order} level1"
+                              style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                            >
+                              {level3Obj.Lable}
+                            </p>
+                          {:else if level3Obj.Order == 2}
+                            <p
+                              class="service-for{level3Obj.Order} level2"
+                              style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                            >
+                              {level3Obj.Value}
+                            </p>
+                          {/if}
+                        {/if}
+                      {/each}
+                    </div>
+                  {/each}
+                {/each}
+                <!--  -->
+              {:else if billService.Section_Level1}
                 {#each billService.Section_Level1 as section, j}
                   {#if section.SectionType == "ServiceHeaderGroup"}
                     <div class="headers-con">
@@ -265,7 +333,7 @@
                                       <img
                                         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
-                                        on:click={() => toolTipToggle(j, i)}
+                                        on:click={(e) => toolTipToggle(j, i, e)}
                                       />
                                       {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
                                         <div
@@ -276,7 +344,7 @@
                                           <div class="tooltip-con">
                                             {level2Obj.ToolTip}
                                             <br />
-                                            {#if billService.URL != ""}
+                                            {#if billService.URL && billService.URL != ""}
                                               <a
                                                 on:click={() => {
                                                   fetchAndRedirect(
@@ -371,7 +439,7 @@
                                         >
                                           <div class="tooltip-con">
                                             {level2Obj.ToolTip}<br />
-                                            {#if billService.URL != ""}
+                                            {#if billService.URL && billService.URL != ""}
                                               <a
                                                 on:click={() => {
                                                   fetchAndRedirect(
@@ -453,17 +521,15 @@
                                         on:click={() => toolTipToggle(j, i)}
                                       />
                                       {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
-                                        <div class="tooltip-description">
-                                          <div
-                                            class="tooltip-con"
-                                            style={billsObjectsArray[i]
-                                              .toolTipStylleArray[j]}
-                                          >
-                                            Covers the costs of moving gas from
-                                            its source to your premise, other
-                                            than the cost of gas itself.
+                                        <div
+                                          class="tooltip-description"
+                                          style={billsObjectsArray[i]
+                                            .toolTipStylleArray[j]}
+                                        >
+                                          <div class="tooltip-con">
+                                            {level3Obj.ToolTip}
                                             <br />
-                                            {#if billService.URL != ""}
+                                            {#if billService.URL && billService.URL != ""}
                                               <a
                                                 on:click={() => {
                                                   fetchAndRedirect(
@@ -650,6 +716,7 @@
     display: grid;
     grid-template-columns: 45% auto 1fr auto;
     padding: 10px 0;
+    gap: 6px;
     @media screen and (max-width: 767px) {
       justify-content: unset;
       align-items: flex-start;
@@ -777,7 +844,6 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 16px;
-    min-width: 90%;
     padding: 20px;
     margin-bottom: 5%;
     background-color: white;
@@ -841,13 +907,16 @@
     margin: 0;
     @media screen and (min-width: 993px) and (max-width: 1100px) {
       flex: 1 0 60%;
+      max-width: calc(60% - 12px);
     }
     @media screen and (max-width: 767px) {
       flex: 1 0 60%;
+      max-width: calc(60% - 12px);
     }
     @media screen and (max-width: 480px) {
       flex: 1 0 60%;
       font-size: 16px;
+      max-width: calc(60% - 12px);
     }
   }
   .level2 {
@@ -952,6 +1021,7 @@
     padding: 22px 30px;
     background: #005faa;
     border-radius: 6px;
+    text-align: center;
     @media screen and (max-width: 767px) {
       flex-direction: column;
       justify-content: center;
