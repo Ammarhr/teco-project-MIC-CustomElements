@@ -15,6 +15,7 @@
     eventsDomain,
     assetsUrl,
     generalErr,
+    SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
@@ -27,11 +28,12 @@
 
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiToken && !$data.messages && $generalErr !== true) {
+    if ($apiToken && $SAPToken && !$data.messages && $generalErr !== true) {
       get(
         $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
-        // "../../data/messages.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`,
+        // "../../data/messages.json",
+        $SAPToken
       );
     }
   });

@@ -11,6 +11,7 @@
     apiDomain,
     eventsDomain,
     newToken,
+    SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
   let newTokenTrigger;
@@ -20,10 +21,11 @@
   ////////////////////////
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiToken && !$data.NetMeter) {
+    if ($apiToken && $SAPToken && !$data.NetMeter) {
       get(
         $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
+        $SAPToken
         // "../../data/yearlyEnergy.json"
       );
     }
@@ -38,7 +40,8 @@
     get(
       $newToken.token,
       // "../../data/yearlyEnergy.json"
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
+      $SAPToken
     );
     newTokenTrigger = $newToken.token;
   }

@@ -19,6 +19,7 @@
     newToken,
     persona,
     fetchAndRedirect,
+    SAPToken,
   } from "../../js/store";
   import { chart } from "svelte-apexcharts";
   import {
@@ -55,17 +56,19 @@
 
   // fetch meterTable fetch api on component mount
   onMount(() => {
-    if ($apiToken && $apiDomain && !$data.results) {
+    if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
       get(
         $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-        // "../../data/meterTable.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
+        // "../../data/meterTable.json",
+        $SAPToken
       );
     }
     reGeneratedToken = $apiToken;
   });
   //////// change the selected meter + call Dap Api
   const handleSelectedMeter = (meterObject, i) => {
+    chartLegend = "";
     first = false;
     styleSelectedRows = [];
     if (meterObject) {
@@ -99,8 +102,10 @@
         MeterNumber,
         Operand,
         OperandLabel,
+        AMI_Flag,
       } = selectedMeter;
-    //   if (selectedMeter.AMI_Flag == "x") {
+
+      if (AMI_Flag == "X") {
         dailyUsageGet(
           $apiToken,
           `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
@@ -116,9 +121,10 @@
             kw: DAP_kw,
             dtoun: DAP_dtoun,
             dtouf: DAP_dtouf,
-          }
+          },
+          $SAPToken
         );
-    //   }
+      }
       let monthlyUrl;
 
       if (DAP_dtoun == "x" && DAP_dtouf == "x") {
@@ -129,21 +135,24 @@
 
       monthlyUsageGet(
         $apiToken,
-        monthlyUrl
-        // "../../data/meterUsageMonthly.json"
+        monthlyUrl,
+        // "../../data/meterUsageMonthly.json",
+        $SAPToken
       );
     }
-    fetchAndRedirect(
-      $apiToken,
-      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      null,
-      {
-        EventCode: "Click_Meter_Line",
-        Outcome: selectedMeter.MeterNumber,
-        Feedback: "",
-        Persona: $persona,
-      }
-    );
+    if (selectedMeter) {
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Meter_Line",
+          Outcome: selectedMeter.MeterNumber,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
+    }
   };
 
   // refresh the component depend on the new generated token
@@ -154,8 +163,9 @@
   ) {
     get(
       $newToken.token,
-      //   `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`
-      "../../data/meterTable.json"
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
+      $SAPToken
+      // "../../data/meterTable.json"
     );
     reGeneratedToken = $newToken.token;
   }
@@ -172,10 +182,21 @@
     first = true;
   }
   let chartColor;
+  let onOffPeakDemand;
+  let chartLegend;
   $: if (selectedMeter) {
-    console.log("hre", selectedMeter.DAP_kw);
     if (selectedMeter.DAP_kw == "x") {
       chartColor = "#411084";
+      chartLegend = "Demand";
+      if (selectedMeter) {
+        if (selectedMeter.Operand == "KW_R_OPK") {
+          onOffPeakDemand = "Off Peak: ";
+        } else if (selectedMeter.Operand == "KW_R_PK") {
+          onOffPeakDemand = "On Peak: ";
+        } else {
+          onOffPeakDemand = "Demand: ";
+        }
+      }
     } else if (
       selectedMeter.DAP_dtoun == "x" &&
       selectedMeter.DAP_dtouf !== "x"
@@ -193,8 +214,18 @@
       chartColor = "both";
     } else if (selectedMeter.DAP_rkwh == "x") {
       chartColor = "#96BDFF";
+      if (selectedMeter) {
+        if (selectedMeter.Operand == "RECVD_KWH") {
+          chartLegend = "SELF-GENERATED";
+        }
+      }
     } else {
       chartColor = "#044F8D";
+      if (selectedMeter) {
+        if (selectedMeter.Operand == "DELV_KWH") {
+          chartLegend = "UTILITY PROVIDED";
+        }
+      }
     }
   }
 
@@ -402,8 +433,25 @@
     $monthlyUsageData.MonthlyUsage.MonthlyDetails &&
     $monthlyUsageData.MonthlyUsage.MonthlyDetails.length > 0
   ) {
-    if ($monthlyUsageData.MonthlyUsage.MonthlyDetails.length > 20) {
-      monthlyMinwidth = "1500px";
+    switch (true) {
+      case $monthlyUsageData.MonthlyUsage.MonthlyDetails.length >= 25:
+        monthlyMinwidth = "1500px";
+        break;
+      case $monthlyUsageData.MonthlyUsage.MonthlyDetails.length >= 15 &&
+        $monthlyUsageData.MonthlyUsage.MonthlyDetails.length < 25:
+        monthlyMinwidth = "1200px";
+        break;
+      case $monthlyUsageData.MonthlyUsage.MonthlyDetails.length >= 10 &&
+        $monthlyUsageData.MonthlyUsage.MonthlyDetails.length < 15:
+        monthlyMinwidth = "900px";
+        break;
+      case $monthlyUsageData.MonthlyUsage.MonthlyDetails.length >= 6 &&
+        $monthlyUsageData.MonthlyUsage.MonthlyDetails.length < 10:
+        monthlyMinwidth = "600px";
+        break;
+      default:
+        // code to be executed if none of the cases are true
+        break;
     }
   }
   $: if (
@@ -412,8 +460,25 @@
     $dailyUsageData.DailyUsage.DailyDetails &&
     $dailyUsageData.DailyUsage.DailyDetails.length > 0
   ) {
-    if ($dailyUsageData.DailyUsage.DailyDetails.length > 20) {
-      dailyMinwidth = "1500px";
+    switch (true) {
+      case $dailyUsageData.DailyUsage.DailyDetails.length > 25:
+        dailyMinwidth = "1500px";
+        break;
+      case $dailyUsageData.DailyUsage.DailyDetails.length >= 15 &&
+        $dailyUsageData.DailyUsage.DailyDetails.length < 25:
+        dailyMinwidth = "1200px";
+        break;
+      case $dailyUsageData.DailyUsage.DailyDetails.length >= 10 &&
+        $dailyUsageData.DailyUsage.DailyDetails.length < 15:
+        dailyMinwidth = "900px";
+        break;
+      case $dailyUsageData.DailyUsage.DailyDetails.length >= 6 &&
+        $dailyUsageData.DailyUsage.DailyDetails.length < 10:
+        dailyMinwidth = "600px";
+        break;
+      default:
+        // code to be executed if none of the cases are true
+        break;
     }
   }
 </script>
@@ -651,26 +716,26 @@
                 <!--  -->
               {/if}
               {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && activeSection == "monthly"}
-                {#if selectedMeter.DAP_dtoun !== "x" || selectedMeter.DAP_dtouf !== "x"}
-                  <div class="switch">
-                    <button
-                      class={usageBtnClass}
-                      on:click={() => {
-                        costUsageToggle("usage");
-                      }}
-                    >
-                      Usage
-                    </button>
-                    <button
-                      class={costBtnClass}
-                      on:click={() => {
-                        costUsageToggle("cost");
-                      }}
-                    >
-                      Cost
-                    </button>
-                  </div>
-                {/if}
+                <!-- {#if selectedMeter.DAP_dtoun !== "x" || selectedMeter.DAP_dtouf !== "x"} -->
+                <div class="switch">
+                  <button
+                    class={usageBtnClass}
+                    on:click={() => {
+                      costUsageToggle("usage");
+                    }}
+                  >
+                    Usage
+                  </button>
+                  <button
+                    class={costBtnClass}
+                    on:click={() => {
+                      costUsageToggle("cost");
+                    }}
+                  >
+                    Cost
+                  </button>
+                </div>
+                <!-- {/if} -->
               {/if}
             </div>
             <!-- Monthly Chart -->
@@ -712,7 +777,8 @@
                       chartDisplayUnit,
                       tempData,
                       true,
-                      selectedMeter.BillingPeriod,
+                      onOffPeakDemand,
+                      chartLegend
                     )}
                   />
                 {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
@@ -775,7 +841,10 @@
                         selectedMeter.Service,
                         selectedMeter.UOF,
                         chartDisplayUnit,
-                        tempData
+                        tempData,
+                        false,
+                        onOffPeakDemand,
+                        chartLegend
                       )}
                     />
                   {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
@@ -1064,6 +1133,8 @@
     width: 100%;
     @media screen and (max-width: 480px) {
       justify-content: center;
+      flex-direction: column;
+      align-items: center;
     }
   }
   h4 {
@@ -1167,6 +1238,12 @@
     color: #6c6c6c;
     cursor: pointer;
     margin: 0;
+    border-bottom: solid 2px transparent;
+    &:hover {
+      color: #0f0f0f;
+      font-weight: 300;
+      border-color: #005faa;
+    }
   }
   #meter-tab11 {
     display: none;

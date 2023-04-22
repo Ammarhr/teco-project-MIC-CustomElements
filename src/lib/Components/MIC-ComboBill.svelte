@@ -17,6 +17,7 @@
     persona,
     billNumber,
     latestBill,
+    SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
   import MicBillInsightsCombo from "./MIC-BillInsights-combo.svelte";
@@ -32,22 +33,31 @@
   const [chargeData, chargeLoading, chargeError, chargeGet] = fetchstore(); // charge details select store fetch
 
   onMount(() => {
-    if ($apiToken && $apiDomain && !$chargeData.Section && !$data.services) {
+    if (
+      $apiToken &&
+      $SAPToken &&
+      $apiDomain &&
+      !$chargeData.Section &&
+      !$data.services
+    ) {
       chargeGet(
         $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
-        // "../../../data/ChargeDetails.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+        // "../../../data/ChargeDetails.json",
+        $SAPToken
       );
       get(
         $apiToken,
-        // "../../../data/DemandInsight.json"
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
+        // "../../../data/DemandInsight.json",
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
+        $SAPToken
       );
     }
     sunget(
       $apiToken,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
-      // "../../data/sunSelect.json"
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
+      // "../../data/sunSelect.json",
+      $SAPToken
     );
     comboNewToken = $apiToken;
   });
@@ -59,7 +69,8 @@
   ) {
     chargeGet(
       $newToken.token,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+      $SAPToken
       // "../../data/ChargeDetails.json"
     ).then(() => {
       insightsArray = [];
@@ -69,7 +80,8 @@
     });
     get(
       $newToken.token,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
+      $SAPToken
       // "../../../data/Insights.json"
     ).then(() => {
       insightsArray = [];
@@ -80,7 +92,8 @@
     });
     sunget(
       $apiToken,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
+      $SAPToken
       // "../../data/sunSelect.json"
     ).then(() => {
       sunSelectArray = [];
@@ -136,39 +149,38 @@
   }
 </script>
 
-{#if $loading || $chargeLoading}
-  <mic-loading />
-{:else if arrayOfCharges}
-  <div class="refreshable">
+<div class="refreshable">
+  {#if $chargeLoading || $loading}
+    <div class="charge-detailes"><mic-loading /></div>
+    <div class="insights"><mic-loading /></div>
+  {:else if arrayOfCharges}
     {#each arrayOfCharges as charge, i}
       {#if charge && charge.SectionType}
         {#if charge.SectionType}
           <div class="charge-detailes">
             {#if i == chargesArray.length - 2}
               <!-- <MicChargeDetailsCombo
-                                charges={chargesArray[i]}
-                                invoicetotal={chargesArray[
-                                    chargesArray.length - 1
-                                ]}
-                            /> -->
+                charges={chargesArray[i]}
+                invoicetotal={chargesArray[chargesArray.length - 1]}
+              /> -->
               <mic-billingsummary-combo
                 charges={[charge]}
                 invoicetotal={chargesArray[chargesArray.length - 1]}
               />
             {:else}
               <!-- <MicChargeDetailsCombo
-                                charges={chargesArray[i]}
-                                invoicetotal={""}
-                            /> -->
+                charges={chargesArray[i]}
+                invoicetotal={""}
+              /> -->
               <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
             {/if}
           </div>
           {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
             <div class="insights">
               <!-- <MicBillInsightsCombo
-                                insightservices={insightsArray[i]}
-                                sunselectdata={sunSelectArray}
-                            /> -->
+              insightservices={insightsArray[i]}
+              sunselectdata={sunSelectArray}
+              /> -->
               <mic-insights-combo
                 insightservices={insightsArray[i]}
                 sunselectdata={sunSelectArray}
@@ -192,8 +204,8 @@
         <mic-bulkdownload class="mic-insights" />
       </div>
     {/if}
-  </div>
-{/if}
+  {/if}
+</div>
 
 <style lang="scss">
   .refreshable {

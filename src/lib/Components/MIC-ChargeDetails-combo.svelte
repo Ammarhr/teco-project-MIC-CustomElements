@@ -17,6 +17,7 @@
     latestBill,
   } from "../../js/store";
   import { onMount } from "svelte";
+  import { each } from "svelte/internal";
 
   //mocking data
   const [data, loading, error, get] = fetchstore();
@@ -97,19 +98,64 @@
         "opacity: 0;max-height: 0;margin: 0; transition:200ms; padding:0; ";
     }
   };
-
-  const toolTipToggle = (j, i) => {
-    if (typeof billsObjectsArray[i].toolTipArray[j] !== "boolean")
-      billsObjectsArray[i].toolTipArray.push(false);
-
-    billsObjectsArray[i].toolTipArray[j] =
-      !billsObjectsArray[i].toolTipArray[j];
-    if (billsObjectsArray[i].toolTipArray[j]) {
-      billsObjectsArray[i].toolTipStylleArray[j] =
-        "max-height: 200vh;opacity: 1;transition:200ms;";
+  let key = 0;
+  $: key = key;
+  let arrOfLevel3 = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+  let arrayOfL3Style = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+  const toolTipToggle = (j, i, chargeLine, level3) => {
+    if (level3) {
+      arrOfLevel3[j] = !arrOfLevel3[j];
+      if (arrOfLevel3[j] == true) {
+        arrayOfL3Style[j] = "max-height: 200vh;opacity: 1;transition:200ms;";
+      } else {
+        arrayOfL3Style[j] =
+          "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
+      }
     } else {
-      billsObjectsArray[i].toolTipStylleArray[j] =
-        "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
+      if (typeof billsObjectsArray[i].toolTipArray[j] !== "boolean")
+        billsObjectsArray[i].toolTipArray.push(false);
+
+      billsObjectsArray[i].toolTipArray[j] =
+        !billsObjectsArray[i].toolTipArray[j];
+      if (billsObjectsArray[i].toolTipArray[j]) {
+        billsObjectsArray[i].toolTipStylleArray[j] =
+          "max-height: 200vh;opacity: 1;transition:200ms;";
+      } else {
+        billsObjectsArray[i].toolTipStylleArray[j] =
+          "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
+      }
     }
     fetchAndRedirect(
       $apiToken,
@@ -117,7 +163,7 @@
       null,
       {
         EventCode: "CD_ChargeTooltipClick",
-        Outcome: "Helper x Is Active",
+        Outcome: `Helper ${chargeLine} Is Active`,
         Persona: $persona,
       }
     );
@@ -176,96 +222,11 @@
               </p>
             {/if}
             <div id="content">
-              {#if billService.Lable && billService.Lable !== "" && billService.Lable.toLowerCase().includes("installments") === true}
+              {#if billService.Lable && billService.Lable !== "" && billService.Lable.toLowerCase().includes("65456") === true}
                 <!-- special case regarding the Installments & Adjustments -->
                 {#each billService.Section_Level1 as section, k}
                   {#each section.Section_Level2 as subSection, j}
-                    <div class="charges-container">
-                      {#each subSection.Section_Level3 as level3Obj}
-                        {#if level3Obj.SectionType == "Charge"}
-                          {#if level3Obj.Order == 1}
-                            <div class={"level" + level3Obj.Order}>
-                              <p
-                                style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
-                              >
-                                {level3Obj.Value}
-                              </p>
-                              {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
-                                <!-- {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
-                                  {billsObjectsArray[i].toolTipStylleArray[j]}
-                                {/if} -->
-                                <div class="tooltip-icon">
-                                  <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`} -->
-                                  <img
-                                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
-                                    alt=""
-                                    on:click={() => toolTipToggle(j, 0)}
-                                  />
-                                  {#if billsObjectsArray[0] && billsObjectsArray[0].toolTipStylleArray[j]}
-                                    <!-- {console.log(k, "index")} -->
-                                    <div
-                                      class="tooltip-description"
-                                      style={billsObjectsArray[0]
-                                        .toolTipStylleArray[j]}
-                                    >
-                                      <div class="tooltip-con">
-                                        {level3Obj.ToolTip}
-                                        <br />
-                                        {#if billService.URL && billService.URL != ""}
-                                          <a
-                                            on:click={() => {
-                                              fetchAndRedirect(
-                                                $apiToken,
-                                                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                billService.URL,
-                                                {
-                                                  EventCode:
-                                                    "CD_ChargeExplanationClick",
-                                                  Outcome:
-                                                    "Charge Exeplination Page Loaded",
-                                                  Persona: $persona,
-                                                }
-                                              );
-                                            }}>UNDERSTANDING YOUR CHARGES</a
-                                          >
-                                        {/if}
-                                      </div>
-                                    </div>
-                                  {/if}
-                                </div>
-                              {/if}
-                            </div>
-                          {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
-                            <span
-                              class={"level" + level3Obj.Order}
-                              style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
-                            >
-                              {level3Obj.Value}
-                            </span>
-                          {:else}
-                            <p class={"level" + level3Obj.Order}>
-                              {level3Obj.Value}
-                            </p>
-                          {/if}
-                        {:else if subSection.SectionType == "CombinedGroup"}
-                          {#if level3Obj.Order == 1}
-                            <p
-                              class="service-for{level3Obj.Order} level1"
-                              style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
-                            >
-                              {level3Obj.Lable}
-                            </p>
-                          {:else if level3Obj.Order == 2}
-                            <p
-                              class="service-for{level3Obj.Order} level2"
-                              style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
-                            >
-                              {level3Obj.Value}
-                            </p>
-                          {/if}
-                        {/if}
-                      {/each}
-                    </div>
+                    <div class="charges-container" />
                   {/each}
                 {/each}
                 <!--  -->
@@ -299,21 +260,6 @@
                   {:else if section.SectionType == "Charge_Group"}
                     <!-- BreakDown sections -->
                     {#if section.Section_Level2 && section.Section_Level2[0] && section.Section_Level2[0].IsBreakdown == true}
-                      <!-- <div
-                        class="breakdown-header"
-                        on:click={() => {
-                          subSectionToggle(j, i);
-                        }}
-                      >
-                        <h6>View Breakdown</h6>
-                        <img
-                          src={breakdownToggle}
-                          alt=""
-                          id={"rotate-svg-" +
-                            billsObjectsArray[i].subSectionArray[j]}
-                        />
-                      </div> -->
-                      <!-- {console.log(billsObjectsArray[i].subToggleStyleArray[j])} -->
                       {#if billsObjectsArray[i]}
                         <div
                           class="charges-container break-down "
@@ -333,7 +279,8 @@
                                       <img
                                         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
-                                        on:click={(e) => toolTipToggle(j, i, e)}
+                                        on:click={(e) =>
+                                          toolTipToggle(j, i, level2Obj.Value)}
                                       />
                                       {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
                                         <div
@@ -405,9 +352,101 @@
                             </div>
                           </div>
                         {/if}
+                        {#each section.Section_Level2 as level2Obj, k}
+                          {#if level2Obj.Section_Level3}
+                            <div class="charges-container">
+                              {#each level2Obj.Section_Level3 as level3Obj}
+                                {#if level3Obj.SectionType == "Charge"}
+                                  {#if level3Obj.Order == 1}
+                                    <div class={"level" + level3Obj.Order}>
+                                      <p
+                                        style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                      >
+                                        {level3Obj.Value}
+                                      </p>
+                                      {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
+                                        <div class="tooltip-icon">
+                                          <img
+                                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
+                                            alt=""
+                                            on:click={() =>
+                                              toolTipToggle(
+                                                k,
+                                                k,
+                                                level3Obj.Value,
+                                                "levele3"
+                                              )}
+                                          />
+
+                                          {#if arrOfLevel3[k]}
+                                            <div
+                                              class="tooltip-description"
+                                              style={arrayOfL3Style[k]}
+                                            >
+                                              <div class="tooltip-con">
+                                                {level3Obj.ToolTip}
+                                                <br />
+                                                {#if billService.URL && billService.URL != ""}
+                                                  <a
+                                                    on:click={() => {
+                                                      fetchAndRedirect(
+                                                        $apiToken,
+                                                        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                        billService.URL,
+                                                        {
+                                                          EventCode:
+                                                            "CD_ChargeExplanationClick",
+                                                          Outcome:
+                                                            "Charge Exeplination Page Loaded",
+                                                          Persona: $persona,
+                                                        }
+                                                      );
+                                                    }}
+                                                    >UNDERSTANDING YOUR CHARGES</a
+                                                  >
+                                                {/if}
+                                              </div>
+                                            </div>
+                                          {/if}
+                                        </div>
+                                      {/if}
+                                    </div>
+                                  {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
+                                    <span
+                                      class={"level" + level3Obj.Order}
+                                      style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
+                                    >
+                                      {level3Obj.Value}
+                                    </span>
+                                  {:else}
+                                    <p class={"level" + level3Obj.Order}>
+                                      {level3Obj.Value}
+                                    </p>
+                                  {/if}
+                                {:else if level2Obj.SectionType == "CombinedGroup"}
+                                  {#if level3Obj.Order == 1}
+                                    <p
+                                      class="service-for{level3Obj.Order} level1"
+                                      style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                    >
+                                      {level3Obj.Lable}
+                                    </p>
+                                  {:else if level3Obj.Order == 2}
+                                    <p
+                                      class="service-for{level3Obj.Order} level2"
+                                      style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                    >
+                                      {level3Obj.Value}
+                                    </p>
+                                  {/if}
+                                {/if}
+                              {/each}
+                            </div>
+                          {/if}
+                        {/each}
+
                         <div class="charges-container">
                           {#each section.Section_Level2 as level2Obj}
-                            <!-- {section.SectionType} -->
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
                                 <div class={"level" + level2Obj.Order}>
@@ -429,7 +468,8 @@
                                       <img
                                         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
-                                        on:click={() => toolTipToggle(j, i)}
+                                        on:click={() =>
+                                          toolTipToggle(j, i, level2Obj.Value)}
                                       />
                                       {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
                                         <div
@@ -480,7 +520,6 @@
                         </div>
                       {/if}
                     {/if}
-
                     <!-- Sub Section -->
                   {:else if section.SectionType == "CustomeSection"}
                     {#if section.Lable && section.Lable != ""}
@@ -518,7 +557,8 @@
                                       <img
                                         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
-                                        on:click={() => toolTipToggle(j, i)}
+                                        on:click={() =>
+                                          toolTipToggle(j, i, level3Obj.Value)}
                                       />
                                       {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
                                         <div
@@ -729,6 +769,13 @@
       display: flex;
       flex-wrap: wrap;
     }
+    &:empty {
+      /* Remove the style of the empty div */
+      /* For example: */
+      border: none;
+      padding: 0;
+      height: 0;
+    }
   }
   .headers-con {
     display: flex;
@@ -915,7 +962,9 @@
     }
     @media screen and (max-width: 480px) {
       flex: 1 0 60%;
-      font-size: 16px;
+      p {
+        font-size: 16px !important;
+      }
       max-width: calc(60% - 12px);
     }
   }
@@ -934,7 +983,7 @@
     }
     @media screen and (max-width: 480px) {
       order: 3;
-      font-size: 14px;
+      font-size: 14px !important;
     }
   }
   .level3 {
@@ -951,7 +1000,7 @@
       order: 4;
     }
     @media screen and (max-width: 480px) {
-      font-size: 14px;
+      font-size: 14px !important;
     }
   }
   .total-row {
@@ -973,7 +1022,7 @@
       flex: 1 0 40%;
     }
     @media screen and (max-width: 480px) {
-      font-size: 16px;
+      font-size: 16px !important;
     }
   }
   .service-for1 {
@@ -1010,7 +1059,7 @@
     color: #005faa;
     max-width: 275px;
     @media screen and (max-width: 767px) {
-      font-size: 18px;
+      font-size: 18px !important;
     }
   }
   .total {
@@ -1038,7 +1087,7 @@
     color: #ffffff;
     margin: 0;
     @media screen and (max-width: 767px) {
-      font-size: 22px;
+      font-size: 22px !important;
     }
   }
   .total-value {

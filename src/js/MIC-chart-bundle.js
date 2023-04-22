@@ -1,5 +1,5 @@
 // import { Label } from "@amcharts/amcharts5";
-// import cloudIcon from "../assets/usage-cloud.svg"
+import cloudIcon from "../assets/usage-cloud.svg"
 // import tempLegend from "../assets/temp-legend.svg"
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
     let options = {
@@ -150,11 +150,11 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
 }
 
 
-export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp, monthly, days) => {
+export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp, monthly, onOffPeakDemand, customLegend) => {
     // console.log(color, 'color');
     let filterData;
-    let toolTipUsage = chartUnit == "cost" ? "Cost" : service == "Gas" ? "Gas Used: " : "Energy Used: "
-
+    let toolTipUsage = chartUnit == "cost" ? "Cost" : service == "Gas" ? "Gas Used: " : onOffPeakDemand ? onOffPeakDemand : "Energy Used: "
+    let chartLegend = customLegend ? customLegend.toUpperCase() : service.toUpperCase();
     if (data && chartUnit == "cost") {
         unit = "$"
         filterData = data.map((results) => {
@@ -237,21 +237,26 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             series: [
                 {
                     type: "column",
-                    name: service.toUpperCase(),
+                    name: chartLegend,
                     color: `${color}`,
                     data: filterData
                 },
-                data.map((results) => {
+                temp == true && data.map((results) => {
                     return results.Temperature
                 }).length > 0 ? {
                     type: "line",
-                    name: temp == true ? "TEMPERATURE" : "TEMPERATURE",
+                    name: "TEMPERATURE",
                     color: "#FF832B",
-                    data: temp == true ? data.map((results) => {
+                    data: data.map((results) => {
                         if (results.Temperature !== '')
                             return results.Temperature
-                    }) : [],
-                } : {}
+                    }),
+                } : {
+                    type: "line",
+                    name: " ",
+                    color: "#ffffff00",
+                    data: []
+                }
             ],
             fill: {
                 opacity: 100,
@@ -294,7 +299,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 },
             },
             dataLabels: {
-                enabled: true,
+                enabled: false,
                 offsetY: -20,
                 formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
                     let arr;
@@ -323,14 +328,26 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     strokeColor: '#fff',
                     fillColors: undefined,
                     radius: 12,
-                    // customHTML: function () {
-                    //     return `<img src="${tempLegend}"/>`
-                    // },
                     onClick: undefined,
                     offsetX: 0,
                     offsetY: 0
                 },
             },
+            // annotations: {
+            //     points: [{
+            //         x: "MAY 31",
+            //         y: 54.5 + 15,
+            //         yAxisIndex: 0,
+            //         seriesIndex: 0,
+            //         image: {
+            //             path: cloudIcon,
+            //             width: 30,
+            //             height: 30,
+            //             offsetX: 0,
+            //             offsetY: 0,
+            //         }
+            //     }],
+            // },
             tooltip: {
                 enabled: true,
                 followCursor: true,
@@ -349,7 +366,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                             +
                             `<div  style="padding:6px">`
                             +
-                            (series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
+                            (series[0] && series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
                                 '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
                                 "<span style='font-weight:700; color:#000000; margin-right:6px; margin-bottom:6px'>" +
                                 toolTipUsage +
@@ -358,7 +375,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                                 +
                                 series[0][dataPointIndex].toLocaleString() + " " + unit : "")
                             +
-                            (series[1][dataPointIndex] ? "</div>"
+                            (series[1] && series[1][dataPointIndex] ? "</div>"
                                 + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;  margin-bottom: 6px;">'
                                 + `<span style='font-weight:700; '>` +
                                 "Avg. Temp: " +
@@ -367,7 +384,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                                 "<span style='font-weight:300;'>"
                                 + series[1][dataPointIndex] + "°" : "")
                             +
-                            (monthly === true ? "</div>"
+                            (monthly === true && daysArray[dataPointIndex] ? "</div>"
                                 + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;">'
                                 + `<span style='font-weight:700; '>` +
                                 "Billing Days: " +
@@ -449,17 +466,30 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
 
 
 export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit) => {
-    let costArray;
-    if (data && chartUnit == "cost") {
-        costArray = data.map((results) => {
-            return results.Cost?.split(",").join('')
-        })
+
+    let costArray = [];
+    let costArrayOff = [];
+    let daysArray = []
+    if (data && chartUnit == "cost" && onPeak == "x" && offPeak == "x") {
+        costArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 == 0 : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')))
+        costArrayOff = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 !== 0 : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')))
+    } else if (chartUnit == "cost") {
+        if (onPeak == "x") {
+            costArray = data.map(res => res.Cost)
+
+        } else if (offPeak == "x") {
+            costArrayOff = data.map(res => res.Cost)
+        }
     }
+    if (data) {
+        daysArray = chartUnit == "usage" ? data.filter((result, i) => onPeak == "x" && offPeak !== "x" || onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 == 0 : result.Dtype == "dtoun").map(value => value.Days) : data.map(value => value.Days)
+    }
+
     let serisData = chartUnit == "usage" ? [onPeak == "x" ? {
         name: 'OnPeak',
         type: 'column',
-        color: onPeak == "x" && offPeak !== "x" ? `${color}` : "#00B6F0",
-        data: data.filter(result => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" || monthly ? true : result.Dtype == "dtoun").map(value => value.Usage)
+        color: "#00B6F0",
+        data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 == 0 : result.Dtype == "dtoun").map(value => parseFloat(value.Usage?.split(",").join('')))
     } : {
         name: '',
         type: 'column',
@@ -468,8 +498,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     }, offPeak == "x" ? {
         name: 'OffPeak',
         type: 'column',
-        color: onPeak !== "x" && offPeak == "x" ? `${color}` : "#00294A",
-        data: data.filter(result => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" || monthly ? true : result.Dtype == "dtouf").map(value => value.Usage)
+        color: "#00294A",
+        data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 !== 0 : result.Dtype == "dtouf").map(value => parseFloat(value.Usage?.split(",").join('')))
     } : {
         name: '',
         type: 'column',
@@ -482,8 +512,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     }] : [onPeak == "x" ? {
         name: 'OnPeak',
         type: 'column',
-        color: onPeak == "x" && offPeak !== "x" ? `${color}` : "#00B6F0",
-        data: data.filter(result => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" || monthly ? true : result.Dtype == "dtoun").map(value => value.Cost)
+        color: "#00B6F0",
+        data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 == 0 : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')))
     } : {
         name: '',
         type: 'column',
@@ -493,7 +523,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         name: 'OffPeak',
         type: 'column',
         color: onPeak !== "x" && offPeak == "x" ? `${color}` : "#00294A",
-        data: data.filter(result => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" || monthly ? true : result.Dtype == "dtouf").map(value => value.Cost)
+        data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 !== 0 : result.Dtype == "dtouf").map(value => parseFloat(value.Cost?.split(",").join('')))
     } : {
         name: '',
         type: 'column',
@@ -558,13 +588,6 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             tooltip: {
                 enabled: false
             },
-            // style: {
-            //     colors: [],
-            //     fontSize: '12px',
-            //     fontFamily: 'Helvetica, Arial, sans-serif',
-            //     fontWeight: 400,
-            //     cssClass: 'apexcharts-xaxis-label',
-            // },
         },
         yaxis: [
             {
@@ -636,7 +659,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     arr[dataPointIndex] +
                     "</div>"
                     + (chartUnit == "usage" ? (`<div class="apexcharts-tooltip-text" style="margin-top: 8px;">` +
-                        (series[0][dataPointIndex] ? "</div>" +
+                        (series[0] && series[0][dataPointIndex] ? "</div>" +
                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
                             "<span style='font-weight:700; color:#000000; margin-bottom:6px'>" +
                             "On Peak: " +
@@ -645,7 +668,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                             +
                             series[0][dataPointIndex] + " " + unit : "")
                         +
-                        (series[1][dataPointIndex] ? "</div>"
+                        (series[1] && series[1][dataPointIndex] ? "</div>"
                             +
                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                             + `<span style='font-weight:700; margin-bottom:6px'>` +
@@ -653,17 +676,35 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                             "</span>"
                             +
                             "<span style='font-weight:300;'>"
-                            + series[1][dataPointIndex] + " " + unit : "")) : costArray[dataPointIndex] ? "</div>"
+                            + series[1][dataPointIndex] + " " + unit : "")) :
+
+                        costArrayOff[dataPointIndex] || costArray[dataPointIndex] ?
+                            '<div style="padding-top:14px"> ' +
+                            (costArray[dataPointIndex] ?
+                                ("</div>"
+                                    +
+                                    '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                    + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                    "OnPeak: " +
+                                    "</span>"
+                                    +
+                                    "<span style='font-weight:300;'>"
+                                    +
+                                    costArray[dataPointIndex] + " " + "$") : "")
+                            +
+                            (costArrayOff[dataPointIndex] ? ("</div>"
                                 +
                                 '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                                 + `<span style='font-weight:700; margin-bottom:6px'>` +
-                                "Cost: " +
+                                "OffPeak: " +
                                 "</span>"
                                 +
                                 "<span style='font-weight:300;'>"
-                                + costArray[dataPointIndex] + " " + "$" : "")
+                                + costArrayOff[dataPointIndex] + " " + "$") : "") : ""
+
+                    )
                     +
-                    (series[2][dataPointIndex] ? "</div>"
+                    (series[2] && series[2][dataPointIndex] ? "</div>"
                         + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                         + `<span style='font-weight:700; margin-bottom:6px'>` +
                         "Avg. Temp: " +
@@ -671,14 +712,14 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                         +
                         "<span style='font-weight:300;'>"
                         + series[2][dataPointIndex] + "°" : "") +
-                    (monthly ? "</div>"
+                    (daysArray && monthly == true ? "</div>"
                         + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                         + `<span style='font-weight:700; margin-bottom:6px'>` +
                         "Billing Days: " +
                         "</span>"
                         +
                         "<span style='font-weight:300;'>"
-                        + days.split(" ")[0] : "")
+                        + daysArray[dataPointIndex] : '')
 
                 );
             },

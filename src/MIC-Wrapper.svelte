@@ -19,6 +19,7 @@
   import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
   import MicBalanceSummaryClone from "./lib/Components/clone/MIC-BalanceSummaryClone.svelte";
   import MicBillingSummaryClone from "./lib/Components/clone/MIC-BillingSummaryClone.svelte";
+  import MicComboBill from "./lib/Components/MIC-ComboBill.svelte";
 
   import { onMount } from "svelte";
   import {
@@ -30,14 +31,15 @@
     newToken,
     persona,
     setAssetsUrl,
+    setSAPTpken,
   } from "./js/store";
-  import MicComboBill from "./lib/Components/MIC-ComboBill.svelte";
+
   export let token;
   export let domain;
   export let eventdomain;
   // export let assetspath;
   export let personainput;
-
+  export let saptoken = '""';
   const refresh = () => {
     newToken.set("");
   };
@@ -45,6 +47,7 @@
     setToken(token);
     setDomain(domain);
     setEventDomain(eventdomain);
+    setSAPTpken(saptoken);
     // setAssetsUrl(assetspath);
     if (personainput == "Agent") {
       persona.set("Agent");
@@ -61,9 +64,9 @@
   refresh();
 </script>
 
-{#if token && domain && eventdomain && $generalErr !== true}
+{#if token && domain && eventdomain && saptoken && $generalErr !== true}
   <div class="wrapper">
-    <!-- <mic-headerinformation /> -->
+    <mic-headerinformation />
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
@@ -100,7 +103,6 @@
     <!-- <mic-yearlyenergy class="mic-insights" /> -->
     <mic-metertable />
     <!-- <MicMeterTable /> -->
-    
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />
@@ -114,7 +116,7 @@
     padding: 0px 16px 0 16px;
     width: calc(100% - 32px);
     gap: 30px;
-    background-color: #f4f5f7;
+    background-color: #ffff;
   }
   .important-balance {
     display: grid;

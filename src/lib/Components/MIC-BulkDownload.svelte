@@ -4,15 +4,22 @@
   // @ts-nocheck
   import { onMount } from "svelte";
   // import backgroundPattern from "../../assets/mask-bd.svg";
-  import { fetchstore, apiDomain, apiToken, generalErr } from "../../js/store";
+  import {
+    fetchstore,
+    apiDomain,
+    apiToken,
+    generalErr,
+    SAPToken,
+  } from "../../js/store";
   //mocking data
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiDomain && $apiToken && !$data.BlkDownload) {
+    if ($apiDomain && $SAPToken && $apiToken && !$data.BlkDownload) {
       get(
         $apiToken,
         // "../../data/bulkDownload.json"
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`,
+        $SAPToken
       );
     }
   });
@@ -31,9 +38,7 @@
     style="background-image:url({`https://tecocdn.azureedge.net/ibill/iBill-assets/mask-bd.svg`});"
   >
     <div class="tecoBillBannerBody">
-      <p>
-        Looking To Download Bill? Click Here To Download One Or More Bills.
-      </p>
+      <p>Looking To Download Bill? Click Here To Download One Or More Bills.</p>
       <!-- svelte-ignore a11y-invalid-attribute -->
       <a class="reverseOrder m_1" href={$data.BlkDownload} role="button"
         ><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" />

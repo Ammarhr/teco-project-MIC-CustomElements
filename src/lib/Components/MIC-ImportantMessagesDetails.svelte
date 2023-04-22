@@ -164,6 +164,7 @@
       color: #6b7280;
       font-size: 36px;
       font-weight: 600;
+      padding: 0;
       cursor: pointer;
     }
     img {
@@ -207,6 +208,8 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    gap: 10px;
+    align-items: center;
     .message-lable {
       display: flex;
       align-items: center;

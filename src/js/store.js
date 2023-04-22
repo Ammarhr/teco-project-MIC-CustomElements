@@ -35,6 +35,10 @@ export const eventsDomain = writable('')
 export const setEventDomain = (domain) => {
     eventsDomain.set(domain)
 }
+export const SAPToken = writable("");
+export const setSAPTpken = (token) => {
+    SAPToken.set(token)
+}
 export const assetsUrl = writable('')
 export const setAssetsUrl = (domain) => {
     assetsUrl.set(domain)
@@ -76,8 +80,6 @@ function eraseCookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-
-
 const mijCookie = "MIC-IBLL-MIJ";
 
 if (!getCookie(mijCookie)) {
@@ -90,7 +92,7 @@ export function fetchstore() {
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url) => {
+    const get = async (token, url, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -100,8 +102,8 @@ export function fetchstore() {
             } else if (token) {
                 //* test data
                 //* real api hit with jwt token:
-                if (window.mx === undefined || window.mx === "undefined") {
-                // if (token == "") {
+                // if (window.mx === undefined || window.mx === "undefined") {
+                if (token == "") {
                     // send uuid to mij request
                     const uuid = getCookie(mijCookie);
 
@@ -112,7 +114,8 @@ export function fetchstore() {
                             method: "POST",
                             headers: {
                                 Authorization: `Bearer ${token}`,
-                                "MIC-MIJ-TOKEN": uuid
+                                "MIC-MIJ-TOKEN": uuid,
+                                "UserCredentials": saptoken
                             },
                             body: false,
                         }
@@ -136,7 +139,8 @@ export function fetchstore() {
                         credentials: 'same-origin',
                         headers: {
                             'Content-Type': 'application/json',
-                            "Authorization": `Bearer ${token}`
+                            "Authorization": `Bearer ${token}`,
+                            "UserCredentials": saptoken
                         },
                         body: JSON.stringify({}),
                     });
@@ -161,7 +165,7 @@ export const fetchDailyUsageChart = () => {
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url, body) => {
+    const get = async (token, url, body, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -175,7 +179,8 @@ export const fetchDailyUsageChart = () => {
                     credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${token}`,
+                        "UserCredentials": saptoken
                     },
                     body: JSON.stringify(body),
                 });
@@ -199,7 +204,7 @@ export const fetchMonthlyUsageChart = () => {
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url) => {
+    const get = async (token, url, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -207,8 +212,8 @@ export const fetchMonthlyUsageChart = () => {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                if (window.mx === undefined || window.mx === "undefined") {
-                // if (token == "") {
+                // if (window.mx === undefined || window.mx === "undefined") {
+                if (token == "") {
                     const uuid = getCookie(mijCookie);
 
                     // REQUEST TO SEND
@@ -242,7 +247,8 @@ export const fetchMonthlyUsageChart = () => {
                         credentials: 'same-origin',
                         headers: {
                             'Content-Type': 'application/json',
-                            "Authorization": `Bearer ${token}`
+                            "Authorization": `Bearer ${token}`,
+                            "UserCredentials": saptoken
                         },
                         body: JSON.stringify({}),
                     });
@@ -266,7 +272,7 @@ export const fetchRecommendations = () => {
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url, body) => {
+    const get = async (token, url, body, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -311,7 +317,8 @@ export const fetchRecommendations = () => {
                         credentials: 'same-origin',
                         headers: {
                             'Content-Type': 'application/json',
-                            "Authorization": `Bearer ${token}`
+                            "Authorization": `Bearer ${token}`,
+                            "UserCredentials": saptoken
                         },
                         body: JSON.stringify(body),
                     });
@@ -332,58 +339,24 @@ export const fetchRecommendations = () => {
 }
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
     // if (window.mx === undefined || window.mx === "undefined") {
-    if (token == "") {
-        // send uuid to mij request
-        // console.log("hhhh");
-        try {
 
-            const uuid = getCookie(mijCookie);
-
-            // REQUEST TO SEND
-            let fetchBody = {
-                modle: {
-                    target: fetchUrl,
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "MIC-MIJ-TOKEN": uuid
-                    },
-                    body: false,
-                }
-            }
-            window.$.ajax({
-                url: "/InteractiveBill/GetWebComponentData",
-                type: "POST",
-                datatype: "json",
-                data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
-                success: async function (responseData) {
-                    let stringResponse = responseData;
-                    let parseResponse = JSON.parse(stringResponse);
-                    data.set(parseResponse);
-                    loading.set(false);
-                }
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    } else {
-        fetch(fetchUrl, {
-            method: "POST",
-            mode: "cors",
-            cache: "no-cache",
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`,
-            },
-            body: JSON.stringify(fetchBody || {}),
+    fetch(fetchUrl, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(fetchBody || {}),
+    })
+        .then((response) => {
+            return response.json();
         })
-            .then((response) => {
-                return response.json();
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    }
+        .catch((error) => {
+            // console.log(error);
+        })
+
     if (redirectUrl) {
         window.open(
             redirectUrl,
@@ -397,7 +370,7 @@ export function feedbackCall() {
     const data = writable({});
     const loading = writable(false);;
 
-    async function setFeedback(token, url) {
+    async function setFeedback(token, url, saptoken) {
         loading.set(true)
         error.set(false);
         try {
@@ -442,7 +415,8 @@ export function feedbackCall() {
                         cache: "no-cache",
                         headers: {
                             'Content-Type': 'application/json',
-                            "Authorization": `Bearer ${token}`
+                            "Authorization": `Bearer ${token}`,
+                            "UserCredentials": saptoken
                         },
                         body: JSON.stringify({}),
                     });
@@ -467,7 +441,7 @@ export function errorCallback() {
     const data = writable({});
     const loading = writable(false);;
 
-    async function errorHandler(token, url) {
+    async function errorHandler(token, url, saptoken) {
         loading.set(true)
         error.set(false);
         try {
@@ -512,7 +486,8 @@ export function errorCallback() {
                         cache: "no-cache",
                         headers: {
                             'Content-Type': 'application/json',
-                            "Authorization": `Bearer ${token}`
+                            "Authorization": `Bearer ${token}`,
+                            "UserCredentials": saptoken
                         },
                     });
                     data.set(await Publishresponse.json());
@@ -538,7 +513,7 @@ export function reGenerateToken() {
     const error = writable(false);
     const data = writable({});
 
-    async function getToken(oldToken, url) {
+    async function getToken(oldToken, url, saptoken) {
         loading.set(true);
         error.set(false);
         try {
@@ -583,7 +558,8 @@ export function reGenerateToken() {
                         credentials: 'same-origin',
                         headers: {
                             'Content-Type': 'application/json',
-                            "Authorization": `Bearer ${oldToken}`
+                            "Authorization": `Bearer ${oldToken}`,
+                            "UserCredentials": saptoken
                         },
                         body: JSON.stringify({}),
                     });

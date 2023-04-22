@@ -17,6 +17,7 @@
     eventsDomain,
     newToken,
     persona,
+    SAPToken,
   } from "../../js/store";
   import MicSunSelect from "./MIC-SunSelect.svelte";
   // state
@@ -26,11 +27,12 @@
   const [data, loading, error, get] = fetchstore();
   const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken();
 
-  $: if ($apiDomain && $apiToken && !$data.bills) {
+  $: if ($apiDomain && $apiToken && $SAPToken && !$data.bills) {
     get(
       $apiToken,
       // "../../data/BillSelector.json"
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`,
+      $SAPToken
     );
   }
 
@@ -41,7 +43,8 @@
       getToken(
         $apiToken,
         // "../../data/Token.json"
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`,
+        $SAPToken
       ).then(() => changeBillNumber(selectedBill));
       // setTimeout(() => {
       //   changeBillNumber(selectedBill);
@@ -52,7 +55,8 @@
       getToken(
         $apiToken,
         // "../../data/Token.json"
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`,
+        $SAPToken
       ).then(() => changeBillNumber(selectedBill));
       // setTimeout(() => {
       //   changeBillNumber(selectedBill);

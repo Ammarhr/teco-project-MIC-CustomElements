@@ -22,6 +22,7 @@
     persona,
     eventsDomain,
     sunSelectServicesArray,
+    SAPToken
   } from "../../js/store";
   import { onMount } from "svelte";
   export let insightservices;
@@ -348,7 +349,7 @@
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
                     <p class="insights-value">
-                      {insightsService?.yearly?.CurrentDemandValue.toLocaleString()}
+                      {insightsService?.yearly?.CurrentDemandValue}
                       {insightsService?.yearly?.DemandUnit}
                     </p>
                     {#if insightsService.yearly.LoadFactorArrowComparison > 0}
@@ -545,7 +546,7 @@
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
                     <p class="insights-value">
-                      {insightsService?.monthly?.CurrentDemandValue.toLocaleString()}
+                      {insightsService?.monthly?.CurrentDemandValue}
                       {insightsService?.monthly?.DemandUnit}
                     </p>
                     {#if insightsService.monthly.LoadFactorArrowComparison > 0}

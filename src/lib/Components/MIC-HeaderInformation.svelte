@@ -2,7 +2,7 @@
 
 <script>
   // @ts-nocheck
-  import { fetchstore, apiDomain, apiToken } from "../../js/store";
+  import { fetchstore, apiDomain, apiToken, SAPToken } from "../../js/store";
   //state
   let account;
   let statusClass = "Inactive";
@@ -11,11 +11,12 @@
 
   // testing url:"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json"
   // dev url:"${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails"
-  $: if ($apiDomain && $apiToken && !$data.account) {
+  $: if ($apiDomain && $SAPToken && $apiToken && !$data.account) {
     get(
       $apiToken,
       // "../../data/accountData.json"
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`,
+      $SAPToken
       // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json`
     );
   }
@@ -36,7 +37,6 @@
 </script>
 
 <div>
-
   {#if $loading}
     <mic-loading />
   {:else if $error}
@@ -66,13 +66,22 @@
         >
           <div class="oneLined">
             {#if account.IsElectric}
-              <img class="spacing-outer-right-medium" src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`} />
+              <img
+                class="spacing-outer-right-medium"
+                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`}
+              />
             {/if}
             {#if account.IsGas}
-              <img class="spacing-outer-right-medium" src={`https://tecocdn.azureedge.net/ibill/iBill-assets/GasService.svg`} />
+              <img
+                class="spacing-outer-right-medium"
+                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/gasService.svg`}
+              />
             {/if}
             {#if account.IsLighting}
-              <img class="lighting" src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`} />
+              <img
+                class="lighting"
+                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`}
+              />
             {/if}
             <div>
               <div class="account-id">
