@@ -19,6 +19,8 @@
   import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
   import MicBalanceSummaryClone from "./lib/Components/clone/MIC-BalanceSummaryClone.svelte";
   import MicBillingSummaryClone from "./lib/Components/clone/MIC-BillingSummaryClone.svelte";
+  import MicComboBill from "./lib/Components/MIC-ComboBill.svelte";
+  import MicShadowLoading from "./lib/Components/MIC-ShadowLoading.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -29,13 +31,15 @@
     newToken,
     persona,
     setAssetsUrl,
+    setSAPTpken,
   } from "./js/store";
+
   export let token;
   export let domain;
   export let eventdomain;
   // export let assetspath;
   export let personainput;
-
+  export let saptoken = '""';
   const refresh = () => {
     newToken.set("");
   };
@@ -43,6 +47,7 @@
     setToken(token);
     setDomain(domain);
     setEventDomain(eventdomain);
+    setSAPTpken(saptoken);
     // setAssetsUrl(assetspath);
     if (personainput == "Agent") {
       persona.set("Agent");
@@ -59,7 +64,7 @@
   refresh();
 </script>
 
-{#if token && domain && eventdomain && $generalErr !== true}
+{#if token && domain && eventdomain && saptoken && $generalErr !== true}
   <div class="wrapper">
     <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
@@ -77,25 +82,27 @@
     </div>
     <mic-billselector />
     <!-- <MicBillSelectorAndDownload /> -->
-    <div class="refreshable">
-      <div class="charge-detailes">
-        <mic-billingsummary />
-        <!-- <mic-billingsummary-clone /> -->
-        <!-- <MicBillingSummary /> -->
-      </div>
-      <div class="insights">
-        <mic-insights class="mic-insights" />
-        <mic-yearlyenergy class="mic-insights" />
-        <!-- <MicInsights/> -->
-        <!-- <MicYearlyEnergy /> -->
-        <!-- <MicBulkDownload /> -->
-        <!-- <MicBulkDownload /> -->
-        <mic-bulkdownload class="mic-insights" />
-      </div>
-    </div>
+    <mic-combo-bill />
+    <!-- <div class="refreshable"> -->
+    <!-- <MicComboBill /> -->
+    <!-- <div class="charge-detailes"> -->
+    <!-- <mic-billingsummary /> -->
+    <!-- <mic-billingsummary-clone /> -->
+    <!-- <MicBillingSummary /> -->
+    <!-- </div> -->
+    <!-- <div class="insights"> -->
+    <!-- <mic-insights class="mic-insights" /> -->
+    <!-- <mic-yearlyenergy class="mic-insights" /> -->
+    <!-- <MicInsights/> -->
+    <!-- <MicYearlyEnergy /> -->
+    <!-- <MicBulkDownload /> -->
+    <!-- </div> -->
+    <!-- </div> -->
     <!-- <div class="blk-container"> -->
     <!-- </div> -->
+    <!-- <mic-yearlyenergy class="mic-insights" /> -->
     <mic-metertable />
+    <!-- <MicShadowLoading /> -->
     <!-- <MicMeterTable /> -->
   </div>
 {:else if $generalErr === true}
@@ -105,20 +112,21 @@
 
 <style lang="scss">
   .wrapper {
-    width: 100%;
     display: flex;
     flex-direction: column;
+    padding: 0px 16px 0 16px;
+    width: calc(100% - 32px);
     gap: 30px;
-    background-color: #f4f5f7;
+    background-color: #ffffff00;
   }
   .important-balance {
     display: grid;
     flex-direction: row;
     column-gap: 30px;
+    row-gap: 30px;
     grid-template-columns: calc(66.66% - 30px) 33.33%;
     width: 100%;
     @media screen and (max-width: 992px) {
-      gap: 30px;
       grid-template-columns: 100%;
     }
   }
@@ -139,7 +147,7 @@
     display: grid;
     flex-direction: row;
     column-gap: 30px;
-    grid-template-columns: calc(66.66% - 30px) 33.33%;
+    // grid-template-columns: calc(66.66% - 30px) 33.33%;
     width: 100%;
     @media screen and (max-width: 992px) {
       grid-template-columns: 100%;

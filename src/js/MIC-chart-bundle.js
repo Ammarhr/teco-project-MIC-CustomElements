@@ -1,4 +1,6 @@
+// import { Label } from "@amcharts/amcharts5";
 import cloudIcon from "../assets/usage-cloud.svg"
+// import tempLegend from "../assets/temp-legend.svg"
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
     let options = {
         series: data,
@@ -148,45 +150,89 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
 }
 
 
-export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp) => {
-    let filtedData;
-    let toolTipUsage = chartUnit == "usage" ? "Energy Used: " : "Cost"
-    if (chartUnit == "cost") {
+export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp, monthly, onOffPeakDemand, customLegend) => {
+    // console.log(color, 'color');
+    let filterData;
+    let toolTipUsage = chartUnit == "cost" ? "Cost" : service == "Gas" ? "Gas Used: " : onOffPeakDemand ? onOffPeakDemand : "Energy Used: "
+    let chartLegend = customLegend ? customLegend.toUpperCase() : service.toUpperCase();
+    if (data && chartUnit == "cost") {
         unit = "$"
-        filtedData = data.map((results) => {
-            return results.Cost
+        filterData = data.map((results) => {
+            if (results.Cost !== '') {
+                return results.Cost?.split(",").join('')
+            } else {
+                return null
+            }
         })
-    } else if (chartUnit == "usage") {
-        filtedData = data.map((results) => {
-            return results.Usage
+    } else if (data && chartUnit == "usage") {
+        filterData = data.map((results) => {
+            if (results.Usage !== "") {
+                return parseFloat(results.Usage?.split(",").join(''))
+            } else {
+                return null
+            }
         })
     } else {
-        filtedData = data.map((results) => {
-            return results.Usage
-        })
+        if (data)
+            filterData = data.map((results) => {
+                if (results.Usage !== "") {
+                    return parseFloat(results.Usage?.split(",").join(''))
+                } else {
+                    return null
+                }
+            })
+    }
+    if (filterData && filterData.length < 5 && filterData.length !== 0) {
+        filterData = [...filterData, 0, 0, 0, 0, 0]
     }
     let colWidth;
     let serviceData;
+    let tempData;
     let catArray = [];
+    let daysArray = []
+    let cloudArray = [];
     if (data && data.length > 0) {
+        if (chartUnit !== "cost") {
+            unit = data[0].UOM;
+        }
         serviceData = data.filter((results) => {
-            if (results.Usage !== "")
-                return results.Usage
+            if (results.Usage !== "") {
+                if (results.CloudIcon == "X") {
+                    cloudArray.push({
+                        x: results.Perioddate,
+                        y: parseFloat(results.Usage?.split(",").join('')) + parseFloat(results.Usage?.split(",").join('')) * 0.1,
+                        yAxisIndex: 0,
+                        seriesIndex: 0,
+                        image: {
+                            path: cloudIcon,
+                            width: 30,
+                            height: 30,
+                            offsetX: 0,
+                            offsetY: 0,
+                        }
+                    })
+                }
+                return parseFloat(results.Usage?.split(",").join(''))
+            }
+        })
+        tempData = data.map((results) => {
+            return results.Temperature;
         })
         catArray = data.map((results) => {
-            return results.Perioddate
+            return results.Perioddate.toUpperCase();
+        })
+        daysArray = data.map((results) => {
+            return results.Days;
         })
     }
-    // console.log("serviceData", serviceData);
     //* configure column width depend on the data 
     if (data && data.length < 5) {
-        colWidth = "5%"
+        colWidth = "20%"
     } else {
-        colWidth = "70px"
+        colWidth = "90px"
     }
-
     let options
-    if (!serviceData || serviceData.length == 0) {
+    if ((!serviceData || serviceData.length == 0) && (!tempData || tempData.length == 0)) {
         options = {
             annotations: {
                 position: 'front',
@@ -198,7 +244,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             },
             chart: {
                 height: 400,
-                width: 2000,
+                width: "100%",
                 type: "bar"
             },
             noData: {
@@ -214,32 +260,43 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             ],
         }
     } else {
+
         options = {
             series: [
                 {
                     type: "column",
-                    name: service,
-                    color: "#005FAA",
-                    data: filtedData
+                    name: chartLegend,
+                    color: `${color}`,
+                    data: filterData
                 },
-                {
+                temp == true && data.map((results) => {
+                    return results.Temperature
+                }).length > 0 ? {
                     type: "line",
-                    name: temp == true ? "tempereature" : undefined,
+                    name: "TEMPERATURE",
                     color: "#FF832B",
-                    data: temp == true ? data.map((results) => {
-                        return results.Temperature
-                    }) : [],
+                    data: data.map((results) => {
+                        if (results.Temperature !== '') {
+                            return results.Temperature
+                        } else {
+                            return null
+                        }
+                    }),
+                } : {
+                    type: "line",
+                    name: " ",
+                    color: "#ffffff00",
+                    data: []
                 }
-
             ],
             fill: {
                 opacity: 100,
-                colors: color,
+                colors: [`${color}`],
             },
             chart: {
                 height: height,
                 marginLeft: 0,
-                width: data && data.length > 30 ? 2500 : "100%",
+                width: "100%",
                 zoom: {
                     enabled: false // Disable chart zooming
                 },
@@ -262,12 +319,13 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 bar: {
                     position: 'left',
                     borderRadiusWhenStacked: 'last',
-                    borderRadius: 10,
+                    borderRadius: 8,
+                    borderRadiusApplication: 'end',
+                    endingShape: 'rounded',
                     columnWidth: colWidth || "70%",
                     dataLabels: {
                         position: "top", // top, center, bottom,
                     },
-
                     distributed: false,
                 },
             },
@@ -278,16 +336,36 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     let arr;
                     arr = data.filter(res => res.CloudIcon)
                     if (data[dataPointIndex] && data[dataPointIndex].CloudIcon == "X")
-                        return (""
-                            // '<div>' 
-                            // // +
-                            // // `<img src=${cloudIcon} alt="cloud icon" />`
-                        )
+                        return ``
                 },
             },
             legend: {
                 show: true,
                 horizontalAlign: 'right',
+                onItemClick: {
+                    toggleDataSeries: false
+                },
+                onItemHover: {
+                    highlightDataSeries: false
+                },
+                labels: {
+                    colors: undefined,
+                    useSeriesColors: false
+                },
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 0,
+                    strokeColor: '#fff',
+                    fillColors: undefined,
+                    radius: 12,
+                    onClick: undefined,
+                    offsetX: 0,
+                    offsetY: 0
+                },
+            },
+            annotations: {
+                points: cloudArray,
             },
             tooltip: {
                 enabled: true,
@@ -297,31 +375,47 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     arr = data.map((results) => {
                         return results.FullDate
                     })
-                    return (
-                        '<div class=" apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
-                        '<div style="padding-bottom:8px">' +
-                        "<span style='font-weight:700; color:#005FAA; border-bottom:1px solid #EAECEE;'>" +
-                        arr[dataPointIndex] +
-                        "</div>"
-                        +
-                        (series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
-                            '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
-                            "<span style='font-weight:700; color:#000000;'>" +
-                            toolTipUsage +
-                            "</span>" +
-                            "<span style='font-weight:300;color:#000000;'>" + " "
+                    if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex])) {
+
+                        return (
+                            '<div class=" apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
+                            '<div style="padding-bottom:8px; border-bottom:1px solid #EAECEE; margin-bottom: 8px;">' +
+                            "<span style='font-weight:700; color:#005FAA; '>" +
+                            arr[dataPointIndex] +
+                            "</div>"
                             +
-                            series[0][dataPointIndex] + " " + unit : "")
-                        +
-                        (series[1][dataPointIndex] ? "</div>"
-                            + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
-                            + `<span style='font-weight:700;'>` +
-                            "Avg.Temp: " +
-                            "</span>"
+                            `<div  style="padding:6px">`
                             +
-                            "<span style='font-weight:300;'>"
-                            + series[1][dataPointIndex] + "°" : "")
-                    );
+                            (series[0] && series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
+                                '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
+                                "<span style='font-weight:700; color:#000000; margin-right:6px; margin-bottom:6px'>" +
+                                toolTipUsage +
+                                "</span>" +
+                                "<span style='font-weight:300;color:#000000;'>" + " "
+                                +
+                                series[0][dataPointIndex].toLocaleString() + " " + unit : "")
+                            +
+                            (series[1] && series[1][dataPointIndex] ? "</div>"
+                                + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;  margin-bottom: 6px;">'
+                                + `<span style='font-weight:700; '>` +
+                                "Avg. Temp: " +
+                                "</span>"
+                                +
+                                "<span style='font-weight:300;'>"
+                                + series[1][dataPointIndex] + "°" : "")
+                            +
+                            (monthly === true && daysArray[dataPointIndex] ? "</div>"
+                                + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;">'
+                                + `<span style='font-weight:700; '>` +
+                                "Billing Days: " +
+                                "</span>"
+                                +
+                                "<span style='font-weight:300;'>"
+                                + daysArray[dataPointIndex].split(" ")[0] : "")
+                        );
+                    } else {
+                        return ''
+                    }
                 },
                 onDatasetHover: {
                     highlightDataSeries: true,
@@ -337,58 +431,52 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 }
             },
             xaxis: {
+                // min: 13,
+                // range: 13,
                 type: "category",
-                categories: catArray,
+                labels: {
+                    rotate: -45
+                },
+                axisBorder: {
+                    show: true,
+                    color: '#000000',
+                    height: 1,
+                    width: '100%',
+                    offsetX: 0,
+                    offsetY: -0.5
+                },
+                categories: catArray.length > 3 ? catArray : [...catArray, '', '', '', '', ''],
+                tickPlacement: 'between',
                 tooltip: {
                     enabled: false
-                }
+                },
+
             },
             yaxis: [
                 {
-                    dataLabels: {
-                        show: true,
-                    },
-                    axisBorder: {
+                    title: {
                         show: false,
-                    },
-                    axisTicks: {
-                        show: false,
+                        text: ""
                     },
                     labels: {
-                        show: false,
+                        show: true,
                         formatter: function (val) {
                             return val;
                         },
                     },
-                    title: {
-                        text: undefined,
-                        rotate: 0,
-                        offsetX: 12,
-                        offsetY: -10,
-                        style: {
-                            fontFamily: 'Interstate',
-                            fontStyle: "normal",
-                            fontWeight: 300,
-                            fontSize: 12,
-                            lineHeight: "14px",
-                            color: "#005FAA",
-                            marginTop: 16
-                        },
-                    }
                 },
                 {
-                    axisBorder: {
+                    opposite: true,
+                    title: {
                         show: false,
-                    },
-                    axisTicks: {
-                        show: false,
+                        text: ""
                     },
                     labels: {
-                        show: true,
+                        show: false,
                         formatter: function (val) {
                             return val;
                         },
-                    }
+                    },
                 }
             ],
 
@@ -399,179 +487,326 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
 }
 
 
-export const onPeakOffPeakChart = (data, unit) => {
+export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit) => {
 
-    let options = {
-        series: [{
-            name: 'OnPeak',
-            type: 'column',
-            color: "#00B6F0",
-            data: data.filter(result => result.Dtype == "dtoun").map(value => value.Usage)
-        }, {
-            name: 'OffPeak',
-            type: 'column',
-            color: "#00294A",
-            data: data.filter(result => result.Dtype == "dtouf").map(value => value.Usage)
-        }, {
-            name: 'Temperature',
-            type: 'line',
-            data: data.filter((result, i) => i % 2 == 0).map(value => value.Temperature)
-        }],
-        chart: {
-            height: 350,
-            type: 'line',
-            stacked: false,
-            zoom: {
-                enabled: false // Disable chart zooming
+    let costArray = [];
+    let costArrayOff = [];
+    let daysArray = []
+    if (data && chartUnit == "cost" && onPeak == "x" && offPeak == "x") {
+        costArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 == 0 : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')))
+        costArrayOff = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 !== 0 : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')))
+    } else if (chartUnit == "cost") {
+        if (onPeak == "x") {
+            costArray = data.map(res => res.Cost)
+
+        } else if (offPeak == "x") {
+            costArrayOff = data.map(res => res.Cost)
+        }
+    }
+    if (data) {
+        daysArray = chartUnit == "usage" ? data.filter((result, i) => onPeak == "x" && offPeak !== "x" || onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 == 0 : result.Dtype == "dtoun").map(value => value.Days) : data.map(value => value.Days)
+    }
+
+    let serisData = chartUnit == "usage" ? [onPeak == "x" ? {
+        name: 'OnPeak',
+        type: 'column',
+        color: "#00B6F0",
+        data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun")
+            .map(value => value.Usage !== "" ? parseFloat(value.Usage?.split(",").join('')) : null)
+    } : {
+        name: '',
+        type: 'column',
+        color: "#ffffff",
+        data: []
+    }, offPeak == "x" ? {
+        name: 'OffPeak',
+        type: 'column',
+        color: "#00294A",
+        data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_OPK_B"  : result.Dtype == "dtouf")
+            .map(value => value.Usage !== "" ? parseFloat(value.Usage?.split(",").join('')) : null)
+    } : {
+        name: '',
+        type: 'column',
+        color: "#ffffff",
+        data: []
+    }, {
+        name: 'TEMPERATURE',
+        type: 'line',
+        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => i % 2 == 0)
+            .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
+    }] : [onPeak == "x" ? {
+        name: 'OnPeak',
+        type: 'column',
+        color: "#00B6F0",
+        data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_R_PK": result.Dtype == "dtoun")
+            .map(value => value.Cost !== "" ? parseFloat(value.Cost?.split(",").join('')) : null)
+    } : {
+        name: '',
+        type: 'column',
+        color: "#ffffff",
+        data: []
+    }, offPeak == "x" ? {
+        name: 'OffPeak',
+        type: 'column',
+        color: onPeak !== "x" && offPeak == "x" ? `${color}` : "#00294A",
+        data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_OPK_B" : result.Dtype == "dtouf")
+            .map(value => value.Cost !== "" ? parseFloat(value.Cost?.split(",").join('')) : null)
+    } : {
+        name: '',
+        type: 'column',
+        color: "#ffffff",
+        data: []
+    }, {
+        name: 'TEMPERATURE',
+        type: 'line',
+        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => i % 2 == 0)
+            .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature) : []
+    }]
+
+    let colWidth;
+    if (data && data.length < 5) {
+        colWidth = "20%"
+    } else {
+        colWidth = "90px"
+    }
+
+    let options;
+    if (!data.length) {
+        options = {
+            annotations: {
+                position: 'front',
+                yaxis: [
+                    {
+                        y: undefined,
+                    },
+                ],
             },
-            toolbar: {
-                show: false,
+            chart: {
+                height: 400,
+                width: "100%",
+                type: "bar"
             },
-        },
-        stroke: {
-            width: 3,
-            curve: 'smooth',
-        },
-        markers: {
-            size: 5,
-            colors: "#fff",
-            strokeDashArray: 50,
-            strokeWidth: 3,
-            strokeColors: "#FF832B",
-        },
-        fill: {
-            opacity: 100,
-        },
-        dataLabels: {
-            enabled: false
-        },
-        xaxis: {
-            categories: data.filter((result, i) => i % 2 == 0).map(value => value.Perioddate),
-            axisTicks: {
-                show: false,
+            noData: {
+                text: "No Data to display",
+                align: "center",
+                verticalAlign: "middle",
             },
-            axisBorder: {
-                show: false,
+            series: [
+                {
+                    name: "Series 1",
+                    data: []
+                }
+            ],
+        }
+    } else {
+        options = {
+            series: serisData,
+            chart: {
+                height: 350,
+                type: 'line',
+                stacked: false,
+                zoom: {
+                    enabled: false // Disable chart zooming
+                },
+                toolbar: {
+                    show: false,
+                },
             },
-            tooltip: {
+            stroke: {
+                width: 3,
+                curve: 'smooth',
+            },
+            markers: {
+                size: 5,
+                colors: "#fff",
+                strokeDashArray: 50,
+                strokeWidth: 3,
+                strokeColors: "#FF832B",
+            },
+            fill: {
+                opacity: 100,
+            },
+            dataLabels: {
                 enabled: false
-            }
-        },
-        yaxis: [
-            {
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false,
-                },
-                labels: {
-                    show: false,
-                    formatter: function (val) {
-                        return val;
-                    },
-                },
-                title: {
-                    text: undefined,
-                    rotate: 0,
-                    offsetX: 0,
-                    offsetY: 0,
-                    style: {
-                        fontFamily: 'Interstate',
-                        fontStyle: "normal",
-                        fontWeight: 300,
-                        fontSize: 12,
-                        lineHeight: "14px",
-                        color: "#005FAA",
-                    },
-                }
             },
-            {
-                axisBorder: {
-                    show: false,
-                },
+            xaxis: {
+                categories: onPeak == "x" && offPeak == "x" ? data.filter((result, i) => i % 2 == 0).map(value => value.Perioddate) : data.map(value => value.Perioddate),
                 axisTicks: {
                     show: false,
                 },
-                labels: {
+                axisBorder: {
                     show: true,
-                    formatter: function (val) {
-                        return val;
+                    color: '#000000',
+                    height: 1,
+                    width: '100%',
+                    offsetX: 0,
+                    offsetY: -0.5
+                },
+                tooltip: {
+                    enabled: false
+                },
+            },
+            yaxis: [
+                {
+                    axisBorder: {
+                        show: false,
                     },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: false,
+                        formatter: function (val) {
+                            return val;
+                        },
+                    }
+                },
+                {
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: true,
+                        formatter: function (val) {
+                            return val;
+                        },
+                    }
+                },
+                {
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: false,
+                        formatter: function (val) {
+                            return val;
+                        },
+                    }
                 }
-            }
-        ],
-        plotOptions: {
-            bar: {
-                position: 'left',
-                borderRadiusWhenStacked: 'last',
-                borderRadius: 10,
-                columnWidth: "70%",
-                dataLabels: {
-                    position: "top", // top, center, bottom,
-                },
+            ],
+            plotOptions: {
+                bar: {
+                    borderRadius: 8,
+                    borderRadiusApplication: 'end',
+                    columnWidth: colWidth,
+                    dataLabels: {
+                        position: "top", // top, center, bottom,
+                    },
+                    distributed: false,
+                }
+            },
 
-                distributed: false,
-            }
-        },
+            tooltip: {
+                enabled: true,
+                followCursor: true,
+                custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                    let arr;
+                    arr = onPeak == "x" && offPeak == "x" ? data.filter((result, i) => i % 2 == 0).map(value => value.FullDate) : data.map(value => value.FullDate)
+                    if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex])) {
 
-        tooltip: {
-            enabled: true,
-            followCursor: true,
-            custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-                let arr;
-                arr = data.filter((result, i) => i % 2 == 0).map(value => value.FullDate)
-                return (
-                    '<div class="apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
-                    '<div style="padding-bottom:8px width:100%; color:#005FAA; border-bottom:1px solid #EAECEE;">' +
-                    "<span style='font-weight:700;'>" +
-                    arr[dataPointIndex] +
-                    "</div>"
-                    +
-                    (series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text" style="margin-top: 8px;">` +
-                        '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
-                        "<span style='font-weight:700; color:#000000;'>" +
-                        "On Peak: " +
-                        "</span>" +
-                        "<span style='font-weight:300;color:#000000;'>" + " "
-                        +
-                        series[0][dataPointIndex] + " " + unit : "")
-                    +
-                    (series[1][dataPointIndex] ? "</div>"
-                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
-                        + `<span style='font-weight:700;'>` +
-                        "Off Peak:: " +
-                        "</span>"
-                        +
-                        "<span style='font-weight:300;'>"
-                        + series[1][dataPointIndex] + " " + unit : "")
-                    +
-                    (series[2][dataPointIndex] ? "</div>"
-                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
-                        + `<span style='font-weight:700;'>` +
-                        "Avg.Temp: " +
-                        "</span>"
-                        +
-                        "<span style='font-weight:300;'>"
-                        + series[2][dataPointIndex] + "°" : "")
-                );
-            },
-            onDatasetHover: {
-                highlightDataSeries: true,
-            },
-            y: {
-                show: true,
-                style: {
-                    cssClass: 'apexcharts-yaxis-annotation-label',
+                        return (
+                            '<div class="apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
+                            '<div class="apexcharts-theme-light apexcharts-active" style="min-width:150px">' +
+                            '<div style="padding-bottom:8px width:100%; color:#005FAA; border-bottom:1px solid #EAECEE;">' +
+                            "<span style='font-weight:700;'>" +
+                            arr[dataPointIndex] +
+                            "</div>"
+                            + (chartUnit == "usage" ? (`<div class="apexcharts-tooltip-text" style="margin-top: 8px;">` +
+                                (series[0] && series[0][dataPointIndex] ? "</div>" +
+                                    '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
+                                    "<span style='font-weight:700; color:#000000; margin-bottom:6px'>" +
+                                    "On Peak: " +
+                                    "</span>" +
+                                    "<span style='font-weight:300;color:#000000;'>" + " "
+                                    +
+                                    series[0][dataPointIndex].toLocaleString() + " " + unit : "")
+                                +
+                                (series[1] && series[1][dataPointIndex] ? "</div>"
+                                    +
+                                    '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                    + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                    "Off Peak: " +
+                                    "</span>"
+                                    +
+                                    "<span style='font-weight:300;'>"
+                                    + series[1][dataPointIndex] + " " + unit : "")) :
+
+                                costArrayOff[dataPointIndex] || costArray[dataPointIndex] ?
+                                    '<div style="padding-top:14px"> ' +
+                                    (costArray[dataPointIndex] ?
+                                        ("</div>"
+                                            +
+                                            '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                            + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                            "OnPeak: " +
+                                            "</span>"
+                                            +
+                                            "<span style='font-weight:300;'>"
+                                            +
+                                            costArray[dataPointIndex].toLocaleString() + " " + "$") : "")
+                                    +
+                                    (costArrayOff[dataPointIndex] ? ("</div>"
+                                        +
+                                        '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                        + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                        "OffPeak: " +
+                                        "</span>"
+                                        +
+                                        "<span style='font-weight:300;'>"
+                                        + costArrayOff[dataPointIndex].toLocaleString() + " " + "$") : "") : ""
+
+                            )
+                            +
+                            (series[2] && series[2][dataPointIndex] ? "</div>"
+                                + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                "Avg. Temp: " +
+                                "</span>"
+                                +
+                                "<span style='font-weight:300;'>"
+                                + series[2][dataPointIndex] + "°" : "") +
+                            (daysArray && monthly == true ? "</div>"
+                                + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                "Billing Days: " +
+                                "</span>"
+                                +
+                                "<span style='font-weight:300;'>"
+                                + daysArray[dataPointIndex] : '')
+                        );
+                    } else {
+                        return ''
+                    }
                 },
+                onDatasetHover: {
+                    highlightDataSeries: true,
+                },
+                y: {
+                    show: true,
+                    style: {
+                        cssClass: 'apexcharts-yaxis-annotation-label',
+                    },
+                },
+                x: {
+                    show: false,
+                }
             },
-            x: {
-                show: false,
+            legend: {
+                horizontalAlign: 'right',
+                offsetX: 40,
+                onItemClick: {
+                    toggleDataSeries: false
+                },
+                onItemHover: {
+                    highlightDataSeries: false
+                },
             }
-        },
-        legend: {
-            horizontalAlign: 'right',
-            offsetX: 40
         }
     }
     return options;

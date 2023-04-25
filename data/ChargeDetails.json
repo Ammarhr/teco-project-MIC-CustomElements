@@ -1,5 +1,5 @@
 {
-  "Sections": [
+  "Section": [
     {
       "Order": 2,
       "Lable": "Electric Charges",
@@ -12,14 +12,16 @@
       "ServiceType": "Electric",
       "URL": "https://www.tampaelectric.com/residential/billing-options/understanding-your-bill/",
       "FontWeight": "400",
-      "Section_Level1s": [
+      "Collapsible": false,
+      "ConfigValue": "5100651671",
+      "Section_Level1": [
         {
           "Order": 1,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "ServiceHeaderGroup",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Lable": "Service Period:",
@@ -33,7 +35,7 @@
             },
             {
               "Order": 2,
-              "Value": "06/28/2019",
+              "Value": "05/24/2017",
               "FontSize": 18,
               "Color": "#6C6C6C",
               "IsItalic": false,
@@ -53,7 +55,7 @@
             },
             {
               "Order": 4,
-              "Value": "07/29/2019",
+              "Value": "06/22/2017",
               "FontSize": 18,
               "Color": "#6C6C6C",
               "IsItalic": false,
@@ -86,22 +88,15 @@
         },
         {
           "Order": 2,
-          "Value": "5200111332",
-          "FontSize": 0,
-          "IsItalic": false,
-          "IsBreakdown": false,
-          "SectionType": "Config"
-        },
-        {
-          "Order": 3,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Charge_Group",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Value": "Basic Service Charge",
+              "ToolTip": "A fixed monthly amount that covers the cost to provide service to your location.",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -111,7 +106,7 @@
             },
             {
               "Order": 4,
-              "Value": "$15.12",
+              "Value": "$16.62",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -122,16 +117,16 @@
           ]
         },
         {
-          "Order": 3,
+          "Order": 2,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Charge_Group",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Value": "Energy Charge",
-              "ToolTip": "Energy Charge",
+              "ToolTip": "For residential, small commercial and lighting customers, includes the cost (except fuel) of producing and delivering the electricity you purchased, including conservation, environmental and capacity cost recovery charges. For other customers, the three cost recovery charges appear as sepeare line items.",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -142,12 +137,12 @@
           ]
         },
         {
-          "Order": 3,
+          "Order": 2,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Charge_Group",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Value": "First 1,000 kWh",
@@ -159,44 +154,24 @@
               "FontWeight": "400"
             },
             {
-              "Order": 2,
-              "Value": "1,000 kWh",
-              "FontSize": 18,
-              "Color": "#005FAA",
-              "IsItalic": true,
-              "IsBreakdown": false,
-              "SectionType": "Charge",
-              "FontWeight": "300"
-            },
-            {
               "Order": 3,
-              "Value": "@ $0.05674/kWh",
+              "Value": "@ $0.05902/kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
               "IsBreakdown": false,
               "SectionType": "Charge",
               "FontWeight": "300"
-            },
-            {
-              "Order": 4,
-              "Value": "$56.74",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": false,
-              "SectionType": "Charge",
-              "FontWeight": "400"
             }
           ]
         },
         {
-          "Order": 3,
+          "Order": 2,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Charge_Group",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Value": "Above 1,000 kWh",
@@ -209,7 +184,7 @@
             },
             {
               "Order": 2,
-              "Value": "3,524 kWh",
+              "Value": "604 kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -219,7 +194,7 @@
             },
             {
               "Order": 3,
-              "Value": "@ $0.06674/kWh",
+              "Value": "@ $0.07010/kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -229,7 +204,7 @@
             },
             {
               "Order": 4,
-              "Value": "$235.19",
+              "Value": "$42.34",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -240,16 +215,16 @@
           ]
         },
         {
-          "Order": 3,
+          "Order": 2,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Charge_Group",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Value": "Fuel Charge",
-              "ToolTip": "Fuel Charge\n\n",
+              "ToolTip": "Cost of fuel used to produce electricity you purchased. Fuel costs are passed through from fuel suppliers to our customers with no markup or profit to Tampa Electric.",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -260,12 +235,12 @@
           ]
         },
         {
-          "Order": 3,
+          "Order": 2,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Charge_Group",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Value": "First 1,000 kWh",
@@ -288,7 +263,7 @@
             },
             {
               "Order": 3,
-              "Value": "@ $0.02913/kWh",
+              "Value": "@ $0.02642/kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -298,7 +273,7 @@
             },
             {
               "Order": 4,
-              "Value": "$29.13",
+              "Value": "$26.42",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -309,12 +284,12 @@
           ]
         },
         {
-          "Order": 3,
+          "Order": 2,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Charge_Group",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Value": "Above 1,000 kWh",
@@ -327,7 +302,7 @@
             },
             {
               "Order": 2,
-              "Value": "1,262 kWh",
+              "Value": "604 kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -337,7 +312,7 @@
             },
             {
               "Order": 3,
-              "Value": "@ $0.03913/kWh",
+              "Value": "@ $0.03642/kWh",
               "FontSize": 18,
               "Color": "#005FAA",
               "IsItalic": true,
@@ -347,7 +322,7 @@
             },
             {
               "Order": 4,
-              "Value": "$49.38",
+              "Value": "$22.00",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -358,65 +333,16 @@
           ]
         },
         {
-          "Order": 3,
+          "Order": 2,
           "FontSize": 0,
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Charge_Group",
-          "Section_Level2s": [
-            {
-              "Order": 1,
-              "Value": "Sun Select Charge",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": false,
-              "SectionType": "Charge",
-              "FontWeight": "400"
-            },
-            {
-              "Order": 2,
-              "Value": "2,262 kWh",
-              "FontSize": 18,
-              "Color": "#005FAA",
-              "IsItalic": true,
-              "IsBreakdown": false,
-              "SectionType": "Charge",
-              "FontWeight": "300"
-            },
-            {
-              "Order": 3,
-              "Value": "@ $0.06300/kWh",
-              "FontSize": 18,
-              "Color": "#005FAA",
-              "IsItalic": true,
-              "IsBreakdown": false,
-              "SectionType": "Charge",
-              "FontWeight": "300"
-            },
-            {
-              "Order": 4,
-              "Value": "$142.51",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": false,
-              "SectionType": "Charge",
-              "FontWeight": "400"
-            }
-          ]
-        },
-        {
-          "Order": 3,
-          "FontSize": 0,
-          "IsItalic": false,
-          "IsBreakdown": false,
-          "SectionType": "Charge_Group",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "Value": "Florida Gross Receipt Tax",
-              "ToolTip": "Florida Gross Receipt Tax",
+              "ToolTip": "A tax is imposed on gross receipts from utility services that are delivered to retail customers in Florida, in accordance with Chapter 203 of the Florida Statutes. Utility companies collect the tax from all customers, unless exempt, and remit to the state.",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -426,7 +352,7 @@
             },
             {
               "Order": 4,
-              "Value": "$13.54",
+              "Value": "$4.27",
               "FontSize": 20,
               "Color": "#000000",
               "IsItalic": false,
@@ -437,9 +363,9 @@
           ]
         },
         {
-          "Order": 4,
+          "Order": 3,
           "Lable": "Electric Service Cost",
-          "Value": "$541.61",
+          "Value": "$170.67",
           "FontSize": 20,
           "Color": "#005FAA",
           "IsItalic": false,
@@ -448,7 +374,7 @@
           "FontWeight": "400"
         },
         {
-          "Order": 9,
+          "Order": 8,
           "Lable": "Other Fees & Charges",
           "FontSize": 28,
           "IconPath": "otherCharges.svg",
@@ -457,17 +383,18 @@
           "IsBreakdown": false,
           "SectionType": "CustomeSection",
           "FontWeight": "400",
-          "Section_Level2s": [
+          "Section_Level2": [
             {
               "Order": 1,
               "FontSize": 0,
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge_Group",
-              "Section_Level3s": [
+              "Section_Level3": [
                 {
                   "Order": 1,
-                  "Value": "Elec Connection Chrg Subsq",
+                  "Value": "Electric Late Payment Fee",
+                  "ToolTip": "For past due amounts more than $10, the late payment charge is the greater of $5 or 1.5% of the past due amount. For past due amounts of $10 or less, the late payment charge is 1.5% of the past due amount.",
                   "FontSize": 20,
                   "Color": "#000000",
                   "IsItalic": false,
@@ -477,7 +404,7 @@
                 },
                 {
                   "Order": 4,
-                  "Value": "$28.00",
+                  "Value": "$5.50",
                   "FontSize": 20,
                   "Color": "#000000",
                   "IsItalic": false,
@@ -490,9 +417,9 @@
           ]
         },
         {
-          "Order": 10,
+          "Order": 9,
           "Lable": "Total Other Fees and Charges",
-          "Value": "$28.00",
+          "Value": "$5.50",
           "FontSize": 20,
           "Color": "#005FAA",
           "IsItalic": false,
@@ -503,15 +430,189 @@
       ]
     },
     {
-      "Order": 3,
+      "Order": 5,
+      "Lable": "Installments & Adjustments ",
+      "FontSize": 30,
+      "IconPath": "installment&adjustment.svg",
+      "Color": "#044F8D",
+      "IsItalic": false,
+      "IsBreakdown": false,
+      "SectionType": "AccountLevel",
+      "FontWeight": "400",
+      "Collapsible": false,
+      "Section_Level1": [
+        {
+          "Order": 1,
+          "FontSize": 0,
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2": [
+            {
+              "Order": 1,
+              "FontSize": 0,
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge_Group",
+              "Section_Level3": [
+                {
+                  "Order": 1,
+                  "Value": "Original Installment",
+                  "ToolTip": "Original Installment",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "400"
+                },
+                {
+                  "Order": 3,
+                  "Value": "$5.00",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "300"
+                },
+                {
+                  "Order": 4,
+                  "Value": "",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "400"
+                }
+              ]
+            },
+            {
+              "Order": 2,
+              "FontSize": 0,
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge_Group",
+              "Section_Level3": [
+                {
+                  "Order": 1,
+                  "Value": "Security Deposit",
+                  "ToolTip": "Test Tooltip",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "400"
+                }
+              ]
+            },
+            {
+              "Order": 3,
+              "FontSize": 0,
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge_Group",
+              "Section_Level3": [
+                {
+                  "Order": 1,
+                  "Value": "Amount Remaining",
+                  "ToolTip": "Amount Remaining",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "400"
+                },
+                {
+                  "Order": 3,
+                  "Value": "$1.68",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "300"
+                }
+              ]
+            },
+            {
+              "Order": 4,
+              "FontSize": 0,
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge_Group",
+              "Section_Level3": [
+                {
+                  "Order": 1,
+                  "Value": "Remaining Installments",
+                  "ToolTip": "Remaining Installments",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "400"
+                },
+                {
+                  "Order": 3,
+                  "Value": "1",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "300"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Order": 3,
+          "Color": "",
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "Charge_Group",
+          "Section_Level2": [
+            {
+              "Order": 1,
+              "Value": "Miscellaneous Adjustments",
+              "ToolTip": "Miscellaneous Adjustments",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge",
+              "FontWeight": "400"
+            },
+            {
+              "Order": 4,
+              "Value": "528.88",
+              "FontSize": 20,
+              "Color": "#000000",
+              "IsItalic": false,
+              "IsBreakdown": false,
+              "SectionType": "Charge",
+              "FontWeight": "400"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Order": 6,
       "Lable": "Total Current Month's Charges",
-      "Value": "$569.61",
+      "Value": "$230.82",
       "FontSize": 35,
       "Color": "#005FAA",
       "IsItalic": false,
       "IsBreakdown": false,
       "SectionType": "InvoiceTotal",
-      "FontWeight": "400"
+      "FontWeight": "400",
+      "Collapsible": false
     }
   ]
 }

@@ -6,7 +6,7 @@
   //svg imports
   // import circyle from "../../assets/cr.svg";
   // import messageNotification from "../../assets/envelope-solid.svg";
-
+  import MicImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
   //unreaded messages counter
   import {
     fetchstore,
@@ -15,6 +15,7 @@
     eventsDomain,
     assetsUrl,
     generalErr,
+    SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
@@ -27,11 +28,12 @@
 
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiToken && !$data.messages && $generalErr !== true) {
+    if ($apiToken && $SAPToken && !$data.messages && $generalErr !== true) {
       get(
         $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`
-        // "../../data/messages.json"
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`,
+        // "../../data/messages.json",
+        $SAPToken
       );
     }
   });
@@ -47,7 +49,7 @@
     state.messages[0] &&
     state.messages[0].message &&
     state.messages[0].message.length &&
-    state.messages[0].message.length > 237
+    state.messages[0].message.length > 10000000
   ) {
     message =
       state.messages[0].message.slice(0, 237 - state.messages[0].Title.length) +
@@ -63,10 +65,22 @@
   } else {
     ("");
   }
-
+  let cardStyle;
+  let contentStyle;
+  let footerStyle;
+  let msgDataStyle;
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
+    if (isOpen === true) {
+      cardStyle = "max-height: 200vh;opacity: 1;transition:200ms;";
+      contentStyle = " height: calc(100% - 120px);";
+      footerStyle = "height:50px";
+    } else {
+      cardStyle = "height: unset;margin: 0; transition:200ms;";
+      contentStyle = "height: 0;margin: 0; transition:200ms; ";
+      footerStyle = "height:0";
+    }
   };
 </script>
 
@@ -75,7 +89,7 @@
 {:else if $error}
   Error: {$error}
 {:else if $data && $data.messages && state && state.messages && state.messages[0] && $generalErr !== true}
-  <div class="container">
+  <div class="container" style={cardStyle}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div id="message-header" on:click={toggle}>
       <div class="message-counter">
@@ -102,7 +116,7 @@
     </div>
     {#if state.messages}
       {#if isOpen}
-        <div class="message-body" transition:slide={{ duration: 300 }}>
+        <div class="message-body">
           {#if message && message !== ""}
             <p class="msg-data">
               {#if !state.messages[0].empty && state.messages[0] && (state.messages[0].Title !== "") !== ""}
@@ -137,13 +151,13 @@
   .container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
     border-radius: 16px;
     box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.24);
+    height: 340px;
     background-color: white;
     @media screen and (max-width: 830px) {
       width: 100%;
@@ -158,6 +172,7 @@
     width: 100%;
     height: 40px;
     cursor: pointer;
+
     h4 {
       font-weight: 300;
       font-size: 20px;
@@ -168,6 +183,12 @@
       text-transform: uppercase;
       color: #005faa;
       margin: 0;
+      text-align: center;
+      @media screen and (max-width: 480px) {
+        font-size: 18px;
+        display: flex;
+        flex-wrap: wrap;
+      }
     }
   }
 
@@ -191,25 +212,22 @@
     align-items: center;
   }
 
-  .message .message-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px;
-    gap: 499px;
-    width: 392px;
-    max-height: 310px;
+  .message-body {
+    width: 100%;
+    margin: 14px 0;
+    height: 222px;
   }
   .msg-data {
-    font-style: normal;
     font-weight: 300;
     font-size: 20px;
-    line-height: 30px;
-    display: flex;
     color: rgb(0, 0, 0);
-    max-height: 180px;
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+    @media screen and (max-width: 480px) {
+      -webkit-line-clamp: 9;
+    }
   }
   .msg-title {
     font-weight: 700;
@@ -255,6 +273,7 @@
     display: flex;
     flex-direction: row-reverse;
     width: 100%;
+    overflow: hidden;
   }
 
   /* acordion style */

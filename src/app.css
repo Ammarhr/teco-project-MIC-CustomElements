@@ -106,3 +106,45 @@
 * {
     font-family: "Interstate";
 }
+
+.enable {
+    color: white;
+    background-color: #005faa;
+    width: 145px;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+
+.enable:hover {
+    background-color: #145093;
+    /* darker */
+}
+
+.enable:active {
+    background-color: #004083;
+    /* darker */
+}
+
+.disable {
+    color: #adb3c0;
+    background-color: #fff;
+    width: 145px;
+    border: 2px solid #adb3c0;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: none;
+}
+
+
+.teco-btn-unfill {
+    color: white;
+    background-color: #005faa;
+    width: 145px;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}

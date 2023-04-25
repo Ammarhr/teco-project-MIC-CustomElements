@@ -35,6 +35,10 @@ export const eventsDomain = writable('')
 export const setEventDomain = (domain) => {
     eventsDomain.set(domain)
 }
+export const SAPToken = writable("");
+export const setSAPTpken = (token) => {
+    SAPToken.set(token)
+}
 export const assetsUrl = writable('')
 export const setAssetsUrl = (domain) => {
     assetsUrl.set(domain)
@@ -52,13 +56,43 @@ export const generalErr = writable(false);
 //* Agint persona:
 export const persona = writable('')
 
+//* helper functions
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {
+    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+const mijCookie = "MIC-IBLL-MIJ";
+
+if (!getCookie(mijCookie)) {
+    const uuid = crypto.randomUUID();
+    setCookie(mijCookie, uuid, 365);
+}
 //* fetch function
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url) => {
+    const get = async (token, url, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -67,28 +101,61 @@ export function fetchstore() {
                 throw new Error("No Token provided!");
             } else if (token) {
                 //* test data
-                // const Publishresponse = await fetch(url)
                 //* real api hit with jwt token:
-                const Publishresponse = await fetch(url, {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({}),
-                });
-                // if (Publishresponse.status !== 204)  
-                data.set(await Publishresponse.json());
+                // if (window.mx === undefined || window.mx === "undefined") {
+                if (token == "") {
+                    // send uuid to mij request
+                    const uuid = getCookie(mijCookie);
+
+                    // REQUEST TO SEND
+                    let fetchBody = {
+                        modle: {
+                            target: url,
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "MIC-MIJ-TOKEN": uuid,
+                                "UserCredentials": saptoken
+                            },
+                            body: false,
+                        }
+                    }
+                    window.$.ajax({
+                        url: "/InteractiveBill/GetWebComponentData",
+                        type: "POST",
+                        datatype: "json",
+                        data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                        success: async function (responseData) {
+                            let stringResponse = responseData;
+                            let parseResponse = JSON.parse(stringResponse);
+                            data.set(parseResponse);
+                            loading.set(false);
+                        }
+                    });
+                } else {
+                    const Publishresponse = await fetch(url, {
+                        method: 'POST',
+                        cache: 'no-cache',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${token}`,
+                            "UserCredentials": saptoken
+                        },
+                        body: JSON.stringify({}),
+                    });
+                    // if (Publishresponse.status !== 204)  
+                    data.set(await Publishresponse.json());
+                    loading.set(false);
+                }
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
             error.set(e);
             generalErr.set(true);
+            loading.set(false);
         }
-        loading.set(false);
     }
 
     return [data, loading, error, get]
@@ -98,7 +165,7 @@ export const fetchDailyUsageChart = () => {
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url, body) => {
+    const get = async (token, url, body, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -106,21 +173,20 @@ export const fetchDailyUsageChart = () => {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                // const Publishresponse = await fetch(url)
-                //* real api hit with jwt token:
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
                     credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${token}`,
+                        "UserCredentials": saptoken
                     },
                     body: JSON.stringify(body),
                 });
                 // if (Publishresponse.status !== 204)  
                 data.set(await Publishresponse.json());
+
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
@@ -138,7 +204,7 @@ export const fetchMonthlyUsageChart = () => {
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url) => {
+    const get = async (token, url, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -146,16 +212,14 @@ export const fetchMonthlyUsageChart = () => {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                // const Publishresponse = await fetch(url)
-                //* real api hit with jwt token:
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
                     credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${token}`,
+                        "UserCredentials": saptoken
                     },
                     body: JSON.stringify({}),
                 });
@@ -178,7 +242,7 @@ export const fetchRecommendations = () => {
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url, body) => {
+    const get = async (token, url, body, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -186,15 +250,14 @@ export const fetchRecommendations = () => {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                //* real api hit with jwt token:
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
                     credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${token}`,
+                        "UserCredentials": saptoken
                     },
                     body: JSON.stringify(body),
                 });
@@ -213,6 +276,8 @@ export const fetchRecommendations = () => {
     return [data, loading, error, get]
 }
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
+    // if (window.mx === undefined || window.mx === "undefined") {
+
     fetch(fetchUrl, {
         method: "POST",
         mode: "cors",
@@ -227,8 +292,9 @@ export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
             return response.json();
         })
         .catch((error) => {
-            console.log(error);
+            // console.log(error);
         })
+
     if (redirectUrl) {
         window.open(
             redirectUrl,
@@ -242,7 +308,7 @@ export function feedbackCall() {
     const data = writable({});
     const loading = writable(false);;
 
-    async function setFeedback(token, url) {
+    async function setFeedback(token, url, saptoken) {
         loading.set(true)
         error.set(false);
         try {
@@ -250,16 +316,14 @@ export function feedbackCall() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                // const Publishresponse = await fetch(url)
-                //* real api hit with jwt token:
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     mode: "cors",
                     cache: "no-cache",
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${token}`,
+                        "UserCredentials": saptoken
                     },
                     body: JSON.stringify({}),
                 });
@@ -283,7 +347,7 @@ export function errorCallback() {
     const data = writable({});
     const loading = writable(false);;
 
-    async function errorHandler(token, url) {
+    async function errorHandler(token, url, saptoken) {
         loading.set(true)
         error.set(false);
         try {
@@ -291,16 +355,14 @@ export function errorCallback() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
-                // const Publishresponse = await fetch(url)
-                //* real api hit with jwt token:
                 const Publishresponse = await fetch(url, {
                     method: 'GET',
                     mode: "cors",
                     cache: "no-cache",
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${token}`,
+                        "UserCredentials": saptoken
                     },
                 });
                 data.set(await Publishresponse.json());
@@ -325,7 +387,7 @@ export function reGenerateToken() {
     const error = writable(false);
     const data = writable({});
 
-    async function getToken(oldToken, url) {
+    async function getToken(oldToken, url, saptoken) {
         loading.set(true);
         error.set(false);
         try {
@@ -333,15 +395,15 @@ export function reGenerateToken() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (oldToken) {
-                //* test data
-                //* real api hit with jwt token:
+
                 const Publishresponse = await fetch(url, {
                     method: 'POST',
                     cache: 'no-cache',
                     credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${oldToken}`
+                        "Authorization": `Bearer ${oldToken}`,
+                        "UserCredentials": saptoken
                     },
                     body: JSON.stringify({}),
                 });
@@ -374,47 +436,27 @@ export function passThroughServiceFetch() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                // console.log(token, "this is the token")
-                // var dotNetToken = document.querySelector('input[name="__RequestVerificationToken"]').value
-                let fetchBody = window.AddAntiForgeryToken({
-                    model: {
+                let fetchBody = {
+                    modle: {
                         target: url,
                         method: "POST",
                         headers: {
                             Authorization: `Bearer ${token}`
                         },
                         body: false,
-
                     }
-                })
-                console.log(".Net Token:", dotNetToken);
-                console.log("before calling");
-                const Publishresponse = await fetch("/InteractiveBill/GetWebComponentData", {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    },
-                    data: JSON.stringify(fetchBody)
+                }
+                window.$.ajax({
+                    url: "/InteractiveBill/GetWebComponentData",
+                    type: "POST",
+                    datatype: "json",
+                    data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
+                    success: async function (responseData) {
+                        let stringResponse = responseData;
+                        let parseResponse = JSON.parse(stringResponse);
+                        data.set(parseResponse);
+                    }
                 });
-                // console.log("response: ",await Publishresponse.json());
-                let stringResponse = await Publishresponse.text();
-                // console.log("this is the string response:", stringResponse);
-                let parseResponse = JSON.parse(stringResponse);
-                let secondParser = JSON.parse(parseResponse);
-                // console.log("this is the parsed response:", parseResponse);
-                data.set(secondParser);
-                // $.ajax({
-                //     url: "/InteractiveBill/GetWebComponentData",
-                //     type: "POST",
-                //     datatype: "json",
-                //     data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
-                //     success: function (data) {
-                //     }
-                // });
-
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
                 // console.log("we have error regarding to parse!!!!");

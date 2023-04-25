@@ -11,14 +11,15 @@
   export let token;
 
   // store
-  import { fetchstore } from "../../js/store";
+  import { fetchstore , SAPToken} from "../../js/store";
   // import { onMount } from "svelte";
 
   //mocking data
   
   const [data, loading, error, get] = fetchstore(
     "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json",
-    token
+    token,
+    $SAPToken
   );
 
   var newElement;
