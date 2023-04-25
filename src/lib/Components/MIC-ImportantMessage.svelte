@@ -49,7 +49,7 @@
     state.messages[0] &&
     state.messages[0].message &&
     state.messages[0].message.length &&
-    state.messages[0].message.length > 237
+    state.messages[0].message.length > 10000000
   ) {
     message =
       state.messages[0].message.slice(0, 237 - state.messages[0].Title.length) +
@@ -68,6 +68,7 @@
   let cardStyle;
   let contentStyle;
   let footerStyle;
+  let msgDataStyle;
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
@@ -114,34 +115,34 @@
       />
     </div>
     {#if state.messages}
-      <!-- {#if isOpen} -->
-      <div class="message-body" style={contentStyle}>
-        {#if message && message !== ""}
-          <p class="msg-data">
-            {#if !state.messages[0].empty && state.messages[0] && (state.messages[0].Title !== "") !== ""}
-              <span>
-                <span class="msg-title">
-                  {state.messages[0].Title}
+      {#if isOpen}
+        <div class="message-body">
+          {#if message && message !== ""}
+            <p class="msg-data">
+              {#if !state.messages[0].empty && state.messages[0] && (state.messages[0].Title !== "") !== ""}
+                <span>
+                  <span class="msg-title">
+                    {state.messages[0].Title}
+                  </span>
+                  {@html message}
                 </span>
+              {:else}
                 {@html message}
-              </span>
-            {:else}
-              {@html message}
-            {/if}
-          </p>
-        {:else}
-          <p class="msg-data" style="height: 105px;">No Messages</p>
-        {/if}
-      </div>
-      <div class="message-footer" style={footerStyle}>
-        {#if state.messages[0].empty}
-          <span />
-        {:else}
-          <mic-messagesdetails messages={state.messages} />
-          <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
-        {/if}
-      </div>
-      <!-- {/if} -->
+              {/if}
+            </p>
+          {:else}
+            <p class="msg-data" style="height: 105px;">No Messages</p>
+          {/if}
+        </div>
+        <div class="message-footer">
+          {#if state.messages[0].empty}
+            <span />
+          {:else}
+            <mic-messagesdetails messages={state.messages} />
+            <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
+          {/if}
+        </div>
+      {/if}
     {/if}
   </div>
 {/if}
@@ -150,7 +151,6 @@
   .container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     max-width: calc(100% - 40px);
     padding: 20px;
@@ -213,32 +213,21 @@
   }
 
   .message-body {
-    display: flex;
-    flex-direction: column;
-    height: calc(100% - 120px);
-    margin: 12px 0;
-    @media screen and (max-width: 1024px) {
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 9;
-      -webkit-box-orient: vertical;
-    }
-    @media screen and (max-width: 480px) {
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 5;
-      -webkit-box-orient: vertical;
-    }
+    width: 100%;
+    margin: 14px 0;
+    height: 222px;
   }
   .msg-data {
-    font-style: normal;
     font-weight: 300;
     font-size: 20px;
-    line-height: 30px;
-    display: flex;
     color: rgb(0, 0, 0);
-    max-height: 200px;
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+    @media screen and (max-width: 480px) {
+      -webkit-line-clamp: 9;
+    }
   }
   .msg-title {
     font-weight: 700;

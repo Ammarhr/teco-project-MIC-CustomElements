@@ -20,7 +20,7 @@
   import MicBalanceSummaryClone from "./lib/Components/clone/MIC-BalanceSummaryClone.svelte";
   import MicBillingSummaryClone from "./lib/Components/clone/MIC-BillingSummaryClone.svelte";
   import MicComboBill from "./lib/Components/MIC-ComboBill.svelte";
-
+  import MicShadowLoading from "./lib/Components/MIC-ShadowLoading.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -66,7 +66,7 @@
 
 {#if token && domain && eventdomain && saptoken && $generalErr !== true}
   <div class="wrapper">
-    <mic-headerinformation />
+    <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
@@ -102,6 +102,7 @@
     <!-- </div> -->
     <!-- <mic-yearlyenergy class="mic-insights" /> -->
     <mic-metertable />
+    <!-- <MicShadowLoading /> -->
     <!-- <MicMeterTable /> -->
   </div>
 {:else if $generalErr === true}
@@ -116,7 +117,7 @@
     padding: 0px 16px 0 16px;
     width: calc(100% - 32px);
     gap: 30px;
-    background-color: #ffff;
+    background-color: #ffffff00;
   }
   .important-balance {
     display: grid;

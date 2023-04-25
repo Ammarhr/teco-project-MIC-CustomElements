@@ -98,8 +98,39 @@
         "opacity: 0;max-height: 0;margin: 0; transition:200ms; padding:0; ";
     }
   };
-  let key = 0;
-  $: key = key;
+
+  let componentContainer;
+  let toolTipSvg;
+  let toolTipCon;
+  $: componentContainer = document.querySelector(".billing-container");
+  $: toolTipSvg = document.querySelector(".tooltip-svg");
+  $: toolTipCon = document.querySelector(".tooltip-con");
+  const closeToggle = (e) => {
+    // console.log(e.target !== toolTipSvg, "tool tip");
+    // if (e.target !== toolTipSvg || e.target !== toolTipCon) {
+    //   if (
+    //     billsObjectsArray &&
+    //     billsObjectsArray[activeSection] &&
+    //     billsObjectsArray[activeSection].subSectionArray
+    //   ) {
+    //     // console.log("here", e.target);
+    //     // console.log(
+    //     //   "here",
+    //     //   billsObjectsArray[activeSection].subSectionArray[activeTooltip]
+    //     // );
+    //     billsObjectsArray[activeSection].subSectionArray[activeTooltip] = false;
+    //     billsObjectsArray[activeSection].subToggleStyleArray[activeTooltip] =
+    //       "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
+    //   } else if (arrOfLevel3[activeTooltip] && arrayOfL3Style[activeTooltip]) {
+    //     console.log(arrOfLevel3[activeTooltip], arrayOfL3Style[activeTooltip]);
+    //     arrOfLevel3[activeTooltip] = false;
+    //     arrayOfL3Style[activeTooltip] =
+    //       "opacity: 0;max-height: 0;margin: 0; transition:200ms; padding:0; ";
+    //   }
+    // }
+  };
+  $: if (componentContainer) {
+  }
   let arrOfLevel3 = [
     false,
     false,
@@ -134,7 +165,49 @@
     false,
     false,
   ];
+  let activeTooltip;
+  let activeSection;
+  let previouseActiveTooltip;
+  let previouseActiveSec;
   const toolTipToggle = (j, i, chargeLine, level3) => {
+    previouseActiveTooltip = activeTooltip;
+    previouseActiveSec = activeSection;
+    activeTooltip = j;
+    activeSection = i;
+    if (previouseActiveTooltip !== j || previouseActiveSec !== i) {
+      if (previouseActiveTooltip !== null) {
+        if (
+          arrOfLevel3[previouseActiveTooltip] == true &&
+          arrayOfL3Style[previouseActiveTooltip]
+        )
+          arrOfLevel3[previouseActiveTooltip] =
+            !arrOfLevel3[previouseActiveTooltip];
+        arrayOfL3Style[previouseActiveTooltip] =
+          "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
+      }
+      if (previouseActiveTooltip !== null && previouseActiveSec !== null) {
+        if (
+          billsObjectsArray[previouseActiveSec] &&
+          billsObjectsArray[previouseActiveSec].toolTipArray[
+            previouseActiveTooltip
+          ] &&
+          billsObjectsArray[previouseActiveSec].toolTipStylleArray[
+            previouseActiveTooltip
+          ]
+        ) {
+          billsObjectsArray[previouseActiveSec].toolTipArray[
+            previouseActiveTooltip
+          ] =
+            !billsObjectsArray[previouseActiveSec].toolTipArray[
+              previouseActiveTooltip
+            ];
+          billsObjectsArray[previouseActiveSec].toolTipStylleArray[
+            previouseActiveTooltip
+          ] =
+            "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
+        }
+      }
+    }
     if (level3) {
       arrOfLevel3[j] = !arrOfLevel3[j];
       if (arrOfLevel3[j] == true) {
@@ -144,12 +217,12 @@
           "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
       }
     } else {
-      if (typeof billsObjectsArray[i].toolTipArray[j] !== "boolean")
-        billsObjectsArray[i].toolTipArray.push(false);
-
+      if (typeof billsObjectsArray[i].toolTipArray[j] !== "boolean") {
+        billsObjectsArray[i].toolTipArray[j] == false;
+      }
       billsObjectsArray[i].toolTipArray[j] =
         !billsObjectsArray[i].toolTipArray[j];
-      if (billsObjectsArray[i].toolTipArray[j]) {
+      if (billsObjectsArray[i].toolTipArray[j] == true) {
         billsObjectsArray[i].toolTipStylleArray[j] =
           "max-height: 200vh;opacity: 1;transition:200ms;";
       } else {
@@ -185,7 +258,7 @@
     <!-- {console.log(charges, "charges")} -->
     {#each charges as billService, i}
       {#if billService.SectionType == "Service" || billService.SectionType == "AccountLevel"}
-        <div class="card">
+        <div class="card" bind:this={componentContainer}>
           {#if billService.Collapsible == false || !billService.Collapsible}
             <div
               id="bills-header"
@@ -200,7 +273,6 @@
               />
             </div>
           {/if}
-
           <div style={styleToggleArr[i]} class="bill-content {chargesClass}">
             <span>
               <h3
@@ -265,7 +337,7 @@
                           class="charges-container break-down "
                           style={billsObjectsArray[i].subToggleStyleArray[j]}
                         >
-                          {#each section.Section_Level2 as level2Obj}
+                          {#each section.Section_Level2 as level2Obj, l}
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
                                 <div class="{'level' + level2Obj.Order} ">
@@ -275,14 +347,30 @@
                                     {level2Obj.Value}
                                   </p>
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
-                                    <div class="tooltip-icon">
+                                    <div
+                                      class="tooltip-icon"
+                                      bind:this={toolTipCon}
+                                    >
                                       <img
                                         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
+                                        class="tooltip-svg"
+                                        bind:this={toolTipSvg}
                                         on:click={(e) =>
                                           toolTipToggle(j, i, level2Obj.Value)}
                                       />
                                       {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
+                                        <div
+                                          class="overlay"
+                                          on:click={(e) =>
+                                            toolTipToggle(
+                                              j,
+                                              i,
+                                              level2Obj.Value
+                                            )}
+                                          style={billsObjectsArray[i]
+                                            .toolTipStylleArray[j]}
+                                        />
                                         <div
                                           class="tooltip-description"
                                           style={billsObjectsArray[i]
@@ -327,6 +415,10 @@
                                   {level2Obj.Value}
                                 </p>
                               {/if}
+                              <!-- {console.log(section.Section_Level2.length,"length",l)} -->
+                              {#if section.Section_Level2 && section.Section_Level2.length < 3 && l == section.Section_Level2.length - 1}
+                                <p class={"level4"} />
+                              {/if}
                             {/if}
                           {/each}
                         </div>
@@ -365,10 +457,15 @@
                                         {level3Obj.Value}
                                       </p>
                                       {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
-                                        <div class="tooltip-icon">
+                                        <div
+                                          class="tooltip-icon"
+                                          bind:this={toolTipCon}
+                                        >
                                           <img
                                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                             alt=""
+                                            class="tooltip-svg"
+                                            bind:this={toolTipSvg}
                                             on:click={() =>
                                               toolTipToggle(
                                                 k,
@@ -379,6 +476,17 @@
                                           />
 
                                           {#if arrOfLevel3[k]}
+                                            <div
+                                              class="overlay"
+                                              on:click={(e) =>
+                                                toolTipToggle(
+                                                  k,
+                                                  k,
+                                                  level3Obj.Value,
+                                                  "levele3"
+                                                )}
+                                              style={arrayOfL3Style[k]}
+                                            />
                                             <div
                                               class="tooltip-description"
                                               style={arrayOfL3Style[k]}
@@ -446,7 +554,7 @@
                         {/each}
 
                         <div class="charges-container">
-                          {#each section.Section_Level2 as level2Obj}
+                          {#each section.Section_Level2 as level2Obj, l}
                             {#if level2Obj.SectionType == "Charge"}
                               {#if level2Obj.Order == 1}
                                 <div class={"level" + level2Obj.Order}>
@@ -464,14 +572,30 @@
                                     </p>
                                   {/if}
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
-                                    <div class="tooltip-icon">
+                                    <div
+                                      class="tooltip-icon"
+                                      bind:this={toolTipCon}
+                                    >
                                       <img
                                         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
+                                        class="tooltip-svg"
+                                        bind:this={toolTipSvg}
                                         on:click={() =>
                                           toolTipToggle(j, i, level2Obj.Value)}
                                       />
                                       {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
+                                        <div
+                                          class="overlay"
+                                          on:click={(e) =>
+                                            toolTipToggle(
+                                              j,
+                                              i,
+                                              level2Obj.Value
+                                            )}
+                                          style={billsObjectsArray[i]
+                                            .toolTipStylleArray[j]}
+                                        />
                                         <div
                                           class="tooltip-description"
                                           style={billsObjectsArray[i]
@@ -515,6 +639,11 @@
                                   {level2Obj.Value}
                                 </p>
                               {/if}
+                              <!--  -->
+                              {#if section.Section_Level2 && section.Section_Level2.length < 3 && l == section.Section_Level2.length - 1}
+                                <p class={"level4"} />
+                              {/if}
+                              <!--  -->
                             {/if}
                           {/each}
                         </div>
@@ -552,15 +681,31 @@
                                     {level3Obj.Value}
                                   </p>
                                   {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
-                                    <div class="tooltip-icon">
+                                    <div
+                                      class="tooltip-icon"
+                                      bind:this={toolTipCon}
+                                    >
                                       <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`} -->
                                       <img
                                         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
                                         alt=""
+                                        class="tooltip-svg"
+                                        bind:this={toolTipSvg}
                                         on:click={() =>
                                           toolTipToggle(j, i, level3Obj.Value)}
                                       />
                                       {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
+                                        <div
+                                          class="overlay"
+                                          on:click={(e) =>
+                                            toolTipToggle(
+                                              j,
+                                              i,
+                                              level3Obj.Value
+                                            )}
+                                          style={billsObjectsArray[i]
+                                            .toolTipStylleArray[j]}
+                                        />
                                         <div
                                           class="tooltip-description"
                                           style={billsObjectsArray[i]
@@ -688,6 +833,23 @@
   * {
     font-family: "Interstate";
   }
+  .charges-container:not(:has(.level4)) .level1 {
+    max-width: unset;
+    flex: 1 0 100%;
+  }
+  .overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #00ccff00;
+    z-index: 1;
+  }
+  .tooltip-svg {
+    z-index: 12;
+    position: relative;
+  }
   p {
     margin: 0;
   }
@@ -710,7 +872,7 @@
   .tooltip-description {
     position: absolute;
     bottom: 100%;
-    z-index: 1;
+    z-index: 14;
     max-width: 100vw;
     max-width: 440px;
     border-radius: 6px;
@@ -722,6 +884,8 @@
     box-shadow: 0 0 8px 1px #9e9e9e96;
     left: 0;
     .tooltip-con {
+      z-index: 15;
+      position: relative;
       padding: 8px;
       > a {
         text-decoration: none;
@@ -750,25 +914,29 @@
   }
   .charges-container {
     position: relative;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #eaecee;
-    display: grid;
-    grid-template-columns: 45% auto 1fr auto;
+    // justify-content: space-between;
+    // align-items: center;
+    // display: grid;
+    // grid-template-columns: 45% auto 1fr auto;
+    justify-content: unset;
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
     padding: 10px 0;
+    border-bottom: 1px solid #eaecee;
     gap: 6px;
-    @media screen and (max-width: 767px) {
-      justify-content: unset;
-      align-items: flex-start;
-      display: flex;
-      flex-wrap: wrap;
-    }
-    @media screen and (min-width: 993px) and (max-width: 1100px) {
-      justify-content: unset;
-      align-items: flex-start;
-      display: flex;
-      flex-wrap: wrap;
-    }
+    // @media screen and (max-width: 767px) {
+    //   justify-content: unset;
+    //   align-items: flex-start;
+    //   display: flex;
+    //   flex-wrap: wrap;
+    // }
+    // @media screen and (min-width: 993px) and (max-width: 1100px) {
+    //   justify-content: unset;
+    //   align-items: flex-start;
+    //   display: flex;
+    //   flex-wrap: wrap;
+    // }
     &:empty {
       /* Remove the style of the empty div */
       /* For example: */
@@ -952,20 +1120,23 @@
     color: #000000;
     padding: 5px 0;
     margin: 0;
-    @media screen and (min-width: 993px) and (max-width: 1100px) {
-      flex: 1 0 60%;
-      max-width: calc(60% - 12px);
-    }
-    @media screen and (max-width: 767px) {
-      flex: 1 0 60%;
-      max-width: calc(60% - 12px);
-    }
+    max-width: calc(60% - 12px);
+    flex: 1 0 60%;
+    // @media screen and (min-width: 993px) and (max-width: 1100px) {
+    //   flex: 1 0 60%;
+    //   max-width: calc(60% - 12px);
+    // }
+    // @media screen and (max-width: 767px) {
+    //   flex: 1 0 60%;
+    //   max-width: calc(60% - 12px);
+    // }
     @media screen and (max-width: 480px) {
-      flex: 1 0 60%;
+      // flex: 1 0 60%;
+      font-size: 16px !important;
       p {
         font-size: 16px !important;
       }
-      max-width: calc(60% - 12px);
+      // max-width: calc(60% - 12px);
     }
   }
   .level2 {
@@ -975,14 +1146,15 @@
     margin: 0;
     font-size: 18px;
     padding-bottom: 5px;
-    @media screen and (min-width: 993px) and (max-width: 1100px) {
-      order: 3;
-    }
-    @media screen and (max-width: 767px) {
-      order: 3;
-    }
+    order: 3;
+    // @media screen and (min-width: 993px) and (max-width: 1100px) {
+    //   order: 3;
+    // }
+    // @media screen and (max-width: 767px) {
+    //   order: 3;
+    // }
     @media screen and (max-width: 480px) {
-      order: 3;
+      // order: 3;
       font-size: 14px !important;
     }
   }
@@ -993,12 +1165,13 @@
     font-size: 18px;
     margin: 0;
     padding-bottom: 5px;
-    @media screen and (min-width: 993px) and (max-width: 1100px) {
-      order: 4;
-    }
-    @media screen and (max-width: 767px) {
-      order: 4;
-    }
+    order: 4;
+    // @media screen and (min-width: 993px) and (max-width: 1100px) {
+    //   order: 4;
+    // }
+    // @media screen and (max-width: 767px) {
+    //   order: 4;
+    // }
     @media screen and (max-width: 480px) {
       font-size: 14px !important;
     }
@@ -1013,14 +1186,16 @@
     margin: 0;
     grid-column-start: 4;
     text-align: right;
-    @media screen and (min-width: 993px) and (max-width: 1100px) {
-      padding: 5px 0;
-      flex: 1 0 40%;
-    }
-    @media screen and (max-width: 767px) {
-      padding: 5px 0;
-      flex: 1 0 40%;
-    }
+    padding: 5px 0;
+    flex: 1 0 40%;
+    // @media screen and (min-width: 993px) and (max-width: 1100px) {
+    //   padding: 5px 0;
+    //   flex: 1 0 40%;
+    // }
+    // @media screen and (max-width: 767px) {
+    //   padding: 5px 0;
+    //   flex: 1 0 40%;
+    // }
     @media screen and (max-width: 480px) {
       font-size: 16px !important;
     }

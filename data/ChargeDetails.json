@@ -154,16 +154,6 @@
               "FontWeight": "400"
             },
             {
-              "Order": 2,
-              "Value": "1,000 kWh",
-              "FontSize": 18,
-              "Color": "#005FAA",
-              "IsItalic": true,
-              "IsBreakdown": false,
-              "SectionType": "Charge",
-              "FontWeight": "300"
-            },
-            {
               "Order": 3,
               "Value": "@ $0.05902/kWh",
               "FontSize": 18,
@@ -172,16 +162,6 @@
               "IsBreakdown": false,
               "SectionType": "Charge",
               "FontWeight": "300"
-            },
-            {
-              "Order": 4,
-              "Value": "$59.02",
-              "FontSize": 20,
-              "Color": "#000000",
-              "IsItalic": false,
-              "IsBreakdown": false,
-              "SectionType": "Charge",
-              "FontWeight": "400"
             }
           ]
         },
@@ -495,6 +475,16 @@
                   "IsBreakdown": false,
                   "SectionType": "Charge",
                   "FontWeight": "300"
+                },
+                {
+                  "Order": 4,
+                  "Value": "",
+                  "FontSize": 20,
+                  "Color": "#000000",
+                  "IsItalic": false,
+                  "IsBreakdown": false,
+                  "SectionType": "Charge",
+                  "FontWeight": "400"
                 }
               ]
             },
@@ -509,16 +499,6 @@
                   "Order": 1,
                   "Value": "Security Deposit",
                   "ToolTip": "Test Tooltip",
-                  "FontSize": 20,
-                  "Color": "#000000",
-                  "IsItalic": false,
-                  "IsBreakdown": false,
-                  "SectionType": "Charge",
-                  "FontWeight": "400"
-                },
-                {
-                  "Order": 4,
-                  "Value": "$54.65",
                   "FontSize": 20,
                   "Color": "#000000",
                   "IsItalic": false,

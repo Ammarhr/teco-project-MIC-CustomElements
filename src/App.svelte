@@ -14,7 +14,7 @@
 </script>
 
 <div class="app-container">
-  <!-- <MicWrapper token="smth" domain="jsdelivr.=" eventdomain="s" personainput="Customer" assetspath="https://drive.google.com/drive/folders/1a4bJhluf6Br4IMrS1KDU-8aRYEhC_T5N?usp=share_link"/> -->
+  <!-- <MicWrapper token="smth" domain="jsdelivr.=" eventdomain="s" personainput="Customer" /> -->
   <!-- <MicBillSelectorAndDownload />
   <MicInsights /> -->
   <!-- <MicLoading />
