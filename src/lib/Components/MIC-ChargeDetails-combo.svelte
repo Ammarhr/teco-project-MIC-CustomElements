@@ -132,38 +132,26 @@
   $: if (componentContainer) {
   }
   let arrOfLevel3 = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
   ];
   let arrayOfL3Style = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false, false, false, false],
   ];
   let activeTooltip;
   let activeSection;
@@ -175,14 +163,20 @@
     activeTooltip = j;
     activeSection = i;
     if (previouseActiveTooltip !== j || previouseActiveSec !== i) {
-      if (previouseActiveTooltip !== null) {
+      if (
+        previouseActiveTooltip !== undefined &&
+        previouseActiveSec !== undefined
+      ) {
         if (
-          arrOfLevel3[previouseActiveTooltip] == true &&
-          arrayOfL3Style[previouseActiveTooltip]
+          arrOfLevel3[previouseActiveSec] &&
+          arrOfLevel3[previouseActiveSec][previouseActiveTooltip] == true &&
+          arrayOfL3Style[previouseActiveSec] &&
+          arrayOfL3Style[previouseActiveSec][previouseActiveTooltip]
         )
-          arrOfLevel3[previouseActiveTooltip] =
-            !arrOfLevel3[previouseActiveTooltip];
-        arrayOfL3Style[previouseActiveTooltip] =
+          arrOfLevel3[previouseActiveSec][previouseActiveTooltip] =
+            !arrOfLevel3[previouseActiveSec][previouseActiveTooltip];
+
+        arrayOfL3Style[previouseActiveSec][previouseActiveTooltip] =
           "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
       }
       if (previouseActiveTooltip !== null && previouseActiveSec !== null) {
@@ -209,11 +203,11 @@
       }
     }
     if (level3) {
-      arrOfLevel3[j] = !arrOfLevel3[j];
-      if (arrOfLevel3[j] == true) {
-        arrayOfL3Style[j] = "max-height: 200vh;opacity: 1;transition:200ms;";
+      arrOfLevel3[i][j] = !arrOfLevel3[i][j];
+      if (arrOfLevel3[i][j] == true) {
+        arrayOfL3Style[i][j] = "max-height: 200vh;opacity: 1;transition:200ms;";
       } else {
-        arrayOfL3Style[j] =
+        arrayOfL3Style[i][j] =
           "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
       }
     } else {
@@ -444,10 +438,10 @@
                             </div>
                           </div>
                         {/if}
-                        {#each section.Section_Level2 as level2Obj, k}
+                        {#each section.Section_Level2 as level2Obj, o}
                           {#if level2Obj.Section_Level3}
                             <div class="charges-container">
-                              {#each level2Obj.Section_Level3 as level3Obj}
+                              {#each level2Obj.Section_Level3 as level3Obj, p}
                                 {#if level3Obj.SectionType == "Charge"}
                                   {#if level3Obj.Order == 1}
                                     <div class={"level" + level3Obj.Order}>
@@ -468,28 +462,28 @@
                                             bind:this={toolTipSvg}
                                             on:click={() =>
                                               toolTipToggle(
-                                                k,
-                                                k,
+                                                p,
+                                                o,
                                                 level3Obj.Value,
                                                 "levele3"
                                               )}
                                           />
 
-                                          {#if arrOfLevel3[k]}
+                                          {#if arrOfLevel3[o] && arrayOfL3Style[o][p]}
                                             <div
                                               class="overlay"
                                               on:click={(e) =>
                                                 toolTipToggle(
-                                                  k,
-                                                  k,
+                                                  p,
+                                                  o,
                                                   level3Obj.Value,
                                                   "levele3"
                                                 )}
-                                              style={arrayOfL3Style[k]}
+                                              style={arrayOfL3Style[o][p]}
                                             />
                                             <div
                                               class="tooltip-description"
-                                              style={arrayOfL3Style[k]}
+                                              style={arrayOfL3Style[o][p]}
                                             >
                                               <div class="tooltip-con">
                                                 {level3Obj.ToolTip}

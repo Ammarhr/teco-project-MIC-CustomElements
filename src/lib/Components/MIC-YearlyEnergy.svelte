@@ -17,17 +17,18 @@
   let newTokenTrigger;
   let yearlyEnergyData;
   let arrayOfToggles = [];
-
+  let tries = 0;
   ////////////////////////
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiToken && $SAPToken && !$data.NetMeter) {
+    if ($apiToken && $SAPToken && !$data.NetMeter && tries != 1) {
       get(
         $apiToken,
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
         $SAPToken
         // "../../data/yearlyEnergy.json"
       );
+      tries++;
     }
     newTokenTrigger = $apiToken;
   });

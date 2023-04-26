@@ -131,7 +131,7 @@
               {/if}
             </p>
           {:else}
-            <p class="msg-data" style="height: 105px;">No Messages</p>
+            <p class="msg-data" style="height: 105px; text-align: center;">No Messages</p>
           {/if}
         </div>
         <div class="message-footer">
