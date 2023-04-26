@@ -547,7 +547,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     }, {
         name: 'TEMPERATURE',
         type: 'line',
-        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => result.Operand == "KWH_R_PK")
+        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) =>monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun")
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
     }] : [onPeak == "x" ? {
         name: 'OnPeak',
@@ -574,7 +574,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     }, {
         name: 'TEMPERATURE',
         type: 'line',
-        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => result.Operand == "KWH_R_PK")
+        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun")
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
     }]
 
