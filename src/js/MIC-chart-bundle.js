@@ -54,14 +54,18 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
                 //     )
                 // } else {
                 // }
-                return val.toLocaleString() + unit;
+
+                return (
+                    val.toLocaleString() && val.toLocaleString().length > 3 ? [val.toLocaleString(), unit] : val.toLocaleString() + unit
+                )
             },
-            offsetY: -30,
+            offsetY: -40,
             style: {
-                fontSize: '16px',
+                fontSize: '14px',
                 fontWeight: 400,
                 fontFamily: 'Interstate',
-                colors: '#bbbb'
+                colors: '#bbbb',
+                display: "flex"
             },
         },
         xaxis: {
@@ -95,8 +99,17 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
             },
             labels: {
                 show: true,
+                style: {
+                    colors: [],
+                    fontSize: '12px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: 400,
+                    cssClass: 'apexcharts-yaxis-label',
+                },
                 formatter: function ( /** @type {Number} */ val) {
-                    return Math.floor(val);
+                    return (
+                        Math.floor(val)
+                    )
                 },
             },
         },
@@ -225,6 +238,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             return results.Days;
         })
     }
+
     //* configure column width depend on the data 
     if (data && data.length < 5) {
         colWidth = "20%"
@@ -393,7 +407,8 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                                 "</span>" +
                                 "<span style='font-weight:300;color:#000000;'>" + " "
                                 +
-                                series[0][dataPointIndex].toLocaleString() + " " + unit : "")
+                                unit == "$" ? unit + " " + series[0][dataPointIndex].toLocaleString()
+                                : series[0][dataPointIndex].toLocaleString() + " " + unit : "")
                             +
                             (series[1] && series[1][dataPointIndex] ? "</div>"
                                 + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;  margin-bottom: 6px;">'
@@ -411,7 +426,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                                 "</span>"
                                 +
                                 "<span style='font-weight:300;'>"
-                                + daysArray[dataPointIndex].split(" ")[0] : "")
+                                + daysArray[dataPointIndex] : "")
                         );
                     } else {
                         return ''
@@ -493,8 +508,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     let costArrayOff = [];
     let daysArray = []
     if (data && chartUnit == "cost" && onPeak == "x" && offPeak == "x") {
-        costArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 == 0 : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')))
-        costArrayOff = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 !== 0 : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')))
+        costArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')).toFixed(2))
+        costArrayOff = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_OPK_B" : result.Dtype == "dtouf").map(value => parseFloat(value.Cost?.split(",").join('')))
     } else if (chartUnit == "cost") {
         if (onPeak == "x") {
             costArray = data.map(res => res.Cost)
@@ -504,7 +519,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         }
     }
     if (data) {
-        daysArray = chartUnit == "usage" ? data.filter((result, i) => onPeak == "x" && offPeak !== "x" || onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? i % 2 == 0 : result.Dtype == "dtoun").map(value => value.Days) : data.map(value => value.Days)
+        daysArray = chartUnit == "usage" ? data.filter((result, i) => onPeak == "x" && offPeak !== "x" || onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun").map(value => value.Days) : data.map(value => value.Days)
     }
 
     let serisData = chartUnit == "usage" ? [onPeak == "x" ? {
@@ -522,7 +537,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         name: 'OffPeak',
         type: 'column',
         color: "#00294A",
-        data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_OPK_B"  : result.Dtype == "dtouf")
+        data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_OPK_B" : result.Dtype == "dtouf")
             .map(value => value.Usage !== "" ? parseFloat(value.Usage?.split(",").join('')) : null)
     } : {
         name: '',
@@ -532,13 +547,13 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     }, {
         name: 'TEMPERATURE',
         type: 'line',
-        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => i % 2 == 0)
+        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => result.Operand == "KWH_R_PK")
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
     }] : [onPeak == "x" ? {
         name: 'OnPeak',
         type: 'column',
         color: "#00B6F0",
-        data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_R_PK": result.Dtype == "dtoun")
+        data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun")
             .map(value => value.Cost !== "" ? parseFloat(value.Cost?.split(",").join('')) : null)
     } : {
         name: '',
@@ -559,8 +574,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     }, {
         name: 'TEMPERATURE',
         type: 'line',
-        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => i % 2 == 0)
-            .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature) : []
+        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => result.Operand == "KWH_R_PK")
+            .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
     }]
 
     let colWidth;
@@ -630,7 +645,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                 enabled: false
             },
             xaxis: {
-                categories: onPeak == "x" && offPeak == "x" ? data.filter((result, i) => i % 2 == 0).map(value => value.Perioddate) : data.map(value => value.Perioddate),
+                categories: data.filter((result, i) => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun")
+                    .map(value => value.Perioddate),
                 axisTicks: {
                     show: false,
                 },
@@ -707,8 +723,9 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                 followCursor: true,
                 custom: function ({ series, seriesIndex, dataPointIndex, w }) {
                     let arr;
-                    arr = onPeak == "x" && offPeak == "x" ? data.filter((result, i) => i % 2 == 0).map(value => value.FullDate) : data.map(value => value.FullDate)
-                    if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex])) {
+                    arr = data.filter((result, i) => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun")
+                        .map(value => value.FullDate)
+                    if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex]) || series[2] && series[2][dataPointIndex]) {
 
                         return (
                             '<div class="apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
@@ -737,7 +754,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                     "<span style='font-weight:300;'>"
                                     + series[1][dataPointIndex] + " " + unit : "")) :
 
-                                costArrayOff[dataPointIndex] || costArray[dataPointIndex] ?
+                                (costArrayOff[dataPointIndex] && costArrayOff[dataPointIndex] !== "0.00") || (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00") ?
                                     '<div style="padding-top:14px"> ' +
                                     (costArray[dataPointIndex] ?
                                         ("</div>"
@@ -749,7 +766,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                             +
                                             "<span style='font-weight:300;'>"
                                             +
-                                            costArray[dataPointIndex].toLocaleString() + " " + "$") : "")
+                                            "$ " + costArray[dataPointIndex].toLocaleString()) : "")
                                     +
                                     (costArrayOff[dataPointIndex] ? ("</div>"
                                         +
@@ -759,7 +776,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                         "</span>"
                                         +
                                         "<span style='font-weight:300;'>"
-                                        + costArrayOff[dataPointIndex].toLocaleString() + " " + "$") : "") : ""
+                                        + "$ " + costArrayOff[dataPointIndex].toLocaleString()) : "") : ""
 
                             )
                             +

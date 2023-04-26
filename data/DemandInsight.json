@@ -1,111 +1,56 @@
 {
   "services": [
     {
-      "serviceName": "Electric",
-      "BillContractNo": "5100470566",
+      "serviceName": "Gas",
+      "BillContractNo": "5100724238",
+      "ZInstallBillClass": "Commercial and Industrial",
       "monthly": {
         "VisibilityTab": true,
-        "unit": "KWH",
-        "valueConsumption": 1365465458,
-        "percentageConsumption": -105,
-        "valueTemp": 56,
-        "percentageTemp": 0,
+        "unit": "Therms",
+        "valueConsumption": 6312190,
+        "percentageConsumption": 2,
+        "valueTemp": 66,
+        "percentageTemp": 7,
         "y": {
           "data": [
-            522525,
-            341115
+            6178230,
+            6312190
           ]
         },
         "x": [
-          "Nov 2021",
-          "Dec 2021"
+          "JAN 2023",
+          "FEB 2023"
         ],
-        "CurrentFactorValue": 75,
-        "CurrentFactorDate": "MAR 22",
-        "PreviousFactorValue": 20,
-        "PreviousFactorDate": "FEP 22",
-        "LoadFactorArrowComparison": 50,
-        "CurrentDemandValue": 925000,
-        "DemandUnit": "KW"
+        "CurrentFactorDate": "FEB 2023",
+        "PreviousFactorValue": "0.00",
+        "PreviousFactorDate": "JAN 2023",
+        "LoadFactorArrowComparison": 0,
+        "CurrentDemandValue": "0.00",
+        "DemandUnit": "Therms"
       },
       "yearly": {
         "VisibilityTab": true,
-        "unit": "KWH",
-        "valueConsumption": 1505,
-        "percentageConsumption": -80,
-        "valueTemp": 35,
-        "percentageTemp": 0,
+        "unit": "Therms",
+        "valueConsumption": 6312190,
+        "percentageConsumption": -2,
+        "valueTemp": 66,
+        "percentageTemp": 5,
         "y": {
           "data": [
-            2,
-            1
+            400,
+            350
           ]
         },
         "x": [
-          "Dec 2021",
-          "Dec 2020"
+          "FEB 2022",
+          "FEB 2023"
         ],
-        "CurrentFactorValue": 70,
-        "CurrentFactorDate": "MAR 22",
-        "PreviousFactorValue": 50,
-        "PreviousFactorDate": "MAR 21",
-        "LoadFactorArrowComparison": -150,
-        "CurrentDemandValue": 580,
-        "DemandUnit": "KW"
-      }
-    },
-     {
-      "serviceName": "Electric",
-      "BillContractNo": "5200021995",
-      "monthly": {
-        "VisibilityTab": true,
-        "unit": "KWH",
-        "valueConsumption": 1365465458,
-        "percentageConsumption": -105,
-        "valueTemp": 56,
-        "percentageTemp": 0,
-        "y": {
-          "data": [
-            522525,
-            341115
-          ]
-        },
-        "x": [
-          "Nov 2021",
-          "Dec 2021"
-        ],
-        "CurrentFactorValue": 75,
-        "CurrentFactorDate": "MAR 22",
-        "PreviousFactorValue": 20,
-        "PreviousFactorDate": "FEP 22",
-        "LoadFactorArrowComparison": 50,
-        "CurrentDemandValue": 925000,
-        "DemandUnit": "KW"
-      },
-      "yearly": {
-        "VisibilityTab": true,
-        "unit": "KWH",
-        "valueConsumption": 1505,
-        "percentageConsumption": -80,
-        "valueTemp": 35,
-        "percentageTemp": 0,
-        "y": {
-          "data": [
-            2,
-            1
-          ]
-        },
-        "x": [
-          "Dec 2021",
-          "Dec 2020"
-        ],
-        "CurrentFactorValue": 70,
-        "CurrentFactorDate": "MAR 22",
-        "PreviousFactorValue": 50,
-        "PreviousFactorDate": "MAR 21",
-        "LoadFactorArrowComparison": -150,
-        "CurrentDemandValue": 580,
-        "DemandUnit": "KW"
+        "CurrentFactorDate": "FEB 2023",
+        "PreviousFactorValue": "0.00",
+        "PreviousFactorDate": "FEB 2022",
+        "LoadFactorArrowComparison": 0,
+        "CurrentDemandValue": "0.00",
+        "DemandUnit": "Therms"
       }
     }
   ]
