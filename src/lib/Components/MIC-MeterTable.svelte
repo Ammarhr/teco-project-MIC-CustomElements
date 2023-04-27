@@ -134,14 +134,14 @@
       }
       let monthlyUrl;
 
-      if (DAP_dtoun == "x" && DAP_dtouf == "x") {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=HIST_OFKWH&Operand2=HIST_PKKWH&Dln=${DLN}&ZipCode=${ZipCode}`;
-      } else if (DAP_dtoun !== "x" && DAP_dtouf == "x") {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=HIST_OFKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
-      } else if (DAP_dtoun == "x" && DAP_dtouf !== "x") {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=HIST_PKKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+      if (DAP_dtoun == "x" && DAP_dtouf == "x" && Operand == "YKWH") {
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=HIST_PKKWH&Dln=${DLN}&ZipCode=${ZipCode}`;
+      } else if (DAP_dtoun !== "x" && DAP_dtouf == "x" && Operand == "YKWH") {
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+      } else if (DAP_dtoun == "x" && DAP_dtouf !== "x" && Operand == "YKWH") {
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_PKKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
       } else {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${HistoricalFact}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${HistoricalFact}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
       }
 
       monthlyUsageGet(
