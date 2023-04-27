@@ -21,7 +21,13 @@
   ////////////////////////
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiToken && $SAPToken && !$data.NetMeter && tries != 1) {
+    if (
+      $apiToken &&
+      $SAPToken &&
+      !$data.NetMeter &&
+      tries != 1 &&
+      $newToken !== ""
+    ) {
       get(
         $apiToken,
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
