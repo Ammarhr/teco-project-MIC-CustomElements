@@ -1359,7 +1359,7 @@
     right: 0;
     box-shadow: 0px 10px 15px rgba(16, 24, 40, 0.1),
       0px 4px 6px rgba(16, 24, 40, 0.1);
-    max-width: 400px;
+    width: 314px;
     &::before {
       content: "";
       position: absolute;

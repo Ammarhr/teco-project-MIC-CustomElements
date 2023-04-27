@@ -89,6 +89,19 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
             },
         },
         yaxis: {
+            title: {
+                text: unit,
+                rotate: 0,
+                offsetX: 0,
+                offsetY: 0,
+                style: {
+                    color: "blue",
+                    fontSize: '12px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: 600,
+                    cssClass: 'apexcharts-yaxis-title',
+                },
+            },
             min: 0,
             max: max,
             axisBorder: {
@@ -547,7 +560,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     }, {
         name: 'TEMPERATURE',
         type: 'line',
-        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) =>monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun")
+        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => monthly == true ? result.Operand == "KWH_R_PK" : result.Dtype == "dtoun")
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
     }] : [onPeak == "x" ? {
         name: 'OnPeak',
