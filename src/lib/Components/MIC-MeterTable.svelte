@@ -108,6 +108,7 @@
         MeterNumber,
         Operand,
         OperandLabel,
+        HistoricalFact,
         AMI_Flag,
       } = selectedMeter;
 
@@ -133,10 +134,14 @@
       }
       let monthlyUrl;
 
-      if (DAP_dtoun == "x" && DAP_dtouf == "x") {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=KWH_OPK_B&Operand2=KWH_R_PK&Dln=${DLN}&ZipCode=${ZipCode}`;
+      if (DAP_dtoun == "x" && DAP_dtouf == "x" && Operand == "YKWH") {
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=HIST_PKKWH&Dln=${DLN}&ZipCode=${ZipCode}`;
+      } else if (DAP_dtoun !== "x" && DAP_dtouf == "x" && Operand == "YKWH") {
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+      } else if (DAP_dtoun == "x" && DAP_dtouf !== "x" && Operand == "YKWH") {
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_PKKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
       } else {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=${MeterNumber}&Operand1=${Operand}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${HistoricalFact}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
       }
 
       monthlyUsageGet(
@@ -164,9 +169,9 @@
         chartColor = "#411084";
         chartLegend = "Demand";
         if (selectedMeter) {
-          if (selectedMeter.Operand == "KW_R_OPK") {
+          if (selectedMeter.HistoricalFact == "KW_R_OPK") {
             onOffPeakDemand = "Off Peak: ";
-          } else if (selectedMeter.Operand == "KW_R_PK") {
+          } else if (selectedMeter.HistoricalFact == "KW_R_PK") {
             onOffPeakDemand = "On Peak: ";
           } else {
             onOffPeakDemand = "Demand: ";
@@ -190,14 +195,16 @@
       } else if (selectedMeter.DAP_rkwh == "x") {
         chartColor = "#96BDFF";
         if (selectedMeter) {
-          if (selectedMeter.Operand == "RECVD_KWH") {
+          if (selectedMeter.Operand == "YKWHRC") {
+            onOffPeakDemand= "Received: "
             chartLegend = "SELF-GENERATED";
           }
         }
       } else {
         chartColor = "#044F8D";
         if (selectedMeter) {
-          if (selectedMeter.Operand == "DELV_KWH") {
+          if (selectedMeter.Operand == "YKWHDL") {
+            onOffPeakDemand= "Delivered: "
             chartLegend = "UTILITY PROVIDED";
           }
         }
