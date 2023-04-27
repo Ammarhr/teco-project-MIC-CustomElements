@@ -195,14 +195,16 @@
       } else if (selectedMeter.DAP_rkwh == "x") {
         chartColor = "#96BDFF";
         if (selectedMeter) {
-          if (selectedMeter.HistoricalFact == "HIST_RKWH") {
+          if (selectedMeter.Operand == "YKWHRC") {
+            onOffPeakDemand= "Received: "
             chartLegend = "SELF-GENERATED";
           }
         }
       } else {
         chartColor = "#044F8D";
         if (selectedMeter) {
-          if (selectedMeter.HistoricalFact == "HIST_DKWH") {
+          if (selectedMeter.Operand == "YKWHDL") {
+            onOffPeakDemand= "Delivered: "
             chartLegend = "UTILITY PROVIDED";
           }
         }

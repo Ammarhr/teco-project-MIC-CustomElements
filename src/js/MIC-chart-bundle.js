@@ -1,5 +1,5 @@
 // import { Label } from "@amcharts/amcharts5";
-import cloudIcon from "../assets/usage-cloud.svg"
+// import cloudIcon from "../assets/usage-cloud.svg"
 // import tempLegend from "../assets/temp-legend.svg"
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
     let options = {
@@ -217,7 +217,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                         yAxisIndex: 0,
                         seriesIndex: 0,
                         image: {
-                            path: cloudIcon,
+                            path: 'https://tecocdn.azureedge.net/ibill/iBill-assets/usage-cloud.svg',
                             width: 30,
                             height: 30,
                             offsetX: 0,
@@ -408,7 +408,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                                 "<span style='font-weight:300;color:#000000;'>" + " "
                                 +
                                 (chartUnit == "cost" ? unit + " " + series[0][dataPointIndex].toLocaleString()
-                                : series[0][dataPointIndex].toLocaleString() + " " + unit) : "")
+                                    : series[0][dataPointIndex].toLocaleString() + " " + unit) : "")
                             +
                             (series[1] && series[1][dataPointIndex] ? "</div>"
                                 + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;  margin-bottom: 6px;">'
@@ -756,7 +756,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
 
                                 (costArrayOff[dataPointIndex] && costArrayOff[dataPointIndex] !== "0.00") || (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00") ?
                                     '<div style="padding-top:14px"> ' +
-                                    (costArray[dataPointIndex] ?
+                                    (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00" ?
                                         ("</div>"
                                             +
                                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
@@ -768,7 +768,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                             +
                                             "$ " + costArray[dataPointIndex].toLocaleString()) : "")
                                     +
-                                    (costArrayOff[dataPointIndex] ? ("</div>"
+                                    (costArrayOff[dataPointIndex] && costArrayOff[dataPointIndex] !== "0.00" ? ("</div>"
                                         +
                                         '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                                         + `<span style='font-weight:700; margin-bottom:6px'>` +
