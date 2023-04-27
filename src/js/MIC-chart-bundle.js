@@ -2,6 +2,7 @@
 import cloudIcon from "../assets/usage-cloud.svg"
 // import tempLegend from "../assets/temp-legend.svg"
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
+    console.log(-1 * (height / 5) ,"height");
     let options = {
         series: data,
         fill: {
@@ -56,10 +57,10 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
                 // }
 
                 return (
-                    val.toLocaleString() && val.toLocaleString().length > 3 ? [val.toLocaleString(), unit] : val.toLocaleString() + unit
+                    val.toLocaleString()
                 )
             },
-            offsetY: -40,
+            offsetY: -25,
             style: {
                 fontSize: '14px',
                 fontWeight: 400,
@@ -92,14 +93,14 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
             title: {
                 text: unit,
                 rotate: 0,
-                offsetX: 0,
-                offsetY: 0,
+                offsetX: 30,
+                offsetY: -1 * (height / 2.2),
                 style: {
-                    color: "blue",
+                    color: "#005FAA",
                     fontSize: '12px',
-                    fontFamily: 'Helvetica, Arial, sans-serif',
-                    fontWeight: 600,
-                    cssClass: 'apexcharts-yaxis-title',
+                    fontFamily: 'Interstate',
+                    fontWeight: 300,
+                    cssClass: 'insights-apexcharts-yaxis-title',
                 },
             },
             min: 0,
@@ -121,7 +122,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
                 },
                 formatter: function ( /** @type {Number} */ val) {
                     return (
-                        Math.floor(val)
+                        Math.floor(val) 
                     )
                 },
             },

@@ -8,13 +8,13 @@
         "VisibilityTab": true,
         "unit": "Therms",
         "valueConsumption": 6312190,
-        "percentageConsumption": 2,
+        "percentageConsumption": 50,
         "valueTemp": 66,
         "percentageTemp": 7,
         "y": {
           "data": [
-            6178230,
-            6312190
+            20,
+            5
           ]
         },
         "x": [

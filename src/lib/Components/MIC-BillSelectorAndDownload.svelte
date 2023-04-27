@@ -30,8 +30,8 @@
   $: if ($apiDomain && $apiToken && $SAPToken && !$data.bills) {
     get(
       $apiToken,
-      "../../data/BillSelector.json",
-      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`,
+      // "../../data/BillSelector.json",
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`,
       $SAPToken
     );
   }

@@ -81,10 +81,10 @@
       </div>
     </div>
     <mic-billselector />
-    <MicBillSelectorAndDownload />
+    <!-- <MicBillSelectorAndDownload /> -->
     <mic-combo-bill />
     <!-- <div class="refreshable"> -->
-    <MicComboBill />
+    <!-- <MicComboBill /> -->
     <!-- <div class="charge-detailes"> -->
     <!-- <mic-billingsummary /> -->
     <!-- <mic-billingsummary-clone /> -->

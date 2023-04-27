@@ -27,8 +27,8 @@
         $SAPToken
         // "../../data/yearlyEnergy.json"
       );
-      tries++;
     }
+    console.log("yearly energy");
     newTokenTrigger = $apiToken;
   });
 
@@ -44,6 +44,7 @@
       $SAPToken
     );
     newTokenTrigger = $newToken.token;
+    console.log("new yearly energy");
   }
   const toggle = (i) => {
     arrayOfToggles[i] = !arrayOfToggles[i];

@@ -22,7 +22,7 @@
     persona,
     eventsDomain,
     sunSelectServicesArray,
-    SAPToken
+    SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
   export let insightservices;
@@ -700,7 +700,7 @@
   }
   .chart-container {
     width: 100%;
-    margin-bottom: 15px;
+    margin: 15px 0;
   }
   .flex-center-items {
     display: flex;

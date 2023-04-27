@@ -42,21 +42,21 @@
     ) {
       chargeGet(
         $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
-        "../../../data/ChargeDetails.json",
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+        // "../../../data/ChargeDetails.json",
         $SAPToken
       );
       get(
         $apiToken,
-        "../../../data/DemandInsight.json",
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
+        // "../../../data/DemandInsight.json",
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
         $SAPToken
       );
     }
     sunget(
       $apiToken,
-      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
-      "../../data/sunSelect.json",
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
+      // "../../data/sunSelect.json",
       $SAPToken
     );
     comboNewToken = $apiToken;
@@ -112,6 +112,7 @@
 
   $: if ($sundata.SunSelect && $sundata.SunSelect.length > 0) {
     sunSelectArray = $sundata.SunSelect;
+    console.log(sunSelectArray, "sunSelectArray");
   }
   let insight;
   let insightsArray = [];
@@ -177,10 +178,10 @@
           </div>
           {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
             <div class="insights">
-              <MicBillInsightsCombo
+              <!-- <MicBillInsightsCombo
               insightservices={insightsArray[i]}
               sunselectdata={sunSelectArray}
-              />
+              /> -->
               <mic-insights-combo
                 insightservices={insightsArray[i]}
                 sunselectdata={sunSelectArray}
