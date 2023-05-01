@@ -248,10 +248,12 @@
                           class="arrow"
                           alt=""
                         />
-                        {Math.abs(
-                          insightsService.yearly?.percentageConsumption
-                        )}% {insightsService?.yearly?.unit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.yearly?.percentageConsumption
+                          )}% {insightsService?.yearly?.unit}
+                        </span>
+                      </span>
                     {:else if insightsService.yearly.percentageConsumption < 0}
                       <span
                         class={avgClass}
@@ -262,19 +264,23 @@
                           class="arrow"
                           alt=""
                         />
-                        {Math.abs(
-                          insightsService.yearly?.percentageConsumption
-                        )}% {insightsService?.yearly?.unit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.yearly?.percentageConsumption
+                          )}% {insightsService?.yearly?.unit}
+                        </span>
+                      </span>
                     {:else if insightsService.yearly.percentageConsumption == 0}
                       <span
                         class={"red"}
                         style="background: #E6EFF7; border: 1px solid #005FAA"
                       >
-                        {Math.abs(
-                          insightsService.yearly?.percentageConsumption
-                        )}% {insightsService?.yearly?.unit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.yearly?.percentageConsumption
+                          )}% {insightsService?.yearly?.unit}
+                        </span>
+                      </span>
                     {/if}
                   </div>
                 </div>
@@ -362,10 +368,12 @@
                           class="arrow"
                           alt="arrow icon"
                         />
-                        {Math.abs(
-                          insightsService.yearly?.LoadFactorArrowComparison
-                        )}% {insightsService?.yearly?.DemandUnit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.yearly?.LoadFactorArrowComparison
+                          )}% {insightsService?.yearly?.DemandUnit}
+                        </span>
+                      </span>
                     {:else if insightsService.yearly.LoadFactorArrowComparison < 0}
                       <span
                         class={avgClass}
@@ -376,19 +384,23 @@
                           class="arrow"
                           alt=""
                         />
-                        {Math.abs(
-                          insightsService.yearly?.LoadFactorArrowComparison
-                        )}% {insightsService?.yearly?.DemandUnit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.yearly?.LoadFactorArrowComparison
+                          )}% {insightsService?.yearly?.DemandUnit}
+                        </span>
+                      </span>
                     {:else if insightsService.yearly.LoadFactorArrowComparison == 0}
                       <span
                         class={"red"}
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
-                        {Math.abs(
-                          insightsService.yearly?.LoadFactorArrowComparison
-                        )}% {insightsService?.yearly?.DemandUnit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.yearly?.LoadFactorArrowComparison
+                          )}% {insightsService?.yearly?.DemandUnit}
+                        </span>
+                      </span>
                     {/if}
                   </div>
                 </div>
@@ -443,10 +455,12 @@
                           class="arrow"
                           alt="arrow icon"
                         />
-                        {Math.abs(
-                          insightsService.monthly?.percentageConsumption
-                        )}% {insightsService?.monthly?.unit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.monthly?.percentageConsumption
+                          )}% {insightsService?.monthly?.unit}
+                        </span>
+                      </span>
                     {:else if insightsService.monthly.percentageConsumption < 0}
                       <span
                         class={avgClass}
@@ -457,10 +471,12 @@
                           class="arrow"
                           alt=""
                         />
-                        {Math.abs(
-                          insightsService.monthly?.percentageConsumption
-                        )}% {insightsService?.monthly?.unit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.monthly?.percentageConsumption
+                          )}% {insightsService?.monthly?.unit}
+                        </span>
+                      </span>
                     {:else if insightsService.monthly.percentageConsumption == 0}
                       <span
                         class={"red"}
@@ -559,10 +575,12 @@
                           class="arrow"
                           alt="arrow icon"
                         />
-                        {Math.abs(
-                          insightsService.monthly?.LoadFactorArrowComparison
-                        )}% {insightsService?.monthly?.DemandUnit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.monthly?.LoadFactorArrowComparison
+                          )}% {insightsService?.monthly?.DemandUnit}
+                        </span>
+                      </span>
                     {:else if insightsService.monthly.LoadFactorArrowComparison < 0}
                       <span
                         class={avgClass}
@@ -573,19 +591,23 @@
                           class="arrow"
                           alt=""
                         />
-                        {Math.abs(
-                          insightsService.monthly?.LoadFactorArrowComparison
-                        )}% {insightsService?.monthly?.DemandUnit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.monthly?.LoadFactorArrowComparison
+                          )}% {insightsService?.monthly?.DemandUnit}
+                        </span>
+                      </span>
                     {:else if insightsService.monthly.LoadFactorArrowComparison == 0}
                       <span
                         class={"red"}
                         style="background: #E6EFF7; border: 1px solid #005FAA;"
                       >
-                        {Math.abs(
-                          insightsService.monthly?.LoadFactorArrowComparison
-                        )}% {insightsService?.monthly?.DemandUnit}</span
-                      >
+                        <span class="percentage-consumption">
+                          {Math.abs(
+                            insightsService.monthly?.LoadFactorArrowComparison
+                          )}% {insightsService?.monthly?.DemandUnit}
+                        </span>
+                      </span>
                     {/if}
                   </div>
                 </div>
@@ -621,14 +643,13 @@
         </div>
       </div>
     {/if}
-    {#if $sunloading}
+    <!-- {#if $sunloading}
       <mic-loading />
     {:else if $sunerror}
       <h1 />
     {:else if sunSelectArray && sunSelectArray.length > 0}
-      <!-- <MicSunSelect contractnum={sunSelectArray[i]} /> -->
       <mic-sunselect contractnum={sunSelectArray[i]} />
-    {/if}
+    {/if} -->
   {/each}
   <!-- {:else if $sundata &&sunselectdata}
   {#if $sunloading}
@@ -641,6 +662,9 @@
 {/if}
 
 <style lang="scss">
+  .percentage-consumption{
+    width: max-content;
+  }
   .insight-card {
     display: flex;
     flex-direction: column;

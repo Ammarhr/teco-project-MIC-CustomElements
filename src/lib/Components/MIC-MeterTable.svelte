@@ -44,6 +44,7 @@
   let styleSelectedRows = [];
   let timeoutId;
   let refreshableToken;
+  let EP_Flag;
   const [data, loading, error, get] = fetchstore(); // meterTable fetch
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
     fetchDailyUsageChart(); // daily usage fetch
@@ -62,7 +63,13 @@
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
         // "../../data/meterTable.json",
         $SAPToken
-      );
+      ).then(() => {
+        if ($data && $data.EPFlag) {
+          EP_Flag = $data.EPFlag;
+        } else {
+          EP_Flag = "";
+        }
+      });
       refreshableToken = $apiToken;
     }
   });
@@ -196,7 +203,7 @@
         chartColor = "#96BDFF";
         if (selectedMeter) {
           if (selectedMeter.Operand == "YKWHRC") {
-            onOffPeakDemand= "Received: "
+            onOffPeakDemand = "Received: ";
             chartLegend = "SELF-GENERATED";
           }
         }
@@ -204,7 +211,7 @@
         chartColor = "#044F8D";
         if (selectedMeter) {
           if (selectedMeter.Operand == "YKWHDL") {
-            onOffPeakDemand= "Delivered: "
+            onOffPeakDemand = "Delivered: ";
             chartLegend = "UTILITY PROVIDED";
           }
         }
@@ -223,7 +230,13 @@
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
       $SAPToken
       // "../../data/meterTable.json"
-    );
+    ).then(() => {
+      if ($data && $data.EPFlag) {
+        EP_Flag = $data.EPFlag;
+      } else {
+        EP_Flag = "";
+      }
+    });
     refreshableToken = $newToken.token;
   }
   // select the dafault active tab
@@ -240,6 +253,7 @@
   }
 
   //////// table first render
+
   $: if ($data && $data.MeterTabel) {
     tableData = $data.MeterTabel;
     selectedMeter = $data.MeterTabel[0];
@@ -549,8 +563,15 @@
                   <th>Meter Number</th>
                   <th>Read Date</th>
                   <th>Biling Read</th>
-                  <th>Current Reading</th>
-                  <th>Previous Reading</th>
+                  {#if EP_Flag == "x"}
+                    <th>Low <br /> Pricing Level </th>
+                    <th>Medium <br /> Pricing Level </th>
+                    <th>High <br /> Pricing Level </th>
+                    <th>Critical<br /> Pricing Level </th>
+                  {:else}
+                    <th>Current Reading</th>
+                    <th>Previous Reading</th>
+                  {/if}
                   <th>Total Used</th>
                 </tr>
                 {#each pagenateItems as row, i}
@@ -585,21 +606,56 @@
                         {row.BillingPeriod != "" ? row.BillingPeriod : "-"}
                       </div></td
                     >
-                    <td>
-                      <div class="td-value">
-                        <span>
-                          {row.CurrentReading != "" ? row.CurrentReading : "-"}
-                        </span>
-                        <h4 style="color: black;">
-                          {row.ReadType != "" ? row.ReadType : ""}
-                        </h4>
-                      </div></td
-                    >
-                    <td>
-                      <div class="td-value">
-                        {row.PreviousReading != "" ? row.PreviousReading : "-"}
-                      </div></td
-                    >
+                    {#if EP_Flag == "x"}
+                      <td>
+                        <div class="td-value">
+                          <span>
+                            {row.Low != "" ? row.Low : "-"}
+                          </span>
+                        </div></td
+                      >
+                      <td>
+                        <div class="td-value">
+                          <span>
+                            {row.Med != "" ? row.Med : "-"}
+                          </span>
+                        </div></td
+                      >
+                      <td>
+                        <div class="td-value">
+                          <span>
+                            {row.High != "" ? row.High : "-"}
+                          </span>
+                        </div></td
+                      >
+                      <td>
+                        <div class="td-value">
+                          <span>
+                            {row.Critical != "" ? row.Critical : "-"}
+                          </span>
+                        </div></td
+                      >
+                    {:else}
+                      <td>
+                        <div class="td-value">
+                          <span>
+                            {row.CurrentReading != ""
+                              ? row.CurrentReading
+                              : "-"}
+                          </span>
+                          <h4 style="color: black;">
+                            {row.ReadType != "" ? row.ReadType : ""}
+                          </h4>
+                        </div></td
+                      >
+                      <td>
+                        <div class="td-value">
+                          {row.PreviousReading != ""
+                            ? row.PreviousReading
+                            : "-"}
+                        </div></td
+                      >
+                    {/if}
                     <td>
                       <div class="td-value">
                         <span>
@@ -1031,6 +1087,7 @@
     width: 100%;
     margin: 10px auto 20px auto;
     border-radius: 6px;
+    text-align: center !important;
   }
   th {
     box-sizing: border-box;
@@ -1042,9 +1099,7 @@
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+    text-align: center;
     &:first-child {
       border-radius: 6px 0px 0px 0px;
     }
@@ -1366,7 +1421,7 @@
     right: 0;
     box-shadow: 0px 10px 15px rgba(16, 24, 40, 0.1),
       0px 4px 6px rgba(16, 24, 40, 0.1);
-    width: 314px;
+    width: calc(314px - 32px);
     &::before {
       content: "";
       position: absolute;

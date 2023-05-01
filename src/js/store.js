@@ -101,53 +101,20 @@ export function fetchstore() {
                 throw new Error("No Token provided!");
             } else if (token) {
                 //* test data
-                //* real api hit with jwt token:
-                // if (window.mx === undefined || window.mx === "undefined") {
-                if (token == "") {
-                    // send uuid to mij request
-                    const uuid = getCookie(mijCookie);
-
-                    // REQUEST TO SEND
-                    let fetchBody = {
-                        modle: {
-                            target: url,
-                            method: "POST",
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                "MIC-MIJ-TOKEN": uuid,
-                                "UserCredentials": saptoken
-                            },
-                            body: false,
-                        }
-                    }
-                    window.$.ajax({
-                        url: "/InteractiveBill/GetWebComponentData",
-                        type: "POST",
-                        datatype: "json",
-                        data: window.AddAntiForgeryToken({ model: fetchBody.modle }),
-                        success: async function (responseData) {
-                            let stringResponse = responseData;
-                            let parseResponse = JSON.parse(stringResponse);
-                            data.set(parseResponse);
-                            loading.set(false);
-                        }
-                    });
-                } else {
-                    const Publishresponse = await fetch(url, {
-                        method: 'POST',
-                        cache: 'no-cache',
-                        credentials: 'same-origin',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            "Authorization": `Bearer ${token}`,
-                            "UserCredentials": saptoken
-                        },
-                        body: JSON.stringify({}),
-                    });
-                    // if (Publishresponse.status !== 204)  
-                    data.set(await Publishresponse.json());
-                    loading.set(false);
-                }
+                const Publishresponse = await fetch(url, {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`,
+                        "UserCredentials": saptoken
+                    },
+                    body: JSON.stringify({}),
+                });
+                // if (Publishresponse.status !== 204)  
+                data.set(await Publishresponse.json());
+                loading.set(false);
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
@@ -425,10 +392,7 @@ export function passThroughServiceFetch() {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
-    // generalErr.set(false)
     const get = async (token, url) => {
-
-        // console.log("here start fetch");
         loading.set(true);
         error.set(false);
         try {
@@ -459,11 +423,9 @@ export function passThroughServiceFetch() {
                 });
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
-                // console.log("we have error regarding to parse!!!!");
             }
         } catch (e) {
             error.set(e);
-            // console.log("hello from error");
         }
         loading.set(false);
     }

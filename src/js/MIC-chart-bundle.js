@@ -2,7 +2,6 @@
 // import cloudIcon from "../assets/usage-cloud.svg"
 // import tempLegend from "../assets/temp-legend.svg"
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
-    console.log(-1 * (height / 5), "height");
     let options = {
         series: data,
         fill: {
@@ -178,15 +177,15 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
 
 
 export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp, monthly, onOffPeakDemand, customLegend) => {
-    // console.log(color, 'color');
     let filterData;
     let toolTipUsage = chartUnit == "cost" ? "Cost:" : service == "Gas" ? "Gas Used: " : onOffPeakDemand ? onOffPeakDemand : "Energy Used: "
     let chartLegend = customLegend ? customLegend.toUpperCase() : service.toUpperCase();
+    let max = 0;
     if (data && chartUnit == "cost") {
         unit = "$"
         filterData = data.map((results) => {
             if (results.Cost !== '') {
-                return results.Cost?.split(",").join('')
+                return parseFloat(results.Cost?.split(",").join('')).toFixed(2)
             } else {
                 return null
             }
@@ -194,11 +193,15 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
     } else if (data && chartUnit == "usage") {
         filterData = data.map((results) => {
             if (results.Usage !== "") {
+                if (max < parseFloat(results.Usage?.split(",").join(''))) {
+                    max = parseFloat(results.Usage?.split(",").join(''))
+                }
                 return parseFloat(results.Usage?.split(",").join(''))
             } else {
                 return null
             }
         })
+
     } else {
         if (data)
             filterData = data.map((results) => {
@@ -222,12 +225,12 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
         if (chartUnit !== "cost") {
             unit = data[0].UOM;
         }
-        serviceData = data.filter((results) => {
+        serviceData = data.map((results) => {
             if (results.Usage !== "") {
                 if (results.CloudIcon == "X") {
                     cloudArray.push({
-                        x: results.Perioddate,
-                        y: parseFloat(results.Usage?.split(",").join('')) + parseFloat(results.Usage?.split(",").join('')) * 0.1,
+                        x: results.Perioddate.toUpperCase(),
+                        y: parseFloat(results.Usage?.split(",").join('')) + (max * 0.05),
                         yAxisIndex: 0,
                         seriesIndex: 0,
                         image: {
@@ -239,7 +242,9 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                         }
                     })
                 }
-                return parseFloat(results.Usage?.split(",").join(''))
+                return results
+            } else {
+                return null
             }
         })
         tempData = data.map((results) => {
@@ -406,7 +411,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex])) {
 
                         return (
-                            '<div class=" apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +
+                            '<div class=" apexcharts-theme-light apexcharts-active" style="padding:12px;min-width:150px; max-width:208px">' +
                             '<div style="padding-bottom:8px; border-bottom:1px solid #EAECEE; margin-bottom: 8px;">' +
                             "<span style='font-weight:700; color:#005FAA; '>" +
                             arr[dataPointIndex] +
@@ -414,33 +419,38 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                             +
                             `<div  style="padding:6px">`
                             +
-                            (series[0] && series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
-                                '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
-                                "<span style='font-weight:700; color:#000000; margin-right:6px; margin-bottom:6px'>" +
-                                toolTipUsage +
-                                "</span>" +
-                                "<span style='font-weight:300;color:#000000;'>" + " "
-                                +
-                                (chartUnit == "cost" ? unit + " " + series[0][dataPointIndex].toLocaleString()
-                                    : series[0][dataPointIndex].toLocaleString() + " " + unit) : "")
-                            +
-                            (series[1] && series[1][dataPointIndex] ? "</div>"
-                                + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;  margin-bottom: 6px;">'
-                                + `<span style='font-weight:700; '>` +
-                                "Avg. Temp: " +
-                                "</span>"
-                                +
-                                "<span style='font-weight:300;'>"
-                                + series[1][dataPointIndex] + "°" : "")
-                            +
-                            (monthly === true && daysArray[dataPointIndex] ? "</div>"
-                                + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;">'
-                                + `<span style='font-weight:700; '>` +
-                                "Billing Days: " +
-                                "</span>"
-                                +
-                                "<span style='font-weight:300;'>"
-                                + daysArray[dataPointIndex] : "")
+                            (serviceData[dataPointIndex] && serviceData[dataPointIndex].CloudIcon == "X" ? `<div class="apexcharts-tooltip-text" >` +
+                                '<div class="arrow_box" style="display:flex;flex-direction:column;align-items:center;white-space: unset !important;width: 100%;white-space: pre-wrap !important;">' +
+                                "<span style='font-weight:300; font-size:14px;color:#000000; margin-right:6px; margin-bottom:6px; width:100%'>" +
+                                "Meter is not responding; data will be updated when available" +
+                                "</span>" :
+                                (((series[0] && series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
+                                    '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
+                                    "<span style='font-weight:700; color:#000000; margin-right:6px; margin-bottom:6px'>" +
+                                    toolTipUsage +
+                                    "</span>" +
+                                    "<span style='font-weight:300;color:#000000;'>" + " "
+                                    +
+                                    (chartUnit == "cost" ? unit + " " + series[0][dataPointIndex].toFixed(2).toLocaleString()
+                                        : series[0][dataPointIndex].toLocaleString() + " " + unit) : "")
+                                    +
+                                    (series[1] && series[1][dataPointIndex] ? "</div>"
+                                        + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;  margin-bottom: 6px;">'
+                                        + `<span style='font-weight:700; '>` +
+                                        "Avg. Temp: " +
+                                        "</span>"
+                                        +
+                                        "<span style='font-weight:300;'>"
+                                        + series[1][dataPointIndex] + "°" : ""))
+                                    +
+                                    (monthly === true && daysArray[dataPointIndex] ? "</div>"
+                                        + '<div class="arrow_box" style="display:flex;  flex-direction:row; justify-content: space-between;">'
+                                        + `<span style='font-weight:700; '>` +
+                                        "Billing Days: " +
+                                        "</span>"
+                                        +
+                                        "<span style='font-weight:300;'>"
+                                        + daysArray[dataPointIndex] : "")))
                         );
                     } else {
                         return ''
@@ -519,25 +529,22 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
 export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit) => {
 
     let costArray = [];
-    let costArrayOff = [];
     let daysArray = []
-    if (data && chartUnit == "cost" && onPeak == "x" && offPeak == "x") {
-        costArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun").map(value => parseFloat(value.Cost?.split(",").join('')).toFixed(2))
-        costArrayOff = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_OFKWH" : result.Dtype == "dtouf").map(value => parseFloat(value.Cost?.split(",").join('')))
-    } else if (chartUnit == "cost") {
-        if (onPeak == "x") {
-            costArray = data.map(res => res.Cost)
+    let categoriesArray;
+    // if (data && chartUnit == "cost" && onPeak == "x" && offPeak == "x") {
+    costArray = data.filter(value => value.Cost !== "0.00" && value.Cost !== "" ? parseFloat(value.Cost?.split(",").join('')).toFixed(2) : null)
+        .map(value => value.Cost)
+    categoriesArray = chartUnit == "usage" ? data.filter((result, i) => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
+        .map(value => value.Perioddate)
+        : data.filter(value => value.Cost !== "0.00" && value.Cost !== "" ? value.Perioddate?.split(",").join('') : null)
+            .map(value => value.Perioddate)
 
-        } else if (offPeak == "x") {
-            costArrayOff = data.map(res => res.Cost)
-        }
-    }
     if (data) {
         daysArray = chartUnit == "usage" ? data.filter((result, i) => onPeak == "x" && offPeak !== "x" || onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun").map(value => value.Days) : data.map(value => value.Days)
     }
 
-    let serisData = chartUnit == "usage" ? [onPeak == "x" ? {
-        name: 'OnPeak',
+    let serisData = chartUnit == "usage" ? ([(onPeak == "x" ? {
+        name: 'ONPEAK',
         type: 'column',
         color: "#00B6F0",
         data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
@@ -547,8 +554,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         type: 'column',
         color: "#ffffff",
         data: []
-    }, offPeak == "x" ? {
-        name: 'OffPeak',
+    }), (offPeak == "x" ? {
+        name: 'OFFPEAK',
         type: 'column',
         color: "#00294A",
         data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_OFKWH" : result.Dtype == "dtouf")
@@ -558,39 +565,24 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         type: 'column',
         color: "#ffffff",
         data: []
+    }), {
+        name: 'TEMPERATURE',
+        type: 'line',
+        color: "#FF832B",
+        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
+            .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
+    }]) : ([{
+        name: 'ELECTRIC',
+        type: 'column',
+        color: "#044F8D",
+        data: costArray
     }, {
         name: 'TEMPERATURE',
         type: 'line',
+        color: "#FF832B",
         data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
-    }] : [onPeak == "x" ? {
-        name: 'OnPeak',
-        type: 'column',
-        color: "#00B6F0",
-        data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
-            .map(value => value.Cost !== "" ? parseFloat(value.Cost?.split(",").join('')) : null)
-    } : {
-        name: '',
-        type: 'column',
-        color: "#ffffff",
-        data: []
-    }, offPeak == "x" ? {
-        name: 'OffPeak',
-        type: 'column',
-        color: onPeak !== "x" && offPeak == "x" ? `${color}` : "#00294A",
-        data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_OFKWH" : result.Dtype == "dtouf")
-            .map(value => value.Cost !== "" ? parseFloat(value.Cost?.split(",").join('')) : null)
-    } : {
-        name: '',
-        type: 'column',
-        color: "#ffffff",
-        data: []
-    }, {
-        name: 'TEMPERATURE',
-        type: 'line',
-        data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
-            .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
-    }]
+    }])
 
     let colWidth;
     if (data && data.length < 5) {
@@ -659,8 +651,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                 enabled: false
             },
             xaxis: {
-                categories: data.filter((result, i) => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
-                    .map(value => value.Perioddate),
+                categories: categoriesArray,
                 axisTicks: {
                     show: false,
                 },
@@ -685,7 +676,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                         show: false,
                     },
                     labels: {
-                        show: false,
+                        show: onPeak == "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : false,
                         formatter: function (val) {
                             return val;
                         },
@@ -699,7 +690,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                         show: false,
                     },
                     labels: {
-                        show: true,
+                        show: onPeak !== "x" && offPeak == "x" ? true : false,
                         formatter: function (val) {
                             return val;
                         },
@@ -766,32 +757,21 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                     "</span>"
                                     +
                                     "<span style='font-weight:300;'>"
-                                    + series[1][dataPointIndex].toLocaleString() + " " + unit : "")) :
-
-                                (costArrayOff[dataPointIndex] && costArrayOff[dataPointIndex] !== "0.00") || (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00") ?
+                                    + series[1][dataPointIndex].toLocaleString() + " " + unit : ""))
+                                : (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00") ?
                                     '<div style="padding-top:14px"> ' +
                                     (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00" ?
                                         ("</div>"
                                             +
                                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                                             + `<span style='font-weight:700; margin-bottom:6px'>` +
-                                            "OnPeak: " +
+                                            "Cost: " +
                                             "</span>"
                                             +
                                             "<span style='font-weight:300;'>"
                                             +
                                             "$ " + costArray[dataPointIndex].toLocaleString()) : "")
-                                    +
-                                    (costArrayOff[dataPointIndex] && costArrayOff[dataPointIndex] !== "0.00" ? ("</div>"
-                                        +
-                                        '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
-                                        + `<span style='font-weight:700; margin-bottom:6px'>` +
-                                        "OffPeak: " +
-                                        "</span>"
-                                        +
-                                        "<span style='font-weight:300;'>"
-                                        + "$ " + costArrayOff[dataPointIndex].toLocaleString()) : "") : ""
-
+                                    : ""
                             )
                             +
                             (series[2] && series[2][dataPointIndex] ? "</div>"

@@ -36,7 +36,7 @@
     ) {
       get(
         $apiToken,
-        // "../../../data/AccountBalanceData.json"
+        // "../../../data/AccountBalanceData.json",
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`,
         $SAPToken
       );
@@ -78,15 +78,17 @@
     // dynamic totalAmmount colors
     if ($data.totalAmmount.includes("-")) {
       color = "#24A148";
-      absTotalAmmount = parseFloat($data.totalAmmount);
+
+      absTotalAmmount = parseFloat(
+        $data.totalAmmount?.split(",").join("")
+      ).toFixed(2);
       absTotalAmmount = Math.abs(absTotalAmmount);
-      // console.log("total ammount: ", absTotalAmmount.toString().split());
     } else {
       absTotalAmmount = $data.totalAmmount;
       color = "#005FAA";
     }
     // dynamic font size
-    if ($data.totalAmmount[0] && $data.totalAmmount.split(".")[0].length >= 8) {
+    if ($data.totalAmmount[0] && $data.totalAmmount.split(".")[0].length >= 6) {
       totalAmmountFontSize = "36px";
       subTotalAmmountFontSize = "20px";
     }
@@ -122,7 +124,7 @@
           {/if}
           {#if absTotalAmmount}
             <span style="color: {color}; font-size:{totalAmmountFontSize}"
-              >{absTotalAmmount.toString().split(".")[0]}</span
+              >{absTotalAmmount.toLocaleString().split(".")[0]}</span
             >
           {/if}
           {#if absTotalAmmount && absTotalAmmount

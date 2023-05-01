@@ -14,58 +14,51 @@
     SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
+  export let yearlyarray;
   let newTokenTrigger;
   let yearlyEnergyData;
   let arrayOfToggles = [];
   ////////////////////////
-  const [data, loading, error, get] = fetchstore();
-  onMount(() => {
-    if (
-      $apiToken &&
-      $SAPToken &&
-      !$data.NetMeter &&
-      tries != 1 &&
-      $newToken !== ""
-    ) {
-      get(
-        $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
-        $SAPToken
-        // "../../data/yearlyEnergy.json"
-      );
-    }
-    console.log("yearly energy");
-    newTokenTrigger = $apiToken;
-  });
+  // const [data, loading, error, get] = fetchstore();
+  // onMount(() => {
+  //   if ($apiToken && $SAPToken && !$data.NetMeter && $newToken == "") {
+  //     get(
+  //       $apiToken,
+  //       `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
+  //       $SAPToken
+  //       // "../../data/yearlyEnergy.json"
+  //     );
+  //   }
+  //   console.log("yearly energy");
+  //   newTokenTrigger = $apiToken;
+  // });
 
-  $: if (
-    $newToken &&
-    $newToken.token &&
-    (newTokenTrigger == $apiToken || newTokenTrigger !== $newToken.token)
-  ) {
-    get(
-      $newToken.token,
-      // "../../data/yearlyEnergy.json"
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
-      $SAPToken
-    );
-    newTokenTrigger = $newToken.token;
-    console.log("new yearly energy");
-  }
+  // $: if (
+  //   $newToken &&
+  //   $newToken.token &&
+  //   (newTokenTrigger == $apiToken || newTokenTrigger !== $newToken.token)
+  // ) {
+  //   get(
+  //     $newToken.token,
+  //     // "../../data/yearlyEnergy.json"
+  //     `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
+  //     $SAPToken
+  //   );
+  //   newTokenTrigger = $newToken.token;
+  //   console.log("new yearly energy");
+  // }
   const toggle = (i) => {
     arrayOfToggles[i] = !arrayOfToggles[i];
   };
-  $: if ($data && $data.NetMeter) {
-    yearlyEnergyData = $data.NetMeter;
+  $: if (yearlyarray && yearlyarray[0]) {
+    yearlyEnergyData = yearlyarray;
     for (let i = 0; i < yearlyEnergyData.length; i++) {
       arrayOfToggles.push(true);
     }
   }
 </script>
 
-{#if $loading}
-  <mic-loading />
-{:else if yearlyEnergyData && yearlyEnergyData[0]}
+{#if yearlyarray && yearlyarray[0]}
   {#each yearlyEnergyData as YearlyValue, i}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     {#if YearlyValue.CurrentBillSurplus && YearlyValue.CurrentBillSurplus !== ""}

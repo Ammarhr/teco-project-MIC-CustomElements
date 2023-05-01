@@ -157,12 +157,25 @@
   let activeSection;
   let previouseActiveTooltip;
   let previouseActiveSec;
+  let previouseLevel;
+  let currentLevel;
   const toolTipToggle = (j, i, chargeLine, level3) => {
     previouseActiveTooltip = activeTooltip;
     previouseActiveSec = activeSection;
     activeTooltip = j;
     activeSection = i;
-    if (previouseActiveTooltip !== j || previouseActiveSec !== i) {
+    if (level3) {
+      previouseLevel = currentLevel;
+      currentLevel = level3;
+    } else {
+      previouseLevel = currentLevel;
+      currentLevel = "level2";
+    }
+    if (
+      previouseActiveTooltip !== j ||
+      previouseActiveSec !== i ||
+      previouseLevel !== currentLevel
+    ) {
       if (
         previouseActiveTooltip !== undefined &&
         previouseActiveSec !== undefined
@@ -462,28 +475,28 @@
                                             bind:this={toolTipSvg}
                                             on:click={() =>
                                               toolTipToggle(
-                                                p,
                                                 o,
+                                                j,
                                                 level3Obj.Value,
                                                 "levele3"
                                               )}
                                           />
 
-                                          {#if arrOfLevel3[o] && arrayOfL3Style[o][p]}
+                                          {#if arrOfLevel3[j] && arrayOfL3Style[j][o]}
                                             <div
                                               class="overlay"
                                               on:click={(e) =>
                                                 toolTipToggle(
-                                                  p,
                                                   o,
+                                                  j,
                                                   level3Obj.Value,
                                                   "levele3"
                                                 )}
-                                              style={arrayOfL3Style[o][p]}
+                                              style={arrayOfL3Style[j][o]}
                                             />
                                             <div
                                               class="tooltip-description"
-                                              style={arrayOfL3Style[o][p]}
+                                              style={arrayOfL3Style[j][o]}
                                             >
                                               <div class="tooltip-con">
                                                 {level3Obj.ToolTip}
