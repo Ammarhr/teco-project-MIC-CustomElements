@@ -151,7 +151,6 @@ export const fetchDailyUsageChart = () => {
                     },
                     body: JSON.stringify(body),
                 });
-                // if (Publishresponse.status !== 204)  
                 data.set(await Publishresponse.json());
 
             } else {
@@ -159,7 +158,6 @@ export const fetchDailyUsageChart = () => {
             }
         } catch (e) {
             error.set(e);
-            // generalErr.set(true);
         }
         loading.set(false);
     }
@@ -345,8 +343,6 @@ export function errorCallback() {
     return [data, loading, error, errorHandler]
 }
 
-
-
 export const latestBill = writable('');
 export const newToken = writable('');
 export function reGenerateToken() {
@@ -386,7 +382,6 @@ export function reGenerateToken() {
 
     return [data, loading, error, getToken]
 }
-
 
 export function passThroughServiceFetch() {
     const loading = writable(false);

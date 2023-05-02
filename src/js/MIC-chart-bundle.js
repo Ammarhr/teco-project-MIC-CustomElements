@@ -1,6 +1,3 @@
-// import { Label } from "@amcharts/amcharts5";
-// import cloudIcon from "../assets/usage-cloud.svg"
-// import tempLegend from "../assets/temp-legend.svg"
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
     let options = {
         series: data,
@@ -54,7 +51,6 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
                 //     )
                 // } else {
                 // }
-
                 return (
                     val.toLocaleString()
                 )
@@ -293,7 +289,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             ],
         }
     } else {
-
         options = {
             series: [
                 {
@@ -470,8 +465,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 }
             },
             xaxis: {
-                // min: 13,
-                // range: 13,
                 type: "category",
                 labels: {
                     rotate: -45
@@ -489,14 +482,23 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 tooltip: {
                     enabled: false
                 },
-
             },
             yaxis: [
                 {
-                    title: {
-                        show: false,
-                        text: ""
-                    },
+                    // title: {
+                    //     show: false,
+                    //     text: unit,
+                    //     rotate: 0,
+                    //     offsetX: 25,
+                    //     offsetY: -1 * (height / 2.3),
+                    //     style: {
+                    //         color: "#005FAA",
+                    //         fontSize: '12px',
+                    //         fontFamily: 'Interstate',
+                    //         fontWeight: 300,
+                    //         cssClass: 'insights-apexcharts-yaxis-title',
+                    //     },
+                    // },
                     labels: {
                         show: true,
                         formatter: function (val) {
@@ -526,7 +528,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
 }
 
 
-export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit) => {
+export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit, height) => {
 
     let costArray = [];
     let daysArray = []
@@ -550,7 +552,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
             .map(value => value.Usage !== "" ? parseFloat(value.Usage?.split(",").join('')) : null)
     } : {
-        name: '',
+        name: ' ',
         type: 'column',
         color: "#ffffff",
         data: []
@@ -561,10 +563,10 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_OFKWH" : result.Dtype == "dtouf")
             .map(value => value.Usage !== "" ? parseFloat(value.Usage?.split(",").join('')) : null)
     } : {
-        name: '',
+        name: ' ',
         type: 'column',
         color: "#ffffff",
-        data: []
+        data: [],
     }), {
         name: 'TEMPERATURE',
         type: 'line',
@@ -603,7 +605,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                 ],
             },
             chart: {
-                height: 400,
+                height: height,
                 width: "100%",
                 type: "bar"
             },
@@ -669,6 +671,20 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             },
             yaxis: [
                 {
+                    // title: {
+                    //     show: false,
+                    //     text: unit,
+                    //     rotate: 0,
+                    //     offsetX: 20,
+                    //     offsetY: -1 * (height / 2.7),
+                    //     style: {
+                    //         color: "#005FAA",
+                    //         fontSize: '12px',
+                    //         fontFamily: 'Interstate',
+                    //         fontWeight: 300,
+                    //         cssClass: 'insights-apexcharts-yaxis-title',
+                    //     },
+                    // },
                     axisBorder: {
                         show: false,
                     },

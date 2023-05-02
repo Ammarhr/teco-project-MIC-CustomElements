@@ -2,14 +2,6 @@
 
 <script>
   // @ts-nocheck
-  //   import toggle from "../../assets/cr.svg";
-  //   import toolTip from "../../assets/toolTip.svg";
-  //   import nextIcon from "../../assets/next.svg";
-  //   import prevIcon from "../../assets/prev.svg";
-  //   import searchIcon from "../../assets/search.svg";
-  // import verticalLine from "../../assets/vertical-line.svg";
-  // import elictric from "../../assets/electric.svg";
-  //   import { slide } from "svelte/transition";
   import {
     fetchstore,
     apiDomain,
@@ -379,7 +371,7 @@
       toolTipStyle = "position: absolute; top:20px";
     } else {
       toolTipStyle =
-        "height:0; opacity: 0;margin: 0; transition:200ms; padding:0; position: absolute; top:20px";
+        "display:none; height:0; opacity: 0;margin: 0; transition:200ms; padding:0; position: absolute; top:20px";
     }
   }
   let container;
@@ -562,7 +554,7 @@
                   <th>Service</th>
                   <th>Meter Number</th>
                   <th>Read Date</th>
-                  <th>Biling Read</th>
+                  <th>Billing Read</th>
                   {#if EP_Flag == "x"}
                     <th>Low <br /> Pricing Level </th>
                     <th>Medium <br /> Pricing Level </th>
@@ -868,7 +860,8 @@
                       selectedMeter.DAP_dtoun,
                       selectedMeter.DAP_dtouf,
                       chartColor,
-                      chartDisplayUnit
+                      chartDisplayUnit,
+                      400
                     )}
                   />
                 {/if}
@@ -943,7 +936,8 @@
                         selectedMeter.DAP_dtoun,
                         selectedMeter.DAP_dtouf,
                         chartColor,
-                        chartDisplayUnit
+                        chartDisplayUnit,
+                        400
                       )}
                     />
                   {/if}

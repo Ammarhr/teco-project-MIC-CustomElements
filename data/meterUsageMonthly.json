@@ -12,7 +12,7 @@
             "Cost": "71.57",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_PKKWH",
             "Days": "30",
             "ToolTipEstimated": ""
          },
@@ -25,7 +25,7 @@
             "Cost": "105.16",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_OFKWH",
             "Days": "31",
             "ToolTipEstimated": ""
          },
@@ -38,7 +38,7 @@
             "Cost": "114.63",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_PKKWH",
             "Days": "30",
             "ToolTipEstimated": ""
          },
@@ -51,7 +51,7 @@
             "Cost": "89.18",
             "CloudIcon": "X",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_OFKWH",
             "Days": "30",
             "ToolTipEstimated": ""
          },
@@ -64,7 +64,7 @@
             "Cost": "96.10",
             "CloudIcon": "X",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_PKKWH",
             "Days": "31",
             "ToolTipEstimated": ""
          },
@@ -77,7 +77,7 @@
             "Cost": "100.52",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_OFKWH",
             "Days": "31",
             "ToolTipEstimated": ""
          },
@@ -90,7 +90,7 @@
             "Cost": "74.55",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_PKKWH",
             "Days": "29",
             "ToolTipEstimated": ""
          },
@@ -103,7 +103,7 @@
             "Cost": "52.49",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_OFKWH",
             "Days": "31",
             "ToolTipEstimated": ""
          },
@@ -116,7 +116,7 @@
             "Cost": "63.67",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_PKKWH",
             "Days": "30",
             "ToolTipEstimated": ""
          },
@@ -129,7 +129,7 @@
             "Cost": "148.24",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_OFKWH",
             "Days": "34",
             "ToolTipEstimated": ""
          },
@@ -142,7 +142,7 @@
             "Cost": "168.51",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_PKKWH",
             "Days": "29",
             "ToolTipEstimated": ""
          },
@@ -155,21 +155,8 @@
             "Cost": "131.11",
             "CloudIcon": "",
             "Switcher": "",
-            "Operand": "HIST_KWH",
+            "Operand": "HIST_OFKWH",
             "Days": "29",
-            "ToolTipEstimated": ""
-         },
-         {
-            "Perioddate": "APR",
-            "FullDate": "April 2022",
-            "Temperature": "73",
-            "UOM": "KWH",
-            "Usage": "1,181.0",
-            "Cost": "156.20",
-            "CloudIcon": "",
-            "Switcher": "",
-            "Operand": "HIST_KWH",
-            "Days": "32",
             "ToolTipEstimated": ""
          }
       ]

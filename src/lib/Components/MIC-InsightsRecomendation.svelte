@@ -202,24 +202,24 @@
               {#if $data.yearlyPercentageConsumption && $data.monthlyPercentageConsumption}
                 <p>
                   You used <span>
-                    {$data.yearlyPercentageConsumption}
+                    <strong>{$data.yearlyPercentageConsumption}</strong>
                   </span> than the same period last year.
                 </p>
                 <p>
                   You used <span>
-                    {$data.monthlyPercentageConsumption}
+                    <strong> {$data.monthlyPercentageConsumption}</strong>
                   </span> than the same period last month.
                 </p>
               {:else if $data.yearlyPercentageConsumption && !$data.monthlyPercentageConsumption}
                 <p>
                   You used <span>
-                    {$data.yearlyPercentageConsumption}
+                    <strong> {$data.yearlyPercentageConsumption}</strong>
                   </span> than the same period last year.
                 </p>
               {:else if $data.monthlyPercentageConsumption && !$data.yearlyPercentageConsumption}
                 <p>
                   You used <span>
-                    {$data.monthlyPercentageConsumption}
+                    <strong> {$data.monthlyPercentageConsumption}</strong>
                   </span> than the same period last month.
                 </p>
               {:else}
