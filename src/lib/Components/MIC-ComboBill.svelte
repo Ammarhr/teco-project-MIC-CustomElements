@@ -4,8 +4,6 @@
   // @ts-nocheck
   //svg imports
 
-  import MicBillingSummary from "./MIC-BillingSummary.svelte";
-  import MicInsights from "./MIC-Insights.svelte";
   import {
     fetchstore,
     apiDomain,
@@ -229,15 +227,16 @@
           </div>
           {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
             <div class="insights">
-              <!-- <MicBillInsightsCombo
-              insightservices={insightsArray[i]}
-              sunselectdata={sunSelectArray}
-              /> -->
               <mic-insights-combo
                 insightservices={insightsArray[i]}
                 sunselectdata={sunSelectArray}
                 emptytabs={emptyTabs}
               />
+              <!-- <MicBillInsightsCombo
+                insightservices={insightsArray[i]}
+                sunselectdata={sunSelectArray}
+                emptytabs={emptyTabs}
+              /> -->
               {#if $sunloading}
                 <mic-loading />
               {:else if $sunerror}

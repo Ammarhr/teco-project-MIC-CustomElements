@@ -147,12 +147,14 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
                         color: "#6C6C6C",
                         offsetY: 15,
                         fontFamily: "Interstate",
+                        fontWeight: 300,
                     },
                     value: {
                         offsetY: -25,
                         fontSize: "18px",
                         color: "#005FAA",
                         fontFamily: "Interstate",
+                        fontWeight: 400,
                         formatter: function (val) {
                             return val + "%";
                         },
@@ -211,7 +213,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
     if (filterData && filterData.length < 5 && filterData.length !== 0) {
         filterData = [...filterData, 0, 0, 0, 0, 0]
     }
-    let colWidth;
     let serviceData;
     let tempData;
     let catArray = [];
@@ -254,12 +255,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
         })
     }
 
-    //* configure column width depend on the data 
-    if (data && data.length < 5) {
-        colWidth = "20%"
-    } else {
-        colWidth = "90px"
-    }
     let options
     if ((!serviceData || serviceData.length == 0) && (!tempData || tempData.length == 0)) {
         options = {
@@ -347,10 +342,10 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 bar: {
                     position: 'left',
                     borderRadiusWhenStacked: 'last',
-                    borderRadius: 8,
+                    borderRadius: 6,
                     borderRadiusApplication: 'end',
                     endingShape: 'rounded',
-                    columnWidth: colWidth || "70%",
+                    columnWidth: "70%",
                     dataLabels: {
                         position: "top", // top, center, bottom,
                     },
@@ -586,13 +581,6 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
     }])
 
-    let colWidth;
-    if (data && data.length < 5) {
-        colWidth = "20%"
-    } else {
-        colWidth = "90px"
-    }
-
     let options;
     if (!data.length) {
         options = {
@@ -729,9 +717,9 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             ],
             plotOptions: {
                 bar: {
-                    borderRadius: 8,
+                    borderRadius: data.length > 12 ? 1 : 8,
                     borderRadiusApplication: 'end',
-                    columnWidth: colWidth,
+                    columnWidth: "70%",
                     dataLabels: {
                         position: "top", // top, center, bottom,
                     },

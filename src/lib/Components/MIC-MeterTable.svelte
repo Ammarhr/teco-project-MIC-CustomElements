@@ -37,6 +37,22 @@
   let timeoutId;
   let refreshableToken;
   let EP_Flag;
+  let monthlyMinwidth = "unset";
+  let dailyMinwidth = "unset";
+  let chartColor = "#044F8D";
+  let onOffPeakDemand;
+  let chartLegend;
+  let first = false; // trigger first render for the tabs
+  let container;
+  let toolTipIconCon;
+  let costBtnClass = "sw-btn-inactive";
+  let usageBtnClass = "sw-btn-active";
+  let chartDisplayUnit = "usage";
+  let tempData = true;
+  let sortingType;
+  let activeSort;
+  let prevSortth;
+
   const [data, loading, error, get] = fetchstore(); // meterTable fetch
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
     fetchDailyUsageChart(); // daily usage fetch
@@ -65,9 +81,6 @@
       refreshableToken = $apiToken;
     }
   });
-  let chartColor;
-  let onOffPeakDemand;
-  let chartLegend;
 
   //////// change the selected meter + call Dap Api
   const handleSelectedMeter = (meterObject, i) => {
@@ -82,12 +95,14 @@
       selectedMeter = pagenateItems[0];
     }
     // change the style of the selected table row:
-    if (i) {
-      styleSelectedRows[i] =
-        "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
-    } else {
-      styleSelectedRows[0] =
-        "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
+    if (pagenateItems.length > 1) {
+      if (i) {
+        styleSelectedRows[i] =
+          "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
+      } else {
+        styleSelectedRows[0] =
+          "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
+      }
     }
     if (selectedMeter) {
       let {
@@ -131,8 +146,8 @@
           $SAPToken
         );
       }
-      let monthlyUrl;
 
+      let monthlyUrl;
       if (DAP_dtoun == "x" && DAP_dtouf == "x" && Operand == "YKWH") {
         monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=HIST_PKKWH&Dln=${DLN}&ZipCode=${ZipCode}`;
       } else if (DAP_dtoun !== "x" && DAP_dtouf == "x" && Operand == "YKWH") {
@@ -150,6 +165,7 @@
         $SAPToken
       );
     }
+    // MiJurney event call
     if (selectedMeter) {
       fetchAndRedirect(
         $apiToken,
@@ -300,32 +316,33 @@
   };
 
   ////////// tabs functionality
-  let first = false; // trigger first render for the tabs
   const activateTab = (num1, num2, activeTab) => {
     costUsageToggle("usage");
     activeSection = activeTab;
     tab2 = num2;
     tab1 = num1;
-    if (activeTab == "Daily") {
+    if (activeTab == "daily") {
+      // MiJurney event call
       fetchAndRedirect(
         $apiToken,
         `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
         null,
         {
           EventCode: "Click_Daily_Tab",
-          Outcome: `Meter ID ${selectedMeter.MeterNumber} is active`,
+          Outcome: ``,
           Feedback: "",
           Persona: $persona,
         }
       );
     } else {
+      // MiJurney event call
       fetchAndRedirect(
         $apiToken,
         `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
         null,
         {
           EventCode: "Click_Monthly_Tab",
-          Outcome: `Meter ID ${selectedMeter.MeterNumber} is active`,
+          Outcome: ``,
           Feedback: "",
           Persona: $persona,
         }
@@ -374,8 +391,6 @@
         "display:none; height:0; opacity: 0;margin: 0; transition:200ms; padding:0; position: absolute; top:20px";
     }
   }
-  let container;
-  let toolTipIconCon;
   $: toolTipIconCon = document.querySelector(".chart-tool-tip");
   $: container = document.querySelector(".meter-card");
   $: searchInput = document.getElementById("#search");
@@ -389,23 +404,21 @@
       }
     });
   }
+
   // cost/usage chart toggle function
-  let costBtnClass = "sw-btn-inactive";
-  let usageBtnClass = "sw-btn-active";
-  let chartDisplayUnit = "usage";
-  let tempData = true;
   const costUsageToggle = (activeBtn) => {
     chartDisplayUnit = activeBtn;
     if (activeBtn == "cost") {
       costBtnClass = "sw-btn-active";
       usageBtnClass = "sw-btn-inactive";
+      // MiJurney event call
       fetchAndRedirect(
         $apiToken,
         `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
         null,
         {
           EventCode: "Click_Cost_Switch",
-          Outcome: `Meter ID ${selectedMeter.MeterNumber} is active`,
+          Outcome: ``,
           Feedback: "",
           Persona: $persona,
         }
@@ -413,36 +426,38 @@
     } else if (activeBtn == "usage") {
       usageBtnClass = "sw-btn-active";
       costBtnClass = "sw-btn-inactive";
+      // MiJurney event call
       fetchAndRedirect(
         $apiToken,
         `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
         null,
         {
           EventCode: "Click_Usage_Switch",
-          Outcome: `Meter ID ${selectedMeter.MeterNumber} is active`,
+          Outcome: ``,
           Feedback: "",
           Persona: $persona,
         }
       );
     }
   };
+
   const tempreatureShow = () => {
     tempData = !tempData;
-
+    // MiJurney event call
     fetchAndRedirect(
       $apiToken,
       `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
       null,
       {
         EventCode: "Click_Temp_Checkbox",
-        Outcome: `Meter ID ${selectedMeter.MeterNumber} is active`,
+        Outcome: ``,
         Feedback: "",
         Persona: $persona,
       }
     );
   };
-  let monthlyMinwidth = "unset";
-  let dailyMinwidth = "unset";
+
+  // min width for scroll (chart)
   $: if (
     $monthlyUsageData &&
     $monthlyUsageData.MonthlyUsage &&
@@ -497,6 +512,100 @@
         break;
     }
   }
+  import {
+    sortByMeterNumber,
+    sortByReadDate,
+    sortByBillingPeriod,
+    sortByBilledAmount,
+    sortByCurrentReading,
+    sortByPreviousReading,
+    sortByTotalUsed,
+    sortByLow,
+    sortByMed,
+    sortByHigh,
+    sortByCritical,
+    sortByService,
+  } from "../../js/sorting-bundle";
+  /// sorting:
+  let sortUiObj = {
+    sortingType: "",
+    activeSort: "",
+  };
+  const handleSort = (register) => {
+    sortUiObj.activeSort = register;
+    activeSort = register;
+    if (prevSortth !== undefined && prevSortth !== activeSort) {
+      sortUiObj.sortingType = "asen";
+      sortingType = "asen";
+    } else if (prevSortth !== undefined && prevSortth == activeSort) {
+      if (sortingType == "asen") {
+        sortUiObj.sortingType = "des";
+        sortingType = "des";
+      } else {
+        sortUiObj.sortingType = "asen";
+        sortingType = "asen";
+      }
+    } else {
+      sortUiObj.sortingType = "asen";
+      sortingType = "asen";
+    }
+
+    if (items && items.length > 1) {
+      switch (true) {
+        case register == "1":
+          items = sortByMeterNumber(sortingType, items);
+          break;
+        case register == "2":
+          items = sortByReadDate(sortingType, items);
+          break;
+        case register == "3":
+          items = sortByBillingPeriod(sortingType, items);
+          break;
+        case register == "4":
+          items = sortByCurrentReading(sortingType, items);
+          break;
+        case register == "5":
+          items = sortByPreviousReading(sortingType, items);
+          break;
+        case register == "6":
+          items = sortByTotalUsed(sortingType, items);
+          break;
+        case register == "7":
+          items = sortByLow(sortingType, items);
+          break;
+        case register == "8":
+          items = sortByMed(sortingType, items);
+          break;
+        case register == "9":
+          items = sortByHigh(sortingType, items);
+          break;
+        case register == "10":
+          items = sortByCritical(sortingType, items);
+          break;
+        case register == "0":
+          items = sortByService(sortingType, items);
+          break;
+        default:
+          break;
+      }
+      prevSortth = register;
+      getPaginatedItems();
+    }
+  };
+
+  const renderSortSvg = (thIndex) => {
+    if (items && items.length > 1) {
+      if (activeSort == thIndex && sortingType == "asen") {
+        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-up.svg  alt="sort"/>';
+      } else if (activeSort == thIndex && sortingType == "des") {
+        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-down.svg alt="sort" />';
+      } else {
+        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort.svg  alt="sort"  />';
+      }
+    } else {
+      return "";
+    }
+  };
 </script>
 
 <!------ html ------->
@@ -551,20 +660,77 @@
             {#if tableData}
               <table class="table" id="table">
                 <tr>
-                  <th>Service</th>
-                  <th>Meter Number</th>
-                  <th>Read Date</th>
-                  <th>Billing Read</th>
+                  <th on:click={() => handleSort("0")}>
+                    <span>
+                      Service
+                      {#key sortUiObj}
+                        {@html renderSortSvg(0)}
+                      {/key}
+                    </span>
+                  </th>
+                  <th on:click={() => handleSort("1")}
+                    >Meter Number
+                    {#key sortUiObj}
+                      {@html renderSortSvg(1)}
+                    {/key}
+                  </th>
+                  <th on:click={() => handleSort("2")}
+                    >Read Date
+                    {#key sortUiObj}
+                      {@html renderSortSvg(2)}
+                    {/key}</th
+                  >
+                  <th on:click={() => handleSort("3")}
+                    >Billing Read
+                    {#key sortUiObj}
+                      {@html renderSortSvg(3)}
+                    {/key}</th
+                  >
                   {#if EP_Flag == "x"}
-                    <th>Low <br /> Pricing Level </th>
-                    <th>Medium <br /> Pricing Level </th>
-                    <th>High <br /> Pricing Level </th>
-                    <th>Critical<br /> Pricing Level </th>
+                    <th on:click={() => handleSort("7")}
+                      >Low <br /> Pricing Level
+                      {#key sortUiObj}
+                        {@html renderSortSvg(7)}
+                      {/key}
+                    </th>
+                    <th on:click={() => handleSort("8")}
+                      >Medium <br /> Pricing Level
+                      {#key sortUiObj}
+                        {@html renderSortSvg(8)}
+                      {/key}
+                    </th>
+                    <th on:click={() => handleSort("9")}
+                      >High <br /> Pricing Level
+                      {#key sortUiObj}
+                        {@html renderSortSvg(9)}
+                      {/key}
+                    </th>
+                    <th on:click={() => handleSort("10")}
+                      >Critical<br /> Pricing Level
+                      {#key sortUiObj}
+                        {@html renderSortSvg(10)}
+                      {/key}
+                    </th>
                   {:else}
-                    <th>Current Reading</th>
-                    <th>Previous Reading</th>
+                    <th on:click={() => handleSort("4")}
+                      >Current Reading
+                      {#key sortUiObj}
+                        {@html renderSortSvg(4)}
+                      {/key}
+                    </th>
+                    <th on:click={() => handleSort("5")}
+                      >Previous Reading
+                      {#key sortUiObj}
+                        {@html renderSortSvg(5)}
+                      {/key}
+                    </th>
                   {/if}
-                  <th>Total Used</th>
+                  <th on:click={() => handleSort("6")}
+                    >Total Used
+                    {#key sortUiObj}
+                      {@html renderSortSvg(6)}
+                    {/key}</th
+                  >
                 </tr>
                 {#each pagenateItems as row, i}
                   <tr
@@ -813,11 +979,15 @@
                 {:else if selectedMeter.DAP_dtoun !== "x" && selectedMeter.DAP_dtouf !== "x"}
                   <span class="chart-unit">
                     {#if chartDisplayUnit == "usage"}
-                      {selectedMeter.UOF}
+                      {#if $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0] && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                        <!-- {selectedMeter.UOF} -->
+                        {$monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                      {/if}
                     {:else if chartDisplayUnit == "cost"}
                       $
-                    {:else}
-                      {selectedMeter.UOF}
+                    {:else if $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0] && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                      <!-- {selectedMeter.UOF} -->
+                      {$monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
                     {/if}
                   </span>
                   <div
@@ -841,11 +1011,15 @@
                   <!-- Monthly usage OnPeak & OffPeak chart -->
                   <span class="chart-unit">
                     {#if chartDisplayUnit == "usage"}
-                      {selectedMeter.UOF}
+                      {#if $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0] && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                        <!-- {selectedMeter.UOF} -->
+                        {$monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                      {/if}
                     {:else if chartDisplayUnit == "cost"}
                       $
-                    {:else}
-                      {selectedMeter.UOF}
+                    {:else if $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0] && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                      <!-- {selectedMeter.UOF} -->
+                      {$monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
                     {/if}
                   </span>
                   <div
@@ -889,11 +1063,15 @@
                     <!-- Daily usage simple chart -->
                     <span class="chart-unit">
                       {#if chartDisplayUnit == "usage"}
-                        {selectedMeter.UOF}
+                        {#if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails[0] && $dailyUsageData.DailyUsage.DailyDetails[0].UOM}
+                          {$dailyUsageData.DailyUsage.DailyDetails[0].UOM}
+                          <!-- {selectedMeter.UOF} -->
+                        {/if}
                       {:else if chartDisplayUnit == "cost"}
                         $
-                      {:else}
-                        {selectedMeter.UOF}
+                      {:else if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails[0] && $dailyUsageData.DailyUsage.DailyDetails[0].UOM}
+                        {$dailyUsageData.DailyUsage.DailyDetails[0].UOM}
+                        <!-- {selectedMeter.UOF} -->
                       {/if}
                     </span>
                     <div
@@ -917,11 +1095,15 @@
                     <!-- Daily usage OnPeak & OffPeak chart -->
                     <span class="chart-unit">
                       {#if chartDisplayUnit == "usage"}
-                        {selectedMeter.UOF}
+                        {#if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails[0] && $dailyUsageData.DailyUsage.DailyDetails[0].UOM}
+                          {$dailyUsageData.DailyUsage.DailyDetails[0].UOM}
+                          <!-- {selectedMeter.UOF} -->
+                        {/if}
                       {:else if chartDisplayUnit == "cost"}
                         $
-                      {:else}
-                        {selectedMeter.UOF}
+                      {:else if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails[0] && $dailyUsageData.DailyUsage.DailyDetails[0].UOM}
+                        {$dailyUsageData.DailyUsage.DailyDetails[0].UOM}
+                        <!-- {selectedMeter.UOF} -->
                       {/if}
                     </span>
                     <div
@@ -1094,11 +1276,14 @@
     font-style: normal;
     font-weight: 400;
     text-align: center;
+    cursor: pointer;
     &:first-child {
       border-radius: 6px 0px 0px 0px;
     }
     &:last-child {
       border-radius: 0px 6px 0px 0px;
+    }
+    span {
     }
   }
   .pagination-btns {

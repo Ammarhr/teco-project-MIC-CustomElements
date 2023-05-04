@@ -56,36 +56,6 @@ export const generalErr = writable(false);
 //* Agint persona:
 export const persona = writable('')
 
-//* helper functions
-function setCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}
-function eraseCookie(name) {
-    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
-
-const mijCookie = "MIC-IBLL-MIJ";
-
-if (!getCookie(mijCookie)) {
-    const uuid = crypto.randomUUID();
-    setCookie(mijCookie, uuid, 365);
-}
 //* fetch function
 export function fetchstore() {
     const loading = writable(false);
@@ -240,9 +210,47 @@ export const fetchRecommendations = () => {
 
     return [data, loading, error, get]
 }
-export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
-    // if (window.mx === undefined || window.mx === "undefined") {
+//* MiJurney helper functions
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {
+    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
 
+const mijCookie = "MIC-IBLL-MIJ";
+const start = new Date().getTime();
+let sessionDate = new Date();
+let ipify;
+const userAgent = navigator.userAgent;
+const isMobile = /Mobile/i.test(navigator.userAgent);
+
+if (!getCookie(mijCookie)) {
+    const uuid = crypto.randomUUID();
+    setCookie(mijCookie, uuid, 365);
+}
+
+export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
+    const end = new Date().getTime();
+    const totalTime = (end - start) / 1000;
+    
+    const uuid = getCookie(mijCookie);
     fetch(fetchUrl, {
         method: "POST",
         mode: "cors",
@@ -250,6 +258,7 @@ export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
         headers: {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${token}`,
+            "MIC-MIJ-TOKEN": uuid,
         },
         body: JSON.stringify(fetchBody || {}),
     })
