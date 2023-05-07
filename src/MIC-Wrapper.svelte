@@ -6,21 +6,16 @@
   import MicBalanceSummary from "./lib/Components/MIC-BalanceSummary.svelte";
   import MicBillSelectorAndDownload from "./lib/Components/MIC-BillSelectorAndDownload.svelte";
   import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
-  import MicInsights from "./lib/Components/MIC-Insights.svelte";
-  import MicRenderError from "./lib/Components/MIC-RenderError.svelte";
   import MicGeneralError from "./lib/Components/MIC-GeneralError.svelte";
   import MicSunSelect from "./lib/Components/MIC-SunSelect.svelte";
   import MicImportantMessage from "./lib/Components/MIC-ImportantMessage.svelte";
   import MicImportantMessagesDetails from "./lib/Components/MIC-ImportantMessagesDetails.svelte";
   import MicYearlyEnergy from "./lib/Components/MIC-YearlyEnergy.svelte";
-  import MicBillingSummary from "./lib/Components/MIC-BillingSummary.svelte";
-  import MicToolTipDetails from "./lib/Components/MIC-ToolTipDetails.svelte";
-  import MicPagination from "./lib/Components/mic-pagination.svelte";
   import MicMeterTable from "./lib/Components/MIC-MeterTable.svelte";
-  import MicBalanceSummaryClone from "./lib/Components/clone/MIC-BalanceSummaryClone.svelte";
-  import MicBillingSummaryClone from "./lib/Components/clone/MIC-BillingSummaryClone.svelte";
   import MicComboBill from "./lib/Components/MIC-ComboBill.svelte";
   import MicShadowLoading from "./lib/Components/MIC-ShadowLoading.svelte";
+  import MicSummaryBilling from "./lib/Components/MIC-SummaryBilling.svelte";
+  import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -80,9 +75,13 @@
         <!-- <MicImportantMessage /> -->
       </div>
     </div>
+    <!-- <div class="summary-billing">
+      <MicSummaryBilling />
+    </div> -->
     <mic-billselector />
     <!-- <MicBillSelectorAndDownload /> -->
     <mic-combo-bill />
+    <!-- <MicComboBill /> -->
     <!-- <div class="refreshable"> -->
     <!-- <div class="charge-detailes"> -->
     <!-- <mic-billingsummary /> -->
@@ -117,6 +116,10 @@
     width: calc(100% - 32px);
     gap: 30px;
     background-color: #ffffff00;
+    font-family: "Interstate" !important;
+    * {
+      font-family: "Interstate" !important;
+    }
   }
   .important-balance {
     display: grid;

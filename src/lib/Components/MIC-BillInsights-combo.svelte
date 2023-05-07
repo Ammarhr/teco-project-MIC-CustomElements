@@ -625,7 +625,6 @@
               billcontractnumber={insightsService.BillContractNo}
               body={arrayOfbody[i]}
             />
-            <!-- body={} -->
           {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo && arrayOfbody.length > 0}
             <!-- <MicInsightsRecomendation
               token={$newToken.token}
@@ -662,7 +661,7 @@
 {/if}
 
 <style lang="scss">
-  .percentage-consumption{
+  .percentage-consumption {
     width: max-content;
   }
   .insight-card {

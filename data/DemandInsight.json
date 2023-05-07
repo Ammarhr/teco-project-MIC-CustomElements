@@ -2,7 +2,7 @@
   "services": [
     {
       "serviceName": "Gas",
-      "BillContractNo": "5100724238",
+      "BillContractNo": "5200569815",
       "ZInstallBillClass": "Commercial and Industrial",
       "monthly": {
         "VisibilityTab": true,
@@ -22,14 +22,15 @@
           "FEB 2023"
         ],
         "CurrentFactorDate": "FEB 2023",
-        "PreviousFactorValue": "0.00",
+        "PreviousFactorValue": "50.00",
         "PreviousFactorDate": "JAN 2023",
+        "CurrentFactorValue":"50",
         "LoadFactorArrowComparison": 0,
         "CurrentDemandValue": "0.00",
         "DemandUnit": "Therms"
       },
       "yearly": {
-        "VisibilityTab": true,
+        "VisibilityTab": false,
         "unit": "Therms",
         "valueConsumption": 6312190,
         "percentageConsumption": -2,

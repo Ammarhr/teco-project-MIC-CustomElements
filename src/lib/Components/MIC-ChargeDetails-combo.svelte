@@ -341,7 +341,7 @@
                     {#if section.Section_Level2 && section.Section_Level2[0] && section.Section_Level2[0].IsBreakdown == true}
                       {#if billsObjectsArray[i]}
                         <div
-                          class="charges-container break-down "
+                          class="charges-container break-down"
                           style={billsObjectsArray[i].subToggleStyleArray[j]}
                         >
                           {#each section.Section_Level2 as level2Obj, l}
@@ -384,26 +384,40 @@
                                             .toolTipStylleArray[j]}
                                         >
                                           <div class="tooltip-con">
-                                            {level2Obj.ToolTip}
-                                            <br />
-                                            {#if billService.URL && billService.URL != ""}
-                                              <a
-                                                on:click={() => {
-                                                  fetchAndRedirect(
-                                                    $apiToken,
-                                                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                    billService.URL,
-                                                    {
-                                                      EventCode:
-                                                        "CD_ChargeExplanationClick",
-                                                      Outcome:
-                                                        "Charge Exeplination Page Loaded",
-                                                      Persona: $persona,
-                                                    }
-                                                  );
-                                                }}>UNDERSTANDING YOUR CHARGES</a
-                                              >
-                                            {/if}
+                                            <div>
+                                              {level2Obj.ToolTip}
+                                              <br />
+                                              {#if billService.URL && billService.URL != ""}
+                                                <a
+                                                  on:click={() => {
+                                                    fetchAndRedirect(
+                                                      $apiToken,
+                                                      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                      billService.URL,
+                                                      {
+                                                        EventCode:
+                                                          "CD_ChargeExplanationClick",
+                                                        Outcome:
+                                                          "Charge Exeplination Page Loaded",
+                                                        Persona: $persona,
+                                                      }
+                                                    );
+                                                  }}
+                                                  >UNDERSTANDING YOUR CHARGES</a
+                                                >
+                                              {/if}
+                                            </div>
+                                            <img
+                                              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/x-close.svg`}
+                                              alt=""
+                                              class="tooltip-svg"
+                                              on:click={() =>
+                                                toolTipToggle(
+                                                  j,
+                                                  i,
+                                                  level2Obj.Value
+                                                )}
+                                            />
                                           </div>
                                         </div>
                                       {/if}
@@ -499,27 +513,42 @@
                                               style={arrayOfL3Style[j][o]}
                                             >
                                               <div class="tooltip-con">
-                                                {level3Obj.ToolTip}
-                                                <br />
-                                                {#if billService.URL && billService.URL != ""}
-                                                  <a
-                                                    on:click={() => {
-                                                      fetchAndRedirect(
-                                                        $apiToken,
-                                                        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                        billService.URL,
-                                                        {
-                                                          EventCode:
-                                                            "CD_ChargeExplanationClick",
-                                                          Outcome:
-                                                            "Charge Exeplination Page Loaded",
-                                                          Persona: $persona,
-                                                        }
-                                                      );
-                                                    }}
-                                                    >UNDERSTANDING YOUR CHARGES</a
-                                                  >
-                                                {/if}
+                                                <div>
+                                                  {level3Obj.ToolTip}
+                                                  <br />
+                                                  {#if billService.URL && billService.URL != ""}
+                                                    <a
+                                                      on:click={() => {
+                                                        fetchAndRedirect(
+                                                          $apiToken,
+                                                          `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                          billService.URL,
+                                                          {
+                                                            EventCode:
+                                                              "CD_ChargeExplanationClick",
+                                                            Outcome:
+                                                              "Charge Exeplination Page Loaded",
+                                                            Persona: $persona,
+                                                          }
+                                                        );
+                                                      }}
+                                                      >UNDERSTANDING YOUR
+                                                      CHARGES</a
+                                                    >
+                                                  {/if}
+                                                </div>
+                                                <img
+                                                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/x-close.svg`}
+                                                  alt=""
+                                                  class="tooltip-svg"
+                                                  on:click={() =>
+                                                    toolTipToggle(
+                                                      o,
+                                                      j,
+                                                      level3Obj.Value,
+                                                      "levele3"
+                                                    )}
+                                                />
                                               </div>
                                             </div>
                                           {/if}
@@ -609,25 +638,40 @@
                                             .toolTipStylleArray[j]}
                                         >
                                           <div class="tooltip-con">
-                                            {level2Obj.ToolTip}<br />
-                                            {#if billService.URL && billService.URL != ""}
-                                              <a
-                                                on:click={() => {
-                                                  fetchAndRedirect(
-                                                    $apiToken,
-                                                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                    billService.URL,
-                                                    {
-                                                      EventCode:
-                                                        "CD_ChargeExplanationClick",
-                                                      Outcome:
-                                                        "Charge Exeplination Page Loaded",
-                                                      Persona: $persona,
-                                                    }
-                                                  );
-                                                }}>UNDERSTANDING YOUR CHARGES</a
-                                              >
-                                            {/if}
+                                            <div>
+                                              {level2Obj.ToolTip}
+                                              <br />
+                                              {#if billService.URL && billService.URL != ""}
+                                                <a
+                                                  on:click={() => {
+                                                    fetchAndRedirect(
+                                                      $apiToken,
+                                                      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                      billService.URL,
+                                                      {
+                                                        EventCode:
+                                                          "CD_ChargeExplanationClick",
+                                                        Outcome:
+                                                          "Charge Exeplination Page Loaded",
+                                                        Persona: $persona,
+                                                      }
+                                                    );
+                                                  }}
+                                                  >UNDERSTANDING YOUR CHARGES</a
+                                                >
+                                              {/if}
+                                            </div>
+                                            <img
+                                              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/x-close.svg`}
+                                              alt=""
+                                              class="tooltip-svg"
+                                              on:click={() =>
+                                                toolTipToggle(
+                                                  j,
+                                                  i,
+                                                  level2Obj.Value
+                                                )}
+                                            />
                                           </div>
                                         </div>
                                       {/if}
@@ -719,26 +763,40 @@
                                             .toolTipStylleArray[j]}
                                         >
                                           <div class="tooltip-con">
-                                            {level3Obj.ToolTip}
-                                            <br />
-                                            {#if billService.URL && billService.URL != ""}
-                                              <a
-                                                on:click={() => {
-                                                  fetchAndRedirect(
-                                                    $apiToken,
-                                                    `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                    billService.URL,
-                                                    {
-                                                      EventCode:
-                                                        "CD_ChargeExplanationClick",
-                                                      Outcome:
-                                                        "Charge Exeplination Page Loaded",
-                                                      Persona: $persona,
-                                                    }
-                                                  );
-                                                }}>UNDERSTANDING YOUR CHARGES</a
-                                              >
-                                            {/if}
+                                            <div>
+                                              {level3Obj.ToolTip}
+                                              <br />
+                                              {#if billService.URL && billService.URL != ""}
+                                                <a
+                                                  on:click={() => {
+                                                    fetchAndRedirect(
+                                                      $apiToken,
+                                                      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                                                      billService.URL,
+                                                      {
+                                                        EventCode:
+                                                          "CD_ChargeExplanationClick",
+                                                        Outcome:
+                                                          "Charge Exeplination Page Loaded",
+                                                        Persona: $persona,
+                                                      }
+                                                    );
+                                                  }}
+                                                  >UNDERSTANDING YOUR CHARGES</a
+                                                >
+                                              {/if}
+                                            </div>
+                                            <img
+                                              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/x-close.svg`}
+                                              alt=""
+                                              class="tooltip-svg"
+                                              on:click={() =>
+                                                toolTipToggle(
+                                                  j,
+                                                  i,
+                                                  level3Obj.Value
+                                                )}
+                                            />
                                           </div>
                                         </div>
                                       {/if}
@@ -894,9 +952,14 @@
       z-index: 15;
       position: relative;
       padding: 8px;
-      > a {
-        text-decoration: none;
-        color: #005faa;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      div {
+        > a {
+          text-decoration: none;
+          color: #005faa;
+        }
       }
     }
   }

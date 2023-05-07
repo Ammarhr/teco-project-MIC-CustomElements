@@ -1,0 +1,53 @@
+{
+    "Accounts": [
+        {
+            "AccountNumber": "#123456789",
+            "ServiceAddress": "123 Main St, Tampa, FL",
+            "CurrentCharges": "$3,506",
+            "Status": true,
+            "AccountName": "Johnny Depp"
+        },
+        {
+            "AccountNumber": "#876584932",
+            "ServiceAddress": "567 Main St, Tampa, FL",
+            "CurrentCharges": "$3,506",
+            "Status": false
+        },
+        {
+            "AccountNumber": "#123456711",
+            "ServiceAddress": "123 Main St, Tampa, FL",
+            "CurrentCharges": "$3,506",
+            "Status": true
+        },
+        {
+            "AccountNumber": "#123456711",
+            "ServiceAddress": "123 Main St, Tampa, FL",
+            "CurrentCharges": "$3,506",
+            "Status": false
+        },
+        {
+            "AccountNumber": "#123456711",
+            "ServiceAddress": "123 Main St, Tampa, FL",
+            "CurrentCharges": "$3,506",
+            "Status": true
+        },
+        {
+            "AccountNumber": "#123456711",
+            "ServiceAddress": "123 Main St, Tampa, FL",
+            "CurrentCharges": "$3,506",
+            "Status": true
+        },
+        {
+            "AccountNumber": "#123456789",
+            "ServiceAddress": "123 Main St, Tampa, FL",
+            "CurrentCharges": "$3,506",
+            "Status": true
+        },
+        {
+            "AccountNumber": "#876584932",
+            "ServiceAddress": "123 Main St, Tampa, FL",
+            "CurrentCharges": "$3,506",
+            "Status": true
+        }
+    ]
+}

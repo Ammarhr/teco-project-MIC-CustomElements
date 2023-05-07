@@ -1,6 +1,3 @@
-// import { Label } from "@amcharts/amcharts5";
-// import cloudIcon from "../assets/usage-cloud.svg"
-// import tempLegend from "../assets/temp-legend.svg"
 export const renderBarChart = (data, labels, colorsArr, width, height, unit, max) => {
     let options = {
         series: data,
@@ -54,7 +51,6 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
                 //     )
                 // } else {
                 // }
-
                 return (
                     val.toLocaleString()
                 )
@@ -147,16 +143,18 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
                 endAngle: 135,
                 dataLabels: {
                     name: {
-                        fontSize: "16px",
+                        fontSize: "14px",
                         color: "#6C6C6C",
                         offsetY: 15,
                         fontFamily: "Interstate",
+                        fontWeight: 300,
                     },
                     value: {
                         offsetY: -25,
                         fontSize: "18px",
                         color: "#005FAA",
                         fontFamily: "Interstate",
+                        fontWeight: 400,
                         formatter: function (val) {
                             return val + "%";
                         },
@@ -215,16 +213,12 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
     if (filterData && filterData.length < 5 && filterData.length !== 0) {
         filterData = [...filterData, 0, 0, 0, 0, 0]
     }
-    let colWidth;
     let serviceData;
     let tempData;
     let catArray = [];
     let daysArray = []
     let cloudArray = [];
     if (data && data.length > 0) {
-        if (chartUnit !== "cost") {
-            unit = data[0].UOM;
-        }
         serviceData = data.map((results) => {
             if (results.Usage !== "") {
                 if (results.CloudIcon == "X") {
@@ -258,12 +252,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
         })
     }
 
-    //* configure column width depend on the data 
-    if (data && data.length < 5) {
-        colWidth = "20%"
-    } else {
-        colWidth = "90px"
-    }
     let options
     if ((!serviceData || serviceData.length == 0) && (!tempData || tempData.length == 0)) {
         options = {
@@ -293,7 +281,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             ],
         }
     } else {
-
         options = {
             series: [
                 {
@@ -352,10 +339,10 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 bar: {
                     position: 'left',
                     borderRadiusWhenStacked: 'last',
-                    borderRadius: 8,
+                    borderRadius: 6,
                     borderRadiusApplication: 'end',
                     endingShape: 'rounded',
-                    columnWidth: colWidth || "70%",
+                    columnWidth: "70%",
                     dataLabels: {
                         position: "top", // top, center, bottom,
                     },
@@ -470,8 +457,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 }
             },
             xaxis: {
-                // min: 13,
-                // range: 13,
                 type: "category",
                 labels: {
                     rotate: -45
@@ -489,14 +474,23 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 tooltip: {
                     enabled: false
                 },
-
             },
             yaxis: [
                 {
-                    title: {
-                        show: false,
-                        text: ""
-                    },
+                    // title: {
+                    //     show: false,
+                    //     text: unit,
+                    //     rotate: 0,
+                    //     offsetX: 25,
+                    //     offsetY: -1 * (height / 2.3),
+                    //     style: {
+                    //         color: "#005FAA",
+                    //         fontSize: '12px',
+                    //         fontFamily: 'Interstate',
+                    //         fontWeight: 300,
+                    //         cssClass: 'insights-apexcharts-yaxis-title',
+                    //     },
+                    // },
                     labels: {
                         show: true,
                         formatter: function (val) {
@@ -526,7 +520,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
 }
 
 
-export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit) => {
+export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit, height) => {
 
     let costArray = [];
     let daysArray = []
@@ -550,7 +544,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         data: data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
             .map(value => value.Usage !== "" ? parseFloat(value.Usage?.split(",").join('')) : null)
     } : {
-        name: '',
+        name: ' ',
         type: 'column',
         color: "#ffffff",
         data: []
@@ -561,10 +555,10 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         data: data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_OFKWH" : result.Dtype == "dtouf")
             .map(value => value.Usage !== "" ? parseFloat(value.Usage?.split(",").join('')) : null)
     } : {
-        name: '',
+        name: ' ',
         type: 'column',
         color: "#ffffff",
-        data: []
+        data: [],
     }), {
         name: 'TEMPERATURE',
         type: 'line',
@@ -584,13 +578,6 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
     }])
 
-    let colWidth;
-    if (data && data.length < 5) {
-        colWidth = "20%"
-    } else {
-        colWidth = "90px"
-    }
-
     let options;
     if (!data.length) {
         options = {
@@ -603,7 +590,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                 ],
             },
             chart: {
-                height: 400,
+                height: height,
                 width: "100%",
                 type: "bar"
             },
@@ -669,6 +656,20 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             },
             yaxis: [
                 {
+                    // title: {
+                    //     show: false,
+                    //     text: unit,
+                    //     rotate: 0,
+                    //     offsetX: 20,
+                    //     offsetY: -1 * (height / 2.7),
+                    //     style: {
+                    //         color: "#005FAA",
+                    //         fontSize: '12px',
+                    //         fontFamily: 'Interstate',
+                    //         fontWeight: 300,
+                    //         cssClass: 'insights-apexcharts-yaxis-title',
+                    //     },
+                    // },
                     axisBorder: {
                         show: false,
                     },
@@ -713,9 +714,9 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             ],
             plotOptions: {
                 bar: {
-                    borderRadius: 8,
+                    borderRadius: data.length > 12 ? 1 : 8,
                     borderRadiusApplication: 'end',
-                    columnWidth: colWidth,
+                    columnWidth: "70%",
                     dataLabels: {
                         position: "top", // top, center, bottom,
                     },

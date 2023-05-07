@@ -17,7 +17,7 @@
     if ($apiDomain && $SAPToken && $apiToken && !$data.BlkDownload) {
       get(
         $apiToken,
-        // "../../data/bulkDownload.json"
+        // "../../data/bulkDownload.json",
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`,
         $SAPToken
       );
@@ -40,7 +40,12 @@
     <div class="tecoBillBannerBody">
       <p>Looking To Download Bill? Click Here To Download One Or More Bills.</p>
       <!-- svelte-ignore a11y-invalid-attribute -->
-      <a class="reverseOrder m_1" href={$data.BlkDownload} role="button"
+      <a
+        class="reverseOrder m_1"
+        href={$data.BlkDownload}
+        role="button"
+        target="_blank"
+        rel="noreferrer"
         ><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" />
         {"< "} DOWNLOAD BILLS
       </a>

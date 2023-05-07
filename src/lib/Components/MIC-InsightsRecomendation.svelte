@@ -202,24 +202,24 @@
               {#if $data.yearlyPercentageConsumption && $data.monthlyPercentageConsumption}
                 <p>
                   You used <span>
-                    {$data.yearlyPercentageConsumption}
+                    <strong>{$data.yearlyPercentageConsumption}</strong>
                   </span> than the same period last year.
                 </p>
                 <p>
                   You used <span>
-                    {$data.monthlyPercentageConsumption}
+                    <strong> {$data.monthlyPercentageConsumption}</strong>
                   </span> than the same period last month.
                 </p>
               {:else if $data.yearlyPercentageConsumption && !$data.monthlyPercentageConsumption}
                 <p>
                   You used <span>
-                    {$data.yearlyPercentageConsumption}
+                    <strong> {$data.yearlyPercentageConsumption}</strong>
                   </span> than the same period last year.
                 </p>
               {:else if $data.monthlyPercentageConsumption && !$data.yearlyPercentageConsumption}
                 <p>
                   You used <span>
-                    {$data.monthlyPercentageConsumption}
+                    <strong> {$data.monthlyPercentageConsumption}</strong>
                   </span> than the same period last month.
                 </p>
               {:else}
@@ -347,6 +347,7 @@
           </div>
           <div class="thx_msg">
             <h4>Thank you for your feedback</h4>
+            <span class="link-hypertext" style="display: none;" />
           </div>
         </div>
       </div>
@@ -673,16 +674,22 @@
     p {
       font-weight: 400;
       font-size: 20px;
-      a {
-        overflow-wrap: anywhere !important;
-      }
-    }
-    a {
-      overflow-wrap: anywhere !important;
     }
   }
-  a {
-    overflow-wrap: anywhere !important;
+  .link-hypertext {
+    font-style: normal;
+    color: #005faa;
+    font-weight: 300;
+    word-wrap: break-word;
+    &:hover {
+      color: #145093;
+    }
+    &:active {
+      color: #004083;
+    }
+    &:visited {
+      color: #004083;
+    }
   }
   .react {
     display: flex;
