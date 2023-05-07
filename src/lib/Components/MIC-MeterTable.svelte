@@ -979,15 +979,13 @@
                 {:else if selectedMeter.DAP_dtoun !== "x" && selectedMeter.DAP_dtouf !== "x"}
                   <span class="chart-unit">
                     {#if chartDisplayUnit == "usage"}
-                      {#if $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0] && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
-                        <!-- {selectedMeter.UOF} -->
-                        {$monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                      {#if selectedMeter && selectedMeter.UOF}
+                        {selectedMeter.UOF}
                       {/if}
                     {:else if chartDisplayUnit == "cost"}
                       $
-                    {:else if $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0] && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
-                      <!-- {selectedMeter.UOF} -->
-                      {$monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                    {:else if selectedMeter && selectedMeter.UOF}
+                      {selectedMeter.UOF}
                     {/if}
                   </span>
                   <div
@@ -1011,15 +1009,13 @@
                   <!-- Monthly usage OnPeak & OffPeak chart -->
                   <span class="chart-unit">
                     {#if chartDisplayUnit == "usage"}
-                      {#if $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0] && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
-                        <!-- {selectedMeter.UOF} -->
-                        {$monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                      {#if selectedMeter && selectedMeter.UOF}
+                        {selectedMeter.UOF}
                       {/if}
                     {:else if chartDisplayUnit == "cost"}
                       $
-                    {:else if $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0] && $monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
-                      <!-- {selectedMeter.UOF} -->
-                      {$monthlyUsageData.MonthlyUsage.MonthlyDetails[0].UOM}
+                    {:else if selectedMeter && selectedMeter.UOF}
+                      {selectedMeter.UOF}
                     {/if}
                   </span>
                   <div
@@ -1063,15 +1059,13 @@
                     <!-- Daily usage simple chart -->
                     <span class="chart-unit">
                       {#if chartDisplayUnit == "usage"}
-                        {#if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails[0] && $dailyUsageData.DailyUsage.DailyDetails[0].UOM}
-                          {$dailyUsageData.DailyUsage.DailyDetails[0].UOM}
-                          <!-- {selectedMeter.UOF} -->
+                        {#if selectedMeter && selectedMeter.UOF}
+                          {selectedMeter.UOF}
                         {/if}
                       {:else if chartDisplayUnit == "cost"}
                         $
-                      {:else if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails[0] && $dailyUsageData.DailyUsage.DailyDetails[0].UOM}
-                        {$dailyUsageData.DailyUsage.DailyDetails[0].UOM}
-                        <!-- {selectedMeter.UOF} -->
+                      {:else if selectedMeter && selectedMeter.UOF}
+                        {selectedMeter.UOF}
                       {/if}
                     </span>
                     <div
@@ -1095,15 +1089,13 @@
                     <!-- Daily usage OnPeak & OffPeak chart -->
                     <span class="chart-unit">
                       {#if chartDisplayUnit == "usage"}
-                        {#if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails[0] && $dailyUsageData.DailyUsage.DailyDetails[0].UOM}
-                          {$dailyUsageData.DailyUsage.DailyDetails[0].UOM}
-                          <!-- {selectedMeter.UOF} -->
+                        {#if selectedMeter && selectedMeter.UOF}
+                          {selectedMeter.UOF}
                         {/if}
                       {:else if chartDisplayUnit == "cost"}
                         $
-                      {:else if $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails[0] && $dailyUsageData.DailyUsage.DailyDetails[0].UOM}
-                        {$dailyUsageData.DailyUsage.DailyDetails[0].UOM}
-                        <!-- {selectedMeter.UOF} -->
+                      {:else if selectedMeter && selectedMeter.UOF}
+                        {selectedMeter.UOF}
                       {/if}
                     </span>
                     <div
@@ -1178,6 +1170,7 @@
   * {
     font-family: "Interstate";
   }
+
   #meter-header {
     display: flex;
     flex-direction: row;

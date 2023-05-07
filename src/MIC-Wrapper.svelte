@@ -15,6 +15,7 @@
   import MicComboBill from "./lib/Components/MIC-ComboBill.svelte";
   import MicShadowLoading from "./lib/Components/MIC-ShadowLoading.svelte";
   import MicSummaryBilling from "./lib/Components/MIC-SummaryBilling.svelte";
+  import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
   import { onMount } from "svelte";
   import {
     setDomain,
@@ -60,7 +61,7 @@
 
 {#if token && domain && eventdomain && saptoken && $generalErr !== true}
   <div class="wrapper">
-    <mic-headerinformation />
+    <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
@@ -115,6 +116,10 @@
     width: calc(100% - 32px);
     gap: 30px;
     background-color: #ffffff00;
+    font-family: "Interstate" !important;
+    * {
+      font-family: "Interstate" !important;
+    }
   }
   .important-balance {
     display: grid;

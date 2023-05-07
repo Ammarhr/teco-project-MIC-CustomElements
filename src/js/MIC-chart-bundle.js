@@ -143,7 +143,7 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
                 endAngle: 135,
                 dataLabels: {
                     name: {
-                        fontSize: "16px",
+                        fontSize: "14px",
                         color: "#6C6C6C",
                         offsetY: 15,
                         fontFamily: "Interstate",
@@ -219,9 +219,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
     let daysArray = []
     let cloudArray = [];
     if (data && data.length > 0) {
-        if (chartUnit !== "cost") {
-            unit = data[0].UOM;
-        }
         serviceData = data.map((results) => {
             if (results.Usage !== "") {
                 if (results.CloudIcon == "X") {

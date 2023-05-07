@@ -26,8 +26,8 @@ export const sortByMeterNumber = (type, items) => {
 export const sortByReadDate = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = new Date(a.ReadDate),
-                fb = new Date(b.ReadDate);
+            let fa = a.ReadDate !==''? new Date(a.ReadDate) :new Date("1/1/1") ,
+                fb = b.ReadDate !==''? new Date(b.ReadDate) :new Date("1/1/1") ;
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;
@@ -102,8 +102,8 @@ export const sortByBilledAmount = (type, items) => {
 export const sortByCurrentReading = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = a !== '' ? parseFloat(a.CurrentReading?.split(',').join('')) : 0,
-                fb = b !== '' ? parseFloat(b.CurrentReading?.split(',').join('')) : 0;
+            let fa = a.CurrentReading !== '' ? parseFloat(a.CurrentReading?.split(',').join('')) : 0,
+                fb = b.CurrentReading !== '' ? parseFloat(b.CurrentReading?.split(',').join('')) : 0;
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;
@@ -127,8 +127,8 @@ export const sortByCurrentReading = (type, items) => {
 export const sortByPreviousReading = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = a !== '' ? parseFloat(a.PreviousReading.split(',').join('')) : 0,
-                fb = b !== '' ? parseFloat(b.PreviousReading.split(',').join('')) : 0;
+            let fa = a.PreviousReading !== '' ? parseFloat(a.PreviousReading?.split(',').join('')) : 0,
+                fb = b.PreviousReading !== '' ? parseFloat(b.PreviousReading?.split(',').join('')) : 0;
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;
@@ -152,8 +152,8 @@ export const sortByPreviousReading = (type, items) => {
 export const sortByTotalUsed = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = parseFloat(a.TotalUsed.split(',').join('')),
-                fb = parseFloat(b.TotalUsed.split(',').join(''));
+            let fa = a.TotalUsed !== "" ? parseFloat(a.TotalUsed.split(',').join('')) : 0,
+                fb = b.TotalUsed !== "" ? parseFloat(b.TotalUsed.split(',').join('')) : 0;
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;
@@ -177,8 +177,8 @@ export const sortByTotalUsed = (type, items) => {
 export const sortByLow = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = parseFloat(a.Low.split(',').join('')),
-                fb = parseFloat(b.Low.split(',').join(''));
+            let fa = a.Low !== "" ? parseFloat(a.Low.split(',').join('')) : 0,
+                fb = b.Low !== "" ? parseFloat(b.Low.split(',').join('')) : 0;
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;
@@ -202,8 +202,8 @@ export const sortByLow = (type, items) => {
 export const sortByMed = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = parseFloat(a.Med.split(',').join('')),
-                fb = parseFloat(b.Med.split(',').join(''));
+            let fa = a.Med !== "" ? parseFloat(a.Med.split(',').join('')) : 0,
+                fb = b.Med !== "" ? parseFloat(b.Med.split(',').join('')) : 0;
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;
@@ -227,8 +227,8 @@ export const sortByMed = (type, items) => {
 export const sortByHigh = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = parseFloat(a.High.split(',').join('')),
-                fb = parseFloat(b.High.split(',').join(''));
+            let fa = a.High !== "" ? parseFloat(a.High.split(',').join('')) : 0,
+                fb = b.High !== "" ? parseFloat(b.High.split(',').join('')) : 0;
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;
@@ -252,8 +252,8 @@ export const sortByHigh = (type, items) => {
 export const sortByCritical = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = parseFloat(a.Critical.split(',').join('')),
-                fb = parseFloat(b.Critical.split(',').join(''));
+            let fa = a.Critical !== "" ? parseFloat(a.Critical.split(',').join('')) : 0,
+                fb = b.Critical !== "" ? parseFloat(b.Critical.split(',').join('')) : 0;
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;

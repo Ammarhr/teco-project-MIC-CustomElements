@@ -49,10 +49,10 @@
     state.messages[0] &&
     state.messages[0].message &&
     state.messages[0].message.length &&
-    state.messages[0].message.length > 10000000
+    state.messages[0].message.length > 1000000
   ) {
     message =
-      state.messages[0].message.slice(0, 237 - state.messages[0].Title.length) +
+      state.messages[0].message.slice(0, 300 - state.messages[0].Title.length) +
       "...";
   } else if (
     state &&
@@ -131,7 +131,9 @@
               {/if}
             </p>
           {:else}
-            <p class="msg-data" style="height: 105px; text-align: center;">No Messages</p>
+            <p class="msg-data" style="height: 105px; text-align: center;">
+              No Messages
+            </p>
           {/if}
         </div>
         <div class="message-footer">
@@ -222,12 +224,8 @@
     font-size: 20px;
     color: rgb(0, 0, 0);
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 8;
-    -webkit-box-orient: vertical;
-    @media screen and (max-width: 480px) {
-      -webkit-line-clamp: 9;
-    }
+    display: flex;
+    height: 216px;
   }
   .msg-title {
     font-weight: 700;
@@ -237,7 +235,6 @@
     height: 1.5rem;
   }
   p {
-    // display: contents;
     margin: 0;
     @media screen and (max-width: 480px) {
       font-size: 18px !important;
