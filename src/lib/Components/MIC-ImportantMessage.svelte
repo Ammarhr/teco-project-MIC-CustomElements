@@ -18,7 +18,6 @@
     SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
-  import { slide } from "svelte/transition";
 
   //state
   let state = {};

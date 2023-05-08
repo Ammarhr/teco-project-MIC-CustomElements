@@ -67,40 +67,20 @@
       <div class="balance">
         <mic-balancesummary />
         <!-- <MicBalanceSummary /> -->
-        <!-- <mic-balancesummary-clone />   -->
-        <!-- <MicBalanceSummaryClone /> -->
       </div>
       <div class="messages">
         <mic-importentmessage />
         <!-- <MicImportantMessage /> -->
       </div>
     </div>
-    <!-- <div class="summary-billing">
+    <div class="summary-billing">
       <MicSummaryBilling />
-    </div> -->
+    </div>
     <mic-billselector />
     <!-- <MicBillSelectorAndDownload /> -->
     <mic-combo-bill />
     <!-- <MicComboBill /> -->
-    <!-- <div class="refreshable"> -->
-    <!-- <div class="charge-detailes"> -->
-    <!-- <mic-billingsummary /> -->
-    <!-- <mic-billingsummary-clone /> -->
-    <!-- <MicBillingSummary /> -->
-    <!-- </div> -->
-    <!-- <div class="insights"> -->
-    <!-- <mic-insights class="mic-insights" /> -->
-    <!-- <mic-yearlyenergy class="mic-insights" /> -->
-    <!-- <MicInsights/> -->
-    <!-- <MicYearlyEnergy /> -->
-    <!-- <MicBulkDownload /> -->
-    <!-- </div> -->
-    <!-- </div> -->
-    <!-- <div class="blk-container"> -->
-    <!-- </div> -->
-    <!-- <mic-yearlyenergy class="mic-insights" /> -->
     <mic-metertable />
-    <!-- <MicShadowLoading /> -->
     <!-- <MicMeterTable /> -->
   </div>
 {:else if $generalErr === true}

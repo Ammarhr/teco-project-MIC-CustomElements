@@ -88,6 +88,7 @@
     onOffPeakDemand = "";
     first = false;
     tempData = true;
+    chartDisplayUnit = "usage"
     styleSelectedRows = [];
     if (meterObject) {
       selectedMeter = meterObject;
@@ -1118,6 +1119,56 @@
                 {/if}
               </div>
             {/if}
+            <div class="legend-con">
+              {#if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
+                {#if chartDisplayUnit == "usage"}
+                  {#if selectedMeter.DAP_dtoun == "x"}
+                    <div class="chart-legend">
+                      <span
+                        class="legend-point"
+                        style="background: rgb(0, 182, 240); color: rgb(0, 182, 240);"
+                      /><span class="legend-text">ON-PEAK</span>
+                    </div>
+                  {/if}
+                  {#if selectedMeter.DAP_dtouf == "x"}
+                    <div class="chart-legend">
+                      <span
+                        class="legend-point"
+                        style="background: rgb(0, 41, 74); color: rgb(0, 41, 74);"
+                      /><span class="legend-text">OFF-PEAK</span>
+                    </div>
+                  {/if}
+                {:else if chartDisplayUnit == "cost"}
+                  <div class="chart-legend">
+                    <span
+                      class="legend-point"
+                      style="background: rgb(4, 79, 141); color: rgb(4, 79, 141);"
+                    /><span class="legend-text">ُELECTRIC</span>
+                  </div>
+                {/if}
+              {:else}
+                <div class="chart-legend">
+                  <span
+                    class="legend-point"
+                    style="background: {chartColor}; color: {chartColor};"
+                  /><span class="legend-text">
+                    {#if selectedMeter.Service}
+                      {chartLegend
+                        ? chartLegend.toUpperCase()
+                        : selectedMeter.Service.toUpperCase()}
+                    {/if}
+                  </span>
+                </div>
+              {/if}
+              {#if tempData == true}
+                <div class="chart-legend">
+                  <span
+                    class="legend-point leg-temp"
+                    style="background: rgb(255, 131, 43); color: rgb(255, 131, 43);"
+                  /><span class="legend-text">TEMPERATURE</span>
+                </div>
+              {/if}
+            </div>
             <!-- Boks of Information: Cost, Temp And Hit Peak -->
             {#if $dailyUsageData.DailyUsage && activeSection == "daily"}
               <div class="information-box">
@@ -1390,7 +1441,36 @@
     @media screen and (min-width: 992px) {
       min-width: unset !important;
       overflow: unset;
+      overflow-x: unset;
     }
+  }
+  .legend-con {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .chart-legend {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+  .legend-point {
+    height: 12px;
+    width: 12px;
+    border-width: 0px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    display: inline-flex;
+  }
+  .leg-temp {
+    width: 14px;
+    height: 2px;
+  }
+  .legend-text{
+    font-weight: 300;
   }
   .chart-unit {
     margin-left: 36px;

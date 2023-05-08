@@ -31,7 +31,7 @@
     if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
       get(
         $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillinSummary`,
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SummaryBilling`,
         "../../data/SummaryBilling.json",
         $SAPToken
       ).then(() => {});
@@ -135,6 +135,76 @@
       getPaginatedItems();
     }
   };
+
+  /// sorting
+  import {
+    sortByService,
+    sortByAccountNumber,
+    sortByServiceAddress,
+    sortByCurrentCharges,
+    sortByStatus,
+  } from "../../js/sorting-bundle";
+  let activeSort, prevSortth, sortingType;
+  const handleSort = (register) => {
+    sortUiObj.activeSort = register;
+    activeSort = register;
+    if (prevSortth !== undefined && prevSortth !== activeSort) {
+      sortUiObj.sortingType = "asen";
+      sortingType = "asen";
+    } else if (prevSortth !== undefined && prevSortth == activeSort) {
+      if (sortingType == "asen") {
+        sortUiObj.sortingType = "des";
+        sortingType = "des";
+      } else {
+        sortUiObj.sortingType = "asen";
+        sortingType = "asen";
+      }
+    } else {
+      sortUiObj.sortingType = "asen";
+      sortingType = "asen";
+    }
+    if (items && items.length > 1) {
+      switch (true) {
+        case register == "0":
+          items = sortByService(sortingType, items);
+          break;
+        case register == "1":
+          items = sortByAccountNumber(sortingType, items);
+          break;
+        case register == "2":
+          items = sortByServiceAddress(sortingType, items);
+          break;
+        case register == "3":
+          items = sortByCurrentCharges(sortingType, items);
+          break;
+        case register == "4":
+          items = sortByStatus(sortingType, items);
+          break;
+        default:
+          break;
+      }
+      prevSortth = register;
+      getPaginatedItems();
+    }
+  };
+  /// sorting:
+  let sortUiObj = {
+    sortingType: "",
+    activeSort: "",
+  };
+  const renderSortSvg = (thIndex) => {
+    if (items && items.length > 1) {
+      if (activeSort == thIndex && sortingType == "asen") {
+        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-up.svg  alt="sort"/>';
+      } else if (activeSort == thIndex && sortingType == "des") {
+        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-down.svg alt="sort" />';
+      } else {
+        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort.svg  alt="sort"  />';
+      }
+    } else {
+      return "";
+    }
+  };
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -189,11 +259,36 @@
           {#if tableData}
             <table class="table" id="table">
               <tr>
-                <th>Service</th>
-                <th>Account Number</th>
-                <th>Service Address</th>
-                <th>Current Charges</th>
-                <th>Status</th>
+                <th on:click={() => handleSort("0")}>
+                  Service
+                  {#key sortUiObj}
+                    {@html renderSortSvg(0)}
+                  {/key}
+                </th>
+                <th on:click={() => handleSort("1")}>
+                  Account Number
+                  {#key sortUiObj}
+                    {@html renderSortSvg(1)}
+                  {/key}
+                </th>
+                <th on:click={() => handleSort("2")}>
+                  Service Address
+                  {#key sortUiObj}
+                    {@html renderSortSvg(2)}
+                  {/key}
+                </th>
+                <th on:click={() => handleSort("3")}>
+                  Current Charges
+                  {#key sortUiObj}
+                    {@html renderSortSvg(3)}
+                  {/key}
+                </th>
+                <th on:click={() => handleSort("4")}>
+                  Status
+                  {#key sortUiObj}
+                    {@html renderSortSvg(4)}
+                  {/key}</th
+                >
               </tr>
               {#each pagenateItems as row, i}
                 <tr
@@ -206,7 +301,7 @@
                   <td>
                     <div class="td-value">
                       <img
-                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/gasService.svg`}
+                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${row.Service.toLowerCase()}Service.svg`}
                         alt={row.Service}
                       />
                     </div>
@@ -228,7 +323,7 @@
                   <td>
                     <div class="td-value">
                       {#if row.CurrentCharges != ""}
-                        {row.CurrentCharges}
+                        ${row.CurrentCharges}
                       {/if}
                     </div></td
                   >
@@ -256,65 +351,81 @@
                 </tr>
               {/each}
             </table>
-            {#if tableData && tableData.length > 5}
-              <div class="pagination-options">
-                <div>
-                  <p class="showing">
-                    Showing {pagenateItems.length} Of {items.length} Results
-                  </p>
-                </div>
-                {#if items && items.length > 5}
-                  <div class="pagination-btns">
-                    <button
-                      on:click={prevPage}
-                      disabled={currentPage === 0}
-                      class="prev-next"
-                    >
-                      <img
-                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
-                        alt=""
-                      />
-                      Previous
-                    </button>
-                    {#each arrayOfBtns as pageIndex}
-                      <button
-                        on:click={() => goToPage(pageIndex)}
-                        class:selected={pageIndex === currentPage}
-                        disabled={currentPage === pageIndex}
-                        class="page-btn"
-                      >
-                        {#key pageIndex}
-                          {pageIndex + 1}
-                        {/key}
-                      </button>
-                    {/each}
-                    <button
-                      on:click={nextPage}
-                      disabled={currentPage === totalPagesShowen - 1}
-                      class="prev-next"
-                    >
-                      Next
-                      <img
-                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
-                        alt=""
-                      />
-                    </button>
-                  </div>
-                {/if}
-              </div>
-            {/if}
           {/if}
         {/if}
       </div>
+      {#if tableData && tableData.length > 5}
+      <div class="pagination-options">
+        <div>
+          <p class="showing">
+            Showing {pagenateItems.length} Of {items.length} Results
+          </p>
+        </div>
+        {#if items && items.length > 5}
+          <div class="pagination-btns">
+            <button
+              on:click={prevPage}
+              disabled={currentPage === 0}
+              class="prev-next"
+            >
+              <img
+                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
+                alt=""
+              />
+              Previous
+            </button>
+            {#each arrayOfBtns as pageIndex}
+              <button
+                on:click={() => goToPage(pageIndex)}
+                class:selected={pageIndex === currentPage}
+                disabled={currentPage === pageIndex}
+                class="page-btn"
+              >
+                {#key pageIndex}
+                  {pageIndex + 1}
+                {/key}
+              </button>
+            {/each}
+            <button
+              on:click={nextPage}
+              disabled={currentPage === totalPagesShowen - 1}
+              class="prev-next"
+            >
+              Next
+              <img
+                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
+                alt=""
+              />
+            </button>
+          </div>
+        {/if}
+      </div>
+    {/if}
     {/if}
   </div>
 
   <div class="account-details account-card">
-    <p>Service Address: <span>123 Main St, Tampa FL</span></p>
+    <p>
+      Service Address: <span
+        >{selectedAccount && selectedAccount.ServiceAddress
+          ? selectedAccount.ServiceAddress
+          : ""}</span
+      >
+    </p>
     {#if selectedAccount && selectedAccount.AccountName}
-      <p>Contact Name: <span>Johnny Depp</span></p>
+      <p>Contact Name: <span>{selectedAccount.AccountName}</span></p>
     {/if}
-    <p>Status: <span class="acc-status">Active</span></p>
+    <p>
+      Status: <span
+        class="acc-status"
+        style={selectedAccount && selectedAccount.Status == true
+          ? "color:#24a148;"
+          : "color:#DA1E28"}
+        >{selectedAccount && selectedAccount.Status == true
+          ? "Active"
+          : "Inactive"}
+      </span>
+    </p>
   </div>
 </div>
 
@@ -438,6 +549,7 @@
     font-style: normal;
     font-weight: 400;
     text-align: center;
+    cursor: pointer;
     &:first-child {
       border-radius: 6px 0px 0px 0px;
     }

@@ -1,52 +1,60 @@
 {
     "Accounts": [
         {
+            "Service": "Electric",
             "AccountNumber": "#123456789",
             "ServiceAddress": "123 Main St, Tampa, FL",
-            "CurrentCharges": "$3,506",
+            "CurrentCharges": "3,506",
             "Status": true,
             "AccountName": "Johnny Depp"
         },
         {
+            "Service": "Gas",
             "AccountNumber": "#876584932",
             "ServiceAddress": "567 Main St, Tampa, FL",
-            "CurrentCharges": "$3,506",
+            "CurrentCharges": "3,00",
             "Status": false
         },
         {
+            "Service": "Electric",
             "AccountNumber": "#123456711",
-            "ServiceAddress": "123 Main St, Tampa, FL",
-            "CurrentCharges": "$3,506",
+            "ServiceAddress": "123 Main St, Tampa, To",
+            "CurrentCharges": "3,506",
             "Status": true
         },
         {
+            "Service": "Electric",
             "AccountNumber": "#123456711",
             "ServiceAddress": "123 Main St, Tampa, FL",
-            "CurrentCharges": "$3,506",
+            "CurrentCharges": "3,106",
             "Status": false
         },
         {
+            "Service": "Electric",
             "AccountNumber": "#123456711",
-            "ServiceAddress": "123 Main St, Tampa, FL",
-            "CurrentCharges": "$3,506",
+            "ServiceAddress": "123 Main St, Tampa, Ga",
+            "CurrentCharges": "1,506",
             "Status": true
         },
         {
+            "Service": "Gas",
             "AccountNumber": "#123456711",
-            "ServiceAddress": "123 Main St, Tampa, FL",
-            "CurrentCharges": "$3,506",
+            "ServiceAddress": "123 Main St, Tampa, Sa",
+            "CurrentCharges": "3,900",
             "Status": true
         },
         {
+            "Service": "Electric",
             "AccountNumber": "#123456789",
             "ServiceAddress": "123 Main St, Tampa, FL",
-            "CurrentCharges": "$3,506",
+            "CurrentCharges": "1,850",
             "Status": true
         },
         {
+            "Service": "Gas",
             "AccountNumber": "#876584932",
             "ServiceAddress": "123 Main St, Tampa, FL",
-            "CurrentCharges": "$3,506",
+            "CurrentCharges": "3,800",
             "Status": true
         }
     ]

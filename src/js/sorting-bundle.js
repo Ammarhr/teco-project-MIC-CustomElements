@@ -299,3 +299,107 @@ export const sortByService = (type, items) => {
         });
     }
 }
+
+
+//* SummaryBilling sort functions.
+export const sortByAccountNumber = (type, items) => {
+    if (items && items.length > 1) {
+        return items.sort((a, b) => {
+            let fa = a.AccountNumber.toLowerCase(),
+                fb = b.AccountNumber.toLowerCase();
+            if (type == "asen") {
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                if (fa < fb) {
+                    return 1;
+                }
+                if (fa > fb) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+    }
+}
+export const sortByServiceAddress = (type, items) => {
+    if (items && items.length > 1) {
+        return items.sort((a, b) => {
+            let fa = a.ServiceAddress.toLowerCase(),
+                fb = b.ServiceAddress.toLowerCase();
+            if (type == "asen") {
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                if (fa < fb) {
+                    return 1;
+                }
+                if (fa > fb) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+    }
+}
+
+export const sortByCurrentCharges = (type, items) => {
+    if (items && items.length > 1) {
+        return items.sort((a, b) => {
+            let fa = a.CurrentCharges !== "" ? parseFloat(a.CurrentCharges.split(',').join('')) : 0,
+                fb = b.CurrentCharges !== "" ? parseFloat(b.CurrentCharges.split(',').join('')) : 0;
+            if (type == "asen") {
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                if (fa < fb) {
+                    return 1;
+                }
+                if (fa > fb) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+    }
+}
+export const sortByStatus = (type, items) => {
+    if (items && items.length > 1) {
+        return items.sort((a, b) => {
+            let fa = a.Status,
+                fb = b.Status;
+            if (type == "asen") {
+                if (fa && !fb) {
+                    return -1;
+                }
+                if (!fa && fb) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                if (fa && !fb) {
+                    return 1;
+                }
+                if (!fa && fb) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+    }
+}

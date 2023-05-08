@@ -138,7 +138,10 @@
   let agencySection;
   $: if ($chargeData && $chargeData.Section) {
     arrayOfCharges = $chargeData.Section;
-    invoiceTotal = $chargeData.Section[$chargeData.Section.length - 2];
+    invoiceTotalArray = $chargeData.Section.filter((subSection) => {
+      return subSection.SectionType == "InvoiceTotal";
+    });
+    // invoiceTotal = $chargeData.Section[$chargeData.Section.length - 2];
   }
 
   $: if ($sundata && $sundata.SunSelect) {
@@ -149,6 +152,7 @@
   let insightsArray = [];
   let chargesArray = [];
   let bulkPosition = 0;
+  let invoiceTotalArray;
   $: if (
     $chargeData &&
     $chargeData.Section &&
@@ -179,7 +183,6 @@
     }
   }
   ////////////////////
-
   let newArr;
   let newSunSelectArray = [];
   let sunArrayVal;
@@ -203,25 +206,24 @@
   {#if $chargeLoading || $loading || $sunloading}
     <div class="charge-detailes"><mic-loading /></div>
     <div class="insights"><mic-loading /></div>
-  {:else if arrayOfCharges}
+  {:else if arrayOfCharges && invoiceTotalArray}
     {#each arrayOfCharges as charge, i}
       {#if charge && charge.SectionType}
         {#if charge.SectionType}
           <div class="charge-detailes">
-            {#if i == chargesArray.length - 2}
-              <!-- <MicChargeDetailsCombo
-                charges={chargesArray[i]}
-                invoicetotal={chargesArray[chargesArray.length - 1]}
-              /> -->
+            <!-- {#if i == chargesArray.length - 2} -->
+            {#if arrayOfCharges[i + 1] && arrayOfCharges[i + 1].SectionType == "InvoiceTotal" && invoiceTotalArray && invoiceTotalArray[0]}
+            <!-- <MicChargeDetailsCombo
+                charges={[charge]}
+                invoicetotal={invoiceTotalArray}
+                /> -->
+                <!-- invoicetotal={chargesArray[chargesArray.length - 1]} -->
               <mic-billingsummary-combo
                 charges={[charge]}
-                invoicetotal={chargesArray[chargesArray.length - 1]}
+                invoicetotal={invoiceTotalArray}
               />
             {:else}
-              <!-- <MicChargeDetailsCombo
-                charges={chargesArray[i]}
-                invoicetotal={""}
-              /> -->
+              <!-- <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} /> -->
               <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
             {/if}
           </div>

@@ -360,7 +360,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 },
             },
             legend: {
-                show: true,
+                show: false,
                 horizontalAlign: 'right',
                 onItemClick: {
                     toggleDataSeries: false
@@ -810,6 +810,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                 }
             },
             legend: {
+                show: false,
                 horizontalAlign: 'right',
                 offsetX: 40,
                 onItemClick: {
