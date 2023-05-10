@@ -54,6 +54,7 @@
           {
             EventCode: "Select_Latest_Bill",
             Outcome: $billNumber,
+            Persona: $persona,
           }
         );
       });

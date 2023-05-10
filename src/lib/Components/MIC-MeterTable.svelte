@@ -52,7 +52,8 @@
   let sortingType;
   let activeSort;
   let prevSortth;
-
+  let newSelect = "";
+  let disableTemp = false;
   const [data, loading, error, get] = fetchstore(); // meterTable fetch
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
     fetchDailyUsageChart(); // daily usage fetch
@@ -77,6 +78,13 @@
         } else {
           EP_Flag = "";
         }
+        if ($data && $data.TempFlag == false) {
+          disableTemp = false;
+          tempData = true;
+        } else {
+          disableTemp = true;
+          tempData = false;
+        }
       });
       refreshableToken = $apiToken;
     }
@@ -84,12 +92,12 @@
 
   //////// change the selected meter + call Dap Api
   const handleSelectedMeter = (meterObject, i) => {
-    costBtnClass = "sw-btn-inactive";
-    usageBtnClass = "sw-btn-active";
     chartLegend = "";
     onOffPeakDemand = "";
     first = false;
     tempData = true;
+    costBtnClass = "sw-btn-inactive";
+    usageBtnClass = "sw-btn-active";
     chartDisplayUnit = "usage";
     styleSelectedRows = [];
     if (meterObject) {
@@ -160,7 +168,6 @@
       } else {
         monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${HistoricalFact}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
       }
-
       monthlyUsageGet(
         refreshableToken,
         monthlyUrl,
@@ -169,7 +176,7 @@
       );
     }
     // MiJurney event call
-    if (selectedMeter) {
+    if (newSelect !== "" && selectedMeter) {
       fetchAndRedirect(
         $apiToken,
         `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
@@ -182,6 +189,7 @@
         }
       );
     }
+    newSelect = selectedMeter;
     if (selectedMeter) {
       if (selectedMeter.DAP_kw == "x") {
         chartColor = "#411084";
@@ -236,6 +244,7 @@
     $newToken.token &&
     (refreshableToken == $apiToken || refreshableToken !== $newToken.token)
   ) {
+    newSelect = "";
     get(
       $newToken.token,
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
@@ -246,6 +255,13 @@
         EP_Flag = $data.EPFlag;
       } else {
         EP_Flag = "";
+      }
+      if ($data && $data.TempFlag == false) {
+        disableTemp = false;
+        tempData = true;
+      } else {
+        disableTemp = true;
+        tempData = false;
       }
     });
     refreshableToken = $newToken.token;
@@ -320,7 +336,10 @@
 
   ////////// tabs functionality
   const activateTab = (num1, num2, activeTab) => {
-    costUsageToggle("usage");
+    // costUsageToggle("usage");
+    costBtnClass = "sw-btn-inactive";
+    usageBtnClass = "sw-btn-active";
+    chartDisplayUnit = "usage";
     activeSection = activeTab;
     tab2 = num2;
     tab1 = num1;
@@ -447,17 +466,31 @@
   const tempreatureShow = () => {
     tempData = !tempData;
     // MiJurney event call
-    fetchAndRedirect(
-      $apiToken,
-      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      null,
-      {
-        EventCode: "Click_Temp_Checkbox",
-        Outcome: ``,
-        Feedback: "",
-        Persona: $persona,
-      }
-    );
+    if (tempData == true) {
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Temp_Checkbox",
+          Outcome: `active`,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
+    } else {
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Temp_Checkbox",
+          Outcome: `inactive`,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
+    }
   };
 
   // min width for scroll (chart)
@@ -684,7 +717,7 @@
                     {/key}</th
                   >
                   <th on:click={() => handleSort("3")}
-                    >Billing Read
+                    >Biling Period
                     {#key sortUiObj}
                       {@html renderSortSvg(3)}
                     {/key}</th
@@ -917,21 +950,23 @@
             <div />
             <!-- option for Hadi to style -->
             <div class="options" style="position: relative;">
-              <input
-                type="checkbox"
-                name="trmprature"
-                id="temp"
-                checked
-                on:click={tempreatureShow}
-              />
-              <span>Temperature</span>
-              <img
-                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
-                alt="usage chart tool tip"
-                class="chart-tool-tip"
-                bind:this={toolTipIconCon}
-                on:click={tooltipToggle}
-              />
+              {#if disableTemp == false}
+                <input
+                  type="checkbox"
+                  name="trmprature"
+                  id="temp"
+                  checked
+                  on:click={tempreatureShow}
+                />
+                <span>Temperature</span>
+                <img
+                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
+                  alt="usage chart tool tip"
+                  class="chart-tool-tip"
+                  bind:this={toolTipIconCon}
+                  on:click={tooltipToggle}
+                />
+              {/if}
               {#if activeSection == "monthly" && $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.TempTooltip}
                 <div class="tooltip-content" style={toolTipStyle}>
                   {@html $monthlyUsageData.MonthlyUsage.TempTooltip}
@@ -1034,7 +1069,8 @@
                       selectedMeter.DAP_dtouf,
                       chartColor,
                       chartDisplayUnit,
-                      400
+                      400,
+                      $monthlyUsageData.MonthlyUsage.MaxUsage
                     )}
                   />
                 {/if}
@@ -1114,7 +1150,8 @@
                         selectedMeter.DAP_dtouf,
                         chartColor,
                         chartDisplayUnit,
-                        400
+                        400,
+                        $dailyUsageData.DailyUsage.MaxUsage
                       )}
                     />
                   {/if}
