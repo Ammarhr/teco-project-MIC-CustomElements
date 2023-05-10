@@ -213,11 +213,11 @@
           <div class="charge-detailes">
             <!-- {#if i == chargesArray.length - 2} -->
             {#if arrayOfCharges[i + 1] && arrayOfCharges[i + 1].SectionType == "InvoiceTotal" && invoiceTotalArray && invoiceTotalArray[0]}
-            <!-- <MicChargeDetailsCombo
+              <!-- <MicChargeDetailsCombo
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
                 /> -->
-                <!-- invoicetotal={chargesArray[chargesArray.length - 1]} -->
+              <!-- invoicetotal={chargesArray[chargesArray.length - 1]} -->
               <mic-billingsummary-combo
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
@@ -297,6 +297,12 @@
     width: 100%;
     @media screen and (max-width: 992px) {
       grid-template-columns: 100%;
+    }
+
+    & > div {
+      @if height == 0 {
+        display: none;
+      }
     }
   }
   .charge-detailes {

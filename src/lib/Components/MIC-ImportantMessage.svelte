@@ -117,7 +117,7 @@
       {#if isOpen}
         <div class="message-body">
           {#if message && message !== ""}
-            <p class="msg-data">
+            <div class="msg-data">
               {#if !state.messages[0].empty && state.messages[0] && (state.messages[0].Title !== "") !== ""}
                 <span>
                   <span class="msg-title">
@@ -128,7 +128,7 @@
               {:else}
                 {@html message}
               {/if}
-            </p>
+            </div>
           {:else}
             <p class="msg-data" style="height: 105px; text-align: center;">
               No Messages
@@ -222,9 +222,26 @@
     font-weight: 300;
     font-size: 20px;
     color: rgb(0, 0, 0);
-    overflow: hidden;
-    display: flex;
+    // overflow: hidden;
+    // display: flex;
     height: 216px;
+    @media screen and (max-width: 480px) {
+      font-size: 18px !important;
+    }
+    :nth-child(2) {
+      display: -webkit-box !important;
+      -webkit-box-orient: vertical !important;
+      -webkit-line-clamp: 6 !important;
+      overflow: hidden !important;
+    }
+    span {
+      p {
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical !important;
+        -webkit-line-clamp: 7 !important;
+        overflow: hidden !important;
+      }
+    }
   }
   .msg-title {
     font-weight: 700;
@@ -235,9 +252,14 @@
   }
   p {
     margin: 0;
-    @media screen and (max-width: 480px) {
-      font-size: 18px !important;
-    }
+    // display: -webkit-box !important;
+    // -webkit-box-orient: vertical !important;
+    // -webkit-line-clamp: 8 !important;
+    // overflow: hidden !important;
+    // @media screen and (max-width: 480px) {
+    //   font-size: 18px !important;
+    // -webkit-line-clamp: 9 !important;
+    // }
   }
   button {
     display: flex;

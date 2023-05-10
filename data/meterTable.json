@@ -26,9 +26,9 @@
         "DAP_dkwh": "",
         "DAP_rkwh": "",
         "DAP_pf": "",
-        "DAP_kw": "x",
-        "DAP_dtoun": "",
-        "DAP_dtouf": ""
+        "DAP_kw": "",
+        "DAP_dtoun": "x",
+        "DAP_dtouf": "x"
       },
       {
         "Service": "Electric",
@@ -39,7 +39,7 @@
         "CurrentReading": "21,947",
         "PreviousReading": "21,582",
         "TotalUsed": "365 KWH",
-        "AMI_Flag": "X",
+        "AMI_Flag": "",
         "UOF": "KWH",
         "DLN": "9000096267",
         "ZipCode": "33615",

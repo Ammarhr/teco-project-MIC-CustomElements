@@ -77,7 +77,7 @@
     toggleArray[i] = !toggleArray[i];
 
     if (toggleArray[i]) {
-      styleToggleArr[i] = "max-height: 200vh;opacity: 1;transition:200ms;";
+      styleToggleArr[i] = "opacity: 1;transition:200ms;";
     } else {
       styleToggleArr[i] =
         "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";

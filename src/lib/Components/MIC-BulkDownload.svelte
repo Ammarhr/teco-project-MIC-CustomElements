@@ -10,6 +10,7 @@
     apiToken,
     generalErr,
     SAPToken,
+    persona,
   } from "../../js/store";
   //mocking data
   const [data, loading, error, get] = fetchstore();
@@ -23,6 +24,12 @@
       );
     }
   });
+  let btnStatus;
+  $: if ($persona && $persona == "Agent") {
+    btnStatus = "disable";
+  } else {
+    btnStatus = "enable";
+  }
 </script>
 
 {#if $loading}
@@ -46,8 +53,10 @@
         role="button"
         target="_blank"
         rel="noreferrer"
-        ><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" />
-        {"< "} DOWNLOAD BILLS
+        style={btnStatus == "disable" ?"pointer-events: none;":""}
+        ><span class={btnStatus} aria-hidden="true" >
+          {"< "} DOWNLOAD BILLS
+        </span>
       </a>
     </div>
   </div>
@@ -187,6 +196,13 @@
         text-align: left;
         color: white;
       }
+      span {
+        background: none;
+        border: none;
+        color: white;
+        margin: 0;
+        padding: 0;
+      }
       p {
         font-size: 25px;
         font-weight: 400;
@@ -198,5 +214,11 @@
         }
       }
     }
+  }
+  .disable {
+    color: $teco-dark-grey !important;
+    cursor: default;
+    background: none;
+    border: none;
   }
 </style>

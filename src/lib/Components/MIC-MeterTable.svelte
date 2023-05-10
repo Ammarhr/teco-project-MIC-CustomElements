@@ -84,11 +84,13 @@
 
   //////// change the selected meter + call Dap Api
   const handleSelectedMeter = (meterObject, i) => {
+    costBtnClass = "sw-btn-inactive";
+    usageBtnClass = "sw-btn-active";
     chartLegend = "";
     onOffPeakDemand = "";
     first = false;
     tempData = true;
-    chartDisplayUnit = "usage"
+    chartDisplayUnit = "usage";
     styleSelectedRows = [];
     if (meterObject) {
       selectedMeter = meterObject;
@@ -1469,7 +1471,7 @@
     width: 14px;
     height: 2px;
   }
-  .legend-text{
+  .legend-text {
     font-weight: 300;
   }
   .chart-unit {

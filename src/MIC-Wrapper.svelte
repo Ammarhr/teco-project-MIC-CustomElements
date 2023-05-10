@@ -73,9 +73,9 @@
         <!-- <MicImportantMessage /> -->
       </div>
     </div>
-    <div class="summary-billing">
+    <!-- <div class="summary-billing">
       <MicSummaryBilling />
-    </div>
+    </div> -->
     <mic-billselector />
     <!-- <MicBillSelectorAndDownload /> -->
     <mic-combo-bill />

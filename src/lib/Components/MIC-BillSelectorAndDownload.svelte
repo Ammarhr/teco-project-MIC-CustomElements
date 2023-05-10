@@ -45,10 +45,18 @@
         // "../../data/Token.json"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`,
         $SAPToken
-      ).then(() => changeBillNumber(selectedBill));
-      // setTimeout(() => {
-      //   changeBillNumber(selectedBill);
-      // }, 500);
+      ).then(() => {
+        changeBillNumber(selectedBill);
+        fetchAndRedirect(
+          $apiToken,
+          `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+          null,
+          {
+            EventCode: "Select_Latest_Bill",
+            Outcome: $billNumber,
+          }
+        );
+      });
     } else if (!latest1) {
       selectedBill = e.target.value;
       newToken.set("");
@@ -57,10 +65,19 @@
         // "../../data/Token.json"
         `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedBill}`,
         $SAPToken
-      ).then(() => changeBillNumber(selectedBill));
-      // setTimeout(() => {
-      //   changeBillNumber(selectedBill);
-      // }, 500);
+      ).then(() => {
+        changeBillNumber(selectedBill);
+        fetchAndRedirect(
+          $apiToken,
+          `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+          null,
+          {
+            EventCode: "Select_New_Bill",
+            Outcome: $billNumber,
+            Persona: $persona,
+          }
+        );
+      });
     }
   };
 
@@ -79,6 +96,12 @@
         changeBillNumber($data.bills[0].value);
       }
     }
+  }
+  let btnStatus;
+  $: if ($persona && $persona == "Agent") {
+    btnStatus = "disable";
+  } else {
+    btnStatus = "enable";
   }
 </script>
 
@@ -103,16 +126,6 @@
               aria-label=""
               on:change={(e) => {
                 handleChange(e);
-                fetchAndRedirect(
-                  $apiToken,
-                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                  null,
-                  {
-                    EventCode: "Select_New_Bill",
-                    Outcome: $billNumber,
-                    Persona: $persona,
-                  }
-                );
               }}
               bind:value={$billNumber}
             >
@@ -138,18 +151,23 @@
           </div>
           <button
             type="button"
-            class="btn tecoBillSelectorDownloadButton"
+            class="btn tecoBillSelectorDownloadButton {btnStatus}"
             id="btn-download"
-            on:click={() =>
-              fetchAndRedirect(
-                $apiToken,
-                `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                `${$data.download_link}${$billNumber}`,
-                {
-                  EventCode: "Bill_Download",
-                  Outcome: $billNumber,
-                }
-              )}
+            on:click={() => {
+              if (btnStatus == "enable") {
+                fetchAndRedirect(
+                  $apiToken,
+                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+                  `${$data.download_link}${$billNumber}`,
+                  {
+                    EventCode: "Bill_Download",
+                    Outcome: $billNumber,
+                  }
+                );
+              } else {
+                return;
+              }
+            }}
           >
             <img
               src={`https://tecocdn.azureedge.net/ibill/iBill-assets/DownloadIcon.svg`}
@@ -166,15 +184,6 @@
                 if ($data.bills[0]) {
                   handleChange(e, $data.bills[0].value);
                 }
-                fetchAndRedirect(
-                  $apiToken,
-                  `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                  null,
-                  {
-                    EventCode: "Select_Latest_Bill",
-                    Outcome: $billNumber,
-                  }
-                );
               }}>View Latest Bill</a
             >
           </span>
@@ -379,6 +388,24 @@
       }
       &:active {
         background: #e5eff6;
+      }
+    }
+    .disable {
+      color: #6c6c6c;
+      border-color: #6c6c6c;
+      cursor: default;
+      &:hover {
+        color: #6c6c6c;
+        border-color: #6c6c6c;
+        background: none !important;
+      }
+      &:active {
+        color: #6c6c6c;
+        border-color: #6c6c6c;
+        background: none !important;
+      }
+      img {
+        filter: grayscale(100%);
       }
     }
     // small container

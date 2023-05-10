@@ -477,28 +477,19 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             },
             yaxis: [
                 {
-                    // title: {
-                    //     show: false,
-                    //     text: unit,
-                    //     rotate: 0,
-                    //     offsetX: 25,
-                    //     offsetY: -1 * (height / 2.3),
-                    //     style: {
-                    //         color: "#005FAA",
-                    //         fontSize: '12px',
-                    //         fontFamily: 'Interstate',
-                    //         fontWeight: 300,
-                    //         cssClass: 'insights-apexcharts-yaxis-title',
-                    //     },
-                    // },
+                    min:0,
+                    tickAmount: 5,
                     labels: {
                         show: true,
                         formatter: function (val) {
-                            return val;
-                        },
+                            // console.log(val);
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;                     
+                         },
                     },
                 },
                 {
+                    min:0,
+                    tickAmount: 5,
                     opposite: true,
                     title: {
                         show: false,
@@ -507,7 +498,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     labels: {
                         show: false,
                         formatter: function (val) {
-                            return val;
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;
                         },
                     },
                 }
@@ -534,7 +525,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             .map(value => value.Perioddate)
 
     if (data) {
-        daysArray = chartUnit == "usage" ? data.filter((result, i) => onPeak == "x" && offPeak !== "x" || onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun").map(value => value.Days) : data.map(value => value.Days)
+        daysArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
+        .map(value => value.Days !== "" ? value.Days : null)
     }
 
     let serisData = chartUnit == "usage" ? ([(onPeak == "x" ? {
@@ -656,20 +648,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             },
             yaxis: [
                 {
-                    // title: {
-                    //     show: false,
-                    //     text: unit,
-                    //     rotate: 0,
-                    //     offsetX: 20,
-                    //     offsetY: -1 * (height / 2.7),
-                    //     style: {
-                    //         color: "#005FAA",
-                    //         fontSize: '12px',
-                    //         fontFamily: 'Interstate',
-                    //         fontWeight: 300,
-                    //         cssClass: 'insights-apexcharts-yaxis-title',
-                    //     },
-                    // },
+                    min:0,
+                    tickAmount: 5,
                     axisBorder: {
                         show: false,
                     },
@@ -679,11 +659,13 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     labels: {
                         show: onPeak == "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : false,
                         formatter: function (val) {
-                            return val;
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;
                         },
                     }
                 },
                 {
+                    min:0,
+                    tickAmount: 5,
                     axisBorder: {
                         show: false,
                     },
@@ -693,11 +675,13 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     labels: {
                         show: onPeak !== "x" && offPeak == "x" ? true : false,
                         formatter: function (val) {
-                            return val;
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;
                         },
                     }
                 },
                 {
+                    min:0,
+                    tickAmount: 5,
                     axisBorder: {
                         show: false,
                     },
@@ -707,7 +691,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     labels: {
                         show: false,
                         formatter: function (val) {
-                            return val;
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;
                         },
                     }
                 }
