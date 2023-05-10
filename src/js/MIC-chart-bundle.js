@@ -477,18 +477,18 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
             },
             yaxis: [
                 {
-                    min:0,
+                    min: 0,
                     tickAmount: 5,
                     labels: {
                         show: true,
                         formatter: function (val) {
                             // console.log(val);
-                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;                     
-                         },
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
+                        },
                     },
                 },
                 {
-                    min:0,
+                    min: 0,
                     tickAmount: 5,
                     opposite: true,
                     title: {
@@ -498,7 +498,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     labels: {
                         show: false,
                         formatter: function (val) {
-                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
                         },
                     },
                 }
@@ -511,8 +511,8 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
 }
 
 
-export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit, height) => {
-
+export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit, height, maxScale) => {
+    console.log(maxScale, "maxScale");
     let costArray = [];
     let daysArray = []
     let categoriesArray;
@@ -526,7 +526,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
 
     if (data) {
         daysArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
-        .map(value => value.Days !== "" ? value.Days : null)
+            .map(value => value.Days !== "" ? value.Days : null)
     }
 
     let serisData = chartUnit == "usage" ? ([(onPeak == "x" ? {
@@ -648,7 +648,8 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
             },
             yaxis: [
                 {
-                    min:0,
+                    min: 0,
+                    max: chartUnit == "usage" ? parseInt(maxScale) + parseInt(maxScale) * 0.1 : undefined,
                     tickAmount: 5,
                     axisBorder: {
                         show: false,
@@ -659,12 +660,13 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     labels: {
                         show: onPeak == "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : false,
                         formatter: function (val) {
-                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
                         },
                     }
                 },
                 {
-                    min:0,
+                    min: 0,
+                    max: chartUnit == "usage" ? parseInt(maxScale) + parseInt(maxScale) * 0.1 : undefined,
                     tickAmount: 5,
                     axisBorder: {
                         show: false,
@@ -675,12 +677,12 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     labels: {
                         show: onPeak !== "x" && offPeak == "x" ? true : false,
                         formatter: function (val) {
-                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
                         },
                     }
                 },
                 {
-                    min:0,
+                    min: 0,
                     tickAmount: 5,
                     axisBorder: {
                         show: false,
@@ -691,7 +693,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     labels: {
                         show: false,
                         formatter: function (val) {
-                            return val && val == 0 ? 0 : val && val % 1 !== 0 &&  val < 1  ? val.toFixed(2) : val && val > 1 ? parseInt(val) :val;
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
                         },
                     }
                 }

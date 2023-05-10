@@ -237,16 +237,23 @@
           "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
       }
     }
-    fetchAndRedirect(
-      $apiToken,
-      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      null,
-      {
-        EventCode: "CD_ChargeTooltipClick",
-        Outcome: `Helper ${chargeLine} Is Active`,
-        Persona: $persona,
-      }
-    );
+    if (
+      (arrOfLevel3[i] && arrOfLevel3[i][j] && arrOfLevel3[i][j] == true) ||
+      (billsObjectsArray[i] &&
+        billsObjectsArray[i].toolTipArray[j] &&
+        billsObjectsArray[i].toolTipArray[j] == true)
+    ) {
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "CD_ChargeTooltipClick",
+          Outcome: `Helper ${chargeLine} Is Active`,
+          Persona: $persona,
+        }
+      );
+    }
   };
   let chargesClass = "";
   $: if ($billNumber == $latestBill) {
@@ -398,7 +405,7 @@
                                                         EventCode:
                                                           "CD_ChargeExplanationClick",
                                                         Outcome:
-                                                          "Charge Exeplination Page Loaded",
+                                                          "Charge explanation page loaded",
                                                         Persona: $persona,
                                                       }
                                                     );
@@ -527,7 +534,7 @@
                                                             EventCode:
                                                               "CD_ChargeExplanationClick",
                                                             Outcome:
-                                                              "Charge Exeplination Page Loaded",
+                                                              "Charge explanation page loaded",
                                                             Persona: $persona,
                                                           }
                                                         );
@@ -652,7 +659,7 @@
                                                         EventCode:
                                                           "CD_ChargeExplanationClick",
                                                         Outcome:
-                                                          "Charge Exeplination Page Loaded",
+                                                          "Charge explanation page loaded",
                                                         Persona: $persona,
                                                       }
                                                     );
@@ -777,7 +784,7 @@
                                                         EventCode:
                                                           "CD_ChargeExplanationClick",
                                                         Outcome:
-                                                          "Charge Exeplination Page Loaded",
+                                                          "Charge explanation page loaded",
                                                         Persona: $persona,
                                                       }
                                                     );
