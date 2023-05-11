@@ -717,7 +717,7 @@
                     {/key}</th
                   >
                   <th on:click={() => handleSort("3")}
-                    >Biling Period
+                    >Billing Period
                     {#key sortUiObj}
                       {@html renderSortSvg(3)}
                     {/key}</th
@@ -1510,6 +1510,7 @@
   }
   .legend-text {
     font-weight: 300;
+    font-size: 16px;
   }
   .chart-unit {
     margin-left: 36px;

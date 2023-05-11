@@ -88,7 +88,7 @@
       color = "#005FAA";
     }
     // dynamic font size
-    if ($data.totalAmmount[0] && $data.totalAmmount.split(".")[0].length >= 6) {
+    if ($data.totalAmmount[0] && $data.totalAmmount.split(".")[0].length >= 7) {
       totalAmmountFontSize = "36px";
       subTotalAmmountFontSize = "20px";
     }
