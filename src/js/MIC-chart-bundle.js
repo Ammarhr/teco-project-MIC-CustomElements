@@ -527,9 +527,9 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     costArray = data.filter(value => value.Cost !== "0.00" && value.Cost !== "" ? parseFloat(value.Cost?.split(",").join('')).toFixed(2) : null)
         .map(value => value.Cost)
     categoriesArray = chartUnit == "usage" ? data.filter((result, i) => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
-        .map(value => value.Perioddate)
+        .map(value => value.Perioddate.toUpperCase())
         : data.filter(value => value.Cost !== "0.00" && value.Cost !== "" ? value.Perioddate?.split(",").join('') : null)
-            .map(value => value.Perioddate)
+            .map(value => value.Perioddate.toUpperCase())
 
     if (data) {
         daysArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == "HIST_PKKWH" : result.Dtype == "dtoun")
