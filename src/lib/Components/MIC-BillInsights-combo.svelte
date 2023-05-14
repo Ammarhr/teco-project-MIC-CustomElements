@@ -543,7 +543,7 @@
                       use:chart={renderRadialBar(
                         [insightsService?.monthly?.PreviousFactorValue],
                         [insightsService?.monthly?.PreviousFactorDate],
-                        240,
+                        220,
                         "#005FAA"
                       )}
                     />
@@ -553,7 +553,7 @@
                     use:chart={renderRadialBar(
                       [insightsService?.monthly?.CurrentFactorValue],
                       [insightsService?.monthly?.CurrentFactorDate],
-                      240,
+                      220,
                       "#B1DBFD"
                     )}
                   />

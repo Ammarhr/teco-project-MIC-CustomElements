@@ -95,7 +95,11 @@
     chartLegend = "";
     onOffPeakDemand = "";
     first = false;
-    tempData = true;
+    if (disableTemp == false) {
+      tempData = true;
+    } else {
+      tempData = false;
+    }
     costBtnClass = "sw-btn-inactive";
     usageBtnClass = "sw-btn-active";
     chartDisplayUnit = "usage";
@@ -1208,7 +1212,7 @@
                 </div>
               {/if}
             </div>
-            <!-- Boks of Information: Cost, Temp And Hit Peak -->
+            <!-- Boxes of Information: Cost, Temp And Hit Peak -->
             {#if $dailyUsageData.DailyUsage && activeSection == "daily"}
               <div class="information-box">
                 {#if $dailyUsageData.DailyUsage.AVGCost}
@@ -1219,13 +1223,15 @@
                     </h4>
                   </div>
                 {/if}
-                {#if $dailyUsageData.DailyUsage.AVGTemp}
-                  <div>
-                    <h6>AVG. TEMP PER DAY</h6>
-                    <h4>
-                      {$dailyUsageData.DailyUsage.AVGTemp}°
-                    </h4>
-                  </div>
+                {#if disableTemp == false}
+                  {#if $dailyUsageData.DailyUsage.AVGTemp}
+                    <div>
+                      <h6>AVG. TEMP PER DAY</h6>
+                      <h4>
+                        {$dailyUsageData.DailyUsage.AVGTemp}°
+                      </h4>
+                    </div>
+                  {/if}
                 {/if}
                 {#if $dailyUsageData.DailyUsage.HitPeakDemand}
                   <div>
