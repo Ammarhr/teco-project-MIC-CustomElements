@@ -173,7 +173,12 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
     return options;
 }
 
-
+const fillArray_helpper = (arr, len, fill) => {
+    if (arr.length < len) {
+        arr = arr.concat(Array(len - arr.length).fill(fill));
+    }
+    return arr;
+}
 export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp, monthly, onOffPeakDemand, customLegend) => {
     let filterData;
     let toolTipUsage = chartUnit == "cost" ? "Cost:" : service == "Gas" ? "Gas Used: " : onOffPeakDemand ? onOffPeakDemand : "Energy Used: "
@@ -210,8 +215,9 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 }
             })
     }
-    if (filterData && filterData.length < 5 && filterData.length !== 0) {
-        filterData = [...filterData, 0, 0, 0, 0, 0]
+    if (filterData && filterData.length < 13 && filterData.length !== 0) {
+        // filterData = [...filterData, 0, 0, 0, 0, 0]
+        filterData = fillArray_helpper(filterData, 13, 0)
     }
     let serviceData;
     let tempData;
@@ -469,7 +475,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     offsetX: 0,
                     offsetY: -0.5
                 },
-                categories: catArray.length > 3 ? catArray : [...catArray, '', '', '', '', ''],
+                categories: fillArray_helpper(catArray, 13, ''),
                 tickPlacement: 'between',
                 tooltip: {
                     enabled: false
@@ -540,7 +546,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         name: 'ONPEAK',
         type: 'column',
         color: "#00B6F0",
-        data: OnPeakArray.length > 5 ? OnPeakArray : [...OnPeakArray, 0, 0, 0, 0, 0]
+        data: fillArray_helpper(OnPeakArray, 13, 0)
     } : {
         name: ' ',
         type: 'column',
@@ -550,7 +556,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         name: 'OFFPEAK',
         type: 'column',
         color: "#00294A",
-        data: offPeakArray.length > 5 ? offPeakArray : [...offPeakArray, 0, 0, 0, 0, 0]
+        data: fillArray_helpper(offPeakArray, 13, 0)
     } : {
         name: ' ',
         type: 'column',
@@ -566,7 +572,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         name: 'ELECTRIC',
         type: 'column',
         color: "#044F8D",
-        data: costArray.length > 5 ? costArray : [...costArray, 0, 0, 0, 0, 0]
+        data: fillArray_helpper(costArray, 13, 0)
     }, {
         name: 'TEMPERATURE',
         type: 'line',
@@ -635,7 +641,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                 enabled: false
             },
             xaxis: {
-                categories: categoriesArray.length > 5 ? categoriesArray : [...categoriesArray, '', '', '', '', ''],
+                categories: fillArray_helpper(categoriesArray, 13, ''),
                 axisTicks: {
                     show: false,
                 },

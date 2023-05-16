@@ -39,12 +39,14 @@
   let svgId = "rotate-svg-" + isOpen; // toggle button rotate ID
   let avgClass = "red"; //toggle style class (complete it later)
   let chartWidth = 300; // the width of the charts
-  let tries = 3;
+  let newArr;
+  let arrayOfbody = [];
   const [data, loading, error, get] = fetchstore(); // store fetch
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
   onMount(() => {
     // console.log(insightservices, "insightservices");
+    arrayOfbody = [];
   });
   $: if (typeof emptytabs == "boolean" && emptytabs === true) {
     tabsToggleArr = [];
@@ -63,8 +65,7 @@
     }
   };
   ////////////////////////
-  let newArr;
-  let arrayOfbody = [];
+
   $: if (
     insightservices &&
     insightservices.length > 0 &&
@@ -82,6 +83,7 @@
 
   /// data for recommendation:
   $: if (insightservices && insightservices.length > 0) {
+    arrayOfbody = [];
     for (let i = 0; i < insightservices.length; i++) {
       let serviceObj = insightservices[i];
       arrayOfbody.push({
@@ -92,6 +94,7 @@
         MonthlyUsageConsumption: serviceObj.monthly?.percentageConsumption || 0,
         YearlyUsageConsumption: serviceObj.yearly?.percentageConsumption || 0,
       });
+      // console.log("hello", arrayOfbody);
     }
     // console.log("this is body array: ", arrayOfbody);
   }
@@ -642,22 +645,7 @@
         </div>
       </div>
     {/if}
-    <!-- {#if $sunloading}
-      <mic-loading />
-    {:else if $sunerror}
-      <h1 />
-    {:else if sunSelectArray && sunSelectArray.length > 0}
-      <mic-sunselect contractnum={sunSelectArray[i]} />
-    {/if} -->
   {/each}
-  <!-- {:else if $sundata &&sunselectdata}
-  {#if $sunloading}
-    <mic-loading />
-  {:else if $sunerror}
-    <h1 />
-  {:else if $sundata &&sunselectdata.length > 0}
-    <mic-sunselect contractnum={$sundata.SunSelect} class="sun-select" />
-  {/if} -->
 {/if}
 
 <style lang="scss">
