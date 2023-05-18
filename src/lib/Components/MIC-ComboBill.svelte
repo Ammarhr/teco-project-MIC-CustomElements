@@ -226,6 +226,11 @@
               <!-- <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} /> -->
               <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
             {/if}
+            {#if arrayOfCharges.length - 1 == i}
+              <div class="insights">
+                <mic-bulkdownload class="mic-insights bulk-mobile" />
+              </div>
+            {/if}
           </div>
           {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
             <div class="insights">
@@ -264,7 +269,7 @@
                     yearlyarray={YearlyArray}
                   />
                 {/if}
-                <mic-bulkdownload class="mic-insights" />
+                <mic-bulkdownload class="mic-insights bulk-desk" />
               {/if}
             </div>
           {:else}
@@ -281,13 +286,24 @@
         {:else if YearlyArray}
           <mic-yearlyenergy class="mic-insights" yearlyarray={YearlyArray} />
         {/if}
-        <mic-bulkdownload class="mic-insights" />
+        <mic-bulkdownload class="mic-insights bulk-desk" />
       </div>
     {/if}
   {/if}
 </div>
 
 <style lang="scss">
+  .bulk-mobile {
+    display: none;
+    @media screen and (max-width: 992px) {
+      display: unset;
+    }
+  }
+  .bulk-desk {
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
+  }
   .refreshable {
     display: grid;
     flex-direction: row;
