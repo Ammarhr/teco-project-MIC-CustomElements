@@ -361,13 +361,11 @@ export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
             "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
-            EventsBody: {
-                ...fetchBody,
-                EventName: "",
-                EventLevel: "",
-                timestamp: "",
-                AgentId: "",
-            },
+            ...fetchBody,
+            EventName: "",
+            EventLevel: "",
+            timestamp: "",
+            AgentId: "",
             SessionDetail: {
                 IBillSession: uuid,
                 Durationtime: totalTime,

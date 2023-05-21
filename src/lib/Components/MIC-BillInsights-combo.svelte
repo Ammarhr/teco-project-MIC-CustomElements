@@ -40,14 +40,13 @@
   let avgClass = "red"; //toggle style class (complete it later)
   let chartWidth = 300; // the width of the charts
   let newArr;
-  let arrayOfbody = [];
+  export let arrayofbody;
   const [data, loading, error, get] = fetchstore(); // store fetch
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
-  onMount(() => {
-    // console.log(insightservices, "insightservices");
-    arrayOfbody = [];
-  });
+  // onMount(() => {
+  //   console.log(arrayofbody, "arrayofbody");
+  // });
   $: if (typeof emptytabs == "boolean" && emptytabs === true) {
     tabsToggleArr = [];
     // console.log(emptytabs, "emptytabs");
@@ -79,24 +78,6 @@
       });
       sunSelectArray.push(sunArrayVal);
     }
-  }
-
-  /// data for recommendation:
-  $: if (insightservices && insightservices.length > 0) {
-    arrayOfbody = [];
-    for (let i = 0; i < insightservices.length; i++) {
-      let serviceObj = insightservices[i];
-      arrayOfbody.push({
-        TempPreviousValue: serviceObj.monthly?.percentageTemp || 0,
-        TempLastyearValue: serviceObj.yearly?.percentageTemp || 0,
-        BillingClass: insightservices[i].ZInstallBillClass,
-        Division: insightservices[i].serviceName,
-        MonthlyUsageConsumption: serviceObj.monthly?.percentageConsumption || 0,
-        YearlyUsageConsumption: serviceObj.yearly?.percentageConsumption || 0,
-      });
-      // console.log("hello", arrayOfbody);
-    }
-    // console.log("this is body array: ", arrayOfbody);
   }
 
   $: if (insightservices && !tabsToggleArr[0]) {
@@ -617,29 +598,29 @@
               {/if}
             </div>
           {/if}
-          {#if $billNumber === $latestBill && arrayOfbody && arrayOfbody.length > 0 && insightsService.BillContractNo}
+          {#if $billNumber === $latestBill && arrayofbody && insightsService.BillContractNo}
             <!-- <MicInsightsRecomendation
               token={$apiToken}
               billcontractnumber={insightsService.BillContractNo}
-              body={arrayOfbody[i]}
+              body={arrayofbody[i]}
             /> -->
             <mic-recomendation
               token={$apiToken}
               billcontractnumber={insightsService.BillContractNo}
-              body={arrayOfbody[i]}
+              body={arrayofbody}
             />
-          {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo && arrayOfbody.length > 0}
+          {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo && typeof arrayofbody != "array"}
             <!-- <MicInsightsRecomendation
               token={$newToken.token}
               url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
-              body={arrayOfbody[i]}
+              body={arrayofbody}
             /> -->
             <mic-recomendation
               token={$newToken.token}
               url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
-              body={arrayOfbody[i]}
+              body={arrayofbody}
             />
           {/if}
         </div>

@@ -54,7 +54,8 @@
   let prevSortth;
   let newSelect = "";
   let disableTemp = false;
-  let StandbyCustomer_Flag = "";
+  let onPeakOprand;
+  let offPeakOprand;
   const [data, loading, error, get] = fetchstore(); // meterTable fetch
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
     fetchDailyUsageChart(); // daily usage fetch
@@ -85,12 +86,6 @@
         } else {
           disableTemp = true;
           tempData = false;
-        }
-        if ($data && $data.StandbyCustomer_Flag == "X") {
-          StandbyCustomer_Flag = "X";
-          tempData = true;
-        } else {
-          StandbyCustomer_Flag = "";
         }
       });
       refreshableToken = $apiToken;
@@ -146,6 +141,7 @@
         OperandLabel,
         HistoricalFact,
         AMI_Flag,
+        StandbyCustomer_Flag,
       } = selectedMeter;
 
       if (AMI_Flag == "X") {
@@ -168,11 +164,14 @@
           $SAPToken
         );
       }
-
       let monthlyUrl;
       if (StandbyCustomer_Flag == "X" && DAP_dtoun == "x" && DAP_dtouf == "x") {
+        onPeakOprand = "SUSTKWHP";
+        offPeakOprand = "SUSTKWHO";
         monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=SUSTKWHP&Operand2=SUSTKWHO&Dln=${DLN}&ZipCode=${ZipCode}`;
       } else {
+        onPeakOprand = "HIST_PKKWH";
+        offPeakOprand = "HIST_OFKWH";
         if (DAP_dtoun == "x" && DAP_dtouf == "x" && Operand == "YKWH") {
           monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=HIST_PKKWH&Dln=${DLN}&ZipCode=${ZipCode}`;
         } else if (DAP_dtoun !== "x" && DAP_dtouf == "x" && Operand == "YKWH") {
@@ -260,7 +259,6 @@
     (refreshableToken == $apiToken || refreshableToken !== $newToken.token)
   ) {
     newSelect = "";
-    StandbyCustomer_Flag = "";
     get(
       $newToken.token,
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
@@ -278,12 +276,6 @@
       } else {
         disableTemp = true;
         tempData = false;
-      }
-      if ($data && $data.StandbyCustomer_Flag == "X") {
-        StandbyCustomer_Flag = "X";
-        tempData = true;
-      } else {
-        StandbyCustomer_Flag = "";
       }
     });
     refreshableToken = $newToken.token;
@@ -1092,7 +1084,9 @@
                       chartColor,
                       chartDisplayUnit,
                       400,
-                      $monthlyUsageData.MonthlyUsage.MaxUsage
+                      $monthlyUsageData.MonthlyUsage.MaxUsage,
+                      onPeakOprand,
+                      offPeakOprand
                     )}
                   />
                 {/if}
@@ -1173,7 +1167,9 @@
                         chartColor,
                         chartDisplayUnit,
                         400,
-                        $dailyUsageData.DailyUsage.MaxUsage
+                        $dailyUsageData.DailyUsage.MaxUsage,
+                        onPeakOprand,
+                        offPeakOprand
                       )}
                     />
                   {/if}
