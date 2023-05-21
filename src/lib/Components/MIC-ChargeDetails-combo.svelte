@@ -129,8 +129,8 @@
     //   }
     // }
   };
-  $: if (componentContainer) {
-  }
+  // $: if (componentContainer) {
+  // }
   let arrOfLevel3 = [
     [false, false, false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false, false, false],
@@ -269,7 +269,6 @@
   <mic-loading />
 {:else if charges && toggleArray && billsObjectsArray}
   <div class="billing-container">
-    <!-- {console.log(charges, "charges")} -->
     {#each charges as billService, i}
       {#if billService.SectionType == "Service" || billService.SectionType == "AccountLevel"}
         <div class="card" bind:this={componentContainer}>
@@ -308,15 +307,7 @@
               </p>
             {/if}
             <div id="content">
-              {#if billService.Lable && billService.Lable !== "" && billService.Lable.toLowerCase().includes("65456") === true}
-                <!-- special case regarding the Installments & Adjustments -->
-                {#each billService.Section_Level1 as section, k}
-                  {#each section.Section_Level2 as subSection, j}
-                    <div class="charges-container" />
-                  {/each}
-                {/each}
-                <!--  -->
-              {:else if billService.Section_Level1}
+              {#if  billService.Section_Level1}
                 {#each billService.Section_Level1 as section, j}
                   {#if section.SectionType == "ServiceHeaderGroup"}
                     <div class="headers-con">

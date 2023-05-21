@@ -1,5 +1,6 @@
 {
     "EPFlag": "",
+    "TempFlag":false,
     "MeterTabel": [
       {
         "Service": "Electric",
@@ -23,12 +24,12 @@
         "ChartColor": "044F8D",
         "DAP_StartDate": "20230201",
         "DAP_EndDate": "20230301",
-        "DAP_dkwh": "",
+        "DAP_dkwh": "x",
         "DAP_rkwh": "",
         "DAP_pf": "",
         "DAP_kw": "",
-        "DAP_dtoun": "x",
-        "DAP_dtouf": "x"
+        "DAP_dtoun": "",
+        "DAP_dtouf": ""
       },
       {
         "Service": "Electric",

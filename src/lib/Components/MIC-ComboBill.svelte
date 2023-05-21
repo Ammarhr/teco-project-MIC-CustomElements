@@ -91,6 +91,7 @@
     ).then(() => {
       insightsArray = [];
       chargesArray = [];
+      arrayOfbody = [];
       arrayOfCharges = $chargeData.Section;
     });
     get(
@@ -107,6 +108,7 @@
       chargesArray = [];
       arrayOfBillInsights = [];
       sunSelectArray = [];
+      arrayOfbody = [];
       arrayOfBillInsights = $data.services;
     });
     sunget(
@@ -147,12 +149,15 @@
   $: if ($sundata && $sundata.SunSelect) {
     sunSelectArray = $sundata.SunSelect;
   }
-
   let insight;
   let insightsArray = [];
   let chargesArray = [];
+  let arrayOfbody = [];
   let bulkPosition = 0;
   let invoiceTotalArray;
+  // $: if ($billNumber == $latestBill) {
+  //   arrayOfbody = [];
+  // }
   $: if (
     $chargeData &&
     $chargeData.Section &&
@@ -161,14 +166,28 @@
     arrayOfBillInsights.length > 0 &&
     insightsArray.length == 0
   ) {
+    arrayOfbody = [];
     let arryOfConfigue = $chargeData.Section.map((subSection) => {
       return subSection.ConfigValue;
     });
+    arrayOfbody = [];
     for (let i = 0; i < $chargeData.Section.length; i++) {
       insight = arrayOfBillInsights.filter((results) => {
         if (arryOfConfigue[i]) {
           if (arryOfConfigue[i] == results.BillContractNo) {
             bulkPosition = i;
+          }
+          if (arryOfConfigue[i] == results.BillContractNo) {
+            let serviceObj = {
+              TempPreviousValue: results.monthly?.percentageTemp || 0,
+              TempLastyearValue: results.yearly?.percentageTemp || 0,
+              BillingClass: results.ZInstallBillClass,
+              Division: results.serviceName,
+              MonthlyUsageConsumption:
+                results.monthly?.percentageConsumption || 0,
+              YearlyUsageConsumption: results.yearly?.percentageConsumption,
+            };
+            arrayOfbody.push(serviceObj);
           }
           return arryOfConfigue[i] == results.BillContractNo;
         }
@@ -177,9 +196,14 @@
         agencySection = $chargeData.Section[i];
       }
       insightsArray.push(insight);
+
       if ($chargeData.Section[i].Collapsible == false) {
         chargesArray.push([$chargeData.Section[i]]);
       }
+    }
+
+    if (insightsArray.length == 0) {
+      bulkPosition = 0;
     }
   }
   ////////////////////
@@ -210,30 +234,74 @@
     {#each arrayOfCharges as charge, i}
       {#if charge && charge.SectionType}
         {#if charge.SectionType}
-          <div class="charge-detailes">
-            <!-- {#if i == chargesArray.length - 2} -->
-            {#if arrayOfCharges[i + 1] && arrayOfCharges[i + 1].SectionType == "InvoiceTotal" && invoiceTotalArray && invoiceTotalArray[0]}
-              <!-- <MicChargeDetailsCombo
+          <!-- <div class="charge-detailes"> -->
+          <!-- {#if i == chargesArray.length - 2} -->
+          {#if arrayOfCharges[i + 1] && arrayOfCharges[i + 1].SectionType == "InvoiceTotal" && invoiceTotalArray && invoiceTotalArray[0]}
+            <!-- <MicChargeDetailsCombo
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
                 /> -->
-              <!-- invoicetotal={chargesArray[chargesArray.length - 1]} -->
+            <!-- invoicetotal={chargesArray[chargesArray.length - 1]} -->
+            <div class="charge-detailes">
               <mic-billingsummary-combo
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
               />
-            {:else}
-              <!-- <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} /> -->
-              <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
+              <div class="insights">
+                <mic-bulkdownload class="mic-insights bulk-mobile" />
+              </div>
+            </div>
+          {:else}
+            <!-- <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} /> -->
+            {#if charge.SectionType !== "InvoiceTotal"}
+              <div class="charge-detailes">
+                <mic-billingsummary-combo
+                  charges={[charge]}
+                  invoicetotal={""}
+                />
+                <div class="insights">
+                  <mic-bulkdownload class="mic-insights bulk-mobile" />
+                </div>
+              </div>
             {/if}
-          </div>
+          {/if}
+          <!-- {#if arrayOfCharges.length - 1 == i}
+            <div class="insights">
+              <mic-bulkdownload class="mic-insights bulk-mobile" />
+            </div>
+            {/if} -->
+          <!-- </div> -->
+          {#if arrayOfCharges && arrayOfCharges.length > 0 && insightsArray && insightsArray.length == 0 && i == 0}
+            <div class="insights">
+              {#if $yearlyLoading}
+                <mic-loading />
+              {:else if YearlyArray}
+                <mic-yearlyenergy
+                  class="mic-insights"
+                  yearlyarray={YearlyArray}
+                />
+              {/if}
+              <mic-bulkdownload class="mic-insights bulk-desk" />
+            </div>
+          {/if}
           {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
             <div class="insights">
-              <mic-insights-combo
-                insightservices={insightsArray[i]}
-                sunselectdata={sunSelectArray}
-                emptytabs={emptyTabs}
-              />
+              {#key arrayOfbody}
+                {#if $latestBill == $billNumber && arrayOfbody && arrayOfbody[i]}
+                  <mic-insights-combo
+                    insightservices={insightsArray[i]}
+                    sunselectdata={sunSelectArray}
+                    emptytabs={emptyTabs}
+                    arrayofbody={arrayOfbody[i]}
+                  />
+                {:else}
+                  <mic-insights-combo
+                    insightservices={insightsArray[i]}
+                    sunselectdata={sunSelectArray}
+                    emptytabs={emptyTabs}
+                  />
+                {/if}
+              {/key}
               <!-- <MicBillInsightsCombo
                 insightservices={insightsArray[i]}
                 sunselectdata={sunSelectArray}
@@ -264,30 +332,31 @@
                     yearlyarray={YearlyArray}
                   />
                 {/if}
-                <mic-bulkdownload class="mic-insights" />
+                <mic-bulkdownload class="mic-insights bulk-desk" />
               {/if}
             </div>
           {:else}
-            <div class="insights" />
+            <!-- <div class="insights" /> -->
           {/if}
           <!-- </div> -->
         {/if}
       {/if}
     {/each}
-    {#if arrayOfCharges && arrayOfCharges.length > 0 && insightsArray && insightsArray.length == 0}
-      <div class="insights">
-        {#if $yearlyLoading}
-          <mic-loading />
-        {:else if YearlyArray}
-          <mic-yearlyenergy class="mic-insights" yearlyarray={YearlyArray} />
-        {/if}
-        <mic-bulkdownload class="mic-insights" />
-      </div>
-    {/if}
   {/if}
 </div>
 
 <style lang="scss">
+  .bulk-mobile {
+    display: none;
+    @media screen and (max-width: 992px) {
+      display: unset;
+    }
+  }
+  .bulk-desk {
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
+  }
   .refreshable {
     display: grid;
     flex-direction: row;

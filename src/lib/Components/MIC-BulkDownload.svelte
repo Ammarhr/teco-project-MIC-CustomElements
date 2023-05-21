@@ -45,7 +45,7 @@
     style="background-image:url({`https://tecocdn.azureedge.net/ibill/iBill-assets/mask-bd.svg`});"
   >
     <div class="tecoBillBannerBody">
-      <p>Looking To Download Bill? Click Here To Download One Or More Bills.</p>
+      <p>Looking to download bills? Click here to download one or more bills.</p>
       <!-- svelte-ignore a11y-invalid-attribute -->
       <a
         class="reverseOrder m_1"

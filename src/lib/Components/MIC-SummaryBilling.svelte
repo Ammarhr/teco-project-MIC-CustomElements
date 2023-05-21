@@ -366,7 +366,7 @@
             <button
               on:click={prevPage}
               disabled={currentPage === 0}
-              class="prev-next"
+              class="prev-next" 
             >
               <img
                 src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}

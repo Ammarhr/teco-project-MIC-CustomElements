@@ -54,6 +54,8 @@
   let prevSortth;
   let newSelect = "";
   let disableTemp = false;
+  let onPeakOprand;
+  let offPeakOprand;
   const [data, loading, error, get] = fetchstore(); // meterTable fetch
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
     fetchDailyUsageChart(); // daily usage fetch
@@ -139,6 +141,7 @@
         OperandLabel,
         HistoricalFact,
         AMI_Flag,
+        StandbyCustomer_Flag,
       } = selectedMeter;
 
       if (AMI_Flag == "X") {
@@ -161,16 +164,23 @@
           $SAPToken
         );
       }
-
       let monthlyUrl;
-      if (DAP_dtoun == "x" && DAP_dtouf == "x" && Operand == "YKWH") {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=HIST_PKKWH&Dln=${DLN}&ZipCode=${ZipCode}`;
-      } else if (DAP_dtoun !== "x" && DAP_dtouf == "x" && Operand == "YKWH") {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
-      } else if (DAP_dtoun == "x" && DAP_dtouf !== "x" && Operand == "YKWH") {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_PKKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+      if (StandbyCustomer_Flag == "X" && DAP_dtoun == "x" && DAP_dtouf == "x") {
+        onPeakOprand = "SUSTKWHP";
+        offPeakOprand = "SUSTKWHO";
+        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=SUSTKWHP&Operand2=SUSTKWHO&Dln=${DLN}&ZipCode=${ZipCode}`;
       } else {
-        monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${HistoricalFact}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+        onPeakOprand = "HIST_PKKWH";
+        offPeakOprand = "HIST_OFKWH";
+        if (DAP_dtoun == "x" && DAP_dtouf == "x" && Operand == "YKWH") {
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=HIST_PKKWH&Dln=${DLN}&ZipCode=${ZipCode}`;
+        } else if (DAP_dtoun !== "x" && DAP_dtouf == "x" && Operand == "YKWH") {
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+        } else if (DAP_dtoun == "x" && DAP_dtouf !== "x" && Operand == "YKWH") {
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_PKKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+        } else {
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${HistoricalFact}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+        }
       }
       monthlyUsageGet(
         refreshableToken,
@@ -1074,7 +1084,9 @@
                       chartColor,
                       chartDisplayUnit,
                       400,
-                      $monthlyUsageData.MonthlyUsage.MaxUsage
+                      $monthlyUsageData.MonthlyUsage.MaxUsage,
+                      onPeakOprand,
+                      offPeakOprand
                     )}
                   />
                 {/if}
@@ -1155,7 +1167,9 @@
                         chartColor,
                         chartDisplayUnit,
                         400,
-                        $dailyUsageData.DailyUsage.MaxUsage
+                        $dailyUsageData.DailyUsage.MaxUsage,
+                        onPeakOprand,
+                        offPeakOprand
                       )}
                     />
                   {/if}
