@@ -1531,6 +1531,9 @@
   .legend-text {
     font-weight: 300;
     font-size: 16px;
+    @media screen and (max-width: 480px) {
+      font-size: 12px;
+    }
   }
   .chart-unit {
     margin-left: 36px;

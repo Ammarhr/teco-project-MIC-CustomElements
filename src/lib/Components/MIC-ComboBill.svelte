@@ -233,57 +233,38 @@
   {:else if arrayOfCharges && invoiceTotalArray}
     {#each arrayOfCharges as charge, i}
       {#if charge && charge.SectionType}
-        {#if charge.SectionType}
-          <!-- <div class="charge-detailes"> -->
-          <!-- {#if i == chargesArray.length - 2} -->
-          {#if arrayOfCharges[i + 1] && arrayOfCharges[i + 1].SectionType == "InvoiceTotal" && invoiceTotalArray && invoiceTotalArray[0]}
-            <!-- <MicChargeDetailsCombo
-                charges={[charge]}
-                invoicetotal={invoiceTotalArray}
-                /> -->
-            <!-- invoicetotal={chargesArray[chargesArray.length - 1]} -->
-            <div class="charge-detailes">
+        {#if charge.SectionType !== "InvoiceTotal"}
+          <div class="charge-detailes">
+            {#if arrayOfCharges[i + 1] && arrayOfCharges[i + 1].SectionType == "InvoiceTotal" && invoiceTotalArray && invoiceTotalArray[0]}
               <mic-billingsummary-combo
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
               />
-              <div class="insights">
-                <mic-bulkdownload class="mic-insights bulk-mobile" />
-              </div>
-            </div>
-          {:else}
-            <!-- <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} /> -->
-            {#if charge.SectionType !== "InvoiceTotal"}
-              <div class="charge-detailes">
-                <mic-billingsummary-combo
-                  charges={[charge]}
-                  invoicetotal={""}
-                />
-                <div class="insights">
-                  <mic-bulkdownload class="mic-insights bulk-mobile" />
-                </div>
-              </div>
+            {:else if charge.SectionType !== "InvoiceTotal"}
+              <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
             {/if}
-          {/if}
-          <!-- {#if arrayOfCharges.length - 1 == i}
-            <div class="insights">
-              <mic-bulkdownload class="mic-insights bulk-mobile" />
-            </div>
-            {/if} -->
-          <!-- </div> -->
-          {#if arrayOfCharges && arrayOfCharges.length > 0 && insightsArray && insightsArray.length == 0 && i == 0}
-            <div class="insights">
-              {#if $yearlyLoading}
-                <mic-loading />
-              {:else if YearlyArray}
-                <mic-yearlyenergy
-                  class="mic-insights"
-                  yearlyarray={YearlyArray}
-                />
+            {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
+              {#if i == arrayOfCharges.length - 1}
+                <mic-bulkdownload class="mic-insights bulk-mobile" />
               {/if}
-              <mic-bulkdownload class="mic-insights bulk-desk" />
-            </div>
-          {/if}
+            {:else if i == arrayOfCharges.length - 2}
+              <mic-bulkdownload class="mic-insights bulk-mobile" />
+            {/if}
+          </div>
+        {/if}
+        {#if arrayOfCharges && arrayOfCharges.length > 0 && insightsArray && insightsArray.length == 0 && i == 0}
+          <div class="insights">
+            {#if $yearlyLoading}
+              <mic-loading />
+            {:else if YearlyArray}
+              <mic-yearlyenergy
+                class="mic-insights"
+                yearlyarray={YearlyArray}
+              />
+            {/if}
+            <mic-bulkdownload class="mic-insights bulk-desk" />
+          </div>
+        {:else if charge.SectionType !== "InvoiceTotal"}
           {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
             <div class="insights">
               {#key arrayOfbody}
@@ -302,11 +283,6 @@
                   />
                 {/if}
               {/key}
-              <!-- <MicBillInsightsCombo
-                insightservices={insightsArray[i]}
-                sunselectdata={sunSelectArray}
-                emptytabs={emptyTabs}
-              /> -->
               {#if $sunloading}
                 <mic-loading />
               {:else if $sunerror}
@@ -314,15 +290,7 @@
               {:else if newSunSelectArray && newSunSelectArray.length > 0}
                 <mic-sunselect contractnum={newSunSelectArray[i]} />
               {/if}
-              <!-- {#if sunSelectArray && sunSelectArray.length > 0}
-                {#each sunSelectArray as sunSelectObj}
-                  {#if sunSelectObj && insightsArray[i] && insightsArray[i][0] && insightsArray[i][0].BillContractNo}
-                    {#if insightsArray[i][0].BillContractNo == sunSelectObj.SunSelectContract}
-                      <mic-sunselect contractnum={[sunSelectObj]} />
-                    {/if}
-                  {/if}
-                {/each}
-              {/if} -->
+
               {#if bulkPosition == i}
                 {#if $yearlyLoading}
                   <mic-loading />
@@ -336,9 +304,8 @@
               {/if}
             </div>
           {:else}
-            <!-- <div class="insights" /> -->
+            <div class="insights" />
           {/if}
-          <!-- </div> -->
         {/if}
       {/if}
     {/each}

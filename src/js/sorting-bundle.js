@@ -26,8 +26,8 @@ export const sortByMeterNumber = (type, items) => {
 export const sortByReadDate = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = a.ReadDate !==''? new Date(a.ReadDate) :new Date("1/1/1") ,
-                fb = b.ReadDate !==''? new Date(b.ReadDate) :new Date("1/1/1") ;
+            let fa = a.ReadDate !== '' ? new Date(a.ReadDate) : new Date("1/1/1"),
+                fb = b.ReadDate !== '' ? new Date(b.ReadDate) : new Date("1/1/1");
             if (type == "asen") {
                 if (fa < fb) {
                     return -1;
@@ -300,7 +300,6 @@ export const sortByService = (type, items) => {
     }
 }
 
-
 //* SummaryBilling sort functions.
 export const sortByAccountNumber = (type, items) => {
     if (items && items.length > 1) {
@@ -381,8 +380,8 @@ export const sortByCurrentCharges = (type, items) => {
 export const sortByStatus = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = a.Status,
-                fb = b.Status;
+            let fa = a.Status !== null ? a.Status : true,
+                fb = b.Status !== null? b.Status : true;
             if (type == "asen") {
                 if (fa && !fb) {
                     return -1;
@@ -396,6 +395,32 @@ export const sortByStatus = (type, items) => {
                     return 1;
                 }
                 if (!fa && fb) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+    }
+}
+
+export const sortByContactName = (type, items) => {
+    if (items && items.length > 1) {
+        return items.sort((a, b) => {
+            let fa = a.ContactName.toLowerCase(),
+                fb = b.ContactName.toLowerCase();
+            if (type == "asen") {
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                if (fa < fb) {
+                    return 1;
+                }
+                if (fa > fb) {
                     return -1;
                 }
                 return 0;

@@ -61,7 +61,7 @@
 
 {#if token && domain && eventdomain && saptoken && $generalErr !== true}
   <div class="wrapper">
-    <!-- <mic-headerinformation /> -->
+    <mic-headerinformation />
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
@@ -73,11 +73,11 @@
         <!-- <MicImportantMessage /> -->
       </div>
     </div>
+    <mic-billselector />
+    <!-- <MicBillSelectorAndDownload /> -->
     <!-- <div class="summary-billing">
       <MicSummaryBilling />
     </div> -->
-    <mic-billselector />
-    <!-- <MicBillSelectorAndDownload /> -->
     <mic-combo-bill />
     <!-- <MicComboBill /> -->
     <mic-metertable />

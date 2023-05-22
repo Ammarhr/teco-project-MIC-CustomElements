@@ -10,6 +10,7 @@
     persona,
     fetchAndRedirect,
     SAPToken,
+    reGenerateToken,
   } from "../../js/store";
   import { onMount } from "svelte";
 
@@ -25,6 +26,8 @@
   let timeoutId;
   let avgClass = "red";
   const [data, loading, error, get] = fetchstore(); // initial store fetch
+  const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken(); // regenerate token store call
+
   $: searchInput = document.getElementById("#search");
   // fetch accountTable fetch api on component mount
   onMount(() => {
@@ -54,6 +57,12 @@
       styleSelectedRows[0] =
         "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
     }
+    getToken(
+      $apiToken,
+      // "../../data/Token.json"
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedAccount.BillNumber}`,
+      $SAPToken
+    );
   };
 
   $: if ($data && $data.Accounts) {
@@ -127,7 +136,7 @@
       getPaginatedItems();
     } else if (str) {
       searchArray = $data.Accounts.filter((account) => {
-        return account.AccountNumber?.toLowerCase().includes(str.toLowerCase());
+        return account.AccountNumber?.includes(str.toLowerCase());
       });
     }
     if (searchArray[0]) {
@@ -138,11 +147,11 @@
 
   /// sorting
   import {
-    sortByService,
     sortByAccountNumber,
     sortByServiceAddress,
     sortByCurrentCharges,
     sortByStatus,
+    sortByContactName,
   } from "../../js/sorting-bundle";
   let activeSort, prevSortth, sortingType;
   const handleSort = (register) => {
@@ -165,9 +174,6 @@
     }
     if (items && items.length > 1) {
       switch (true) {
-        case register == "0":
-          items = sortByService(sortingType, items);
-          break;
         case register == "1":
           items = sortByAccountNumber(sortingType, items);
           break;
@@ -180,6 +186,9 @@
         case register == "4":
           items = sortByStatus(sortingType, items);
           break;
+        case register == "5":
+          items = sortByContactName(sortingType, items);
+          break;
         default:
           break;
       }
@@ -187,7 +196,7 @@
       getPaginatedItems();
     }
   };
-  /// sorting:
+  /// sorting svg rendering:
   let sortUiObj = {
     sortingType: "",
     activeSort: "",
@@ -221,11 +230,25 @@
 
     {#if isOpen}
       <div class="tool-bar">
+        <div class="summary-account">
+          {#if $data && $data.SummaryAccount}
+            <p>
+              <span class="sub-title">Summary Account:</span>
+              <span>
+                #{$data.SummaryAccount}
+              </span>
+            </p>
+          {/if}
+          {#if $data && $data.StatementDate}
+            <p>
+              <span class="sub-title">Statement Date: </span>
+              <span>
+                {$data.StatementDate}
+              </span>
+            </p>
+          {/if}
+        </div>
         {#if tableData && tableData.length > 5}
-          <div class="summary-account">
-            <p><span class="sub-title">Summary Account:</span> #2234567890</p>
-            <p><span class="sub-title">Statement Date: </span> Nov 30, 2021</p>
-          </div>
           <div
             class="search"
             on:submit={(e) => {
@@ -259,12 +282,7 @@
           {#if tableData}
             <table class="table" id="table">
               <tr>
-                <th on:click={() => handleSort("0")}>
-                  Service
-                  {#key sortUiObj}
-                    {@html renderSortSvg(0)}
-                  {/key}
-                </th>
+                <th> Service </th>
                 <th on:click={() => handleSort("1")}>
                   Account Number
                   {#key sortUiObj}
@@ -289,6 +307,12 @@
                     {@html renderSortSvg(4)}
                   {/key}</th
                 >
+                <th on:click={() => handleSort("5")}>
+                  Contact Name
+                  {#key sortUiObj}
+                    {@html renderSortSvg(5)}
+                  {/key}</th
+                >
               </tr>
               {#each pagenateItems as row, i}
                 <tr
@@ -299,17 +323,31 @@
                   }}
                 >
                   <td>
-                    <div class="td-value">
-                      <img
-                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${row.Service.toLowerCase()}Service.svg`}
-                        alt={row.Service}
-                      />
+                    <div class="td-value" style="flex-direction:row">
+                      {#if row.IsElectric == true}
+                        <img
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`}
+                          alt={row.Service}
+                        />
+                      {/if}
+                      {#if row.IsGas == true}
+                        <img
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/gasService.svg`}
+                          alt={row.Service}
+                        />
+                      {/if}
+                      {#if row.IsLighting == true}
+                        <img
+                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`}
+                          alt={row.Service}
+                        />
+                      {/if}
                     </div>
                   </td>
                   <td>
                     <div class="td-value">
                       {#if row.AccountNumber != ""}
-                        {row.AccountNumber}
+                        #{row.AccountNumber}
                       {/if}
                     </div></td
                   >
@@ -337,15 +375,24 @@
                           >
                             <span class="status"> Active </span>
                           </span>
-                        {:else}
+                        {:else if row.Status == false}
                           <span
                             class={avgClass}
                             style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
                           >
                             <span class="status"> Inactive </span>
                           </span>
+                        {:else}
+                          <div class="td-value" />
                         {/if}
                       </p>
+                    </div></td
+                  >
+                  <td>
+                    <div class="td-value">
+                      {#if row.ContactName != ""}
+                        {row.ContactName}
+                      {/if}
                     </div></td
                   >
                 </tr>
@@ -355,56 +402,57 @@
         {/if}
       </div>
       {#if tableData && tableData.length > 5}
-      <div class="pagination-options">
-        <div>
-          <p class="showing">
-            Showing {pagenateItems.length} Of {items.length} Results
-          </p>
-        </div>
-        {#if items && items.length > 5}
-          <div class="pagination-btns">
-            <button
-              on:click={prevPage}
-              disabled={currentPage === 0}
-              class="prev-next" 
-            >
-              <img
-                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
-                alt=""
-              />
-              Previous
-            </button>
-            {#each arrayOfBtns as pageIndex}
-              <button
-                on:click={() => goToPage(pageIndex)}
-                class:selected={pageIndex === currentPage}
-                disabled={currentPage === pageIndex}
-                class="page-btn"
-              >
-                {#key pageIndex}
-                  {pageIndex + 1}
-                {/key}
-              </button>
-            {/each}
-            <button
-              on:click={nextPage}
-              disabled={currentPage === totalPagesShowen - 1}
-              class="prev-next"
-            >
-              Next
-              <img
-                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
-                alt=""
-              />
-            </button>
+        <div class="pagination-options">
+          <div>
+            <p class="showing">
+              Showing {pagenateItems.length} Of {items.length} Results
+            </p>
           </div>
-        {/if}
-      </div>
-    {/if}
+          {#if items && items.length > 5}
+            <div class="pagination-btns">
+              <button
+                on:click={prevPage}
+                disabled={currentPage === 0}
+                class="prev-next"
+              >
+                <img
+                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
+                  alt=""
+                />
+                Previous
+              </button>
+              {#each arrayOfBtns as pageIndex}
+                <button
+                  on:click={() => goToPage(pageIndex)}
+                  class:selected={pageIndex === currentPage}
+                  disabled={currentPage === pageIndex}
+                  class="page-btn"
+                >
+                  {#key pageIndex}
+                    {pageIndex + 1}
+                  {/key}
+                </button>
+              {/each}
+              <button
+                on:click={nextPage}
+                disabled={currentPage === totalPagesShowen - 1}
+                class="prev-next"
+              >
+                Next
+                <img
+                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
+                  alt=""
+                />
+              </button>
+            </div>
+          {/if}
+        </div>
+      {/if}
     {/if}
   </div>
 
-  <div class="account-details account-card">
+  <!-- Canceled -->
+  <!-- <div class="account-details account-card">
     <p>
       Service Address: <span
         >{selectedAccount && selectedAccount.ServiceAddress
@@ -426,7 +474,7 @@
           : "Inactive"}
       </span>
     </p>
-  </div>
+  </div> -->
 </div>
 
 <style lang="scss">
@@ -721,7 +769,11 @@
     flex-direction: row;
     align-items: center;
     font-size: 20px;
-    gap: 15px;
+    gap: 16px;
+    @media screen and (max-width: 1000px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
     p {
       margin: 0;
       font-weight: 400;
@@ -735,11 +787,18 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    @media screen and (max-width: 1000px) {
+      flex-direction: column;
+      gap: 16px;
+    }
   }
   .showing {
     font-weight: 300;
     font-size: 16px;
     color: #005faa;
+    @media screen and (max-width: 480px) {
+     display: none;
+    }
   }
 
   @media screen and (max-width: 1000px) {
