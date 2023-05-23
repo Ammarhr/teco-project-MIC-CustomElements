@@ -4,7 +4,6 @@
   // @ts-nocheck
 
   // svg imports
-  // import downloadIcon from "../../assets/DownloadIcon.svg";
   import {
     fetchstore,
     changeBillNumber,

@@ -244,10 +244,10 @@
               <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
             {/if}
             {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
-              {#if i == arrayOfCharges.length - 1}
+              {#if i == arrayOfCharges.length - 1 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
                 <mic-bulkdownload class="mic-insights bulk-mobile" />
               {/if}
-            {:else if i == arrayOfCharges.length - 2}
+            {:else if i == arrayOfCharges.length - 2 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
               <mic-bulkdownload class="mic-insights bulk-mobile" />
             {/if}
           </div>
@@ -290,7 +290,6 @@
               {:else if newSunSelectArray && newSunSelectArray.length > 0}
                 <mic-sunselect contractnum={newSunSelectArray[i]} />
               {/if}
-
               {#if bulkPosition == i}
                 {#if $yearlyLoading}
                   <mic-loading />
@@ -300,7 +299,11 @@
                     yearlyarray={YearlyArray}
                   />
                 {/if}
+                {#if arrayOfBillInsights && arrayOfBillInsights.length == arrayOfCharges.length - 1}
+                  <mic-bulkdownload class="mic-insights bulk-mobile" />
+                {/if}
                 <mic-bulkdownload class="mic-insights bulk-desk" />
+
               {/if}
             </div>
           {:else}

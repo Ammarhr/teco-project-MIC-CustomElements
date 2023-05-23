@@ -157,6 +157,8 @@
   const handleSort = (register) => {
     sortUiObj.activeSort = register;
     activeSort = register;
+    
+    // sorting type:
     if (prevSortth !== undefined && prevSortth !== activeSort) {
       sortUiObj.sortingType = "asen";
       sortingType = "asen";
@@ -172,6 +174,7 @@
       sortUiObj.sortingType = "asen";
       sortingType = "asen";
     }
+    // sorting by:
     if (items && items.length > 1) {
       switch (true) {
         case register == "1":
