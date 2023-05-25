@@ -5,35 +5,22 @@
   //svg imports
   import culLine from "../../assets/Vector 550.svg";
   import groupVector from "../../assets/balance-summary-svgs.svg";
-
-  //state
-  // export let item = { name: "Item" };
-  export let token;
-
   // store
   import { fetchstore , SAPToken} from "../../js/store";
-  // import { onMount } from "svelte";
+  //state
+  export let token;
+  var newElement;
+  let color;
 
   //mocking data
-  
   const [data, loading, error, get] = fetchstore(
     "https://cdn.jsdelivr.net/gh/ammarhr/teco-project-MIC-CustomElements@main/data/AccountBalanceData.json",
     token,
     $SAPToken
   );
 
-  var newElement;
+
   $: newElement = document.getElementById("info-container");
-  let color;
-
-  // onMount(() => {
-  // newElement = document.getElementById("info-container");
-  // balance = document.createElement("div");
-  // newElement.appendChild(balance);
-  // console.log(newElement);
-  // balance.setAttribute("id", "info-container");
-  // });
-
   $: if (newElement && $data && $data.html_message) {
     newElement.innerHTML = $data.html_message;
     if ($data.totalAmmount > 0) {

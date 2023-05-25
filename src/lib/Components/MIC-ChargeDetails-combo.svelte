@@ -16,9 +16,7 @@
     billNumber,
     latestBill,
   } from "../../js/store";
-  import { onMount } from "svelte";
-  import { each } from "svelte/internal";
-
+  import MicToolTip from "./MIC-ToolTip.svelte";
   //mocking data
   const [data, loading, error, get] = fetchstore();
 
@@ -27,12 +25,9 @@
   let styleToggleArr = [];
   let billsObjectsArray = [];
   let toggleArray = [];
-  let refreshToken;
-  let recoToken;
   export let charges;
   export let invoicetotal;
   ////////////////////////
-  onMount(() => {});
 
   let arrOfBreakDown = [];
   let arr = [];
@@ -129,8 +124,7 @@
     //   }
     // }
   };
-  // $: if (componentContainer) {
-  // }
+
   let arrOfLevel3 = [
     [false, false, false, false, false, false, false, false, false, false],
     [false, false, false, false, false, false, false, false, false, false],
@@ -307,7 +301,7 @@
               </p>
             {/if}
             <div id="content">
-              {#if  billService.Section_Level1}
+              {#if billService.Section_Level1}
                 {#each billService.Section_Level1 as section, j}
                   {#if section.SectionType == "ServiceHeaderGroup"}
                     <div class="headers-con">
@@ -355,71 +349,7 @@
                                     <div
                                       class="tooltip-icon"
                                       bind:this={toolTipCon}
-                                    >
-                                      <img
-                                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
-                                        alt=""
-                                        class="tooltip-svg"
-                                        bind:this={toolTipSvg}
-                                        on:click={(e) =>
-                                          toolTipToggle(j, i, level2Obj.Value)}
-                                      />
-                                      {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
-                                        <div
-                                          class="overlay"
-                                          on:click={(e) =>
-                                            toolTipToggle(
-                                              j,
-                                              i,
-                                              level2Obj.Value
-                                            )}
-                                          style={billsObjectsArray[i]
-                                            .toolTipStylleArray[j]}
-                                        />
-                                        <div
-                                          class="tooltip-description"
-                                          style={billsObjectsArray[i]
-                                            .toolTipStylleArray[j]}
-                                        >
-                                          <div class="tooltip-con">
-                                            <div>
-                                              {level2Obj.ToolTip}
-                                              <br />
-                                              {#if billService.URL && billService.URL != ""}
-                                                <a
-                                                  on:click={() => {
-                                                    fetchAndRedirect(
-                                                      $apiToken,
-                                                      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                      billService.URL,
-                                                      {
-                                                        EventCode:
-                                                          "CD_ChargeExplanationClick",
-                                                        Outcome:
-                                                          "Charge explanation page loaded",
-                                                        Persona: $persona,
-                                                      }
-                                                    );
-                                                  }}
-                                                  >UNDERSTANDING YOUR CHARGES</a
-                                                >
-                                              {/if}
-                                            </div>
-                                            <img
-                                              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/x-close.svg`}
-                                              alt=""
-                                              class="tooltip-svg"
-                                              on:click={() =>
-                                                toolTipToggle(
-                                                  j,
-                                                  i,
-                                                  level2Obj.Value
-                                                )}
-                                            />
-                                          </div>
-                                        </div>
-                                      {/if}
-                                    </div>
+                                    />
                                   {/if}
                                 </div>
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
@@ -476,81 +406,17 @@
                                         {level3Obj.Value}
                                       </p>
                                       {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
-                                        <div
-                                          class="tooltip-icon"
-                                          bind:this={toolTipCon}
-                                        >
-                                          <img
-                                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
-                                            alt=""
-                                            class="tooltip-svg"
-                                            bind:this={toolTipSvg}
-                                            on:click={() =>
-                                              toolTipToggle(
-                                                o,
-                                                j,
-                                                level3Obj.Value,
-                                                "levele3"
-                                              )}
-                                          />
-
-                                          {#if arrOfLevel3[j] && arrayOfL3Style[j][o]}
-                                            <div
-                                              class="overlay"
-                                              on:click={(e) =>
-                                                toolTipToggle(
-                                                  o,
-                                                  j,
-                                                  level3Obj.Value,
-                                                  "levele3"
-                                                )}
-                                              style={arrayOfL3Style[j][o]}
-                                            />
-                                            <div
-                                              class="tooltip-description"
-                                              style={arrayOfL3Style[j][o]}
-                                            >
-                                              <div class="tooltip-con">
-                                                <div>
-                                                  {level3Obj.ToolTip}
-                                                  <br />
-                                                  {#if billService.URL && billService.URL != ""}
-                                                    <a
-                                                      on:click={() => {
-                                                        fetchAndRedirect(
-                                                          $apiToken,
-                                                          `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                          billService.URL,
-                                                          {
-                                                            EventCode:
-                                                              "CD_ChargeExplanationClick",
-                                                            Outcome:
-                                                              "Charge explanation page loaded",
-                                                            Persona: $persona,
-                                                          }
-                                                        );
-                                                      }}
-                                                      >UNDERSTANDING YOUR
-                                                      CHARGES</a
-                                                    >
-                                                  {/if}
-                                                </div>
-                                                <img
-                                                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/x-close.svg`}
-                                                  alt=""
-                                                  class="tooltip-svg"
-                                                  on:click={() =>
-                                                    toolTipToggle(
-                                                      o,
-                                                      j,
-                                                      level3Obj.Value,
-                                                      "levele3"
-                                                    )}
-                                                />
-                                              </div>
-                                            </div>
-                                          {/if}
-                                        </div>
+                                        <mic-tooltip
+                                          chargeline={level3Obj.Value}
+                                          tooltipurl={billService.URL != ""
+                                            ? billService.URL
+                                            : ""}
+                                          tooltipdis={level3Obj.ToolTip}
+                                        />
+                                        <!-- <MicToolTip
+                                          tooltipurl={billService.URL!=""?billService.URL : ""}
+                                          tooltipdis={level3Obj.ToolTip}
+                                        /> -->
                                       {/if}
                                     </div>
                                   {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
@@ -606,74 +472,17 @@
                                     </p>
                                   {/if}
                                   {#if level2Obj.ToolTip && level2Obj.ToolTip !== ""}
-                                    <div
-                                      class="tooltip-icon"
-                                      bind:this={toolTipCon}
-                                    >
-                                      <img
-                                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
-                                        alt=""
-                                        class="tooltip-svg"
-                                        bind:this={toolTipSvg}
-                                        on:click={() =>
-                                          toolTipToggle(j, i, level2Obj.Value)}
-                                      />
-                                      {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
-                                        <div
-                                          class="overlay"
-                                          on:click={(e) =>
-                                            toolTipToggle(
-                                              j,
-                                              i,
-                                              level2Obj.Value
-                                            )}
-                                          style={billsObjectsArray[i]
-                                            .toolTipStylleArray[j]}
-                                        />
-                                        <div
-                                          class="tooltip-description"
-                                          style={billsObjectsArray[i]
-                                            .toolTipStylleArray[j]}
-                                        >
-                                          <div class="tooltip-con">
-                                            <div>
-                                              {level2Obj.ToolTip}
-                                              <br />
-                                              {#if billService.URL && billService.URL != ""}
-                                                <a
-                                                  on:click={() => {
-                                                    fetchAndRedirect(
-                                                      $apiToken,
-                                                      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                      billService.URL,
-                                                      {
-                                                        EventCode:
-                                                          "CD_ChargeExplanationClick",
-                                                        Outcome:
-                                                          "Charge explanation page loaded",
-                                                        Persona: $persona,
-                                                      }
-                                                    );
-                                                  }}
-                                                  >UNDERSTANDING YOUR CHARGES</a
-                                                >
-                                              {/if}
-                                            </div>
-                                            <img
-                                              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/x-close.svg`}
-                                              alt=""
-                                              class="tooltip-svg"
-                                              on:click={() =>
-                                                toolTipToggle(
-                                                  j,
-                                                  i,
-                                                  level2Obj.Value
-                                                )}
-                                            />
-                                          </div>
-                                        </div>
-                                      {/if}
-                                    </div>
+                                    <mic-tooltip
+                                      chargeline={level2Obj.Value}
+                                      tooltipurl={billService.URL != ""
+                                        ? billService.URL
+                                        : ""}
+                                      tooltipdis={level2Obj.ToolTip}
+                                    />
+                                    <!-- <MicToolTip
+                                      tooltipurl={billService.URL || ""}
+                                      tooltipdis={level2Obj.ToolTip}
+                                    /> -->
                                   {/if}
                                 </div>
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
@@ -718,121 +527,65 @@
                           </h4>
                         </div>
                       </div>
-                      {#each section.Section_Level2 as subSection}
-                        <div class="charges-container">
-                          {#each subSection.Section_Level3 as level3Obj}
-                            {#if level3Obj.SectionType == "Charge"}
-                              {#if level3Obj.Order == 1}
-                                <div class={"level" + level3Obj.Order}>
+                      {#if section.Section_Level2}
+                        {#each section.Section_Level2 as subSection}
+                          <div class="charges-container">
+                            {#each subSection.Section_Level3 as level3Obj}
+                              {#if level3Obj.SectionType == "Charge"}
+                                {#if level3Obj.Order == 1}
+                                  <div class={"level" + level3Obj.Order}>
+                                    <p
+                                      style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                    >
+                                      {level3Obj.Value}
+                                    </p>
+                                    {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
+                                      <mic-tooltip
+                                        chargeline={level3Obj.Value}
+                                        tooltipurl={billService.URL != ""
+                                          ? billService.URL
+                                          : ""}
+                                        tooltipdis={level3Obj.ToolTip}
+                                      />
+                                      <!-- <MicToolTip
+                                        tooltipurl={billService.URL!=""?billService.URL : ""}
+                                        tooltipdis={level3Obj.ToolTip}
+                                      /> -->
+                                    {/if}
+                                  </div>
+                                {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
+                                  <span
+                                    class={"level" + level3Obj.Order}
+                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
+                                  >
+                                    {level3Obj.Value}
+                                  </span>
+                                {:else}
+                                  <p class={"level" + level3Obj.Order}>
+                                    {level3Obj.Value}
+                                  </p>
+                                {/if}
+                              {:else if subSection.SectionType == "CombinedGroup"}
+                                {#if level3Obj.Order == 1}
                                   <p
+                                    class="service-for{level3Obj.Order} level1"
+                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                  >
+                                    {level3Obj.Lable}
+                                  </p>
+                                {:else if level3Obj.Order == 2}
+                                  <p
+                                    class="service-for{level3Obj.Order} level2"
                                     style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
                                   >
                                     {level3Obj.Value}
                                   </p>
-                                  {#if level3Obj.ToolTip && level3Obj.ToolTip != ""}
-                                    <div
-                                      class="tooltip-icon"
-                                      bind:this={toolTipCon}
-                                    >
-                                      <!-- src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`} -->
-                                      <img
-                                        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
-                                        alt=""
-                                        class="tooltip-svg"
-                                        bind:this={toolTipSvg}
-                                        on:click={() =>
-                                          toolTipToggle(j, i, level3Obj.Value)}
-                                      />
-                                      {#if billsObjectsArray[i] && billsObjectsArray[i].toolTipStylleArray[j]}
-                                        <div
-                                          class="overlay"
-                                          on:click={(e) =>
-                                            toolTipToggle(
-                                              j,
-                                              i,
-                                              level3Obj.Value
-                                            )}
-                                          style={billsObjectsArray[i]
-                                            .toolTipStylleArray[j]}
-                                        />
-                                        <div
-                                          class="tooltip-description"
-                                          style={billsObjectsArray[i]
-                                            .toolTipStylleArray[j]}
-                                        >
-                                          <div class="tooltip-con">
-                                            <div>
-                                              {level3Obj.ToolTip}
-                                              <br />
-                                              {#if billService.URL && billService.URL != ""}
-                                                <a
-                                                  on:click={() => {
-                                                    fetchAndRedirect(
-                                                      $apiToken,
-                                                      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-                                                      billService.URL,
-                                                      {
-                                                        EventCode:
-                                                          "CD_ChargeExplanationClick",
-                                                        Outcome:
-                                                          "Charge explanation page loaded",
-                                                        Persona: $persona,
-                                                      }
-                                                    );
-                                                  }}
-                                                  >UNDERSTANDING YOUR CHARGES</a
-                                                >
-                                              {/if}
-                                            </div>
-                                            <img
-                                              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/x-close.svg`}
-                                              alt=""
-                                              class="tooltip-svg"
-                                              on:click={() =>
-                                                toolTipToggle(
-                                                  j,
-                                                  i,
-                                                  level3Obj.Value
-                                                )}
-                                            />
-                                          </div>
-                                        </div>
-                                      {/if}
-                                    </div>
-                                  {/if}
-                                </div>
-                              {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
-                                <span
-                                  class={"level" + level3Obj.Order}
-                                  style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
-                                >
-                                  {level3Obj.Value}
-                                </span>
-                              {:else}
-                                <p class={"level" + level3Obj.Order}>
-                                  {level3Obj.Value}
-                                </p>
+                                {/if}
                               {/if}
-                            {:else if subSection.SectionType == "CombinedGroup"}
-                              {#if level3Obj.Order == 1}
-                                <p
-                                  class="service-for{level3Obj.Order} level1"
-                                  style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
-                                >
-                                  {level3Obj.Lable}
-                                </p>
-                              {:else if level3Obj.Order == 2}
-                                <p
-                                  class="service-for{level3Obj.Order} level2"
-                                  style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
-                                >
-                                  {level3Obj.Value}
-                                </p>
-                              {/if}
-                            {/if}
-                          {/each}
-                        </div>
-                      {/each}
+                            {/each}
+                          </div>
+                        {/each}
+                      {/if}
                     {/if}
                     <!-- Sub Total -->
                   {:else if section.SectionType == "Total"}
@@ -916,64 +669,7 @@
   p {
     margin: 0;
   }
-  .tooltip-icon {
-    cursor: pointer;
-  }
-  .toolTipToggle {
-    position: relative;
-    &::after {
-      content: "";
-      width: 5px;
-      height: 5px;
-      background-color: #005faa;
-      top: 0;
-      left: 50%;
-      z-index: 2;
-      transform: translate(-50%, 0);
-    }
-  }
-  .tooltip-description {
-    position: absolute;
-    bottom: 100%;
-    z-index: 14;
-    max-width: 100vw;
-    max-width: 440px;
-    border-radius: 6px;
-    padding: 6px;
-    font-weight: 400;
-    font-size: 16px;
-    background: rgb(203 232 255 / 96%);
-    color: #000000;
-    box-shadow: 0 0 8px 1px #9e9e9e96;
-    left: 0;
-    .tooltip-con {
-      z-index: 15;
-      position: relative;
-      padding: 8px;
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      div {
-        > a {
-          text-decoration: none;
-          color: #005faa;
-        }
-      }
-    }
-  }
-  .bill-content {
-    display: flex;
-    flex-direction: column;
-    row-gap: 24px;
-    hr {
-      height: 3px;
-      background-color: #eaecee;
-      border: none;
-    }
-    @media screen and (max-width: 480px) {
-      row-gap: 16px;
-    }
-  }
+
   .sub-title {
     h4 {
       font-weight: 400;

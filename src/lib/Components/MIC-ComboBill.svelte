@@ -166,6 +166,7 @@
     arrayOfBillInsights.length > 0 &&
     insightsArray.length == 0
   ) {
+
     arrayOfbody = [];
     let arryOfConfigue = $chargeData.Section.map((subSection) => {
       return subSection.ConfigValue;
@@ -240,8 +241,16 @@
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
               />
+              <!-- <MicChargeDetailsCombo
+                charges={[charge]}
+                invoicetotal={invoiceTotalArray}
+              /> -->
             {:else if charge.SectionType !== "InvoiceTotal"}
               <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
+              <!-- <MicChargeDetailsCombo
+                charges={[charge]}
+                invoicetotal={""}
+              /> -->
             {/if}
             {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
               {#if i == arrayOfCharges.length - 1 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
@@ -275,12 +284,23 @@
                     emptytabs={emptyTabs}
                     arrayofbody={arrayOfbody[i]}
                   />
+                  <!-- <MicBillInsightsCombo 
+                  insightservices={insightsArray[i]}
+                  sunselectdata={sunSelectArray}
+                  emptytabs={emptyTabs}
+                  arrayofbody={arrayOfbody[i]}
+                /> -->
                 {:else}
                   <mic-insights-combo
                     insightservices={insightsArray[i]}
                     sunselectdata={sunSelectArray}
                     emptytabs={emptyTabs}
                   />
+                  <!-- <MicBillInsightsCombo 
+                  insightservices={insightsArray[i]}
+                  sunselectdata={sunSelectArray}
+                  emptytabs={emptyTabs}
+                /> -->
                 {/if}
               {/key}
               {#if $sunloading}
@@ -303,7 +323,6 @@
                   <mic-bulkdownload class="mic-insights bulk-mobile" />
                 {/if}
                 <mic-bulkdownload class="mic-insights bulk-desk" />
-
               {/if}
             </div>
           {:else}

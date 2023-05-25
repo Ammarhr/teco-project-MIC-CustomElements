@@ -16,6 +16,11 @@ let month = newDate.getMonth();
 export const date = writable(month + 1 + ' ' + year);
 export const CopmarsionDate = writable(month + 1 + ' ' + (year - 1));
 
+//* close all tooltip
+export const tooltipShow = writable(false);
+export const resetToolTip = (show) => {
+    tooltipShow.set(show)
+}
 //* bill nubmer
 export const billNumber = writable(''); // billNimber
 export const changeBillNumber = (num) => {

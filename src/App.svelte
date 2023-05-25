@@ -9,7 +9,6 @@
   import MicBulkDownload from "./lib/Components/MIC-BulkDownload.svelte";
   import MicRenderError from "./lib/Components/MIC-RenderError.svelte";
   import MicLoading from "./lib/Components/MIC-Loading.svelte";
-  import MicInsights from "./lib/Components/MIC-Insights.svelte";
   import "./app.css";
 </script>
 

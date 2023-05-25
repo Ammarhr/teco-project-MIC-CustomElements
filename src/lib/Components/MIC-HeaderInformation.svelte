@@ -9,15 +9,12 @@
 
   const [data, loading, error, get] = fetchstore();
 
-  // testing url:"https://cdn.jsdelivr.net/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json"
-  // dev url:"${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails"
   $: if ($apiDomain && $SAPToken && $apiToken && !$data.account) {
     get(
       $apiToken,
       // "../../data/accountData.json"
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`,
       $SAPToken
-      // `https://cdn.${$apiDomain}/gh/Ammarhr/teco-project-MIC-CustomElements@main/data/accountData.json`
     );
   }
 
@@ -130,7 +127,6 @@
     </div>
   {:else}
     <h1 />
-    <!-- <mic-render-error err={"Failed to load header"} /> -->
   {/if}
 </div>
 

@@ -2,7 +2,6 @@
 
 <script>
   // @ts-nocheck
-  // import mask from "../../assets/mask-bs.svg";
   import { onMount } from "svelte";
   import {
     fetchstore,
@@ -14,9 +13,8 @@
     SAPToken,
   } from "../../js/store";
 
-  //state
   var newElement;
-  let color; // this change the charge color depend in the its value
+  let color;
   let tries = 3;
   let btnStatus;
   let totalAmmountFontSize = "64px";
