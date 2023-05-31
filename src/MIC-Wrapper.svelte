@@ -25,16 +25,17 @@
     setEventDomain,
     newToken,
     persona,
-    setAssetsUrl,
+    setSummaryAccountFlag,
+    isSummaryAccountFlag,
     setSAPTpken,
   } from "./js/store";
 
   export let token;
   export let domain;
   export let eventdomain;
-  // export let assetspath;
   export let personainput;
   export let saptoken = '""';
+  export let issummaryaccount = "false";
   const refresh = () => {
     newToken.set("");
   };
@@ -50,6 +51,9 @@
       persona.set("customer");
     }
   }
+  $: if (issummaryaccount) {
+    setSummaryAccountFlag(issummaryaccount);
+  }
 
   onMount(() => {
     generalErr.set(false);
@@ -61,7 +65,7 @@
 
 {#if token && domain && eventdomain && saptoken && $generalErr !== true}
   <div class="wrapper">
-    <!-- <mic-headerinformation /> -->
+    <mic-headerinformation />
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
@@ -75,9 +79,12 @@
     </div>
     <mic-billselector />
     <!-- <MicBillSelectorAndDownload /> -->
-    <!-- <div class="summary-billing">
-      <MicSummaryBilling />
-    </div> -->
+    {#if $isSummaryAccountFlag == "true"}
+      <div class="summary-billing">
+        <mic-summarybilling />
+        <!-- <MicSummaryBilling /> -->
+      </div>
+    {/if}
     <mic-combo-bill />
     <!-- <MicComboBill /> -->
     <mic-metertable />
@@ -129,20 +136,18 @@
     display: grid;
     flex-direction: row;
     column-gap: 30px;
-    // grid-template-columns: calc(66.66% - 30px) 33.33%;
     width: 100%;
     @media screen and (max-width: 992px) {
       grid-template-columns: 100%;
     }
   }
-  .charge-detailes {
+  .charge-detailes { 
     @media screen and (max-width: 992px) {
       width: 100%;
     }
   }
   .mic-insights {
     width: 100%;
-    // max-width: 410px;
     @media screen and (max-width: 767px) {
       max-width: unset;
     }

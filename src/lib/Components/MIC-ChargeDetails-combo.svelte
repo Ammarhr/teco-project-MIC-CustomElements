@@ -8,18 +8,21 @@
     fetchstore,
     apiDomain,
     apiToken,
-    eventsDomain,
-    showToolTipDetails,
-    newToken,
     fetchAndRedirect,
     persona,
     billNumber,
     latestBill,
   } from "../../js/store";
+  import { onMount } from "svelte";
   import MicToolTip from "./MIC-ToolTip.svelte";
-  //mocking data
+
+  //store fetch data
   const [data, loading, error, get] = fetchstore();
 
+  onMount(() => {
+    // trigger the size of the screen:
+    screentTrigger();
+  });
   ///////// acordion functionality
   let isOpen = false;
   let styleToggleArr = [];
@@ -29,33 +32,8 @@
   export let invoicetotal;
   ////////////////////////
 
-  let arrOfBreakDown = [];
-  let arr = [];
   $: if (charges && charges.length > 0 && typeof toggleArray[0] !== "boolean") {
     for (let i = 0; i < charges.length; i++) {
-      // console.log("section mapped", charges[i].Section_Level1);
-      // if (charges[i].Section_Level1) {
-      //   charges[i].Section_Level1.map((dataMapped, j) => {
-      //     if (dataMapped.Section_Level2) {
-      //       let resArray = [];
-      //       dataMapped.Section_Level2.filter((result, k) => {
-      //         if (result.IsBreakdown == true) {
-      //           resArray = dataMapped.Section_Level2;
-      //         }
-      //         // return
-      //       });
-      //       if (resArray.length == 0) {
-      //         arrOfBreakDown.push(dataMapped.Section_Level2);
-      //       }
-      //       if (resArray.length > 0) {
-      //         arrOfBreakDown.push(resArray);
-      //       } else {
-      //         arr.push(arrOfBreakDown);
-      //         arrOfBreakDown = [];
-      //       }
-      //     }
-      //   });
-      // }
       toggleArray.push(true);
       let billObj = {
         subSectionArray: [],
@@ -65,7 +43,6 @@
       };
       billsObjectsArray.push(billObj);
     }
-    // console.log("array fo break downs :", arr);
   }
 
   const toggleContainer = (i) => {
@@ -79,182 +56,31 @@
     }
   };
 
-  const subSectionToggle = (j, i) => {
-    if (typeof billsObjectsArray[i].subSectionArray[j] !== "boolean")
-      billsObjectsArray[i].subSectionArray.push(false);
-
-    billsObjectsArray[i].subSectionArray[j] =
-      !billsObjectsArray[i].subSectionArray[j];
-    if (!billsObjectsArray[i].subSectionArray[j]) {
-      billsObjectsArray[i].subToggleStyleArray[j] =
-        "max-height: 200vh;opacity: 1;transition:200ms; ";
-    } else {
-      billsObjectsArray[i].subToggleStyleArray[j] =
-        "opacity: 0;max-height: 0;margin: 0; transition:200ms; padding:0; ";
-    }
-  };
-
   let componentContainer;
   let toolTipSvg;
   let toolTipCon;
   $: componentContainer = document.querySelector(".billing-container");
   $: toolTipSvg = document.querySelector(".tooltip-svg");
   $: toolTipCon = document.querySelector(".tooltip-con");
-  const closeToggle = (e) => {
-    // console.log(e.target !== toolTipSvg, "tool tip");
-    // if (e.target !== toolTipSvg || e.target !== toolTipCon) {
-    //   if (
-    //     billsObjectsArray &&
-    //     billsObjectsArray[activeSection] &&
-    //     billsObjectsArray[activeSection].subSectionArray
-    //   ) {
-    //     // console.log("here", e.target);
-    //     // console.log(
-    //     //   "here",
-    //     //   billsObjectsArray[activeSection].subSectionArray[activeTooltip]
-    //     // );
-    //     billsObjectsArray[activeSection].subSectionArray[activeTooltip] = false;
-    //     billsObjectsArray[activeSection].subToggleStyleArray[activeTooltip] =
-    //       "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
-    //   } else if (arrOfLevel3[activeTooltip] && arrayOfL3Style[activeTooltip]) {
-    //     console.log(arrOfLevel3[activeTooltip], arrayOfL3Style[activeTooltip]);
-    //     arrOfLevel3[activeTooltip] = false;
-    //     arrayOfL3Style[activeTooltip] =
-    //       "opacity: 0;max-height: 0;margin: 0; transition:200ms; padding:0; ";
-    //   }
-    // }
-  };
 
-  let arrOfLevel3 = [
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-  ];
-  let arrayOfL3Style = [
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false, false, false, false],
-  ];
-  let activeTooltip;
-  let activeSection;
-  let previouseActiveTooltip;
-  let previouseActiveSec;
-  let previouseLevel;
-  let currentLevel;
-  const toolTipToggle = (j, i, chargeLine, level3) => {
-    previouseActiveTooltip = activeTooltip;
-    previouseActiveSec = activeSection;
-    activeTooltip = j;
-    activeSection = i;
-    if (level3) {
-      previouseLevel = currentLevel;
-      currentLevel = level3;
-    } else {
-      previouseLevel = currentLevel;
-      currentLevel = "level2";
-    }
-    if (
-      previouseActiveTooltip !== j ||
-      previouseActiveSec !== i ||
-      previouseLevel !== currentLevel
-    ) {
-      if (
-        previouseActiveTooltip !== undefined &&
-        previouseActiveSec !== undefined
-      ) {
-        if (
-          arrOfLevel3[previouseActiveSec] &&
-          arrOfLevel3[previouseActiveSec][previouseActiveTooltip] == true &&
-          arrayOfL3Style[previouseActiveSec] &&
-          arrayOfL3Style[previouseActiveSec][previouseActiveTooltip]
-        )
-          arrOfLevel3[previouseActiveSec][previouseActiveTooltip] =
-            !arrOfLevel3[previouseActiveSec][previouseActiveTooltip];
-
-        arrayOfL3Style[previouseActiveSec][previouseActiveTooltip] =
-          "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
-      }
-      if (previouseActiveTooltip !== null && previouseActiveSec !== null) {
-        if (
-          billsObjectsArray[previouseActiveSec] &&
-          billsObjectsArray[previouseActiveSec].toolTipArray[
-            previouseActiveTooltip
-          ] &&
-          billsObjectsArray[previouseActiveSec].toolTipStylleArray[
-            previouseActiveTooltip
-          ]
-        ) {
-          billsObjectsArray[previouseActiveSec].toolTipArray[
-            previouseActiveTooltip
-          ] =
-            !billsObjectsArray[previouseActiveSec].toolTipArray[
-              previouseActiveTooltip
-            ];
-          billsObjectsArray[previouseActiveSec].toolTipStylleArray[
-            previouseActiveTooltip
-          ] =
-            "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
-        }
-      }
-    }
-    if (level3) {
-      arrOfLevel3[i][j] = !arrOfLevel3[i][j];
-      if (arrOfLevel3[i][j] == true) {
-        arrayOfL3Style[i][j] = "max-height: 200vh;opacity: 1;transition:200ms;";
-      } else {
-        arrayOfL3Style[i][j] =
-          "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
-      }
-    } else {
-      if (typeof billsObjectsArray[i].toolTipArray[j] !== "boolean") {
-        billsObjectsArray[i].toolTipArray[j] == false;
-      }
-      billsObjectsArray[i].toolTipArray[j] =
-        !billsObjectsArray[i].toolTipArray[j];
-      if (billsObjectsArray[i].toolTipArray[j] == true) {
-        billsObjectsArray[i].toolTipStylleArray[j] =
-          "max-height: 200vh;opacity: 1;transition:200ms;";
-      } else {
-        billsObjectsArray[i].toolTipStylleArray[j] =
-          "opacity: 0;max-height: 0;margin: 0; transition:200ms; display:none";
-      }
-    }
-    if (
-      (arrOfLevel3[i] && arrOfLevel3[i][j] && arrOfLevel3[i][j] == true) ||
-      (billsObjectsArray[i] &&
-        billsObjectsArray[i].toolTipArray[j] &&
-        billsObjectsArray[i].toolTipArray[j] == true)
-    ) {
-      fetchAndRedirect(
-        $apiToken,
-        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-        null,
-        {
-          EventCode: "CD_ChargeTooltipClick",
-          Outcome: `Helper ${chargeLine} Is Active`,
-          Persona: $persona,
-        }
-      );
-    }
-  };
   let chargesClass = "";
   $: if ($billNumber == $latestBill) {
     chargesClass = "";
   } else {
     chargesClass = "gray";
   }
+
+  let mobileScreen = false;
+
+  function screentTrigger() {
+    let screenSize = window.innerWidth;
+    if (screenSize <= 480) {
+      mobileScreen = true;
+    } else {
+      mobileScreen = false;
+    }
+  }
+  window.addEventListener("resize", screentTrigger);
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -284,7 +110,10 @@
             <span>
               <h3
                 id="sectiontitle"
-                style="color:{billService.Color}; font-size:{billService.FontSize}px; font-weight:{billService.FontWeight}; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
+                style="color:{billService.Color}; font-size:{mobileScreen ==
+                  true && billService.MobileFontSize
+                  ? billService.MobileFontSize
+                  : billService.FontSize}px; font-weight:{billService.FontWeight}; display:flex;  justify-content:flex-start; flex-direction:row; align-items:center; gap:6px;"
               >
                 {#if billService.IconPath}
                   <img
@@ -309,7 +138,10 @@
                         {#each section.Section_Level2 as level2Obj}
                           {#if level2Obj.Order < 5}
                             <p
-                              style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
+                              style="font-size:{mobileScreen == true &&
+                              level2Obj.MobileFontSize
+                                ? level2Obj.MobileFontSize
+                                : level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
                             >
                               {level2Obj.Value}
                             </p>
@@ -320,7 +152,10 @@
                         {#each section.Section_Level2 as level2Obj}
                           {#if level2Obj.Order >= 5}
                             <p
-                              style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
+                              style="font-size:{mobileScreen == true &&
+                              level2Obj.MobileFontSize
+                                ? level2Obj.MobileFontSize
+                                : level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
                             >
                               {level2Obj.Value}
                             </p>
@@ -341,7 +176,10 @@
                               {#if level2Obj.Order == 1}
                                 <div class="{'level' + level2Obj.Order} ">
                                   <p
-                                    style="display: flex; flex-direction:row; gap:10px; font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
+                                    style="display: flex; flex-direction:row; gap:10px; font-size:{mobileScreen ==
+                                      true && level2Obj.MobileFontSize
+                                      ? level2Obj.MobileFontSize
+                                      : level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
                                   >
                                     {level2Obj.Value}
                                   </p>
@@ -355,7 +193,10 @@
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
                                 <span
                                   class={"level" + level2Obj.Order}
-                                  style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
+                                  style="font-size:{mobileScreen == true &&
+                                  level2Obj.MobileFontSize
+                                    ? level2Obj.MobileFontSize
+                                    : level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
                                 >
                                   {level2Obj.Value}
                                 </span>
@@ -379,7 +220,10 @@
                           <div class="sub-title">
                             <div
                               class="sub-sec-header"
-                              style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                              style="display: flex; flex-direction:row; gap:10px; font-size:{mobileScreen ==
+                                true && section.MobileFontSize
+                                ? section.MobileFontSize
+                                : section.FontSize}px; color:{section.Color}"
                             >
                               {#if section.IconPath && section.IconPath != ""}
                                 <img
@@ -387,7 +231,12 @@
                                   alt=""
                                 />
                               {/if}
-                              <h4 style="font-size:{section.FontSize}px">
+                              <h4
+                                style="font-size:{mobileScreen == true &&
+                                section.MobileFontSize
+                                  ? section.MobileFontSize
+                                  : section.FontSize}px"
+                              >
                                 {section.Lable}
                               </h4>
                             </div>
@@ -401,7 +250,10 @@
                                   {#if level3Obj.Order == 1}
                                     <div class={"level" + level3Obj.Order}>
                                       <p
-                                        style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                        style="font-size:{mobileScreen ==
+                                          true && level3Obj.MobileFontSize
+                                          ? level3Obj.MobileFontSize
+                                          : level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
                                       >
                                         {level3Obj.Value}
                                       </p>
@@ -422,7 +274,10 @@
                                   {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
                                     <span
                                       class={"level" + level3Obj.Order}
-                                      style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
+                                      style="font-size:{mobileScreen == true &&
+                                      level3Obj.MobileFontSize
+                                        ? level3Obj.MobileFontSize
+                                        : level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
                                     >
                                       {level3Obj.Value}
                                     </span>
@@ -435,14 +290,20 @@
                                   {#if level3Obj.Order == 1}
                                     <p
                                       class="service-for{level3Obj.Order} level1"
-                                      style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                      style="font-size:{mobileScreen == true &&
+                                      level3Obj.MobileFontSize
+                                        ? level3Obj.MobileFontSize
+                                        : level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
                                     >
                                       {level3Obj.Lable}
                                     </p>
                                   {:else if level3Obj.Order == 2}
                                     <p
                                       class="service-for{level3Obj.Order} level2"
-                                      style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                      style="font-size:{mobileScreen == true &&
+                                      level3Obj.MobileFontSize
+                                        ? level3Obj.MobileFontSize
+                                        : level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
                                     >
                                       {level3Obj.Value}
                                     </p>
@@ -460,13 +321,19 @@
                                 <div class={"level" + level2Obj.Order}>
                                   {#if level2Obj.Value && level2Obj.Value[0] == " "}
                                     <p
-                                      style="padding-left: 16px; margin:0; display:block;font-size:{level2Obj.FontSize}px; font-weight:{level2Obj.FontWeight}; color:{level2Obj.Color};"
+                                      style="padding-left: 16px; margin:0; display:block;font-size:{mobileScreen ==
+                                        true && level2Obj.MobileFontSize
+                                        ? level2Obj.MobileFontSize
+                                        : level2Obj.FontSize}px; font-weight:{level2Obj.FontWeight}; color:{level2Obj.Color};"
                                     >
                                       {level2Obj.Value.trim()}
                                     </p>
                                   {:else}
                                     <p
-                                      style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
+                                      style="font-size:{mobileScreen == true &&
+                                      level2Obj.MobileFontSize
+                                        ? level2Obj.MobileFontSize
+                                        : level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight}"
                                     >
                                       {level2Obj.Value}
                                     </p>
@@ -488,7 +355,10 @@
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}
                                 <span
                                   class={"level" + level2Obj.Order}
-                                  style="font-size:{level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
+                                  style="font-size:{mobileScreen == true &&
+                                  level2Obj.MobileFontSize
+                                    ? level2Obj.MobileFontSize
+                                    : level2Obj.FontSize}px; color:{level2Obj.Color}; font-weight:{level2Obj.FontWeight};"
                                 >
                                   {level2Obj.Value}
                                 </span>
@@ -513,7 +383,10 @@
                       <div class="sub-title">
                         <div
                           class="sub-sec-header"
-                          style="display: flex; flex-direction:row; gap:10px; font-size:{section.FontSize}px; color:{section.Color}"
+                          style="display: flex; flex-direction:row; gap:10px; font-size:{mobileScreen ==
+                            true && section.MobileFontSize
+                            ? section.MobileFontSize
+                            : section.FontSize}px; color:{section.Color}"
                         >
                           {#if section.IconPath && section.IconPath != ""}
                             <!-- src="/src/assets/{section.IconPath}" -->
@@ -522,7 +395,12 @@
                               alt=""
                             />
                           {/if}
-                          <h4 tyle="font-size:{section.FontSize}px">
+                          <h4
+                            tyle="font-size:{mobileScreen == true &&
+                            section.MobileFontSize
+                              ? section.MobileFontSize
+                              : section.FontSize}px"
+                          >
                             {section.Lable}
                           </h4>
                         </div>
@@ -535,7 +413,10 @@
                                 {#if level3Obj.Order == 1}
                                   <div class={"level" + level3Obj.Order}>
                                     <p
-                                      style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                      style="font-size:{mobileScreen == true &&
+                                      level3Obj.MobileFontSize
+                                        ? level3Obj.MobileFontSize
+                                        : level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
                                     >
                                       {level3Obj.Value}
                                     </p>
@@ -556,7 +437,10 @@
                                 {:else if level3Obj.Order == 2 || level3Obj.Order == 3}
                                   <span
                                     class={"level" + level3Obj.Order}
-                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
+                                    style="font-size:{mobileScreen == true &&
+                                    level3Obj.MobileFontSize
+                                      ? level3Obj.MobileFontSize
+                                      : level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight};"
                                   >
                                     {level3Obj.Value}
                                   </span>
@@ -569,14 +453,20 @@
                                 {#if level3Obj.Order == 1}
                                   <p
                                     class="service-for{level3Obj.Order} level1"
-                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                    style="font-size:{mobileScreen == true &&
+                                    level3Obj.MobileFontSize
+                                      ? level3Obj.MobileFontSize
+                                      : level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
                                   >
                                     {level3Obj.Lable}
                                   </p>
                                 {:else if level3Obj.Order == 2}
                                   <p
                                     class="service-for{level3Obj.Order} level2"
-                                    style="font-size:{level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
+                                    style="font-size:{mobileScreen == true &&
+                                    level3Obj.MobileFontSize
+                                      ? level3Obj.MobileFontSize
+                                      : level3Obj.FontSize}px; color:{level3Obj.Color}; font-weight:{level3Obj.FontWeight}"
                                   >
                                     {level3Obj.Value}
                                   </p>
@@ -610,7 +500,10 @@
                       </h6>
                       <h6
                         class="total-value"
-                        style="font-size: {section.FontSize}px;"
+                        style="font-size: {mobileScreen == true &&
+                        section.MobileFontSize
+                          ? section.MobileFontSize
+                          : section.FontSize}px;"
                       >
                         {section.Value}
                       </h6>
@@ -632,7 +525,10 @@
                 </h6>
                 <h6
                   class="total-value"
-                  style="font-size: {invoicetotal[0].FontSize}px;"
+                  style="font-size: {mobileScreen == true &&
+                  invoicetotal[0].MobileFontSize
+                    ? invoicetotal[0].MobileFontSize
+                    : invoicetotal[0].FontSize}px;"
                 >
                   {invoicetotal[0].Value}
                 </h6>
@@ -678,10 +574,6 @@
   }
   .charges-container {
     position: relative;
-    // justify-content: space-between;
-    // align-items: center;
-    // display: grid;
-    // grid-template-columns: 45% auto 1fr auto;
     justify-content: unset;
     align-items: flex-start;
     display: flex;
@@ -689,21 +581,8 @@
     padding: 10px 0;
     border-bottom: 1px solid #eaecee;
     gap: 6px;
-    // @media screen and (max-width: 767px) {
-    //   justify-content: unset;
-    //   align-items: flex-start;
-    //   display: flex;
-    //   flex-wrap: wrap;
-    // }
-    // @media screen and (min-width: 993px) and (max-width: 1100px) {
-    //   justify-content: unset;
-    //   align-items: flex-start;
-    //   display: flex;
-    //   flex-wrap: wrap;
-    // }
     &:empty {
       /* Remove the style of the empty div */
-      /* For example: */
       border: none;
       padding: 0;
       height: 0;
@@ -714,22 +593,22 @@
     flex-direction: row;
     gap: 8px;
     flex-wrap: wrap;
+    margin: 10px 0;
     @media screen and (max-width: 480px) {
       gap: 6px;
     }
   }
   .sub-headers {
     display: flex;
-    /* justify-content: space-between; */
     flex-direction: row;
-    /* row-gap: 12px; */
     align-items: end;
     gap: 10px;
     margin-bottom: 8px;
     @media screen and (max-width: 480px) {
       gap: 6px;
+      flex-wrap: inherit;
       p {
-        font-size: 12px !important;
+        // font-size: 12px !important;
       }
     }
   }
@@ -832,8 +711,6 @@
     border-bottom: 1px solid rgba(150, 150, 150, 0.3);
   }
   .row {
-    /* margin-bottom: 10px;
-    padding-bottom: 10px; */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -844,7 +721,6 @@
     justify-content: space-between;
   }
   #title {
-    // height: 29px;
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
@@ -886,21 +762,11 @@
     margin: 0;
     max-width: calc(60% - 12px);
     flex: 1 0 60%;
-    // @media screen and (min-width: 993px) and (max-width: 1100px) {
-    //   flex: 1 0 60%;
-    //   max-width: calc(60% - 12px);
-    // }
-    // @media screen and (max-width: 767px) {
-    //   flex: 1 0 60%;
-    //   max-width: calc(60% - 12px);
-    // }
     @media screen and (max-width: 480px) {
-      // flex: 1 0 60%;
-      font-size: 16px !important;
-      p {
-        font-size: 16px !important;
-      }
-      // max-width: calc(60% - 12px);
+      // font-size: 16px !important;
+      // p {
+      //   font-size: 16px !important;
+      // }
     }
   }
   .level2 {
@@ -911,16 +777,10 @@
     font-size: 18px;
     padding-bottom: 5px;
     order: 3;
-    // @media screen and (min-width: 993px) and (max-width: 1100px) {
-    //   order: 3;
+
+    // @media screen and (max-width: 480px) {
+    //   font-size: 14px !important;
     // }
-    // @media screen and (max-width: 767px) {
-    //   order: 3;
-    // }
-    @media screen and (max-width: 480px) {
-      // order: 3;
-      font-size: 14px !important;
-    }
   }
   .level3 {
     color: #005faa;
@@ -930,15 +790,9 @@
     margin: 0;
     padding-bottom: 5px;
     order: 4;
-    // @media screen and (min-width: 993px) and (max-width: 1100px) {
-    //   order: 4;
+    // @media screen and (max-width: 480px) {
+    //   font-size: 14px !important;
     // }
-    // @media screen and (max-width: 767px) {
-    //   order: 4;
-    // }
-    @media screen and (max-width: 480px) {
-      font-size: 14px !important;
-    }
   }
   .total-row {
     font-weight: 500;
@@ -952,24 +806,19 @@
     text-align: right;
     padding: 5px 0;
     flex: 1 0 40%;
-    // @media screen and (min-width: 993px) and (max-width: 1100px) {
-    //   padding: 5px 0;
-    //   flex: 1 0 40%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // @media screen and (max-width: 480px) {
+    //   font-size: 16px !important;
     // }
-    // @media screen and (max-width: 767px) {
-    //   padding: 5px 0;
-    //   flex: 1 0 40%;
-    // }
-    @media screen and (max-width: 480px) {
-      font-size: 16px !important;
-    }
   }
   .service-for1 {
     margin: 8px 0;
     position: relative;
-    @media screen and (max-width: 480px) {
-      font-size: 16px !important;
-    }
+    // @media screen and (max-width: 480px) {
+    //   font-size: 16px !important;
+    // }
   }
   .service-for2 {
     margin: 8px 0;
@@ -980,7 +829,7 @@
     @media screen and (max-width: 480px) {
       top: 0;
       left: 95px;
-      font-size: 14px !important;
+      // font-size: 14px !important;
     }
   }
   #electric-charges-subtotal {
@@ -998,7 +847,7 @@
     color: #005faa;
     max-width: 275px;
     @media screen and (max-width: 767px) {
-      font-size: 18px !important;
+      // font-size: 18px !important;
     }
   }
   .total {
@@ -1026,7 +875,7 @@
     color: #ffffff;
     margin: 0;
     @media screen and (max-width: 767px) {
-      font-size: 22px !important;
+      // font-size: 22px !important;
     }
   }
   .total-value {
@@ -1039,7 +888,7 @@
     color: #ffffff;
     margin: 0;
     @media screen and (max-width: 767px) {
-      font-size: 24px !important;
+      // font-size: 24px !important;
     }
   }
 

@@ -48,6 +48,17 @@ export const assetsUrl = writable('')
 export const setAssetsUrl = (domain) => {
     assetsUrl.set(domain)
 }
+//children account flag:
+export const isSummaryAccountFlag = writable("false");
+export const setSummaryAccountFlag = (flag) => {
+    isSummaryAccountFlag.set(flag);
+}
+
+// parent account flag
+export const isParentAccount = writable("");
+export const setIsParentAccount = (flag) => {
+    isParentAccount.set(flag);
+}
 
 export const getDate = derived(
     date,

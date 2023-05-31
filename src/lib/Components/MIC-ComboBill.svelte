@@ -8,19 +8,17 @@
     fetchstore,
     apiDomain,
     apiToken,
-    eventsDomain,
-    showToolTipDetails,
     newToken,
-    fetchAndRedirect,
-    persona,
     billNumber,
     latestBill,
     SAPToken,
+    isSummaryAccountFlag,
+    isParentAccount,
   } from "../../js/store";
   import { onMount } from "svelte";
   import MicBillInsightsCombo from "./MIC-BillInsights-combo.svelte";
   import MicChargeDetailsCombo from "./MIC-ChargeDetails-combo.svelte";
-  let invoiceTotal;
+
   let comboNewToken;
   let arrayOfBillInsights = [];
   let sunSelectArray = [];
@@ -39,7 +37,8 @@
       !$chargeData.Section &&
       !$data.services &&
       !$sundata.SunSelect &&
-      !$yearlyData.NetMeter
+      !$yearlyData.NetMeter &&
+      $isSummaryAccountFlag
     ) {
       chargeGet(
         $apiToken,
@@ -47,34 +46,36 @@
         // "../../../data/ChargeDetails.json",
         $SAPToken
       );
-      get(
-        $apiToken,
-        // "../../../data/DemandInsight.json",
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
-        $SAPToken
-      ).then(() => {
-        if ($data && $data.services) {
-          arrayOfBillInsights = $data.services;
-        }
-      });
-    }
-    sunget(
-      $apiToken,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
-      // "../../data/sunSelect.json",
-      $SAPToken
-    ).then(() => {
-      if ($sundata && $sundata.SunSelect) {
-        newSunSelectArray = [];
-        sunSelectArray = $sundata.SunSelect;
+      if ($isSummaryAccountFlag !== "true") {
+        get(
+          $apiToken,
+          // "../../../data/DemandInsight.json",
+          `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
+          $SAPToken
+        ).then(() => {
+          if ($data && $data.services) {
+            arrayOfBillInsights = $data.services;
+          }
+        });
+        sunget(
+          $apiToken,
+          `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
+          // "../../data/sunSelect.json",
+          $SAPToken
+        ).then(() => {
+          if ($sundata && $sundata.SunSelect) {
+            newSunSelectArray = [];
+            sunSelectArray = $sundata.SunSelect;
+          }
+        });
+        yearlyGet(
+          $apiToken,
+          `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
+          // "../../data/yearlyEnergy.json",
+          $SAPToken
+        );
       }
-    });
-    yearlyGet(
-      $apiToken,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
-      // "../../data/yearlyEnergy.json",
-      $SAPToken
-    );
+    }
     comboNewToken = $apiToken;
   });
 
@@ -143,7 +144,6 @@
     invoiceTotalArray = $chargeData.Section.filter((subSection) => {
       return subSection.SectionType == "InvoiceTotal";
     });
-    // invoiceTotal = $chargeData.Section[$chargeData.Section.length - 2];
   }
 
   $: if ($sundata && $sundata.SunSelect) {
@@ -155,9 +155,7 @@
   let arrayOfbody = [];
   let bulkPosition = 0;
   let invoiceTotalArray;
-  // $: if ($billNumber == $latestBill) {
-  //   arrayOfbody = [];
-  // }
+
   $: if (
     $chargeData &&
     $chargeData.Section &&
@@ -166,7 +164,6 @@
     arrayOfBillInsights.length > 0 &&
     insightsArray.length == 0
   ) {
-
     arrayOfbody = [];
     let arryOfConfigue = $chargeData.Section.map((subSection) => {
       return subSection.ConfigValue;
@@ -252,81 +249,85 @@
                 invoicetotal={""}
               /> -->
             {/if}
-            {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
-              {#if i == arrayOfCharges.length - 1 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
+            {#if $isParentAccount !== "X"}
+              {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
+                {#if i == arrayOfCharges.length - 1 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
+                  <mic-bulkdownload class="mic-insights bulk-mobile" />
+                {/if}
+              {:else if i == arrayOfCharges.length - 2 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
                 <mic-bulkdownload class="mic-insights bulk-mobile" />
               {/if}
-            {:else if i == arrayOfCharges.length - 2 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
-              <mic-bulkdownload class="mic-insights bulk-mobile" />
             {/if}
           </div>
         {/if}
-        {#if arrayOfCharges && arrayOfCharges.length > 0 && insightsArray && insightsArray.length == 0 && i == 0}
-          <div class="insights">
-            {#if $yearlyLoading}
-              <mic-loading />
-            {:else if YearlyArray}
-              <mic-yearlyenergy
-                class="mic-insights"
-                yearlyarray={YearlyArray}
-              />
-            {/if}
-            <mic-bulkdownload class="mic-insights bulk-desk" />
-          </div>
-        {:else if charge.SectionType !== "InvoiceTotal"}
-          {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
+        {#if $isParentAccount !== "X"}
+          {#if arrayOfCharges && arrayOfCharges.length > 0 && insightsArray && insightsArray.length == 0 && i == 0}
             <div class="insights">
-              {#key arrayOfbody}
-                {#if $latestBill == $billNumber && arrayOfbody && arrayOfbody[i]}
-                  <mic-insights-combo
-                    insightservices={insightsArray[i]}
-                    sunselectdata={sunSelectArray}
-                    emptytabs={emptyTabs}
-                    arrayofbody={arrayOfbody[i]}
-                  />
-                  <!-- <MicBillInsightsCombo 
+              {#if $yearlyLoading}
+                <mic-loading />
+              {:else if YearlyArray}
+                <mic-yearlyenergy
+                  class="mic-insights"
+                  yearlyarray={YearlyArray}
+                />
+              {/if}
+              <mic-bulkdownload class="mic-insights bulk-desk" />
+            </div>
+          {:else if charge.SectionType !== "InvoiceTotal"}
+            {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
+              <div class="insights">
+                {#key arrayOfbody}
+                  {#if $latestBill == $billNumber && arrayOfbody && arrayOfbody[i]}
+                    <mic-insights-combo
+                      insightservices={insightsArray[i]}
+                      sunselectdata={sunSelectArray}
+                      emptytabs={emptyTabs}
+                      arrayofbody={arrayOfbody[i]}
+                    />
+                    <!-- <MicBillInsightsCombo 
                   insightservices={insightsArray[i]}
                   sunselectdata={sunSelectArray}
                   emptytabs={emptyTabs}
                   arrayofbody={arrayOfbody[i]}
                 /> -->
-                {:else}
-                  <mic-insights-combo
-                    insightservices={insightsArray[i]}
-                    sunselectdata={sunSelectArray}
-                    emptytabs={emptyTabs}
-                  />
-                  <!-- <MicBillInsightsCombo 
+                  {:else}
+                    <mic-insights-combo
+                      insightservices={insightsArray[i]}
+                      sunselectdata={sunSelectArray}
+                      emptytabs={emptyTabs}
+                    />
+                    <!-- <MicBillInsightsCombo 
                   insightservices={insightsArray[i]}
                   sunselectdata={sunSelectArray}
                   emptytabs={emptyTabs}
                 /> -->
-                {/if}
-              {/key}
-              {#if $sunloading}
-                <mic-loading />
-              {:else if $sunerror}
-                <h1 />
-              {:else if newSunSelectArray && newSunSelectArray.length > 0}
-                <mic-sunselect contractnum={newSunSelectArray[i]} />
-              {/if}
-              {#if bulkPosition == i}
-                {#if $yearlyLoading}
+                  {/if}
+                {/key}
+                {#if $sunloading}
                   <mic-loading />
-                {:else if YearlyArray}
-                  <mic-yearlyenergy
-                    class="mic-insights"
-                    yearlyarray={YearlyArray}
-                  />
+                {:else if $sunerror}
+                  <h1 />
+                {:else if newSunSelectArray && newSunSelectArray.length > 0}
+                  <mic-sunselect contractnum={newSunSelectArray[i]} />
                 {/if}
-                {#if arrayOfBillInsights && arrayOfBillInsights.length == arrayOfCharges.length - 1}
-                  <mic-bulkdownload class="mic-insights bulk-mobile" />
+                {#if bulkPosition == i}
+                  {#if $yearlyLoading}
+                    <mic-loading />
+                  {:else if YearlyArray}
+                    <mic-yearlyenergy
+                      class="mic-insights"
+                      yearlyarray={YearlyArray}
+                    />
+                  {/if}
+                  {#if arrayOfBillInsights && arrayOfBillInsights.length == arrayOfCharges.length - 1}
+                    <mic-bulkdownload class="mic-insights bulk-mobile" />
+                  {/if}
+                  <mic-bulkdownload class="mic-insights bulk-desk" />
                 {/if}
-                <mic-bulkdownload class="mic-insights bulk-desk" />
-              {/if}
-            </div>
-          {:else}
-            <div class="insights" />
+              </div>
+            {:else}
+              <div class="insights" />
+            {/if}
           {/if}
         {/if}
       {/if}

@@ -22,9 +22,7 @@
       ).then(() => loading.set(false));
     }
   });
-  // $: if ($loading) {
-  //     console.log("loaaaaaaaaaaaaaaaaaaaading from general error", $loading);
-  // }
+
 </script>
 
 {#if $loading == true}

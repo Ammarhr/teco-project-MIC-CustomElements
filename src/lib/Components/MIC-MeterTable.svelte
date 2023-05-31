@@ -12,6 +12,7 @@
     persona,
     fetchAndRedirect,
     SAPToken,
+    isSummaryAccountFlag,
   } from "../../js/store";
   import { chart } from "svelte-apexcharts";
   import {
@@ -45,8 +46,6 @@
   let first = false; // trigger first render for the tabs
   let container;
   let toolTipIconCon;
-  let costBtnClass = "sw-btn-inactive";
-  let usageBtnClass = "sw-btn-active";
   let chartDisplayUnit = "usage";
   let tempData = true;
   let sortingType;
@@ -56,6 +55,7 @@
   let disableTemp = false;
   let onPeakOprand;
   let offPeakOprand;
+  let words;
   const [data, loading, error, get] = fetchstore(); // meterTable fetch
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
     fetchDailyUsageChart(); // daily usage fetch
@@ -69,25 +69,27 @@
   // fetch meterTable fetch api on component mount
   onMount(() => {
     if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
-      get(
-        $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
-        // "../../data/meterTable.json",
-        $SAPToken
-      ).then(() => {
-        if ($data && $data.EPFlag) {
-          EP_Flag = $data.EPFlag;
-        } else {
-          EP_Flag = "";
-        }
-        if ($data && $data.TempFlag == false) {
-          disableTemp = false;
-          tempData = true;
-        } else {
-          disableTemp = true;
-          tempData = false;
-        }
-      });
+      if ($isSummaryAccountFlag !== "true") {
+        get(
+          $apiToken,
+          `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
+          // "../../data/meterTable.json",
+          $SAPToken
+        ).then(() => {
+          if ($data && $data.EPFlag) {
+            EP_Flag = $data.EPFlag;
+          } else {
+            EP_Flag = "";
+          }
+          if ($data && $data.TempFlag == false) {
+            disableTemp = false;
+            tempData = true;
+          } else {
+            disableTemp = true;
+            tempData = false;
+          }
+        });
+      }
       refreshableToken = $apiToken;
     }
   });
@@ -97,13 +99,15 @@
     chartLegend = "";
     onOffPeakDemand = "";
     first = false;
+    currentWord = 0;
+    if (setTimeoutId) {
+      clearTimeout(setTimeoutId);
+    }
     if (disableTemp == false) {
       tempData = true;
     } else {
       tempData = false;
     }
-    costBtnClass = "sw-btn-inactive";
-    usageBtnClass = "sw-btn-active";
     chartDisplayUnit = "usage";
     styleSelectedRows = [];
     if (meterObject) {
@@ -141,9 +145,27 @@
         OperandLabel,
         HistoricalFact,
         AMI_Flag,
+        UOF,
         StandbyCustomer_Flag,
       } = selectedMeter;
-
+      words = [
+        {
+          text: UOF,
+          size: 14,
+        },
+        {
+          text: "Cost",
+          size: 18,
+        },
+        {
+          text: "$",
+          size: 14,
+        },
+        {
+          text: "Usage",
+          size: 18,
+        },
+      ];
       if (AMI_Flag == "X") {
         dailyUsageGet(
           refreshableToken,
@@ -259,6 +281,8 @@
     (refreshableToken == $apiToken || refreshableToken !== $newToken.token)
   ) {
     newSelect = "";
+    tableData = [];
+    pagenateItems = [];
     get(
       $newToken.token,
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
@@ -350,13 +374,14 @@
 
   ////////// tabs functionality
   const activateTab = (num1, num2, activeTab) => {
-    // costUsageToggle("usage");
-    costBtnClass = "sw-btn-inactive";
-    usageBtnClass = "sw-btn-active";
+    if (setTimeoutId) {
+      clearTimeout(setTimeoutId);
+    }
     chartDisplayUnit = "usage";
     activeSection = activeTab;
     tab2 = num2;
     tab1 = num1;
+    currentWord = 0;
     if (activeTab == "daily") {
       // MiJurney event call
       fetchAndRedirect(
@@ -430,7 +455,7 @@
   $: toolTipIconCon = document.querySelector(".chart-tool-tip");
   $: container = document.querySelector(".meter-card");
   $: searchInput = document.getElementById("#search");
-
+  let setTimeoutId;
   $: if (container) {
     container.addEventListener("click", function (event) {
       // check if the click event originated from the container
@@ -442,11 +467,10 @@
   }
 
   // cost/usage chart toggle function
-  const costUsageToggle = (activeBtn) => {
-    chartDisplayUnit = activeBtn;
-    if (activeBtn == "cost") {
-      costBtnClass = "sw-btn-active";
-      usageBtnClass = "sw-btn-inactive";
+  const costUsageToggle = (e) => {
+    if (e.target.checked == true) {
+      chartDisplayUnit = "cost";
+
       // MiJurney event call
       fetchAndRedirect(
         $apiToken,
@@ -459,9 +483,8 @@
           Persona: $persona,
         }
       );
-    } else if (activeBtn == "usage") {
-      usageBtnClass = "sw-btn-active";
-      costBtnClass = "sw-btn-inactive";
+    } else if (e.target.checked == false) {
+      chartDisplayUnit = "usage";
       // MiJurney event call
       fetchAndRedirect(
         $apiToken,
@@ -475,6 +498,8 @@
         }
       );
     }
+    changeWord();
+    setTimeoutId = setTimeout(changeWord, 800);
   };
 
   const tempreatureShow = () => {
@@ -656,6 +681,11 @@
       return "";
     }
   };
+
+  let currentWord = 0;
+  function changeWord() {
+    currentWord = (currentWord + 1) % words.length;
+  }
 </script>
 
 <!------ html ------->
@@ -965,21 +995,23 @@
             <!-- option for Hadi to style -->
             <div class="options" style="position: relative;">
               {#if disableTemp == false}
-                <input
-                  type="checkbox"
-                  name="trmprature"
-                  id="temp"
-                  checked
-                  on:click={tempreatureShow}
-                />
-                <span>Temperature</span>
-                <img
-                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
-                  alt="usage chart tool tip"
-                  class="chart-tool-tip"
-                  bind:this={toolTipIconCon}
-                  on:click={tooltipToggle}
-                />
+                <div class="temp">
+                  <input
+                    type="checkbox"
+                    name="trmprature"
+                    id="temp"
+                    checked
+                    on:click={tempreatureShow}
+                  />
+                  <span>Temperature</span>
+                  <img
+                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
+                    alt="usage chart tool tip"
+                    class="chart-tool-tip"
+                    bind:this={toolTipIconCon}
+                    on:click={tooltipToggle}
+                  />
+                </div>
               {/if}
               {#if activeSection == "monthly" && $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.TempTooltip}
                 <div class="tooltip-content" style={toolTipStyle}>
@@ -991,23 +1023,18 @@
                 </div>
               {/if}
               {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && activeSection == "monthly"}
-                <div class="switch">
-                  <button
-                    class={usageBtnClass}
-                    on:click={() => {
-                      costUsageToggle("usage");
+                <div class="toggle">
+                  <input
+                    type="checkbox"
+                    id="check-4"
+                    on:change={(e) => {
+                      costUsageToggle(e);
                     }}
+                  />
+                  <label for="check-4">
+                    <p class="toggle_usage">Usage</p>
+                    <p class="toggle_cost">Cost</p></label
                   >
-                    Usage
-                  </button>
-                  <button
-                    class={costBtnClass}
-                    on:click={() => {
-                      costUsageToggle("cost");
-                    }}
-                  >
-                    Cost
-                  </button>
                 </div>
               {/if}
             </div>
@@ -1029,17 +1056,18 @@
                     )}
                   />
                 {:else if selectedMeter.DAP_dtoun !== "x" && selectedMeter.DAP_dtouf !== "x"}
-                  <span class="chart-unit">
-                    {#if chartDisplayUnit == "usage"}
-                      {#if selectedMeter && selectedMeter.UOF}
-                        {selectedMeter.UOF}
-                      {/if}
-                    {:else if chartDisplayUnit == "cost"}
-                      $
-                    {:else if selectedMeter && selectedMeter.UOF}
-                      {selectedMeter.UOF}
-                    {/if}
-                  </span>
+                  <div class="text">
+                    <p>
+                      {#each words as word, i}
+                        <span
+                          class="letter {i === currentWord ? 'in' : 'out'}"
+                          style="font-size: {word.size}px"
+                        >
+                          {word.text}
+                        </span>
+                      {/each}
+                    </p>
+                  </div>
                   <div
                     class="chart"
                     style="min-width: {monthlyMinwidth};"
@@ -1059,17 +1087,18 @@
                   />
                 {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
                   <!-- Monthly usage OnPeak & OffPeak chart -->
-                  <span class="chart-unit">
-                    {#if chartDisplayUnit == "usage"}
-                      {#if selectedMeter && selectedMeter.UOF}
-                        {selectedMeter.UOF}
-                      {/if}
-                    {:else if chartDisplayUnit == "cost"}
-                      $
-                    {:else if selectedMeter && selectedMeter.UOF}
-                      {selectedMeter.UOF}
-                    {/if}
-                  </span>
+                  <div class="text">
+                    <p>
+                      {#each words as word, i}
+                        <span
+                          class="letter {i === currentWord ? 'in' : 'out'}"
+                          style="font-size: {word.size}px"
+                        >
+                          {word.text}
+                        </span>
+                      {/each}
+                    </p>
+                  </div>
                   <div
                     class="chart"
                     style="min-width: {monthlyMinwidth};"
@@ -1112,17 +1141,18 @@
                     />
                   {:else if selectedMeter.DAP_dtoun !== "x" && selectedMeter.DAP_dtouf !== "x"}
                     <!-- Daily usage simple chart -->
-                    <span class="chart-unit">
-                      {#if chartDisplayUnit == "usage"}
-                        {#if selectedMeter && selectedMeter.UOF}
-                          {selectedMeter.UOF}
-                        {/if}
-                      {:else if chartDisplayUnit == "cost"}
-                        $
-                      {:else if selectedMeter && selectedMeter.UOF}
-                        {selectedMeter.UOF}
-                      {/if}
-                    </span>
+                    <div class="text">
+                      <p>
+                        {#each words as word, i}
+                          <span
+                            class="letter {i === currentWord ? 'in' : 'out'}"
+                            style="font-size: {word.size}px"
+                          >
+                            {word.text}
+                          </span>
+                        {/each}
+                      </p>
+                    </div>
                     <div
                       class="chart"
                       style="min-width: {dailyMinwidth};"
@@ -1142,17 +1172,18 @@
                     />
                   {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
                     <!-- Daily usage OnPeak & OffPeak chart -->
-                    <span class="chart-unit">
-                      {#if chartDisplayUnit == "usage"}
-                        {#if selectedMeter && selectedMeter.UOF}
-                          {selectedMeter.UOF}
-                        {/if}
-                      {:else if chartDisplayUnit == "cost"}
-                        $
-                      {:else if selectedMeter && selectedMeter.UOF}
-                        {selectedMeter.UOF}
-                      {/if}
-                    </span>
+                    <div class="text">
+                      <p>
+                        {#each words as word, i}
+                          <span
+                            class="letter {i === currentWord ? 'in' : 'out'}"
+                            style="font-size: {word.size}px"
+                          >
+                            {word.text}
+                          </span>
+                        {/each}
+                      </p>
+                    </div>
                     <div
                       class="chart"
                       style="min-width: {dailyMinwidth};"
@@ -1280,7 +1311,46 @@
   * {
     font-family: "Interstate";
   }
+  //
+  .text {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 40px;
+    p {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+      vertical-align: top;
+      margin: 0;
+      span {
+        grid-area: 1 / 1 / 1 / 1;
+        margin-left: 36px;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 12px;
+        color: #005faa;
+      }
+    }
+  }
 
+  .letter {
+    display: inline-block;
+    position: relative;
+    transform: translateZ(25px);
+    transform-origin: 50% 50% 25px;
+    transition: transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .letter.out {
+    transform: rotateX(90deg);
+    transition: transform 0.32s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  .letter.behind {
+    transform: rotateX(-90deg);
+  }
+
+  //
   #meter-header {
     display: flex;
     flex-direction: row;
@@ -1343,6 +1413,9 @@
     gap: 6px;
     margin-top: 12px;
     align-items: center;
+    @media screen and (max-width: 360px) {
+      flex-direction: column-reverse;
+    }
   }
   .options span {
     font-style: normal;
@@ -1745,29 +1818,67 @@
       width: 14px;
       background-color: #005faa;
       top: -10px;
-      /* transform: rotate(45deg); */
       right: 110px;
       clip-path: inset(0 0 0px 0);
       clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     }
   }
-  .switch {
-    background: #e6eff7;
-    padding: 4px;
-    border-radius: 6px;
-    .sw-btn-active {
-      cursor: pointer;
-      background: white;
-      border: none;
-      border-radius: 6px;
+  .toggle {
+    position: relative;
+  }
+  .toggle input[type="checkbox"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    opacity: 0;
+    margin: 0;
+  }
+
+  .toggle label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 13.33px;
+    .toggle_usage {
+      position: absolute;
+      left: 6px;
       padding: 4px 6px;
     }
-    .sw-btn-inactive {
-      cursor: pointer;
-      border: none;
-      background: unset;
+    .toggle_cost {
+      position: absolute;
+      right: 6px;
+      padding: 4px 6px;
       color: #005faa;
     }
+  }
+  .toggle input[type="checkbox"]:checked + label {
+    .toggle_usage {
+      color: #005faa;
+    }
+    .toggle_cost {
+      color: #000000;
+    }
+  }
+  .toggle label:before {
+    content: "";
+    width: 110px;
+    height: 32px;
+    background: #ffffff;
+    border: 4px solid #e6eff7;
+    box-shadow: inset -48px 0 0 #e6eff7;
+    position: relative;
+    display: inline-block;
+    border-radius: 9px;
+    box-sizing: border-box;
+    transition: 0.25s ease-in-out;
+  }
+  .toggle input[type="checkbox"]:checked + label:before {
+    box-shadow: inset 56px 0 0 #e6eff7;
   }
   ::-webkit-scrollbar {
     width: 7px;

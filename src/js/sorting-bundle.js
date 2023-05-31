@@ -380,21 +380,21 @@ export const sortByCurrentCharges = (type, items) => {
 export const sortByStatus = (type, items) => {
     if (items && items.length > 1) {
         return items.sort((a, b) => {
-            let fa = a.Status !== null ? a.Status : true,
-                fb = b.Status !== null? b.Status : true;
+            let fa = a.Status.toLowerCase(),
+                fb = b.Status.toLowerCase();
             if (type == "asen") {
-                if (fa && !fb) {
+                if (fa < fb) {
                     return -1;
                 }
-                if (!fa && fb) {
+                if (fa > fb) {
                     return 1;
                 }
                 return 0;
             } else {
-                if (fa && !fb) {
+                if (fa < fb) {
                     return 1;
                 }
-                if (!fa && fb) {
+                if (fa > fb) {
                     return -1;
                 }
                 return 0;

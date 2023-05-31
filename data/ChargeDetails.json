@@ -3,6 +3,7 @@
     {
       "Order": 1,
       "Lable": "Natural Gas Charges",
+      "ToolTip": "",
       "FontSize": 30,
       "IconPath": "gasCharge.svg",
       "Color": "#00294A",
@@ -31,7 +32,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 12
             },
             {
               "Order": 2,
@@ -41,7 +43,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 3,
@@ -52,7 +55,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 4,
@@ -62,7 +66,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 5,
@@ -73,7 +78,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 12
             },
             {
               "Order": 6,
@@ -83,7 +89,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             }
           ]
         },
@@ -102,7 +109,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 2,
@@ -113,7 +121,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 3,
@@ -123,7 +132,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 4,
@@ -134,7 +144,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 5,
@@ -144,7 +155,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 6,
@@ -155,7 +167,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             },
             {
               "Order": 7,
@@ -165,7 +178,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 12
             }
           ]
         },
@@ -389,21 +403,12 @@
       "Color": "#00294A",
       "IsItalic": false,
       "IsBreakdown": false,
-      "SectionType": "AccountLevel",
+      "SectionType": "Service",
+      "ServiceType": "Gas",
+      "URL": "https://www.peoplesgas.com/residential/billing-options/understanding-your-bill/",
       "FontWeight": "400",
       "Collapsible": false,
       "Section_Level1": [
-        {
-          "Order": 0,
-          "Lable": "Other Fees",
-          "FontSize": 30,
-          "IconPath": "otherCharges.svg",
-          "Color": "#e62727",
-          "IsItalic": false,
-          "IsBreakdown": false,
-          "SectionType": "CustomeSection",
-          "FontWeight": "400"
-        },
         {
           "Order": 1,
           "FontSize": 0,
@@ -420,7 +425,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "ServiceHeaderGroupvalue",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 24
             },
             {
               "Order": 2,
@@ -449,7 +455,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 14
             },
             {
               "Order": 2,
@@ -459,7 +466,8 @@
               "IsItalic": true,
               "IsBreakdown": false,
               "SectionType": "Charge",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 14
             },
             {
               "Order": 3,
@@ -469,7 +477,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge",
-              "FontWeight": "300"
+              "FontWeight": "300",
+              "MobileFontSize": 14
             },
             {
               "Order": 4,
@@ -479,7 +488,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 14
             }
           ]
         },
@@ -498,7 +508,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 14
             },
             {
               "Order": 4,
@@ -508,7 +519,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 14
             }
           ]
         },
@@ -527,7 +539,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 14
             },
             {
               "Order": 4,
@@ -537,7 +550,8 @@
               "IsItalic": false,
               "IsBreakdown": false,
               "SectionType": "Charge",
-              "FontWeight": "400"
+              "FontWeight": "400",
+              "MobileFontSize": 14
             }
           ]
         },
@@ -550,10 +564,23 @@
           "IsItalic": false,
           "IsBreakdown": false,
           "SectionType": "Total",
-          "FontWeight": "400"
+          "FontWeight": "400",
+          "MobileFontSize": 14
         },
         {
-          "Order": 6,
+          "Order": 4,
+          "Lable": "Other Fees & Charges",
+          "FontSize": 28,
+          "IconPath": "otherCharges.svg",
+          "Color": "#5EB0F4",
+          "IsItalic": false,
+          "IsBreakdown": false,
+          "SectionType": "CustomeSection",
+          "FontWeight": "400",
+          "MobileFontSize": 14
+        },
+        {
+          "Order": 7,
           "Lable": "Taxes",
           "FontSize": 24,
           "Color": "#005FAA",
@@ -578,7 +605,8 @@
                   "IsItalic": false,
                   "IsBreakdown": false,
                   "SectionType": "Charge",
-                  "FontWeight": "400"
+                  "FontWeight": "400",
+                  "MobileFontSize": 14
                 }
               ]
             },
@@ -592,13 +620,14 @@
                 {
                   "Order": 1,
                   "Value": "Municipal Public Service Tax",
-                  "ToolTip": "Many municipalities levy a tax on the natural gas and electricity you use. It is collected by Peoples Gas and paid to the municipality",
+                  "ToolTip": "In addition to the Franchise Fee, many municipalities levy a tax on the gas you use. It is collected by Peoples Gas and paid to the municipality.",
                   "FontSize": 20,
                   "Color": "#000000",
                   "IsItalic": false,
                   "IsBreakdown": false,
                   "SectionType": "Charge",
-                  "FontWeight": "400"
+                  "FontWeight": "400",
+                  "MobileFontSize": 14
                 }
               ]
             },
@@ -617,7 +646,8 @@
                   "IsItalic": false,
                   "IsBreakdown": false,
                   "SectionType": "Charge",
-                  "FontWeight": "400"
+                  "FontWeight": "400",
+                  "MobileFontSize": 14
                 },
                 {
                   "Order": 4,
@@ -627,15 +657,16 @@
                   "IsItalic": false,
                   "IsBreakdown": false,
                   "SectionType": "Charge",
-                  "FontWeight": "400"
+                  "FontWeight": "400",
+                  "MobileFontSize": 14
                 }
               ]
             }
           ]
         },
         {
-          "Order": 7,
-          "Lable": "Taxes Total",
+          "Order": 8,
+          "Lable": "Total Taxes",
           "Value": "-$130.49",
           "FontSize": 20,
           "Color": "#005FAA",

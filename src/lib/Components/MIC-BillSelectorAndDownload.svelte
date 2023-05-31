@@ -3,7 +3,6 @@
 <script>
   // @ts-nocheck
 
-  // svg imports
   import {
     fetchstore,
     changeBillNumber,
@@ -13,20 +12,24 @@
     apiDomain,
     apiToken,
     latestBill,
-    eventsDomain,
     newToken,
     persona,
     SAPToken,
+    isSummaryAccountFlag,
   } from "../../js/store";
   import MicSunSelect from "./MIC-SunSelect.svelte";
   // state
   let selectedBill;
   let selectedLabelBill;
+  let mainClass = "";
   //mocking data
   const [data, loading, error, get] = fetchstore();
   const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken();
 
   $: if ($apiDomain && $apiToken && $SAPToken && !$data.bills) {
+    if ($isSummaryAccountFlag == "true") {
+      mainClass = "col-account";
+    }
     get(
       $apiToken,
       // "../../data/BillSelector.json",
@@ -110,7 +113,9 @@
 {:else if $error}
   <mic-render-error />
 {:else if $data && $data.bills}
-  <div class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard">
+  <div
+    class="tecoGenericShadow roundedRadius20 tecoWhiteBG tecoCard {mainClass}"
+  >
     <div class="tecoBillSelector-v2">
       <div class="tecoInfoLabel">
         <h4>VIEW PRIOR STATEMENTS</h4>
@@ -193,7 +198,6 @@
   </div>
 {:else}
   <h1 />
-  <!-- <mic-render-error err={"failed in bill selector no Token provided"} /> -->
 {/if}
 
 <style lang="scss">
@@ -308,6 +312,32 @@
     }
   }
   // web component "tecoBillSelector" style
+  @media screen and (min-width: 992px) {
+    .col-account {
+      width: 100% !important;
+      .tecoBillSelector-v2 {
+        font-weight: 400;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-direction: row;
+        .tecoInfoLabel h4 {
+          color: $teco-dark-grey;
+        }
+        .tecobillSelectorDetailRow {
+          width: unset;
+          flex-grow: 1;
+        }
+        .tecoBillSelectorDownloadContainer {
+          &::before {
+            content: "DOWNLOAD MY BILL";
+            color: $teco-dark-grey;
+            font-weight: 400;
+          }
+        }
+      }
+    }
+  }
   .tecoBillSelector-v2 {
     font-weight: 400;
     display: flex;

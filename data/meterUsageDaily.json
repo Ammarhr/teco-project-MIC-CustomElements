@@ -39,6 +39,94 @@
                 "CloudIcon": "",
                 "Dtype": "dtoun",
                 "ToolTipEstimated": ""
+            },
+            {
+                "Perioddate": "Feb 01",
+                "FullDate": "February 01 2023",
+                "Temperature": "69",
+                "UOM": "kwh",
+                "Usage": "9.1",
+                "status": "A",
+                "CloudIcon": "",
+                "Dtype": "dtoun",
+                "ToolTipEstimated": ""
+            },
+            {
+                "Perioddate": "Feb 01",
+                "FullDate": "February 01 2023",
+                "Temperature": "69",
+                "UOM": "kwh",
+                "Usage": "7.1",
+                "status": "A",
+                "CloudIcon": "",
+                "Dtype": "dtoun",
+                "ToolTipEstimated": ""
+            },
+            {
+                "Perioddate": "Feb 01",
+                "FullDate": "February 01 2023",
+                "Temperature": "69",
+                "UOM": "kwh",
+                "Usage": "5.1",
+                "status": "A",
+                "CloudIcon": "",
+                "Dtype": "dtoun",
+                "ToolTipEstimated": ""
+            },
+            {
+                "Perioddate": "Feb 01",
+                "FullDate": "February 01 2023",
+                "Temperature": "69",
+                "UOM": "kwh",
+                "Usage": "21.1",
+                "status": "A",
+                "CloudIcon": "",
+                "Dtype": "dtoun",
+                "ToolTipEstimated": ""
+            },
+            {
+                "Perioddate": "Feb 01",
+                "FullDate": "February 01 2023",
+                "Temperature": "69",
+                "UOM": "kwh",
+                "Usage": "32.1",
+                "status": "A",
+                "CloudIcon": "",
+                "Dtype": "dtoun",
+                "ToolTipEstimated": ""
+            },
+            {
+                "Perioddate": "Feb 01",
+                "FullDate": "February 01 2023",
+                "Temperature": "69",
+                "UOM": "kwh",
+                "Usage": "20.1",
+                "status": "A",
+                "CloudIcon": "",
+                "Dtype": "dtoun",
+                "ToolTipEstimated": ""
+            },
+            {
+                "Perioddate": "Feb 01",
+                "FullDate": "February 01 2023",
+                "Temperature": "69",
+                "UOM": "kwh",
+                "Usage": "41.1",
+                "status": "A",
+                "CloudIcon": "",
+                "Dtype": "dtoun",
+                "ToolTipEstimated": ""
+            },
+            {
+                "Perioddate": "Feb 01",
+                "FullDate": "February 01 2023",
+                "Temperature": "69",
+                "UOM": "kwh",
+                "Usage": "12.1",
+                "status": "A",
+                "CloudIcon": "",
+                "Dtype": "dtoun",
+                "ToolTipEstimated": ""
             }
         ]
     }
