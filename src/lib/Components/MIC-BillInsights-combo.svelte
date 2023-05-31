@@ -24,7 +24,6 @@
     sunSelectServicesArray,
     SAPToken,
   } from "../../js/store";
-  import { onMount } from "svelte";
   export let insightservices;
   export let sunselectdata;
   export let emptytabs;
@@ -44,12 +43,8 @@
   const [data, loading, error, get] = fetchstore(); // store fetch
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
-  // onMount(() => {
-  //   console.log(arrayofbody, "arrayofbody");
-  // });
   $: if (typeof emptytabs == "boolean" && emptytabs === true) {
     tabsToggleArr = [];
-    // console.log(emptytabs, "emptytabs");
   }
   ///////// acordion functionality
   const toggle = (i) => {
@@ -63,8 +58,8 @@
         "opacity: 0;max-height: 0;margin: 0; transition:200ms;";
     }
   };
-  ////////////////////////
 
+  ////////////////////////
   $: if (
     insightservices &&
     insightservices.length > 0 &&
@@ -188,33 +183,35 @@
           {#if insightsService?.yearly?.VisibilityTab == true}
             <div id={"tab1" + tabsToggleArr[i][0]}>
               <div class="chart-container">
-                {#if insightsService?.yearly?.y.data[0] > insightsService?.yearly?.y.data[1]}
-                  <div
-                    use:chart={renderBarChart(
-                      [insightsService?.yearly?.y],
-                      insightsService?.yearly?.x,
-                      ["#005FAA", "#B1DBFD"],
-                      chartWidth,
-                      350,
-                      ` ${insightsService?.yearly?.unit}`,
-                      insightsService?.yearly?.y.data[0] +
-                        insightsService?.yearly?.y.data[0] / 10
-                    )}
-                  />
-                {:else}
-                  <div
-                    use:chart={renderBarChart(
-                      [insightsService?.yearly?.y],
-                      insightsService?.yearly?.x,
-                      ["#005FAA", "#B1DBFD"],
-                      chartWidth,
-                      350,
-                      ` ${insightsService?.yearly?.unit}`,
-                      insightsService?.yearly?.y.data[1] +
-                        insightsService?.yearly?.y.data[1] / 10
-                    )}
-                  />
-                {/if}
+                {#key tabsToggleArr}
+                  {#if insightsService?.yearly?.y.data[0] > insightsService?.yearly?.y.data[1]}
+                    <div
+                      use:chart={renderBarChart(
+                        [insightsService?.yearly?.y],
+                        insightsService?.yearly?.x,
+                        ["#005FAA", "#B1DBFD"],
+                        chartWidth,
+                        350,
+                        ` ${insightsService?.yearly?.unit}`,
+                        insightsService?.yearly?.y.data[0] +
+                          insightsService?.yearly?.y.data[0] / 10
+                      )}
+                    />
+                  {:else}
+                    <div
+                      use:chart={renderBarChart(
+                        [insightsService?.yearly?.y],
+                        insightsService?.yearly?.x,
+                        ["#005FAA", "#B1DBFD"],
+                        chartWidth,
+                        350,
+                        ` ${insightsService?.yearly?.unit}`,
+                        insightsService?.yearly?.y.data[1] +
+                          insightsService?.yearly?.y.data[1] / 10
+                      )}
+                    />
+                  {/if}
+                {/key}
                 <div class="content">
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
@@ -315,25 +312,27 @@
               {#if insightsService?.yearly && insightsService?.yearly?.CurrentFactorValue && insightsService?.yearly?.CurrentFactorValue !== ""}
                 <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
                 <div class="chart-container flex-center-items">
-                  <div class="insights-sub-container">
+                  {#key tabsToggleArr}
+                    <div class="insights-sub-container">
+                      <div
+                        use:chart={renderRadialBar(
+                          [insightsService?.yearly?.PreviousFactorValue],
+                          [insightsService?.yearly?.PreviousFactorDate],
+                          220,
+                          "#005FAA"
+                        )}
+                      />
+                    </div>
                     <div
+                      class="insights-sub-container"
                       use:chart={renderRadialBar(
-                        [insightsService?.yearly?.PreviousFactorValue],
-                        [insightsService?.yearly?.PreviousFactorDate],
+                        [insightsService?.yearly?.CurrentFactorValue],
+                        [insightsService?.yearly?.CurrentFactorDate],
                         220,
-                        "#005FAA"
+                        "#B1DBFD"
                       )}
                     />
-                  </div>
-                  <div
-                    class="insights-sub-container"
-                    use:chart={renderRadialBar(
-                      [insightsService?.yearly?.CurrentFactorValue],
-                      [insightsService?.yearly?.CurrentFactorDate],
-                      220,
-                      "#B1DBFD"
-                    )}
-                  />
+                  {/key}
                 </div>
                 <div class="content">
                   <h6 class="insights-label">THIS MONTH</h6>
@@ -395,33 +394,35 @@
           {#if insightsService?.monthly?.VisibilityTab == true}
             <div id={"tab1" + tabsToggleArr[i][1]}>
               <div class="chart-container">
-                {#if insightsService?.monthly?.y.data[0] > insightsService?.monthly?.y.data[1]}
-                  <div
-                    use:chart={renderBarChart(
-                      [insightsService?.monthly?.y],
-                      insightsService?.monthly?.x,
-                      ["#005FAA", "#B1DBFD"],
-                      chartWidth,
-                      350,
-                      ` ${insightsService?.monthly?.unit}`,
-                      insightsService?.monthly?.y.data[0] +
-                        insightsService?.monthly?.y.data[0] / 10
-                    )}
-                  />
-                {:else}
-                  <div
-                    use:chart={renderBarChart(
-                      [insightsService?.monthly?.y],
-                      insightsService?.monthly?.x,
-                      ["#005FAA", "#B1DBFD"],
-                      chartWidth,
-                      350,
-                      ` ${insightsService?.monthly?.unit}`,
-                      insightsService?.monthly?.y.data[1] +
-                        insightsService?.monthly?.y.data[1] / 10
-                    )}
-                  />
-                {/if}
+                {#key tabsToggleArr}
+                  {#if insightsService?.monthly?.y.data[0] > insightsService?.monthly?.y.data[1]}
+                    <div
+                      use:chart={renderBarChart(
+                        [insightsService?.monthly?.y],
+                        insightsService?.monthly?.x,
+                        ["#005FAA", "#B1DBFD"],
+                        chartWidth,
+                        350,
+                        ` ${insightsService?.monthly?.unit}`,
+                        insightsService?.monthly?.y.data[0] +
+                          insightsService?.monthly?.y.data[0] / 10
+                      )}
+                    />
+                  {:else}
+                    <div
+                      use:chart={renderBarChart(
+                        [insightsService?.monthly?.y],
+                        insightsService?.monthly?.x,
+                        ["#005FAA", "#B1DBFD"],
+                        chartWidth,
+                        350,
+                        ` ${insightsService?.monthly?.unit}`,
+                        insightsService?.monthly?.y.data[1] +
+                          insightsService?.monthly?.y.data[1] / 10
+                      )}
+                    />
+                  {/if}
+                {/key}
                 <div class="content">
                   <h6 class="insights-label">THIS MONTH</h6>
                   <div class="val-content">
@@ -522,25 +523,27 @@
               {#if insightsService?.monthly && insightsService?.monthly?.CurrentFactorValue && insightsService?.monthly?.CurrentFactorValue !== ""}
                 <h4 class="insights-title-2">MY Demand INSIGHTS</h4>
                 <div class="chart-container flex-center-items">
-                  <div class="insights-sub-container">
+                  {#key tabsToggleArr}
+                    <div class="insights-sub-container">
+                      <div
+                        use:chart={renderRadialBar(
+                          [insightsService?.monthly?.PreviousFactorValue],
+                          [insightsService?.monthly?.PreviousFactorDate],
+                          220,
+                          "#005FAA"
+                        )}
+                      />
+                    </div>
                     <div
+                      class="insights-sub-container"
                       use:chart={renderRadialBar(
-                        [insightsService?.monthly?.PreviousFactorValue],
-                        [insightsService?.monthly?.PreviousFactorDate],
+                        [insightsService?.monthly?.CurrentFactorValue],
+                        [insightsService?.monthly?.CurrentFactorDate],
                         220,
-                        "#005FAA"
+                        "#B1DBFD"
                       )}
                     />
-                  </div>
-                  <div
-                    class="insights-sub-container"
-                    use:chart={renderRadialBar(
-                      [insightsService?.monthly?.CurrentFactorValue],
-                      [insightsService?.monthly?.CurrentFactorDate],
-                      220,
-                      "#B1DBFD"
-                    )}
-                  />
+                  {/key}
                 </div>
                 <div class="content">
                   <h6 class="insights-label">THIS MONTH</h6>
@@ -602,7 +605,7 @@
             <!-- <MicInsightsRecomendation
               token={$apiToken}
               billcontractnumber={insightsService.BillContractNo}
-              body={arrayofbody[i]}
+              body={arrayofbody}
             /> -->
             <mic-recomendation
               token={$apiToken}

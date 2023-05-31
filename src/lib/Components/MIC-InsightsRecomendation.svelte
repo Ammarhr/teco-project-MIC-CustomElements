@@ -27,6 +27,7 @@
   let comment = "";
   let feedbackBolean = "";
   let index = 0;
+  let modalCon;
 
   //mocking data
   const [data, loading, error, get] = fetchRecommendations();
@@ -43,7 +44,6 @@
       billcontractnumber &&
       !$data.messages
     ) {
-      // let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages?BillContractNo=${billcontractnumber}`;
       let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages_New`;
       // let devUrl = "../../../data/recomendationMessages.json";
       get(token, devUrl, body, $SAPToken);
@@ -116,6 +116,28 @@
   const prev = () => {
     index = (index - 1) % messages.length;
   };
+
+  
+  $: modalCon = document.querySelector(".modal-container");
+  $: if (modalCon) {
+    modalCon.addEventListener("click", function (event) {
+      // check if the click event originated from the container
+      if (event.target == modalCon) {
+        // do something when the container is clicked
+        toggleModal();
+        fetchAndRedirect(
+          token,
+          `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+          null,
+          {
+            EventCode: "IN_Recommendation_Close",
+            Outcome: "",
+            Persona: $persona,
+          }
+        );
+      }
+    });
+  }
 </script>
 
 {#if $data && $data.messages && $data.messages.length > 0}
@@ -142,7 +164,7 @@
     >
   </div>
   {#if showModal == true}
-    <div class="modal-container">
+    <div class="modal-container" bind:this={modalCon}>
       <div class="modal-content">
         <div class="card">
           <div class="card-header">
@@ -176,6 +198,8 @@
                       />
                     {/if}
                   {/each}
+                  <!-- svelte-ignore a11y-click-events-have-key-events -->
+                  <!-- svelte-ignore a11y-missing-attribute -->
                   <div class="next_btn" on:click={next}>
                     <img
                       class="img_btn"
@@ -278,6 +302,7 @@
                 </div>
               </div>
               {#if arrOfPopUp[i] == true}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="modal-container">
                   <div class="feedback_modal">
                     <div class="feedback_modal_header">

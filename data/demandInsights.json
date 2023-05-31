@@ -2,7 +2,7 @@
     "services": [
         {
             "serviceName": "Electric",
-            "BillContractNo": "5100522906",
+            "BillContractNo": "5200217835",
             "ZInstallBillClass": "Residential",
             "monthly": {
                 "VisibilityTab": true,

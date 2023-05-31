@@ -1,4 +1,4 @@
-<svelte:options tag="mic-tooltip" />
+<!-- <svelte:options tag="mic-tooltip" /> -->
 
 <script>
     // @ts-nocheck

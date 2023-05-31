@@ -147,10 +147,10 @@ export const renderRadialBar = (seriesArr, labels, width, color) => {
                         color: "#6C6C6C",
                         offsetY: 15,
                         fontFamily: "Interstate",
-                        fontWeight: 300,
+                        fontWeight: 301,
                     },
                     value: {
-                        offsetY: -25,
+                        offsetY: -24,
                         fontSize: "18px",
                         color: "#005FAA",
                         fontFamily: "Interstate",

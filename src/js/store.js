@@ -16,6 +16,11 @@ let month = newDate.getMonth();
 export const date = writable(month + 1 + ' ' + year);
 export const CopmarsionDate = writable(month + 1 + ' ' + (year - 1));
 
+//* close all tooltip
+export const tooltipShow = writable(false);
+export const resetToolTip = (show) => {
+    tooltipShow.set(show)
+}
 //* bill nubmer
 export const billNumber = writable(''); // billNimber
 export const changeBillNumber = (num) => {
@@ -42,6 +47,17 @@ export const setSAPTpken = (token) => {
 export const assetsUrl = writable('')
 export const setAssetsUrl = (domain) => {
     assetsUrl.set(domain)
+}
+//children account flag:
+export const isSummaryAccountFlag = writable("false");
+export const setSummaryAccountFlag = (flag) => {
+    isSummaryAccountFlag.set(flag);
+}
+
+// parent account flag
+export const isParentAccount = writable("");
+export const setIsParentAccount = (flag) => {
+    isParentAccount.set(flag);
 }
 
 export const getDate = derived(

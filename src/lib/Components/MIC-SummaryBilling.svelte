@@ -6,17 +6,17 @@
     fetchstore,
     apiDomain,
     apiToken,
-    newToken,
     persona,
     fetchAndRedirect,
     SAPToken,
     reGenerateToken,
+    setIsParentAccount,
   } from "../../js/store";
   import { onMount } from "svelte";
 
   let items;
   let tableData;
-  let pageSize = 5; // number of items per page
+  let pageSize = 6; // number of items per page
   let pagenateItems = [];
   let currentPage = 0;
   let selectedAccount;
@@ -25,6 +25,7 @@
   let styleSelectedRows = [];
   let timeoutId;
   let avgClass = "red";
+  let newSelect = "";
   const [data, loading, error, get] = fetchstore(); // initial store fetch
   const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken(); // regenerate token store call
 
@@ -34,8 +35,8 @@
     if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
       get(
         $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SummaryBilling`,
-        "../../data/SummaryBilling.json",
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/CollectiveAccounts`,
+        // "../../data/SummaryBilling.json",
         $SAPToken
       ).then(() => {});
     }
@@ -48,19 +49,35 @@
     } else {
       selectedAccount = pagenateItems[0];
     }
-
+    setIsParentAccount(selectedAccount?.IsParentAccount || "");
     // change the style of the selected table row:
-    if (i) {
-      styleSelectedRows[i] =
-        "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
-    } else {
-      styleSelectedRows[0] =
-        "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
+    if (pagenateItems.length > 1) {
+      if (i) {
+        styleSelectedRows[i] =
+          "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
+      } else {
+        styleSelectedRows[0] =
+          "background-color:#fff9ce; color:#005FAA; font-weight: 400;";
+      }
     }
+    if (newSelect !== "" && selectedAccount) {
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "CA_Account_Select",
+          Outcome: `Account ${selectedAccount.AccountNumber} is active`,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
+    }
+    newSelect = selectedAccount;
     getToken(
       $apiToken,
       // "../../data/Token.json"
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedAccount.BillNumber}`,
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedAccount.InvoiceNumber}`,
       $SAPToken
     );
   };
@@ -135,9 +152,38 @@
       items = $data.Accounts;
       getPaginatedItems();
     } else if (str) {
-      searchArray = $data.Accounts.filter((account) => {
-        return account.AccountNumber?.includes(str.toLowerCase());
-      });
+      for (let i = 0; i < $data.Accounts.length; i++) {
+        switch (true) {
+          case $data.Accounts[i].AccountNumber?.toLowerCase().includes(
+            str.toLowerCase()
+          ):
+            if (!searchArray.includes($data.Accounts[i]))
+              searchArray.push($data.Accounts[i]);
+          case $data.Accounts[i].ServiceAddress?.toLowerCase().includes(
+            str.toLowerCase()
+          ):
+            if (!searchArray.includes($data.Accounts[i]))
+              searchArray.push($data.Accounts[i]);
+          case $data.Accounts[i].CurrentCharges?.toLowerCase().includes(
+            str.toLowerCase()
+          ):
+            if (!searchArray.includes($data.Accounts[i]))
+              searchArray.push($data.Accounts[i]);
+          case $data.Accounts[i].ContactName?.toLowerCase().includes(
+            str.toLowerCase()
+          ):
+            if (!searchArray.includes($data.Accounts[i]))
+              searchArray.push($data.Accounts[i]);
+          case $data.Accounts[i].Status?.includes(str.toLowerCase()):
+            if (!searchArray.includes($data.Accounts[i]))
+              searchArray.push($data.Accounts[i]);
+          default:
+            break;
+        }
+      }
+      // searchArray = $data.Accounts.filter((account) => {
+      //   return account.AccountNumber?.includes(str.toLowerCase());
+      // });
     }
     if (searchArray[0]) {
       items = searchArray;
@@ -157,6 +203,8 @@
   const handleSort = (register) => {
     sortUiObj.activeSort = register;
     activeSort = register;
+
+    // sorting type:
     if (prevSortth !== undefined && prevSortth !== activeSort) {
       sortUiObj.sortingType = "asen";
       sortingType = "asen";
@@ -172,6 +220,7 @@
       sortUiObj.sortingType = "asen";
       sortingType = "asen";
     }
+    // sorting by:
     if (items && items.length > 1) {
       switch (true) {
         case register == "1":
@@ -216,243 +265,251 @@
   };
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="account-con">
-  <div class="account-card">
-    <div id="account-header" on:click={cardToggle} aria-expanded={isOpen}>
-      <h4 id="title">Your AccountS</h4>
-      <img
-        src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
-        alt="toggle"
-        id={svgId}
-      />
-    </div>
-
-    {#if isOpen}
-      <div class="tool-bar">
-        <div class="summary-account">
-          {#if $data && $data.SummaryAccount}
-            <p>
-              <span class="sub-title">Summary Account:</span>
-              <span>
-                #{$data.SummaryAccount}
-              </span>
-            </p>
-          {/if}
-          {#if $data && $data.StatementDate}
-            <p>
-              <span class="sub-title">Statement Date: </span>
-              <span>
-                {$data.StatementDate}
-              </span>
-            </p>
-          {/if}
-        </div>
-        {#if tableData && tableData.length > 5}
-          <div
-            class="search"
-            on:submit={(e) => {
-              clearTimeout(timeoutId);
-              handleSearch(e);
-            }}
-          >
-            <input
-              type="text"
-              id="search"
-              placeholder="Search"
-              bind:this={searchInput}
-              on:input={(e) => {
-                clearTimeout(timeoutId); // Clear any existing timeout
-                timeoutId = setTimeout(() => {
-                  handleSearch(e);
-                }, 750);
+{#if $loading}
+  <mic-loading />
+{:else if $error}
+  <div />
+{:else if pagenateItems && pagenateItems.length > 0}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div class="account-con">
+    <div class="account-card">
+      <div id="account-header" on:click={cardToggle} aria-expanded={isOpen}>
+        <h4 id="title">Your AccountS</h4>
+        <img
+          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
+          alt="toggle"
+          id={svgId}
+        />
+      </div>
+      {#if isOpen}
+        <div class="tool-bar">
+          <div class="summary-account">
+            {#if $data && $data.SummaryAccount}
+              <p>
+                <span class="sub-title">Summary Account:</span>
+                <span>
+                  #{$data.SummaryAccount}
+                </span>
+              </p>
+            {/if}
+            {#if $data && $data.StatementDate}
+              <p>
+                <span class="sub-title">Statement Date: </span>
+                <span>
+                  {$data.StatementDate}
+                </span>
+              </p>
+            {/if}
+          </div>
+          {#if tableData && tableData.length > 5}
+            <div
+              class="search"
+              on:submit={(e) => {
+                clearTimeout(timeoutId);
+                handleSearch(e);
               }}
-            />
-            <button type="submit">
-              <img
-                src={`https://tecocdn.azureedge.net/ibill/iBill-assets/search.svg`}
-                alt=""
+            >
+              <input
+                type="text"
+                id="search"
+                placeholder="Search"
+                bind:this={searchInput}
+                on:input={(e) => {
+                  clearTimeout(timeoutId); // Clear any existing timeout
+                  timeoutId = setTimeout(() => {
+                    handleSearch(e);
+                  }, 750);
+                }}
               />
-            </button>
-          </div>
-        {/if}
-      </div>
-      <div class="table-container">
-        {#if items}
-          {#if tableData}
-            <table class="table" id="table">
-              <tr>
-                <th> Service </th>
-                <th on:click={() => handleSort("1")}>
-                  Account Number
-                  {#key sortUiObj}
-                    {@html renderSortSvg(1)}
-                  {/key}
-                </th>
-                <th on:click={() => handleSort("2")}>
-                  Service Address
-                  {#key sortUiObj}
-                    {@html renderSortSvg(2)}
-                  {/key}
-                </th>
-                <th on:click={() => handleSort("3")}>
-                  Current Charges
-                  {#key sortUiObj}
-                    {@html renderSortSvg(3)}
-                  {/key}
-                </th>
-                <th on:click={() => handleSort("4")}>
-                  Status
-                  {#key sortUiObj}
-                    {@html renderSortSvg(4)}
-                  {/key}</th
-                >
-                <th on:click={() => handleSort("5")}>
-                  Contact Name
-                  {#key sortUiObj}
-                    {@html renderSortSvg(5)}
-                  {/key}</th
-                >
-              </tr>
-              {#each pagenateItems as row, i}
-                <tr
-                  style={styleSelectedRows[i]}
-                  class="table-row"
-                  on:click={() => {
-                    handleSelecteAccount(row, i);
-                  }}
-                >
-                  <td>
-                    <div class="td-value" style="flex-direction:row">
-                      {#if row.IsElectric == true}
-                        <img
-                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`}
-                          alt={row.Service}
-                        />
-                      {/if}
-                      {#if row.IsGas == true}
-                        <img
-                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/gasService.svg`}
-                          alt={row.Service}
-                        />
-                      {/if}
-                      {#if row.IsLighting == true}
-                        <img
-                          src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`}
-                          alt={row.Service}
-                        />
-                      {/if}
-                    </div>
-                  </td>
-                  <td>
-                    <div class="td-value">
-                      {#if row.AccountNumber != ""}
-                        #{row.AccountNumber}
-                      {/if}
-                    </div></td
-                  >
-                  <td>
-                    <div class="td-value">
-                      {#if row.ServiceAddress != ""}
-                        {row.ServiceAddress}
-                      {/if}
-                    </div></td
-                  >
-                  <td>
-                    <div class="td-value">
-                      {#if row.CurrentCharges != ""}
-                        ${row.CurrentCharges}
-                      {/if}
-                    </div></td
-                  >
-                  <td>
-                    <div class="td-value">
-                      <p>
-                        {#if row.Status == true}
-                          <span
-                            class={avgClass}
-                            style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
-                          >
-                            <span class="status"> Active </span>
-                          </span>
-                        {:else if row.Status == false}
-                          <span
-                            class={avgClass}
-                            style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
-                          >
-                            <span class="status"> Inactive </span>
-                          </span>
-                        {:else}
-                          <div class="td-value" />
-                        {/if}
-                      </p>
-                    </div></td
-                  >
-                  <td>
-                    <div class="td-value">
-                      {#if row.ContactName != ""}
-                        {row.ContactName}
-                      {/if}
-                    </div></td
-                  >
-                </tr>
-              {/each}
-            </table>
-          {/if}
-        {/if}
-      </div>
-      {#if tableData && tableData.length > 5}
-        <div class="pagination-options">
-          <div>
-            <p class="showing">
-              Showing {pagenateItems.length} Of {items.length} Results
-            </p>
-          </div>
-          {#if items && items.length > 5}
-            <div class="pagination-btns">
-              <button
-                on:click={prevPage}
-                disabled={currentPage === 0}
-                class="prev-next"
-              >
+              <button type="submit">
                 <img
-                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
-                  alt=""
-                />
-                Previous
-              </button>
-              {#each arrayOfBtns as pageIndex}
-                <button
-                  on:click={() => goToPage(pageIndex)}
-                  class:selected={pageIndex === currentPage}
-                  disabled={currentPage === pageIndex}
-                  class="page-btn"
-                >
-                  {#key pageIndex}
-                    {pageIndex + 1}
-                  {/key}
-                </button>
-              {/each}
-              <button
-                on:click={nextPage}
-                disabled={currentPage === totalPagesShowen - 1}
-                class="prev-next"
-              >
-                Next
-                <img
-                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
+                  src={`https://tecocdn.azureedge.net/ibill/iBill-assets/search.svg`}
                   alt=""
                 />
               </button>
             </div>
           {/if}
         </div>
+        <div class="table-container">
+          {#if items}
+            {#if tableData}
+              <table class="table" id="table">
+                <tr>
+                  <th> Service </th>
+                  <th on:click={() => handleSort("1")}>
+                    Account Number
+                    {#key sortUiObj}
+                      {@html renderSortSvg(1)}
+                    {/key}
+                  </th>
+                  <th on:click={() => handleSort("2")}>
+                    Service Address
+                    {#key sortUiObj}
+                      {@html renderSortSvg(2)}
+                    {/key}
+                  </th>
+                  <th on:click={() => handleSort("3")}>
+                    Current Charges
+                    {#key sortUiObj}
+                      {@html renderSortSvg(3)}
+                    {/key}
+                  </th>
+                  <th on:click={() => handleSort("4")}>
+                    Status
+                    {#key sortUiObj}
+                      {@html renderSortSvg(4)}
+                    {/key}</th
+                  >
+                  <th on:click={() => handleSort("5")}>
+                    Contact Name
+                    {#key sortUiObj}
+                      {@html renderSortSvg(5)}
+                    {/key}</th
+                  >
+                </tr>
+                {#each pagenateItems as row, i}
+                  <tr
+                    style={styleSelectedRows[i]}
+                    class="table-row"
+                    on:click={() => {
+                      handleSelecteAccount(row, i);
+                    }}
+                  >
+                    <td>
+                      <div class="td-value" style="flex-direction:row">
+                        {#if row.IsElectric == "X"}
+                          <img
+                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`}
+                            alt={row.Service}
+                          />
+                        {/if}
+                        {#if row.IsGas == "X"}
+                          <img
+                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/gasService.svg`}
+                            alt={row.Service}
+                          />
+                        {/if}
+                        {#if row.IsLighting == "X"}
+                          <img
+                            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`}
+                            alt={row.Service}
+                          />
+                        {/if}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="td-value">
+                        {#if row.AccountNumber != ""}
+                          #{row.AccountNumber}
+                        {/if}
+                      </div></td
+                    >
+                    <td>
+                      <div class="td-value">
+                        {#if row.ServiceAddress != ""}
+                          {row.ServiceAddress}
+                        {/if}
+                      </div></td
+                    >
+                    <td>
+                      <div class="td-value">
+                        {#if (row.CurrentCharges == "0.00" || row.CurrentCharges == "") && row.IsParentAccount == "X"}
+                          No Charges Available
+                        {:else if (row.CurrentCharges == "0.00" || row.CurrentCharges == "") && row.IsParentAccount !== "X"}
+                          <b>Not billed</b>
+                        {:else if row.CurrentCharges != ""}
+                          ${row.CurrentCharges}
+                        {/if}
+                      </div></td
+                    >
+                    <td>
+                      <div class="td-value">
+                        <p>
+                          {#if row.Status == "Active"}
+                            <span
+                              class={avgClass}
+                              style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
+                            >
+                              <span class="status"> Active </span>
+                            </span>
+                          {:else if row.Status == "Inactive"}
+                            <span
+                              class={avgClass}
+                              style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
+                            >
+                              <span class="status"> Inactive </span>
+                            </span>
+                          {:else}
+                            <div class="td-value" />
+                          {/if}
+                        </p>
+                      </div></td
+                    >
+                    <td>
+                      <div class="td-value">
+                        {#if row.ContactName != ""}
+                          {row.ContactName}
+                        {/if}
+                      </div></td
+                    >
+                  </tr>
+                {/each}
+              </table>
+            {/if}
+          {/if}
+        </div>
+        {#if tableData && tableData.length > 5}
+          <div class="pagination-options">
+            <div>
+              <p class="showing">
+                Showing {pagenateItems.length} Of {items.length} Results
+              </p>
+            </div>
+            {#if items && items.length > 5}
+              <div class="pagination-btns">
+                <button
+                  on:click={prevPage}
+                  disabled={currentPage === 0}
+                  class="prev-next"
+                >
+                  <img
+                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
+                    alt=""
+                  />
+                  Previous
+                </button>
+                {#each arrayOfBtns as pageIndex}
+                  <button
+                    on:click={() => goToPage(pageIndex)}
+                    class:selected={pageIndex === currentPage}
+                    disabled={currentPage === pageIndex}
+                    class="page-btn"
+                  >
+                    {#key pageIndex}
+                      {pageIndex + 1}
+                    {/key}
+                  </button>
+                {/each}
+                <button
+                  on:click={nextPage}
+                  disabled={currentPage === totalPagesShowen - 1}
+                  class="prev-next"
+                >
+                  Next
+                  <img
+                    src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
+                    alt=""
+                  />
+                </button>
+              </div>
+            {/if}
+          </div>
+        {/if}
       {/if}
-    {/if}
-  </div>
+    </div>
 
-  <!-- Canceled -->
-  <!-- <div class="account-details account-card">
+    <!-- Canceled -->
+    <!-- <div class="account-details account-card">
     <p>
       Service Address: <span
         >{selectedAccount && selectedAccount.ServiceAddress
@@ -475,7 +532,8 @@
       </span>
     </p>
   </div> -->
-</div>
+  </div>
+{/if}
 
 <style lang="scss">
   * {
@@ -797,7 +855,7 @@
     font-size: 16px;
     color: #005faa;
     @media screen and (max-width: 480px) {
-     display: none;
+      display: none;
     }
   }
 

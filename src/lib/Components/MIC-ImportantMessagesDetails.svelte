@@ -3,9 +3,9 @@
 <script>
   // @ts-nocheck
 
-  import circyle from "../../assets/cr.svg";
+  // import circyle from "../../assets/cr.svg";
   // import messageNotification from "../../assets/messages-notification.svg";
-  import messageNotification from "../../assets/envelope-solid.svg";
+  // import messageNotification from "../../assets/envelope-solid.svg";
 
   import { slide } from "svelte/transition";
   import {
