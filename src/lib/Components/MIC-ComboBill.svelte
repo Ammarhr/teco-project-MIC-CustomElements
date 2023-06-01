@@ -40,13 +40,13 @@
       !$yearlyData.NetMeter &&
       $isSummaryAccountFlag
     ) {
-      chargeGet(
-        $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
-        // "../../../data/ChargeDetails.json",
-        $SAPToken
-      );
       if ($isSummaryAccountFlag !== "true") {
+        chargeGet(
+          $apiToken,
+          `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+          // "../../../data/ChargeDetails.json",
+          $SAPToken
+        );
         get(
           $apiToken,
           // "../../../data/DemandInsight.json",
@@ -260,9 +260,9 @@
             {/if}
           </div>
         {/if}
-        {#if $isParentAccount !== "X"}
-          {#if arrayOfCharges && arrayOfCharges.length > 0 && insightsArray && insightsArray.length == 0 && i == 0}
-            <div class="insights">
+        {#if arrayOfCharges && arrayOfCharges.length > 0 && insightsArray && insightsArray.length == 0 && i == 0}
+          <div class="insights">
+            {#if $isParentAccount !== "X"}
               {#if $yearlyLoading}
                 <mic-loading />
               {:else if YearlyArray}
@@ -272,37 +272,39 @@
                 />
               {/if}
               <mic-bulkdownload class="mic-insights bulk-desk" />
-            </div>
-          {:else if charge.SectionType !== "InvoiceTotal"}
-            {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
-              <div class="insights">
-                {#key arrayOfbody}
-                  {#if $latestBill == $billNumber && arrayOfbody && arrayOfbody[i]}
-                    <mic-insights-combo
-                      insightservices={insightsArray[i]}
-                      sunselectdata={sunSelectArray}
-                      emptytabs={emptyTabs}
-                      arrayofbody={arrayOfbody[i]}
-                    />
-                    <!-- <MicBillInsightsCombo 
+            {/if}
+          </div>
+        {:else if charge.SectionType !== "InvoiceTotal"}
+          {#if insightsArray && insightsArray[i] && insightsArray[i].length > 0 && sunSelectArray}
+            <div class="insights">
+              {#key arrayOfbody}
+                {#if $latestBill == $billNumber && arrayOfbody && arrayOfbody[i]}
+                  <mic-insights-combo
+                    insightservices={insightsArray[i]}
+                    sunselectdata={sunSelectArray}
+                    emptytabs={emptyTabs}
+                    arrayofbody={arrayOfbody[i]}
+                  />
+                  <!-- <MicBillInsightsCombo 
                   insightservices={insightsArray[i]}
                   sunselectdata={sunSelectArray}
                   emptytabs={emptyTabs}
                   arrayofbody={arrayOfbody[i]}
                 /> -->
-                  {:else}
-                    <mic-insights-combo
-                      insightservices={insightsArray[i]}
-                      sunselectdata={sunSelectArray}
-                      emptytabs={emptyTabs}
-                    />
-                    <!-- <MicBillInsightsCombo 
+                {:else}
+                  <mic-insights-combo
+                    insightservices={insightsArray[i]}
+                    sunselectdata={sunSelectArray}
+                    emptytabs={emptyTabs}
+                  />
+                  <!-- <MicBillInsightsCombo 
                   insightservices={insightsArray[i]}
                   sunselectdata={sunSelectArray}
                   emptytabs={emptyTabs}
                 /> -->
-                  {/if}
-                {/key}
+                {/if}
+              {/key}
+              {#if $isParentAccount !== "X"}
                 {#if $sunloading}
                   <mic-loading />
                 {:else if $sunerror}
@@ -324,10 +326,10 @@
                   {/if}
                   <mic-bulkdownload class="mic-insights bulk-desk" />
                 {/if}
-              </div>
-            {:else}
-              <div class="insights" />
-            {/if}
+              {/if}
+            </div>
+          {:else}
+            <div class="insights" />
           {/if}
         {/if}
       {/if}
