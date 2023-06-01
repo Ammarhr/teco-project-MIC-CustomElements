@@ -59,6 +59,11 @@ export const isParentAccount = writable("");
 export const setIsParentAccount = (flag) => {
     isParentAccount.set(flag);
 }
+// no charge flage
+export const isChargeAmmount = writable("");
+export const setIsChargeAmmount = (flag) => {
+    isChargeAmmount.set(flag);
+}
 
 export const getDate = derived(
     date,

@@ -74,6 +74,9 @@
       );
     }
     newSelect = selectedAccount;
+    // if(selectedAccount){
+
+    // }
     getToken(
       $apiToken,
       // "../../data/Token.json"
@@ -301,7 +304,7 @@
               </p>
             {/if}
           </div>
-          {#if tableData && tableData.length > 5}
+          {#if tableData && tableData.length > 6}
             <div
               class="search"
               on:submit={(e) => {
@@ -458,14 +461,14 @@
             {/if}
           {/if}
         </div>
-        {#if tableData && tableData.length > 5}
+        {#if tableData && tableData.length > 6}
           <div class="pagination-options">
             <div>
               <p class="showing">
                 Showing {pagenateItems.length} Of {items.length} Results
               </p>
             </div>
-            {#if items && items.length > 5}
+            {#if items && items.length > 6}
               <div class="pagination-btns">
                 <button
                   on:click={prevPage}
