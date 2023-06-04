@@ -126,7 +126,9 @@
                   {@html message}
                 </span>
               {:else}
-                {@html message}
+                <span>
+                  {@html message}
+                </span>
               {/if}
             </div>
           {:else}
@@ -222,24 +224,27 @@
     font-weight: 300;
     font-size: 20px;
     color: rgb(0, 0, 0);
-    // overflow: hidden;
-    // display: flex;
     height: 216px;
     @media screen and (max-width: 480px) {
       font-size: 18px !important;
     }
-    :nth-child(2) {
+    // :nth-child(2) {
+    //   display: -webkit-box !important;
+    //   -webkit-box-orient: vertical !important;
+    //   -webkit-line-clamp: 6 !important;
+    //   overflow: hidden !important;
+    // }
+    span {
       display: -webkit-box !important;
       -webkit-box-orient: vertical !important;
-      -webkit-line-clamp: 6 !important;
+      -webkit-line-clamp: 7 !important;
       overflow: hidden !important;
-    }
-    span {
       p {
-        display: -webkit-box !important;
-        -webkit-box-orient: vertical !important;
-        -webkit-line-clamp: 7 !important;
-        overflow: hidden !important;
+        display: contents !important;
+        // display: -webkit-box !important;
+        // -webkit-box-orient: vertical !important;
+        // -webkit-line-clamp: 7 !important;
+        // overflow: hidden !important;
       }
     }
   }
