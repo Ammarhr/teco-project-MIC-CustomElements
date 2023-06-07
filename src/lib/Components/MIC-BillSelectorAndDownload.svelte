@@ -27,7 +27,7 @@
   const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken();
 
   $: if ($apiDomain && $apiToken && $SAPToken && !$data.bills) {
-    if ($isSummaryAccountFlag == "true") {
+    if ($isSummaryAccountFlag.toLowerCase() == "true") {
       mainClass = "col-account";
     }
     get(

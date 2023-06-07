@@ -2,51 +2,10 @@
 
 <script>
   // @ts-nocheck
-
-  import dropDown from "../../assets/cr.svg";
-  import { slide } from "svelte/transition";
-  import {
-    fetchstore,
-    apiToken,
-    apiDomain,
-    eventsDomain,
-    newToken,
-    SAPToken,
-  } from "../../js/store";
-  import { onMount } from "svelte";
   export let yearlyarray;
-  let newTokenTrigger;
   let yearlyEnergyData;
   let arrayOfToggles = [];
-  ////////////////////////
-  // const [data, loading, error, get] = fetchstore();
-  // onMount(() => {
-  //   if ($apiToken && $SAPToken && !$data.NetMeter && $newToken == "") {
-  //     get(
-  //       $apiToken,
-  //       `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
-  //       $SAPToken
-  //       // "../../data/yearlyEnergy.json"
-  //     );
-  //   }
-  //   console.log("yearly energy");
-  //   newTokenTrigger = $apiToken;
-  // });
 
-  // $: if (
-  //   $newToken &&
-  //   $newToken.token &&
-  //   (newTokenTrigger == $apiToken || newTokenTrigger !== $newToken.token)
-  // ) {
-  //   get(
-  //     $newToken.token,
-  //     // "../../data/yearlyEnergy.json"
-  //     `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
-  //     $SAPToken
-  //   );
-  //   newTokenTrigger = $newToken.token;
-  //   console.log("new yearly energy");
-  // }
   const toggle = (i) => {
     arrayOfToggles[i] = !arrayOfToggles[i];
   };

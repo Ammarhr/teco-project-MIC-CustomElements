@@ -40,7 +40,7 @@
       !$yearlyData.NetMeter &&
       $isSummaryAccountFlag
     ) {
-      if ($isSummaryAccountFlag !== "true") {
+      if ($isSummaryAccountFlag.toLowerCase() !== "true") {
         chargeGet(
           $apiToken,
           `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,

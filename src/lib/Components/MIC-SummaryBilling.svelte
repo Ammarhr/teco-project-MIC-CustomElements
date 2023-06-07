@@ -291,7 +291,7 @@
               <p>
                 <span class="sub-title">Summary Account:</span>
                 <span>
-                  #{$data.SummaryAccount}
+                  {$data.SummaryAccount}
                 </span>
               </p>
             {/if}
@@ -304,7 +304,7 @@
               </p>
             {/if}
           </div>
-          {#if tableData && tableData.length > 6}
+          {#if tableData && tableData.length > pageSize}
             <div
               class="search"
               on:submit={(e) => {
@@ -461,14 +461,14 @@
             {/if}
           {/if}
         </div>
-        {#if tableData && tableData.length > 6}
+        {#if tableData && tableData.length > pageSize}
           <div class="pagination-options">
             <div>
               <p class="showing">
                 Showing {pagenateItems.length} Of {items.length} Results
               </p>
             </div>
-            {#if items && items.length > 6}
+            {#if items && items.length > pageSize}
               <div class="pagination-btns">
                 <button
                   on:click={prevPage}

@@ -32,17 +32,15 @@
 
   export let token;
   export let domain;
-  export let eventdomain;
   export let personainput;
   export let saptoken = '""';
   export let issummaryaccount = "false";
   const refresh = () => {
     newToken.set("");
   };
-  $: if (token && domain && eventdomain) {
+  $: if (token && domain ) {
     setToken(token);
     setDomain(domain);
-    setEventDomain(eventdomain);
     setSAPTpken(saptoken);
     // setAssetsUrl(assetspath);
     if (personainput == "Agent") {
@@ -63,7 +61,7 @@
   refresh();
 </script>
 
-{#if token && domain && eventdomain && saptoken && $generalErr !== true}
+{#if token && domain  && saptoken && $generalErr !== true}
   <div class="wrapper">
     <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
@@ -79,7 +77,7 @@
     </div>
     <mic-billselector />
     <!-- <MicBillSelectorAndDownload /> -->
-    {#if $isSummaryAccountFlag == "true"}
+    {#if $isSummaryAccountFlag.toLowerCase() == "true"}
       <div class="summary-billing">
         <mic-summarybilling />
         <!-- <MicSummaryBilling /> -->

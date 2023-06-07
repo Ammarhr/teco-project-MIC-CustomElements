@@ -69,7 +69,7 @@
   // fetch meterTable fetch api on component mount
   onMount(() => {
     if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
-      if ($isSummaryAccountFlag !== "true") {
+      if ($isSummaryAccountFlag.toLowerCase() !== "true") {
         get(
           $apiToken,
           `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
@@ -707,7 +707,7 @@
         />
       </div>
       {#if isOpen}
-        {#if tableData && tableData.length > 5}
+        {#if tableData && tableData.length > pageSize}
           <div
             class="search"
             on:submit={(e) => {
@@ -918,14 +918,14 @@
             >
           </div>
         {/if}
-        {#if tableData && tableData.length > 5}
+        {#if tableData && tableData.length > pageSize}
           <div class="pagination-options">
             <div>
               <p class="showing">
                 Showing {pagenateItems.length} Of {items.length} Results
               </p>
             </div>
-            {#if items && items.length > 5}
+            {#if items && items.length > pageSize}
               <div class="pagination-btns">
                 <button
                   on:click={prevPage}

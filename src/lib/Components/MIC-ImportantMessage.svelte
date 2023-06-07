@@ -120,9 +120,12 @@
             <div class="msg-data">
               {#if !state.messages[0].empty && state.messages[0] && (state.messages[0].Title !== "") !== ""}
                 <span>
-                  <span class="msg-title">
+                  <p class="msg-title">
                     {state.messages[0].Title}
-                  </span>
+                  </p>
+                  {#if state.messages[0].Title !== ""}
+                    <br />
+                  {/if}
                   {@html message}
                 </span>
               {:else}
@@ -237,14 +240,14 @@
     span {
       display: -webkit-box !important;
       -webkit-box-orient: vertical !important;
-      -webkit-line-clamp: 7 !important;
+      -webkit-line-clamp: 6 !important;
       overflow: hidden !important;
+      line-height: 1.4;
       p {
         display: contents !important;
-        // display: -webkit-box !important;
-        // -webkit-box-orient: vertical !important;
-        // -webkit-line-clamp: 7 !important;
-        // overflow: hidden !important;
+      }
+      @media screen and (max-width: 480px) {
+        -webkit-line-clamp: 7 !important;
       }
     }
   }
@@ -254,6 +257,13 @@
     letter-spacing: -0.02em;
     color: #005faa;
     height: 1.5rem;
+    &:empty {
+      /* Remove the style of the empty div */
+      display: none;
+      border: none;
+      padding: 0;
+      height: 0;
+    }
   }
   p {
     margin: 0;
