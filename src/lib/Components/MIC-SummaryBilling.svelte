@@ -403,7 +403,7 @@
                     <td>
                       <div class="td-value">
                         {#if row.AccountNumber != ""}
-                          #{row.AccountNumber}
+                          {row.AccountNumber}
                         {/if}
                       </div></td
                     >

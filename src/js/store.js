@@ -341,7 +341,8 @@ function getSessionLocationsuccessCallback(position) {
 function getSessionLocationerrorCallback(error) {
     // console.log(`Error occurred: ${error.message}`);
 }
-//*
+
+//* get browser name 
 let browserName;
 
 if (userAgent.indexOf("Edg") > -1) {

@@ -415,8 +415,8 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                             (serviceData[dataPointIndex] && serviceData[dataPointIndex].CloudIcon == "X" ? `<div class="apexcharts-tooltip-text" >` +
                                 '<div class="arrow_box" style="display:flex;flex-direction:column;align-items:center;white-space: unset !important;width: 100%;white-space: pre-wrap !important;">' +
                                 "<span style='font-weight:300; font-size:14px;color:#000000; margin-right:6px; margin-bottom:6px; width:100%'>" +
-                                "Meter is not responding; data will be updated when available" +
-                                "</span>" :
+                                serviceData[dataPointIndex].ToolTipEstimated !== "" ? serviceData[dataPointIndex].ToolTipEstimated : "Meter is not responding; data will be updated when available" +
+                            "</span>" :
                                 (((series[0] && series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
                                     '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
                                     "<span style='font-weight:700; color:#000000; margin-right:6px; margin-bottom:6px'>" +
@@ -523,6 +523,55 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     let offPeakArray
     let OnPeakArray
     let categoriesArray;
+    let serviceData = [];
+    let cloudArray = [];
+    let multiblyNum = 1;
+    if (monthly == false) {
+        if (data && data.length > 0) {
+            serviceData = data.map((results) => {
+                if (results.Usage !== "") {
+                    if (onPeak == "x" && offPeak == "x") {
+                        multiblyNum = 2
+                        if (results.CloudIcon == "X" && results.Dtype == "dtoun") {
+                            cloudArray.push({
+                                x: results.Perioddate.toUpperCase(),
+                                y: parseFloat(results.Usage?.split(",").join('')) + (maxScale * 0.5),
+                                yAxisIndex: 0,
+                                seriesIndex: 0,
+                                image: {
+                                    path: 'https://tecocdn.azureedge.net/ibill/iBill-assets/usage-cloud.svg',
+                                    width: 30,
+                                    height: 30,
+                                    offsetX: 0,
+                                    offsetY: 0,
+                                }
+                            })
+                        }
+                    } else {
+                        if (results.CloudIcon == "X") {
+                            cloudArray.push({
+                                x: results.Perioddate.toUpperCase(),
+                                y: parseFloat(results.Usage?.split(",").join('')) + (maxScale * 0.5),
+                                yAxisIndex: 0,
+                                seriesIndex: 0,
+                                image: {
+                                    path: 'https://tecocdn.azureedge.net/ibill/iBill-assets/usage-cloud.svg',
+                                    width: 30,
+                                    height: 30,
+                                    offsetX: 0,
+                                    offsetY: 0,
+                                }
+                            })
+                        }
+                    }
+                    return results
+                } else {
+                    return null
+                }
+            })
+        }
+    }
+
 
     OnPeakArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == onPeakOprand : result.Dtype == "dtoun")
         .map(value => value.Usage !== "" ? parseFloat(value?.Usage?.split(",").join('')) : null)
@@ -719,7 +768,9 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     distributed: false,
                 }
             },
-
+            annotations: {
+                points: cloudArray,
+            },
             tooltip: {
                 enabled: true,
                 followCursor: true,
@@ -736,57 +787,69 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                             "<span style='font-weight:700;'>" +
                             arr[dataPointIndex] +
                             "</div>"
-                            + (chartUnit == "usage" ? (`<div class="apexcharts-tooltip-text" style="margin-top: 8px;">` +
-                                (series[0] && series[0][dataPointIndex] ? "</div>" +
-                                    '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
-                                    "<span style='font-weight:700; color:#000000; margin-bottom:6px'>" +
-                                    "On Peak: " +
-                                    "</span>" +
-                                    "<span style='font-weight:300;color:#000000;'>" + " "
-                                    +
-                                    series[0][dataPointIndex].toLocaleString() + " " + unit : "")
+                            +
+                            (serviceData && serviceData.length > 0 && serviceData[dataPointIndex * multiblyNum] && serviceData[dataPointIndex * multiblyNum].CloudIcon == "X"
+                                ? `<div class="apexcharts-tooltip-text" >` +
+                                '<div class="arrow_box" style="display:flex;flex-direction:column;align-items:center;white-space: unset !important;width: 100%;white-space: pre-wrap !important;">' +
+                                "<span style='font-weight:300; font-size:14px;color:#000000; margin-right:6px; margin-bottom:6px; width:194px; margin-top:14px;'>"
                                 +
-                                (series[1] && series[1][dataPointIndex] ? "</div>"
-                                    +
-                                    '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
-                                    + `<span style='font-weight:700; margin-bottom:6px'>` +
-                                    "Off Peak: " +
-                                    "</span>"
-                                    +
-                                    "<span style='font-weight:300;'>"
-                                    + series[1][dataPointIndex].toLocaleString() + " " + unit : ""))
-                                : (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00") ?
-                                    '<div style="padding-top:14px"> ' +
-                                    (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00" ?
-                                        ("</div>"
+                                (serviceData[dataPointIndex * multiblyNum].ToolTipEstimated !== "" ? serviceData[dataPointIndex * multiblyNum].ToolTipEstimated
+                                    : "Meter is not responding; data will be updated when available") +
+                                "</span>"
+                                :
+                                ((chartUnit == "usage" ?
+
+                                    (`<div class="apexcharts-tooltip-text" style="margin-top: 8px;">` +
+                                        (series[0] && series[0][dataPointIndex] ? "</div>" +
+                                            '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
+                                            "<span style='font-weight:700; color:#000000; margin-bottom:6px'>" +
+                                            "On Peak: " +
+                                            "</span>" +
+                                            "<span style='font-weight:300;color:#000000;'>" + " "
+                                            +
+                                            series[0][dataPointIndex].toLocaleString() + " " + unit : "")
+                                        +
+                                        (series[1] && series[1][dataPointIndex] ? "</div>"
                                             +
                                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                                             + `<span style='font-weight:700; margin-bottom:6px'>` +
-                                            "Cost: " +
+                                            "Off Peak: " +
                                             "</span>"
                                             +
                                             "<span style='font-weight:300;'>"
-                                            +
-                                            "$ " + costArray[dataPointIndex].toLocaleString()) : "")
-                                    : ""
-                            )
-                            +
-                            (series[2] && series[2][dataPointIndex] ? "</div>"
-                                + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
-                                + `<span style='font-weight:700; margin-bottom:6px'>` +
-                                "Avg. Temp: " +
-                                "</span>"
-                                +
-                                "<span style='font-weight:300;'>"
-                                + series[2][dataPointIndex] + "°" : "") +
-                            (daysArray && monthly == true ? "</div>"
-                                + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
-                                + `<span style='font-weight:700; margin-bottom:6px'>` +
-                                "Billing Days: " +
-                                "</span>"
-                                +
-                                "<span style='font-weight:300;'>"
-                                + daysArray[dataPointIndex] : '')
+                                            + series[1][dataPointIndex].toLocaleString() + " " + unit : ""))
+                                    : (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00") ?
+                                        '<div style="padding-top:14px"> ' +
+                                        (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00" ?
+                                            ("</div>"
+                                                +
+                                                '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                                + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                                "Cost: " +
+                                                "</span>"
+                                                +
+                                                "<span style='font-weight:300;'>"
+                                                +
+                                                "$ " + costArray[dataPointIndex].toLocaleString()) : "")
+                                        : ""
+                                )
+                                    +
+                                    (series[2] && series[2][dataPointIndex] ? "</div>"
+                                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                        + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                        "Avg. Temp: " +
+                                        "</span>"
+                                        +
+                                        "<span style='font-weight:300;'>"
+                                        + series[2][dataPointIndex] + "°" : "") +
+                                    (daysArray && monthly == true ? "</div>"
+                                        + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                        + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                        "Billing Days: " +
+                                        "</span>"
+                                        +
+                                        "<span style='font-weight:300;'>"
+                                        + daysArray[dataPointIndex] : '')))
                         );
                     } else {
                         return ''

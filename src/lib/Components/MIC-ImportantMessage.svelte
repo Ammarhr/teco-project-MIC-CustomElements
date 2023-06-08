@@ -231,13 +231,7 @@
     @media screen and (max-width: 480px) {
       font-size: 18px !important;
     }
-    // :nth-child(2) {
-    //   display: -webkit-box !important;
-    //   -webkit-box-orient: vertical !important;
-    //   -webkit-line-clamp: 6 !important;
-    //   overflow: hidden !important;
-    // }
-    span {
+    > span {
       display: -webkit-box !important;
       -webkit-box-orient: vertical !important;
       -webkit-line-clamp: 6 !important;
@@ -267,14 +261,6 @@
   }
   p {
     margin: 0;
-    // display: -webkit-box !important;
-    // -webkit-box-orient: vertical !important;
-    // -webkit-line-clamp: 8 !important;
-    // overflow: hidden !important;
-    // @media screen and (max-width: 480px) {
-    //   font-size: 18px !important;
-    // -webkit-line-clamp: 9 !important;
-    // }
   }
   button {
     display: flex;
