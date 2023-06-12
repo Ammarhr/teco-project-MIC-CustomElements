@@ -244,7 +244,24 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                 }
                 return results
             } else {
-                return null
+                if (results.CloudIcon == "X") {
+                    cloudArray.push({
+                        x: results.Perioddate.toUpperCase(),
+                        y: (max * 0.15),
+                        yAxisIndex: 0,
+                        seriesIndex: 0,
+                        image: {
+                            path: 'https://tecocdn.azureedge.net/ibill/iBill-assets/usage-cloud.svg',
+                            width: 30,
+                            height: 30,
+                            offsetX: 0,
+                            offsetY: 0,
+                        }
+                    })
+                    return results
+                } else {
+                    return null
+                }
             }
         })
         tempData = data.map((results) => {
@@ -401,7 +418,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     arr = data.map((results) => {
                         return results.FullDate
                     })
-                    if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex])) {
+                    if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex]) || serviceData[dataPointIndex] && serviceData[dataPointIndex].CloudIcon == "X") {
 
                         return (
                             '<div class=" apexcharts-theme-light apexcharts-active" style="padding:12px;min-width:150px; max-width:208px">' +
@@ -415,8 +432,8 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                             (serviceData[dataPointIndex] && serviceData[dataPointIndex].CloudIcon == "X" ? `<div class="apexcharts-tooltip-text" >` +
                                 '<div class="arrow_box" style="display:flex;flex-direction:column;align-items:center;white-space: unset !important;width: 100%;white-space: pre-wrap !important;">' +
                                 "<span style='font-weight:300; font-size:14px;color:#000000; margin-right:6px; margin-bottom:6px; width:100%'>" +
-                                serviceData[dataPointIndex].ToolTipEstimated !== "" ? serviceData[dataPointIndex].ToolTipEstimated : "Meter is not responding; data will be updated when available" +
-                            "</span>" :
+                                (serviceData[dataPointIndex].ToolTipEstimated !== "" ? serviceData[dataPointIndex].ToolTipEstimated : "Meter is not responding; data will be updated when available") +
+                                "</span>" :
                                 (((series[0] && series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
                                     '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
                                     "<span style='font-weight:700; color:#000000; margin-right:6px; margin-bottom:6px'>" +
@@ -526,32 +543,53 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     let serviceData = [];
     let cloudArray = [];
     let multiblyNum = 1;
+    let dTounVal = 0, dToufVal = 0;
+    let notationY = 0;
+    let itirate = 1;
     if (monthly == false) {
         if (data && data.length > 0) {
             serviceData = data.map((results) => {
                 if (results.Usage !== "") {
                     if (onPeak == "x" && offPeak == "x") {
                         multiblyNum = 2
-                        if (results.CloudIcon == "X" && results.Dtype == "dtoun") {
-                            cloudArray.push({
-                                x: results.Perioddate.toUpperCase(),
-                                y: parseFloat(results.Usage?.split(",").join('')) + (maxScale * 0.5),
-                                yAxisIndex: 0,
-                                seriesIndex: 0,
-                                image: {
-                                    path: 'https://tecocdn.azureedge.net/ibill/iBill-assets/usage-cloud.svg',
-                                    width: 30,
-                                    height: 30,
-                                    offsetX: 0,
-                                    offsetY: 0,
+
+                        if (results.CloudIcon == "X" && results.Dtype == "dtouf" || results.CloudIcon == "X" && results.Dtype == "dtoun") {
+                            if (results.Dtype == "dtouf") {
+                                dToufVal = parseFloat(results.Usage?.split(",").join(''));
+                            } else if (results.Dtype == "dtoun") {
+                                dTounVal = parseFloat(results.Usage?.split(",").join(''));
+                            }
+                            if (itirate == 2) {
+                                if (dTounVal > dToufVal) {
+                                    notationY = dTounVal;
+                                } else {
+                                    notationY = dToufVal;
                                 }
-                            })
+                                cloudArray.push({
+                                    x: results.Perioddate.toUpperCase(),
+                                    y: notationY + (maxScale * 0.15),
+                                    yAxisIndex: 0,
+                                    seriesIndex: 0,
+                                    image: {
+                                        path: 'https://tecocdn.azureedge.net/ibill/iBill-assets/usage-cloud.svg',
+                                        width: 30,
+                                        height: 30,
+                                        offsetX: 0,
+                                        offsetY: 0,
+                                    }
+                                })
+                                itirate = 0;
+                                dTounVal = 0;
+                                dToufVal = 0;
+                            }
+                            itirate++
+
                         }
                     } else {
                         if (results.CloudIcon == "X") {
                             cloudArray.push({
                                 x: results.Perioddate.toUpperCase(),
-                                y: parseFloat(results.Usage?.split(",").join('')) + (maxScale * 0.5),
+                                y: parseFloat(results.Usage?.split(",").join('')) + (maxScale * 0.15),
                                 yAxisIndex: 0,
                                 seriesIndex: 0,
                                 image: {
@@ -566,7 +604,30 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     }
                     return results
                 } else {
-                    return null
+                    if (results.CloudIcon == "X" && results.Dtype == "dtouf" || results.CloudIcon == "X" && results.Dtype == "dtoun") {
+                        if (itirate == 2) {
+                            cloudArray.push({
+                                x: results.Perioddate.toUpperCase(),
+                                y: (maxScale * 0.15),
+                                yAxisIndex: 0,
+                                seriesIndex: 0,
+                                image: {
+                                    path: 'https://tecocdn.azureedge.net/ibill/iBill-assets/usage-cloud.svg',
+                                    width: 30,
+                                    height: 30,
+                                    offsetX: 0,
+                                    offsetY: 0,
+                                }
+                            })
+                            itirate = 0;
+                            dTounVal = 0;
+                            dToufVal = 0;
+                        }
+                        itirate++
+                        return results
+                    } else {
+                        return null
+                    }
                 }
             })
         }
@@ -778,7 +839,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     let arr;
                     arr = data.filter((result, i) => onPeak !== "x" && offPeak == "x" || onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == onPeakOprand : result.Dtype == "dtoun")
                         .map(value => value.FullDate)
-                    if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex]) || series[2] && series[2][dataPointIndex]) {
+                    if (arr[dataPointIndex] && (series[0] && series[0][dataPointIndex] || series[1] && series[1][dataPointIndex]) || series[2] && series[2][dataPointIndex] || serviceData && serviceData.length > 0 && serviceData[dataPointIndex * multiblyNum] && serviceData[dataPointIndex * multiblyNum].CloudIcon == "X") {
 
                         return (
                             '<div class="apexcharts-theme-light apexcharts-active" style="padding:12px; min-width:150px">' +

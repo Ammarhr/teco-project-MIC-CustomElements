@@ -17,7 +17,7 @@
     token="smth"
     domain="jsdelivr.="
     eventdomain="s"
-    personainput="Agent"
+    personainput=""
     issummaryaccount="false"
   /> -->
 </div>

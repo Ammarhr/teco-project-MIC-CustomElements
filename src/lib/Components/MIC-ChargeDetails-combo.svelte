@@ -121,7 +121,7 @@
                     alt=""
                   />
                 {/if}
-                {billService.Lable}
+                {billService.Lable || ""}
               </h3>
             </span>
             {#if billService.servicePeriod}

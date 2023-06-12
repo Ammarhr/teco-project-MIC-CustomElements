@@ -11,6 +11,9 @@
     SAPToken,
     reGenerateToken,
     setIsParentAccount,
+    newToken,
+    generatedFromTable,
+    billNumber,
   } from "../../js/store";
   import { onMount } from "svelte";
 
@@ -26,6 +29,7 @@
   let timeoutId;
   let avgClass = "red";
   let newSelect = "";
+  let refreshableToken = "";
   const [data, loading, error, get] = fetchstore(); // initial store fetch
   const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken(); // regenerate token store call
 
@@ -40,6 +44,7 @@
         $SAPToken
       ).then(() => {});
     }
+    refreshableToken = $apiToken;
   });
 
   const handleSelecteAccount = (accountObj, i) => {
@@ -74,16 +79,33 @@
       );
     }
     newSelect = selectedAccount;
-    // if(selectedAccount){
 
-    // }
+    generatedFromTable.set(true);
     getToken(
       $apiToken,
-      // "../../data/Token.json"
+      // "../../data/Token.json",
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/GenerateNewToken?SelectedBill=${selectedAccount.InvoiceNumber}`,
       $SAPToken
-    );
+    ).then(() => {});
   };
+
+  $: if (
+    $newToken &&
+    $newToken.token &&
+    (refreshableToken == $apiToken || refreshableToken !== $newToken.token) &&
+    $generatedFromTable == false
+  ) {
+    newSelect = "";
+    tableData = [];
+    pagenateItems = [];
+    get(
+      $newToken.token,
+      `${$apiDomain}/api/ibill/webcomponents/v1/Post/CollectiveAccounts`,
+      $SAPToken
+      // "../../data/meterTable.json"
+    ).then(() => {});
+    refreshableToken = $newToken.token;
+  }
 
   $: if ($data && $data.Accounts) {
     tableData = $data.Accounts;
@@ -428,20 +450,22 @@
                     <td>
                       <div class="td-value">
                         <p>
-                          {#if row.Status == "Active"}
-                            <span
-                              class={avgClass}
-                              style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
-                            >
-                              <span class="status"> Active </span>
-                            </span>
-                          {:else if row.Status == "Inactive"}
-                            <span
-                              class={avgClass}
-                              style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
-                            >
-                              <span class="status"> Inactive </span>
-                            </span>
+                          {#if row.IsParentAccount !== "X"}
+                            {#if row.Status == "Active"}
+                              <span
+                                class={avgClass}
+                                style="background: rgba(36, 161, 72, 0.03); border: 1px solid #24A148;"
+                              >
+                                <span class="status"> Active </span>
+                              </span>
+                            {:else if !row.Status}
+                              <span
+                                class={avgClass}
+                                style="background-color:rgba(218, 30, 40, 0.03); border: 1px solid #DA1E28;"
+                              >
+                                <span class="status"> Inactive </span>
+                              </span>
+                            {/if}
                           {:else}
                             <div class="td-value" />
                           {/if}

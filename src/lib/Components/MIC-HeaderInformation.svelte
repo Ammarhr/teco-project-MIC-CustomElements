@@ -12,7 +12,7 @@
   $: if ($apiDomain && $SAPToken && $apiToken && !$data.account) {
     get(
       $apiToken,
-      // "../../data/accountData.json"
+      // "../../data/accountData.json",
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`,
       $SAPToken
     );

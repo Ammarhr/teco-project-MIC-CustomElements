@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use strict';
 
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 
 // modal hide/show
 export const showMessagesModal = writable(false);
@@ -69,6 +69,7 @@ export const getDate = derived(
     date,
     $date => $date
 );
+export const generatedFromTable = writable(false);
 //* Sunselect array;
 export const sunSelectServicesArray = writable([]);
 //*geral error flag;
@@ -77,13 +78,27 @@ export const generalErr = writable(false);
 //* Agint persona:
 export const persona = writable('')
 
+let isCollectiveAccount = "";
+let parentAccount = ""
+
+function setIsCollectiveAccountFlagHeader() {
+    isCollectiveAccount = get(isSummaryAccountFlag);
+    parentAccount = get(isParentAccount);
+    if (isCollectiveAccount.toLowerCase() == "true") {
+        return true;
+    } else {
+        return false;
+    }
+}
+let headerFlag
 //* fetch function
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
     // generalErr.set(false)
-    const get = async (token, url, saptoken) => {
+    headerFlag = setIsCollectiveAccountFlagHeader()
+    const getData = async (token, url, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -99,7 +114,8 @@ export function fetchstore() {
                     headers: {
                         'Content-Type': 'application/json',
                         "Authorization": `Bearer ${token}`,
-                        "UserCredentials": saptoken
+                        "UserCredentials": saptoken,
+                        "IsCollectiveAccount": headerFlag
                     },
                     body: JSON.stringify({}),
                 });
@@ -116,14 +132,15 @@ export function fetchstore() {
         }
     }
 
-    return [data, loading, error, get]
+    return [data, loading, error, getData]
 }
 export const fetchDailyUsageChart = () => {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
-    // generalErr.set(false)
-    const get = async (token, url, body, saptoken) => {
+    headerFlag = setIsCollectiveAccountFlagHeader()
+
+    const getData = async (token, url, body, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -138,7 +155,8 @@ export const fetchDailyUsageChart = () => {
                     headers: {
                         'Content-Type': 'application/json',
                         "Authorization": `Bearer ${token}`,
-                        "UserCredentials": saptoken
+                        "UserCredentials": saptoken,
+                        "IsCollectiveAccount": headerFlag
                     },
                     body: JSON.stringify(body),
                 });
@@ -153,14 +171,15 @@ export const fetchDailyUsageChart = () => {
         loading.set(false);
     }
 
-    return [data, loading, error, get]
+    return [data, loading, error, getData]
 }
 export const fetchMonthlyUsageChart = () => {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
-    // generalErr.set(false)
-    const get = async (token, url, saptoken) => {
+    headerFlag = setIsCollectiveAccountFlagHeader()
+
+    const getData = async (token, url, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -175,7 +194,8 @@ export const fetchMonthlyUsageChart = () => {
                     headers: {
                         'Content-Type': 'application/json',
                         "Authorization": `Bearer ${token}`,
-                        "UserCredentials": saptoken
+                        "UserCredentials": saptoken,
+                        "IsCollectiveAccount": headerFlag
                     },
                     body: JSON.stringify({}),
                 });
@@ -191,14 +211,15 @@ export const fetchMonthlyUsageChart = () => {
         loading.set(false);
     }
 
-    return [data, loading, error, get]
+    return [data, loading, error, getData]
 }
 export const fetchRecommendations = () => {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
-    // generalErr.set(false)
-    const get = async (token, url, body, saptoken) => {
+    headerFlag = setIsCollectiveAccountFlagHeader();
+
+    const getData = async (token, url, body, saptoken) => {
         loading.set(true);
         error.set(false);
         try {
@@ -213,7 +234,8 @@ export const fetchRecommendations = () => {
                     headers: {
                         'Content-Type': 'application/json',
                         "Authorization": `Bearer ${token}`,
-                        "UserCredentials": saptoken
+                        "UserCredentials": saptoken,
+                        "IsCollectiveAccount": headerFlag
                     },
                     body: JSON.stringify(body),
                 });
@@ -229,7 +251,7 @@ export const fetchRecommendations = () => {
         loading.set(false);
     }
 
-    return [data, loading, error, get]
+    return [data, loading, error, getData]
 }
 //* MiJurney helper functions
 function setCookie(name, value, days) {
@@ -538,7 +560,7 @@ export function passThroughServiceFetch() {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
-    const get = async (token, url) => {
+    const getData = async (token, url) => {
         loading.set(true);
         error.set(false);
         try {
@@ -576,5 +598,5 @@ export function passThroughServiceFetch() {
         loading.set(false);
     }
 
-    return [data, loading, error, get]
+    return [data, loading, error, getData]
 }

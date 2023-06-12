@@ -16,6 +16,7 @@
     persona,
     SAPToken,
     isSummaryAccountFlag,
+    generatedFromTable
   } from "../../js/store";
   import MicSunSelect from "./MIC-SunSelect.svelte";
   // state
@@ -82,6 +83,7 @@
         );
       });
     }
+    generatedFromTable.set(false);
   };
 
   $: if ($data.bills) {
