@@ -276,7 +276,15 @@
                     yearlyarray={YearlyArray}
                   />
                 {/if}
-                <mic-bulkdownload class="mic-insights" />
+                {#if i == 0}
+                  <div class="insights">
+                    <mic-bulkdownload class="mic-insights bulk-desk" />
+                  </div>
+                  {:else if i == arrayOfCharges.length - 1}
+                  <div class="insights">
+                    <mic-bulkdownload class="mic-insights bulk-mobile" />
+                  </div>
+                {/if}
               {/if}
             </div>
           {:else if charge.SectionType !== "InvoiceTotal"}

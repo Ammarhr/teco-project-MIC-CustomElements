@@ -363,8 +363,16 @@
                                   {level2Obj.Value}
                                 </span>
                               {:else}
-                                <p class={"level" + level2Obj.Order}>
-                                  {level2Obj.Value}
+                                <p
+                                  class={level2Obj.Value &&
+                                  level2Obj.Value.length > 10
+                                    ? "level" + level2Obj.Order
+                                    : `level${level2Obj.Order}  normal-text`}
+                                  title={level2Obj.Value}
+                                >
+                                  <span>
+                                    {level2Obj.Value}
+                                  </span>
                                 </p>
                               {/if}
                               <!--  -->
@@ -445,8 +453,16 @@
                                     {level3Obj.Value}
                                   </span>
                                 {:else}
-                                  <p class={"level" + level3Obj.Order}>
-                                    {level3Obj.Value}
+                                  <p
+                                    class={level3Obj.Value &&
+                                    level3Obj.Value.length > 10
+                                      ? "level" + level3Obj.Order
+                                      : `level${level3Obj.Order}  normal-text`}
+                                    title={level3Obj.Value}
+                                  >
+                                    <span title={level3Obj.Value}>
+                                      {level3Obj.Value}
+                                    </span>
                                   </p>
                                 {/if}
                               {:else if subSection.SectionType == "CombinedGroup"}
@@ -798,6 +814,7 @@
     font-weight: 500;
   }
   .level4 {
+    flex: 1 0 40%;
     font-weight: 400;
     font-size: 20px;
     color: #000000;
@@ -805,13 +822,40 @@
     grid-column-start: 4;
     text-align: right;
     padding: 5px 0;
-    flex: 1 0 40%;
+    // position: relative;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    span {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     // @media screen and (max-width: 480px) {
     //   font-size: 16px !important;
     // }
+  }
+  .level4:hover::before {
+    @media screen and (max-width: 480px) {
+      content: attr(title);
+      position: absolute;
+      top: 5px;
+      right: 0;
+      background-color: #ffffff;
+      padding: 5px;
+      border: 1px solid #000000;
+      border-radius: 6px;
+      z-index: 1;
+    }
+  }
+  .normal-text:hover::before:empty {
+    content: "none";
+    display: none;
+  }
+
+  .normal-text:hover::before {
+    content: none;
   }
   .service-for1 {
     margin: 8px 0;

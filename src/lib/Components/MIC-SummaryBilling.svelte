@@ -386,7 +386,7 @@
                     {/key}</th
                   >
                   <th on:click={() => handleSort("5")}>
-                    Contact Name
+                    Contract Name
                     {#key sortUiObj}
                       {@html renderSortSvg(5)}
                     {/key}</th

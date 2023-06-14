@@ -63,7 +63,7 @@
 
 {#if token && domain  && saptoken && $generalErr !== true}
   <div class="wrapper">
-    <mic-headerinformation />
+    <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
