@@ -15,8 +15,9 @@
     sunSelectServicesArray,
   } from "../../js/store";
   import { onMount } from "svelte";
-  export let contractnum;
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
 
+  export let contractnum;
   let arrayOfToggles = [];
   let newTokenTrigger;
   let sunSelectData;
@@ -51,6 +52,7 @@
             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
             alt=""
             id={"rotate-svg-" + arrayOfToggles[i]}
+            use:lazyImage
           />
         </div>
         {#if arrayOfToggles[i]}
@@ -61,6 +63,7 @@
                 <img
                   src={`https://tecocdn.azureedge.net/ibill/iBill-assets/sunselectPercentage.svg`}
                   alt=""
+                  use:lazyImage
                 />
               </h2>
             {:else}

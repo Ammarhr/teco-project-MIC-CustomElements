@@ -20,6 +20,7 @@
     onPeakOffPeakChart,
   } from "../../js/MIC-chart-bundle";
   import { onMount } from "svelte";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
 
   let items;
   let tableData;
@@ -704,6 +705,7 @@
           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
           alt="toggle"
           id={svgId}
+          use:lazyImage
         />
       </div>
       {#if isOpen}
@@ -731,6 +733,7 @@
               <img
                 src={`https://tecocdn.azureedge.net/ibill/iBill-assets/search.svg`}
                 alt=""
+                use:lazyImage
               />
             </button>
           </div>
@@ -826,6 +829,7 @@
                         <img
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${row.Service.toLowerCase()}Service.svg`}
                           alt={row.Service}
+                          use:lazyImage
                         />
                       </div>
                     </td>
@@ -935,6 +939,7 @@
                   <img
                     src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
                     alt=""
+                    use:lazyImage
                   />
                   Previous
                 </button>
@@ -959,6 +964,7 @@
                   <img
                     src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
                     alt=""
+                    use:lazyImage
                   />
                 </button>
               </div>
@@ -1010,6 +1016,7 @@
                     class="chart-tool-tip"
                     bind:this={toolTipIconCon}
                     on:click={tooltipToggle}
+                    use:lazyImage
                   />
                 </div>
               {/if}

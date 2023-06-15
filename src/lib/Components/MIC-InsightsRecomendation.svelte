@@ -13,12 +13,9 @@
     fetchRecommendations,
     SAPToken,
   } from "../../js/store";
-  // import svg from "../../assets/un-filled-awesome-thumbs-up.svg";
-  // import thumbsDown from "../../assets/un-filled-awesome-thumbs-down.svg";
-  // import disabledButtons from "../../assets/disabled-feedback-button.svg";
-  // import nexPrevBtn from "../../assets/next-svgr.svg";
   import { onMount } from "svelte";
-  // import MicCoursel from "./MIC-Coursel.svelte";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
+
   export let token;
   export let body;
   export let billcontractnumber;
@@ -195,6 +192,7 @@
                         class="car_img"
                         src={`data:image/png;base64,${ele.img}`}
                         alt=""
+                        use:lazyImage
                       />
                     {/if}
                   {/each}
@@ -204,6 +202,7 @@
                     <img
                       class="img_btn"
                       src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next-prev.svg`}
+                      use:lazyImage
                     />
                   </div>
                   {#if index > 0}
@@ -212,6 +211,7 @@
                         class="img_btn"
                         id="prev-img"
                         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next-prev.svg`}
+                        use:lazyImage
                       />
                     </div>
                   {/if}
@@ -221,6 +221,7 @@
                   class="car_img"
                   src={`data:image/png;base64,${messages[0].img}`}
                   alt=""
+                  use:lazyImage
                 />
               {/if}
               {#if $data.yearlyPercentageConsumption && $data.monthlyPercentageConsumption}
@@ -261,6 +262,7 @@
                       src={`https://tecocdn.azureedge.net/ibill/iBill-assets/disabled-feedback-button.svg`}
                       alt=""
                       style="cursor: auto;"
+                      use:lazyImage
                     />
                   {:else}
                     <!-- svelte-ignore a11y-missing-attribute -->

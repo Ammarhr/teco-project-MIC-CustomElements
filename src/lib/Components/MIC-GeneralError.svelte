@@ -10,6 +10,8 @@
     SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
+
   export let token;
   const [data, loading, err, errorHandler] = errorCallback();
   onMount(() => {
@@ -37,6 +39,7 @@
       src={`data:image/png;base64,${$data.RecommendationImage}`}
       alt=""
       class="err-img"
+      use:lazyImage
     />
     <p id="err-body">
       {@html $data.HTMLBody}

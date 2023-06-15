@@ -15,6 +15,7 @@
     apiDomain,
     persona,
   } from "../../js/store";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
 
   export let messages;
   let container;
@@ -93,6 +94,7 @@
               <img
                 src={`https://tecocdn.azureedge.net/ibill/iBill-assets/envelope-solid.svg`}
                 alt=""
+                use:lazyImage
               />
               <span id="unreaded-msgs">&nbsp;{messages.length}&nbsp;</span>
             </div>

@@ -9,6 +9,8 @@
     persona,
     fetchAndRedirect,
   } from "../../js/store";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
+
   export let tooltipurl = "";
   export let tooltipdis;
   export let chargeline;
@@ -61,6 +63,7 @@
   on:click={(e) => {
     toolTipToggle();
   }}
+  use:lazyImage
 />
 {#if show && $tooltipShow == false}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -107,6 +110,7 @@
             resetToolTip(false);
           }, 100);
         }}
+        use:lazyImage
       />
     </div>
   </div>

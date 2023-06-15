@@ -3,6 +3,7 @@
 <script>
   // @ts-nocheck
   import { onMount } from "svelte";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
   import {
     fetchstore,
     apiDomain,
@@ -107,6 +108,7 @@
     <div
       class="tecoBalanceSum roundedRadius20"
       style="background-image:url({`https://tecocdn.azureedge.net/ibill/iBill-assets/mask-bs.svg`});"
+      use:lazyImage
     >
       <div class="tecoBalanceSection">
         <span>Total Amount Due</span>

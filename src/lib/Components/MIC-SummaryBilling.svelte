@@ -15,6 +15,7 @@
     generatedFromTable,
     billNumber,
   } from "../../js/store";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
   import { onMount } from "svelte";
 
   let items;
@@ -278,16 +279,17 @@
   const renderSortSvg = (thIndex) => {
     if (items && items.length > 1) {
       if (activeSort == thIndex && sortingType == "asen") {
-        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-up.svg  alt="sort"/>';
+        return `<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-up.svg  alt="sort" class="img-sort" />`;
       } else if (activeSort == thIndex && sortingType == "des") {
-        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-down.svg alt="sort" />';
+        return `<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-down.svg alt="sort" class="img-sort" />`;
       } else {
-        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort.svg  alt="sort"  />';
+        return `<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort.svg  alt="sort" class="img-sort" />`;
       }
     } else {
       return "";
     }
   };
+
 </script>
 
 {#if $loading}
@@ -304,6 +306,7 @@
           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
           alt="toggle"
           id={svgId}
+          use:lazyImage
         />
       </div>
       {#if isOpen}
@@ -350,6 +353,7 @@
                 <img
                   src={`https://tecocdn.azureedge.net/ibill/iBill-assets/search.svg`}
                   alt=""
+                  use:lazyImage
                 />
               </button>
             </div>
@@ -406,18 +410,21 @@
                           <img
                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`}
                             alt={row.Service}
+                            use:lazyImage
                           />
                         {/if}
                         {#if row.IsGas == "X"}
                           <img
                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/gasService.svg`}
                             alt={row.Service}
+                            use:lazyImage
                           />
                         {/if}
                         {#if row.IsLighting == "X"}
                           <img
                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`}
                             alt={row.Service}
+                            use:lazyImage
                           />
                         {/if}
                       </div>
@@ -502,6 +509,7 @@
                   <img
                     src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
                     alt=""
+                    use:lazyImage
                   />
                   Previous
                 </button>
@@ -526,6 +534,7 @@
                   <img
                     src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
                     alt=""
+                    use:lazyImage
                   />
                 </button>
               </div>

@@ -11,6 +11,7 @@
   ///////// js files (store & chart bundles)
   import { chart } from "svelte-apexcharts";
   import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
   import {
     billNumber,
     fetchstore,
@@ -131,6 +132,7 @@
             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
             alt="toggle"
             id={`${svgId}${toggleArray[i]}`}
+            use:lazyImage
           />
         </div>
         <div class="content-container" style={styleToggleArr[i]}>
@@ -227,7 +229,8 @@
                         <img
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/redArrow.svg`}
                           class="arrow"
-                          alt=""
+                          alt="arrow"
+                          use:lazyImage
                         />
                         <span class="percentage-consumption">
                           {Math.abs(
@@ -244,6 +247,7 @@
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/greenArrow.svg`}
                           class="arrow"
                           alt=""
+                          use:lazyImage
                         />
                         <span class="percentage-consumption">
                           {Math.abs(
@@ -281,6 +285,7 @@
                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/arrowUp.svg`}
                             class="arrow"
                             alt="arrow"
+                            use:lazyImage
                           />{Math.abs(insightsService?.yearly?.percentageTemp) +
                             "°"}</span
                         >
@@ -294,6 +299,7 @@
                             style="rotate:calc(180deg)"
                             class="arrow"
                             alt="arrow"
+                            use:lazyImage
                           />{Math.abs(insightsService?.yearly?.percentageTemp) +
                             "°"}</span
                         >
@@ -350,6 +356,7 @@
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/redArrow.svg`}
                           class="arrow"
                           alt="arrow icon"
+                          use:lazyImage
                         />
                         <span class="percentage-consumption">
                           {Math.abs(
@@ -366,6 +373,7 @@
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/greenArrow.svg`}
                           class="arrow"
                           alt=""
+                          use:lazyImage
                         />
                         <span class="percentage-consumption">
                           {Math.abs(
@@ -439,6 +447,7 @@
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/redArrow.svg`}
                           class="arrow"
                           alt="arrow icon"
+                          use:lazyImage
                         />
                         <span class="percentage-consumption">
                           {Math.abs(
@@ -455,6 +464,7 @@
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/greenArrow.svg`}
                           class="arrow"
                           alt=""
+                          use:lazyImage
                         />
                         <span class="percentage-consumption">
                           {Math.abs(
@@ -490,6 +500,7 @@
                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/arrowUp.svg`}
                             class="arrow"
                             alt="arrow"
+                            use:lazyImage
                           />{Math.abs(
                             insightsService?.monthly?.percentageTemp
                           ) + "°"}</span
@@ -504,6 +515,7 @@
                             style="rotate:calc(180deg)"
                             class="arrow"
                             alt="arrow"
+                            use:lazyImage
                           />{Math.abs(
                             insightsService?.monthly?.percentageTemp
                           ) + "°"}</span
@@ -561,6 +573,7 @@
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/redArrow.svg`}
                           class="arrow"
                           alt="arrow icon"
+                          use:lazyImage
                         />
                         <span class="percentage-consumption">
                           {Math.abs(
@@ -577,6 +590,7 @@
                           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/greenArrow.svg`}
                           class="arrow"
                           alt=""
+                          use:lazyImage
                         />
                         <span class="percentage-consumption">
                           {Math.abs(

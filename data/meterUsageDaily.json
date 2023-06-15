@@ -628,9 +628,9 @@
         "FullDate": "April 06 2023",
         "Temperature": "79",
         "UOM": "kwh",
-        "Usage": "",
+        "Usage": "0.00",
         "status": "A",
-        "CloudIcon": "X",
+        "CloudIcon": "",
         "Dtype": "dtoun",
         "ToolTipEstimated": ""
       },
@@ -639,9 +639,9 @@
         "FullDate": "April 06 2023",
         "Temperature": "79",
         "UOM": "kwh",
-        "Usage": "",
+        "Usage": "0.00",
         "status": "A",
-        "CloudIcon": "X",
+        "CloudIcon": "",
         "Dtype": "dtouf",
         "ToolTipEstimated": ""
       }

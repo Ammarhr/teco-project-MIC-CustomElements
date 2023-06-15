@@ -434,7 +434,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                                 "<span style='font-weight:300; font-size:14px;color:#000000; margin-right:6px; margin-bottom:6px; width:100%'>" +
                                 (serviceData[dataPointIndex].ToolTipEstimated !== "" ? serviceData[dataPointIndex].ToolTipEstimated : "Meter is not responding; data will be updated when available") +
                                 "</span>" :
-                                (((series[0] && series[0][dataPointIndex] ? `<div class="apexcharts-tooltip-text">` +
+                                (((chartUnit == "cost" && series[0] && series[0][dataPointIndex] != null && series[0][dataPointIndex] > 0 || chartUnit != "cost" && series[0] && series[0][dataPointIndex] != null && series[0][dataPointIndex] >= 0 ? `<div class="apexcharts-tooltip-text">` +
                                     '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
                                     "<span style='font-weight:700; color:#000000; margin-right:6px; margin-bottom:6px'>" +
                                     toolTipUsage +
@@ -861,7 +861,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                 ((chartUnit == "usage" ?
 
                                     (`<div class="apexcharts-tooltip-text" style="margin-top: 8px;">` +
-                                        (series[0] && series[0][dataPointIndex] ? "</div>" +
+                                        (series[0] && series[0][dataPointIndex] != null && series[0][dataPointIndex] >= 0 ? "</div>" +
                                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
                                             "<span style='font-weight:700; color:#000000; margin-bottom:6px'>" +
                                             "On Peak: " +
@@ -870,7 +870,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                             +
                                             series[0][dataPointIndex].toLocaleString() + " " + unit : "")
                                         +
-                                        (series[1] && series[1][dataPointIndex] ? "</div>"
+                                        (series[1] && series[1][dataPointIndex] != null && series[1][dataPointIndex] >= 0 ? "</div>"
                                             +
                                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                                             + `<span style='font-weight:700; margin-bottom:6px'>` +
