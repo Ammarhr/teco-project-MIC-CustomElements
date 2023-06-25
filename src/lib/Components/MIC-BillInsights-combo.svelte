@@ -9,7 +9,8 @@
   import MicSunSelect from "./MIC-SunSelect.svelte";
 
   ///////// js files (store & chart bundles)
-  import { chart } from "svelte-apexcharts";
+  // import { chart } from "svelte-apexcharts";
+  import { chart } from "../../js/apexchartsBundle";
   import { renderBarChart, renderRadialBar } from "../../js/MIC-chart-bundle";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
   import {

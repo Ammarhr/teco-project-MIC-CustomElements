@@ -28,7 +28,7 @@
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // sun select store fetch
   const [chargeData, chargeLoading, chargeError, chargeGet] = fetchstore(); // charge details  store fetch
   const [yearlyData, yearlyLoading, yearlyError, yearlyGet] = fetchstore(); // yearly energy store fetch
-
+  let tries = 2;
   onMount(() => {
     if (
       $apiToken &&
@@ -38,7 +38,8 @@
       !$data.services &&
       !$sundata.SunSelect &&
       !$yearlyData.NetMeter &&
-      $isSummaryAccountFlag
+      $isSummaryAccountFlag &&
+      tries > 0
     ) {
       if ($isSummaryAccountFlag.toLowerCase() !== "true") {
         chargeGet(
@@ -77,6 +78,7 @@
       }
     }
     comboNewToken = $apiToken;
+    tries--;
   });
 
   $: if (
@@ -89,46 +91,52 @@
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
       $SAPToken
       // "../../data/ChargeDetails.json"
-    ).then(() => {
-      insightsArray = [];
-      chargesArray = [];
-      arrayOfbody = [];
-      arrayOfCharges = $chargeData.Section;
-    });
+    )
+      .then(() => {
+        insightsArray = [];
+        chargesArray = [];
+        arrayOfbody = [];
+        arrayOfCharges = $chargeData.Section;
+      })
+      .catch((err) => console.log());
     get(
       $newToken.token,
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
       $SAPToken
       // "../../../data/Insights.json"
-    ).then(() => {
-      if ($data && $data.services) {
+    )
+      .then(() => {
+        if ($data && $data.services) {
+          arrayOfBillInsights = $data.services;
+        }
+        insightsArray = [];
+        newSunSelectArray = [];
+        chargesArray = [];
+        arrayOfBillInsights = [];
+        sunSelectArray = [];
+        arrayOfbody = [];
         arrayOfBillInsights = $data.services;
-      }
-      insightsArray = [];
-      newSunSelectArray = [];
-      chargesArray = [];
-      arrayOfBillInsights = [];
-      sunSelectArray = [];
-      arrayOfbody = [];
-      arrayOfBillInsights = $data.services;
-    });
+      })
+      .catch((err) => console.log());
     sunget(
       $newToken.token,
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
       $SAPToken
       // "../../data/sunSelect.json"
-    ).then(() => {
-      if ($sundata && $sundata.SunSelect) {
-        newSunSelectArray = [];
-        sunSelectArray = $sundata.SunSelect;
-      }
-    });
+    )
+      .then(() => {
+        if ($sundata && $sundata.SunSelect) {
+          newSunSelectArray = [];
+          sunSelectArray = $sundata.SunSelect;
+        }
+      })
+      .catch((err) => console.log());
     yearlyGet(
       $newToken.token,
       `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
       $SAPToken
       // "../../data/yearlyEnergy.json"
-    );
+    ).catch((err) => console.log());
     comboNewToken = $newToken.token;
   }
   let YearlyArray;
@@ -280,7 +288,7 @@
                   <div class="insights">
                     <mic-bulkdownload class="mic-insights bulk-desk" />
                   </div>
-                  {:else if i == arrayOfCharges.length - 1}
+                {:else if i == arrayOfCharges.length - 1}
                   <div class="insights">
                     <mic-bulkdownload class="mic-insights bulk-mobile" />
                   </div>

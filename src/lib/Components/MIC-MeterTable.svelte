@@ -14,7 +14,9 @@
     SAPToken,
     isSummaryAccountFlag,
   } from "../../js/store";
-  import { chart } from "svelte-apexcharts";
+  import scrollImage from "../../assets/scroll.gif";
+  // import { chart } from "svelte-apexcharts";
+  import { chart } from "../../js/apexchartsBundle";
   import {
     renderMixChart,
     onPeakOffPeakChart,
@@ -97,6 +99,7 @@
 
   //////// change the selected meter + call Dap Api
   const handleSelectedMeter = (meterObject, i) => {
+    scrollClass = "scroll-image";
     chartLegend = "";
     onOffPeakDemand = "";
     first = false;
@@ -375,6 +378,7 @@
 
   ////////// tabs functionality
   const activateTab = (num1, num2, activeTab) => {
+    scrollClass = "scroll-image";
     if (setTimeoutId) {
       clearTimeout(setTimeoutId);
     }
@@ -682,7 +686,10 @@
       return "";
     }
   };
-
+  let scrollClass = "scroll-image";
+  const srollHandle = () => {
+    scrollClass = "disable-scroll";
+  };
   let currentWord = 0;
   function changeWord() {
     currentWord = (currentWord + 1) % words.length;
@@ -738,7 +745,10 @@
             </button>
           </div>
         {/if}
-        <div class="table-container">
+        <div class="table-container" on:scroll={srollHandle}>
+          <div class={scrollClass}>
+            <img src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif" alt="" use:lazyImage />
+          </div>
           {#if items}
             {#if tableData}
               <table class="table" id="table">
@@ -1046,7 +1056,10 @@
               {/if}
             </div>
             <!-- Monthly Chart -->
-            <div id={"meter-tab1" + tab1}>
+            <div id={"meter-tab1" + tab1} on:scroll={srollHandle}>
+              <div class={scrollClass}>
+                <img src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif" alt="" use:lazyImage />
+              </div>
               {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails}
                 {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length == 0}
                   <div
@@ -1130,7 +1143,10 @@
             </div>
             <!-- Daily Chart -->
             {#if selectedMeter && selectedMeter.AMI_Flag != ""}
-              <div id={"meter-tab1" + tab2}>
+              <div id={"meter-tab1" + tab2} on:scroll={srollHandle}>
+                <div class={scrollClass}>
+                  <img src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif" alt="" use:lazyImage />
+                </div>
                 {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails}
                   {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails.length && $dailyUsageData.DailyUsage.DailyDetails.length == 0}
                     <div
@@ -1319,6 +1335,23 @@
     font-family: "Interstate";
   }
   //
+  .scroll-image {
+    display: none;
+    @media screen and (max-width: 480px) {
+      display: unset;
+      img {
+        position: absolute;
+        right: 10px;
+        bottom: 40%;
+        rotate: 180deg;
+        width: 80px;
+        opacity: 50%;
+      }
+    }
+  }
+  .disable-scroll {
+    display: none;
+  }
   .text {
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
@@ -1406,11 +1439,10 @@
     padding: 0px;
     width: 100%;
     height: fit-content;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-    overflow-x: auto;
+    position: relative;
+    @media screen and (max-width: 480px) {
+      box-shadow: inset -7px 0 7px -7px rgba(0, 0, 0, 0.5);
+    }
   }
   .options {
     width: 100%;
@@ -1726,6 +1758,9 @@
     margin-top: 16px;
     overflow-x: auto;
     overflow-y: hidden;
+    @media screen and (max-width: 480px) {
+      box-shadow: inset -7px 0 7px -7px rgba(0, 0, 0, 0.5);
+    }
   }
   /*--------*/
   .information-box {

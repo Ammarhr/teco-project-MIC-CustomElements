@@ -289,7 +289,6 @@
       return "";
     }
   };
-
 </script>
 
 {#if $loading}
@@ -438,8 +437,10 @@
                     >
                     <td>
                       <div class="td-value">
-                        {#if row.ServiceAddress != ""}
-                          {row.ServiceAddress}
+                        {#if row.IsParentAccount !== "X"}
+                          {#if row.ServiceAddress != ""}
+                            {row.ServiceAddress}
+                          {/if}
                         {/if}
                       </div></td
                     >

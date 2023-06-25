@@ -7,7 +7,6 @@
   // import messageNotification from "../../assets/messages-notification.svg";
   // import messageNotification from "../../assets/envelope-solid.svg";
 
-  import { slide } from "svelte/transition";
   import {
     fetchAndRedirect,
     apiToken,
@@ -80,7 +79,7 @@
   }
 </script>
 
-<div class="message-footer" transition:slide={{ duration: 300 }}>
+<div class="message-footer" >
   <button class="enable" on:click={() => showMessages("view")}>View</button>
 </div>
 {#if show}

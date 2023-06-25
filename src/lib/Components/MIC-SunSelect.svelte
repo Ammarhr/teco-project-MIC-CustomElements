@@ -5,7 +5,6 @@
 
   // import dropDown from "../../assets/cr.svg";
   // import percentageIcon from "../../assets/percentage-icon.svg";
-  import { slide } from "svelte/transition";
   import {
     fetchstore,
     apiToken,
@@ -56,7 +55,7 @@
           />
         </div>
         {#if arrayOfToggles[i]}
-          <div class="sun-select-content" transition:slide={{ duration: 300 }}>
+          <div class="sun-select-content" >
             {#if sunSelectObj.SunSelectValue.includes("%")}
               <h2 id="percentage" style="font-size: 5.5rem;">
                 {sunSelectObj.SunSelectValue.split("%")[0]}
@@ -73,7 +72,7 @@
             {/if}
             <p>{sunSelectObj.SunSelectMessage}</p>
           </div>
-          <div class="sub-content" transition:slide={{ duration: 300 }}>
+          <div class="sub-content" >
             <p>
               {sunSelectObj.SunSelectTooltip}
               <!-- As a Sun Select customer you <span>DO NOT</span> pay fuel cost

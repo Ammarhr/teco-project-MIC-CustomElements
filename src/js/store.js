@@ -2,7 +2,7 @@
 'use strict';
 
 import { writable, derived, get } from 'svelte/store';
-
+import axios from "axios";
 // modal hide/show
 export const showMessagesModal = writable(false);
 export function showmodal() {
@@ -32,7 +32,7 @@ export const setDomain = (domain) => {
     apiDomain.set(domain);
 }
 //* api token
-export const apiToken = writable('');
+export const apiToken = writable({});
 export const setToken = (token) => {
     apiToken.set(token);
 }
@@ -92,6 +92,8 @@ function setIsCollectiveAccountFlagHeader() {
 }
 let headerFlag
 //* fetch function
+let arrOfRequests = [];
+export const pendingRequest = writable([])
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
@@ -102,25 +104,24 @@ export function fetchstore() {
         loading.set(true);
         error.set(false);
         try {
+            arrOfRequests.push("1s")
             if (!token) {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
                 //* test data
-                const Publishresponse = await fetch(url, {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
+                const Publishresponse = await axios.post(url, JSON.stringify({}), {
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`,
-                        "UserCredentials": saptoken,
-                        "IsCollectiveAccount": headerFlag
+                        'Authorization': `Bearer ${token}`,
+                        'UserCredentials': saptoken,
+                        'IsCollectiveAccount': headerFlag
                     },
-                    body: JSON.stringify({}),
+                    withCredentials: true,
                 });
                 // if (Publishresponse.status !== 204)  
-                data.set(await Publishresponse.json());
+                data.set(await Publishresponse.data);
+                // console.log(await Publishresponse);
                 loading.set(false);
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
@@ -129,6 +130,9 @@ export function fetchstore() {
             error.set(e);
             generalErr.set(true);
             loading.set(false);
+        } finally {
+            arrOfRequests.pop()
+            pendingRequest.set(arrOfRequests);
         }
     }
 
@@ -144,6 +148,7 @@ export const fetchDailyUsageChart = () => {
         loading.set(true);
         error.set(false);
         try {
+            arrOfRequests.push("1s")
             if (!token) {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
@@ -167,6 +172,9 @@ export const fetchDailyUsageChart = () => {
             }
         } catch (e) {
             error.set(e);
+        } finally {
+            arrOfRequests.pop()
+            pendingRequest.set(arrOfRequests);
         }
         loading.set(false);
     }
@@ -183,6 +191,7 @@ export const fetchMonthlyUsageChart = () => {
         loading.set(true);
         error.set(false);
         try {
+            arrOfRequests.push("1s")
             if (!token) {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
@@ -207,6 +216,9 @@ export const fetchMonthlyUsageChart = () => {
         } catch (e) {
             error.set(e);
             // generalErr.set(true);
+        } finally {
+            arrOfRequests.pop()
+            pendingRequest.set(arrOfRequests);
         }
         loading.set(false);
     }
@@ -223,6 +235,7 @@ export const fetchRecommendations = () => {
         loading.set(true);
         error.set(false);
         try {
+
             if (!token) {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
@@ -527,6 +540,8 @@ export function reGenerateToken() {
         loading.set(true);
         error.set(false);
         try {
+            arrOfRequests.push("1s");
+            pendingRequest.set(arrOfRequests);
             if (!oldToken) {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
@@ -549,6 +564,10 @@ export function reGenerateToken() {
             }
         } catch (e) {
             error.set(e);
+        } finally {
+            arrOfRequests.pop()
+            pendingRequest.set(arrOfRequests);
+
         }
         loading.set(false);
     }

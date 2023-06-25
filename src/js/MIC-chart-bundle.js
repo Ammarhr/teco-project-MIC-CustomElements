@@ -86,6 +86,7 @@ export const renderBarChart = (data, labels, colorsArr, width, height, unit, max
         },
         yaxis: {
             title: {
+                min: 0,
                 text: unit,
                 rotate: 0,
                 offsetX: 30,
@@ -505,7 +506,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     labels: {
                         show: true,
                         formatter: function (val) {
-                            return val && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
+                            return val && val != null && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
                         },
                     },
                 },
@@ -520,7 +521,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     labels: {
                         show: false,
                         formatter: function (val) {
-                            return val && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
+                            return val && val != null && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
                         },
                     },
                 }
