@@ -16,7 +16,7 @@
   import MicShadowLoading from "./lib/Components/MIC-ShadowLoading.svelte";
   import MicSummaryBilling from "./lib/Components/MIC-SummaryBilling.svelte";
   import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import {
     setDomain,
     setToken,
@@ -29,6 +29,7 @@
     isSummaryAccountFlag,
     setSAPTpken,
     pendingRequest,
+    eraseCookie,
   } from "./js/store";
 
   export let token;
@@ -55,6 +56,10 @@
     generalErr.set(false);
     // newToken.set("");
     showToolTipDetails.set(false);
+    console.log(document.cookie);
+  });
+  window.addEventListener("beforeunload", () => {
+    eraseCookie("MIC-IBLL-MIJ")
   });
 </script>
 

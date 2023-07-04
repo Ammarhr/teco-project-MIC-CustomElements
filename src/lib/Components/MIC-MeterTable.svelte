@@ -690,6 +690,10 @@
   const srollHandle = () => {
     scrollClass = "disable-scroll";
   };
+  let scrollClass2 = "scroll-image";
+  const srollHandle2 = () => {
+    scrollClass2 = "disable-scroll";
+  };
   let currentWord = 0;
   function changeWord() {
     currentWord = (currentWord + 1) % words.length;
@@ -745,9 +749,13 @@
             </button>
           </div>
         {/if}
-        <div class="table-container" on:scroll={srollHandle}>
-          <div class={scrollClass}>
-            <img src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif" alt="" use:lazyImage />
+        <div class="table-container" on:scroll={srollHandle2}>
+          <div class={scrollClass2}>
+            <img
+              src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
+              alt=""
+              use:lazyImage
+            />
           </div>
           {#if items}
             {#if tableData}
@@ -1058,7 +1066,11 @@
             <!-- Monthly Chart -->
             <div id={"meter-tab1" + tab1} on:scroll={srollHandle}>
               <div class={scrollClass}>
-                <img src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif" alt="" use:lazyImage />
+                <img
+                  src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
+                  alt=""
+                  use:lazyImage
+                />
               </div>
               {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails}
                 {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length == 0}
@@ -1145,7 +1157,11 @@
             {#if selectedMeter && selectedMeter.AMI_Flag != ""}
               <div id={"meter-tab1" + tab2} on:scroll={srollHandle}>
                 <div class={scrollClass}>
-                  <img src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif" alt="" use:lazyImage />
+                  <img
+                    src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
+                    alt=""
+                    use:lazyImage
+                  />
                 </div>
                 {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails}
                   {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails.length && $dailyUsageData.DailyUsage.DailyDetails.length == 0}
@@ -1337,6 +1353,7 @@
   //
   .scroll-image {
     display: none;
+    z-index: 3;
     @media screen and (max-width: 480px) {
       display: unset;
       img {

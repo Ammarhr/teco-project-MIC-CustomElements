@@ -289,6 +289,11 @@
       return "";
     }
   };
+
+  let scrollClass = "scroll-image";
+  const srollHandle = () => {
+    scrollClass = "disable-scroll";
+  };
 </script>
 
 {#if $loading}
@@ -358,7 +363,14 @@
             </div>
           {/if}
         </div>
-        <div class="table-container">
+        <div class="table-container" on:scroll={srollHandle}>
+          <div class={scrollClass}>
+            <img
+              src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
+              alt=""
+              use:lazyImage
+            />
+          </div>
           {#if items}
             {#if tableData}
               <table class="table" id="table">
@@ -576,6 +588,24 @@
   * {
     font-family: "Interstate";
   }
+  .scroll-image {
+    display: none;
+    z-index: 3;
+    @media screen and (max-width: 480px) {
+      display: unset;
+      img {
+        position: absolute;
+        right: 10px;
+        bottom: 40%;
+        rotate: 180deg;
+        width: 80px;
+        opacity: 50%;
+      }
+    }
+  }
+  .disable-scroll {
+    display: none;
+  }
   .account-con {
     display: flex;
     flex-direction: column;
@@ -670,6 +700,10 @@
     align-self: stretch;
     flex-grow: 0;
     overflow-x: auto;
+    position: relative;
+    @media screen and (max-width: 480px) {
+      box-shadow: inset -7px 0 7px -7px rgba(0, 0, 0, 0.5);
+    }
   }
   table {
     border-collapse: separate;

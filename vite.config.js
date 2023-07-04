@@ -7,9 +7,9 @@ export default defineConfig({
   plugins: [
     svelte({
       preprocess: preprocess(),
-          compilerOptions: {
-            customElement: true,
-          },
+      compilerOptions: {
+        customElement: true,
+      },
     }),
   ],
 })
