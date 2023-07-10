@@ -15,6 +15,7 @@
     generatedFromTable,
     billNumber,
   } from "../../js/store";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
   import { onMount } from "svelte";
 
   let items;
@@ -278,15 +279,20 @@
   const renderSortSvg = (thIndex) => {
     if (items && items.length > 1) {
       if (activeSort == thIndex && sortingType == "asen") {
-        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-up.svg  alt="sort"/>';
+        return `<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-up.svg  alt="sort" class="img-sort" />`;
       } else if (activeSort == thIndex && sortingType == "des") {
-        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-down.svg alt="sort" />';
+        return `<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort-down.svg alt="sort" class="img-sort" />`;
       } else {
-        return '<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort.svg  alt="sort"  />';
+        return `<img src=https://tecocdn.azureedge.net/ibill/iBill-assets/sort.svg  alt="sort" class="img-sort" />`;
       }
     } else {
       return "";
     }
+  };
+
+  let scrollClass = "scroll-image";
+  const srollHandle = () => {
+    scrollClass = "disable-scroll";
   };
 </script>
 
@@ -304,6 +310,7 @@
           src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
           alt="toggle"
           id={svgId}
+          use:lazyImage
         />
       </div>
       {#if isOpen}
@@ -350,12 +357,20 @@
                 <img
                   src={`https://tecocdn.azureedge.net/ibill/iBill-assets/search.svg`}
                   alt=""
+                  use:lazyImage
                 />
               </button>
             </div>
           {/if}
         </div>
-        <div class="table-container">
+        <div class="table-container" on:scroll={srollHandle}>
+          <div class={scrollClass}>
+            <img
+              src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
+              alt=""
+              use:lazyImage
+            />
+          </div>
           {#if items}
             {#if tableData}
               <table class="table" id="table">
@@ -406,18 +421,21 @@
                           <img
                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`}
                             alt={row.Service}
+                            use:lazyImage
                           />
                         {/if}
                         {#if row.IsGas == "X"}
                           <img
                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/gasService.svg`}
                             alt={row.Service}
+                            use:lazyImage
                           />
                         {/if}
                         {#if row.IsLighting == "X"}
                           <img
                             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`}
                             alt={row.Service}
+                            use:lazyImage
                           />
                         {/if}
                       </div>
@@ -431,8 +449,10 @@
                     >
                     <td>
                       <div class="td-value">
-                        {#if row.ServiceAddress != ""}
-                          {row.ServiceAddress}
+                        {#if row.IsParentAccount !== "X"}
+                          {#if row.ServiceAddress != ""}
+                            {row.ServiceAddress}
+                          {/if}
                         {/if}
                       </div></td
                     >
@@ -502,6 +522,7 @@
                   <img
                     src={`https://tecocdn.azureedge.net/ibill/iBill-assets/prev.svg`}
                     alt=""
+                    use:lazyImage
                   />
                   Previous
                 </button>
@@ -526,6 +547,7 @@
                   <img
                     src={`https://tecocdn.azureedge.net/ibill/iBill-assets/next.svg`}
                     alt=""
+                    use:lazyImage
                   />
                 </button>
               </div>
@@ -565,6 +587,24 @@
 <style lang="scss">
   * {
     font-family: "Interstate";
+  }
+  .scroll-image {
+    display: none;
+    z-index: 3;
+    @media screen and (max-width: 480px) {
+      display: unset;
+      img {
+        position: absolute;
+        right: 10px;
+        bottom: 40%;
+        rotate: 180deg;
+        width: 80px;
+        opacity: 50%;
+      }
+    }
+  }
+  .disable-scroll {
+    display: none;
   }
   .account-con {
     display: flex;
@@ -660,6 +700,10 @@
     align-self: stretch;
     flex-grow: 0;
     overflow-x: auto;
+    position: relative;
+    @media screen and (max-width: 480px) {
+      box-shadow: inset -7px 0 7px -7px rgba(0, 0, 0, 0.5);
+    }
   }
   table {
     border-collapse: separate;

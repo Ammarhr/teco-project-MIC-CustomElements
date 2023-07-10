@@ -15,6 +15,7 @@
   } from "../../js/store";
   import { onMount } from "svelte";
   import MicToolTip from "./MIC-ToolTip.svelte";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
 
   //store fetch data
   const [data, loading, error, get] = fetchstore();
@@ -103,6 +104,7 @@
                 src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
                 alt=""
                 id={"rotate-svg-" + !toggleArray[i]}
+                use:lazyImage
               />
             </div>
           {/if}
@@ -119,6 +121,7 @@
                   <img
                     src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${billService.IconPath}`}
                     alt=""
+                    use:lazyImage
                   />
                 {/if}
                 {billService.Lable || ""}
@@ -229,6 +232,7 @@
                                 <img
                                   src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`}
                                   alt=""
+                                  use:lazyImage
                                 />
                               {/if}
                               <h4
@@ -401,6 +405,7 @@
                             <img
                               src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`}
                               alt=""
+                              use:lazyImage
                             />
                           {/if}
                           <h4

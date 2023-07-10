@@ -5,7 +5,6 @@
 
   // import dropDown from "../../assets/cr.svg";
   // import percentageIcon from "../../assets/percentage-icon.svg";
-  import { slide } from "svelte/transition";
   import {
     fetchstore,
     apiToken,
@@ -15,8 +14,9 @@
     sunSelectServicesArray,
   } from "../../js/store";
   import { onMount } from "svelte";
-  export let contractnum;
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
 
+  export let contractnum;
   let arrayOfToggles = [];
   let newTokenTrigger;
   let sunSelectData;
@@ -51,16 +51,18 @@
             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
             alt=""
             id={"rotate-svg-" + arrayOfToggles[i]}
+            use:lazyImage
           />
         </div>
         {#if arrayOfToggles[i]}
-          <div class="sun-select-content" transition:slide={{ duration: 300 }}>
+          <div class="sun-select-content" >
             {#if sunSelectObj.SunSelectValue.includes("%")}
               <h2 id="percentage" style="font-size: 5.5rem;">
                 {sunSelectObj.SunSelectValue.split("%")[0]}
                 <img
                   src={`https://tecocdn.azureedge.net/ibill/iBill-assets/sunselectPercentage.svg`}
                   alt=""
+                  use:lazyImage
                 />
               </h2>
             {:else}
@@ -70,7 +72,7 @@
             {/if}
             <p>{sunSelectObj.SunSelectMessage}</p>
           </div>
-          <div class="sub-content" transition:slide={{ duration: 300 }}>
+          <div class="sub-content" >
             <p>
               {sunSelectObj.SunSelectTooltip}
               <!-- As a Sun Select customer you <span>DO NOT</span> pay fuel cost

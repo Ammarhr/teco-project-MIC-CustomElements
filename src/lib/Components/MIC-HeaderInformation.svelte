@@ -3,6 +3,8 @@
 <script>
   // @ts-nocheck
   import { fetchstore, apiDomain, apiToken, SAPToken } from "../../js/store";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
+
   //state
   let account;
   let statusClass = "Inactive";
@@ -53,6 +55,7 @@
               class="spacing-outer-left-medium"
               src={`https://tecocdn.azureedge.net/ibill/iBill-assets/favIcon.svg`}
               alt="favorite logo"
+              use:lazyImage
             />
           </div>
         </div>
@@ -66,18 +69,21 @@
               <img
                 class="spacing-outer-right-medium"
                 src={`https://tecocdn.azureedge.net/ibill/iBill-assets/electricService.svg`}
+                use:lazyImage
               />
             {/if}
             {#if account.IsGas}
               <img
                 class="spacing-outer-right-medium"
                 src={`https://tecocdn.azureedge.net/ibill/iBill-assets/gasService.svg`}
+                use:lazyImage
               />
             {/if}
             {#if account.IsLighting}
               <img
                 class="lighting"
                 src={`https://tecocdn.azureedge.net/ibill/iBill-assets/lightingService.svg`}
+                use:lazyImage
               />
             {/if}
             <div>

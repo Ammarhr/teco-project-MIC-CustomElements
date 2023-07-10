@@ -18,7 +18,7 @@
     isSummaryAccountFlag,
     generatedFromTable
   } from "../../js/store";
-  import MicSunSelect from "./MIC-SunSelect.svelte";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
   // state
   let selectedBill;
   let selectedLabelBill;
@@ -179,6 +179,7 @@
             <img
               src={`https://tecocdn.azureedge.net/ibill/iBill-assets/DownloadIcon.svg`}
               alt="DI"
+              use:lazyImage
             />DOWNLOAD BILL
           </button>
         </div>

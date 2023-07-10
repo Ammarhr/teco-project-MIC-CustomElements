@@ -16,18 +16,22 @@
   import MicShadowLoading from "./lib/Components/MIC-ShadowLoading.svelte";
   import MicSummaryBilling from "./lib/Components/MIC-SummaryBilling.svelte";
   import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import {
     setDomain,
     setToken,
     generalErr,
     showToolTipDetails,
-    setEventDomain,
-    newToken,
     persona,
     setSummaryAccountFlag,
     isSummaryAccountFlag,
     setSAPTpken,
+    pendingRequest,
+    eraseCookie,
+    fetchAndRedirect,
+    apiToken,
+    apiDomain,
+    start
   } from "./js/store";
 
   export let token;
@@ -35,10 +39,8 @@
   export let personainput;
   export let saptoken = '""';
   export let issummaryaccount = "false";
-  const refresh = () => {
-    newToken.set("");
-  };
-  $: if (token && domain ) {
+
+  $: if (token && domain) {
     setToken(token);
     setDomain(domain);
     setSAPTpken(saptoken);
@@ -52,17 +54,64 @@
   $: if (issummaryaccount) {
     setSummaryAccountFlag(issummaryaccount);
   }
-
   onMount(() => {
+    start.set(new Date().getTime());
     generalErr.set(false);
-    newToken.set("");
+    // newToken.set("");
     showToolTipDetails.set(false);
+
+    fetchAndRedirect(
+      $apiToken,
+      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      null,
+      {
+        EventCode: "IBILL_START",
+        Outcome: ``,
+        Feedback: "",
+        Persona: $persona,
+      }
+    );
   });
-  refresh();
+  // window.onload = function () {
+  //   fetchAndRedirect(
+  //     $apiToken,
+  //     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+  //     null,
+  //     {
+  //       EventCode: "IBILL_START",
+  //       Outcome: ``,
+  //       Feedback: "",
+  //       Persona: $persona,
+  //     }
+  //   );
+  // };
+  window.addEventListener("beforeunload", () => {
+    fetchAndRedirect(
+      $apiToken,
+      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      null,
+      {
+        EventCode: "IBILL_END",
+        Outcome: ``,
+        Feedback: "",
+        Persona: $persona,
+      }
+    )
+    eraseCookie("MIC-IBLL-MIJ")
+  });
 </script>
 
-{#if token && domain  && saptoken && $generalErr !== true}
+{#if token && domain && saptoken && $generalErr !== true}
   <div class="wrapper">
+    {#if $pendingRequest && $pendingRequest.length > 0}
+      <div class="loading-screen">
+        <div class="bouncing-loader">
+          <div />
+          <div />
+          <div />
+        </div>
+      </div>
+    {/if}
     <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
@@ -94,6 +143,52 @@
 {/if}
 
 <style lang="scss">
+  @keyframes bouncing-loader {
+    to {
+      opacity: 0.1;
+      transform: translate3d(0, -16px, 0);
+    }
+  }
+
+  .bouncing-loader {
+    display: flex;
+    justify-content: center;
+  }
+
+  .bouncing-loader > div {
+    width: 16px;
+    height: 16px;
+    margin: 3rem 0.2rem;
+    background: #8385aa;
+    border-radius: 50%;
+    animation: bouncing-loader 0.6s infinite alternate;
+  }
+
+  .bouncing-loader > div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .bouncing-loader > div:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  .loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f57f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .loading-text {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+  }
   .wrapper {
     display: flex;
     flex-direction: column;
@@ -139,7 +234,7 @@
       grid-template-columns: 100%;
     }
   }
-  .charge-detailes { 
+  .charge-detailes {
     @media screen and (max-width: 992px) {
       width: 100%;
     }

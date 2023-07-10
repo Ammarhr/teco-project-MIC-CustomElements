@@ -12,6 +12,8 @@
     SAPToken,
     persona,
   } from "../../js/store";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
+
   //mocking data
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
@@ -43,9 +45,12 @@
   <div
     class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
     style="background-image:url({`https://tecocdn.azureedge.net/ibill/iBill-assets/mask-bd.svg`});"
+    use:lazyImage
   >
     <div class="tecoBillBannerBody">
-      <p>Looking to download bills? Click here to download one or more bills.</p>
+      <p>
+        Looking to download bills? Click here to download one or more bills.
+      </p>
       <!-- svelte-ignore a11y-invalid-attribute -->
       <a
         class="reverseOrder m_1"
@@ -53,8 +58,8 @@
         role="button"
         target="_blank"
         rel="noreferrer"
-        style={btnStatus == "disable" ?"pointer-events: none;":""}
-        ><span class={btnStatus} aria-hidden="true" >
+        style={btnStatus == "disable" ? "pointer-events: none;" : ""}
+        ><span class={btnStatus} aria-hidden="true">
           {"< "} DOWNLOAD BILLS
         </span>
       </a>

@@ -1,6 +1,8 @@
 <svelte:options tag={"mic-yearlyenergy"} />
 
 <script>
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
+
   // @ts-nocheck
   export let yearlyarray;
   let yearlyEnergyData;
@@ -30,6 +32,7 @@
             id={"rotate-svg-" + arrayOfToggles[i]}
             on:click={() => toggle(i)}
             aria-expanded={arrayOfToggles[i]}
+            use:lazyImage
           />
         </div>
         {#if arrayOfToggles[i]}

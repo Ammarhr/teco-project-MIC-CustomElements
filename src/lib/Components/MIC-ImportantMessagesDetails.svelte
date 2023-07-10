@@ -7,7 +7,6 @@
   // import messageNotification from "../../assets/messages-notification.svg";
   // import messageNotification from "../../assets/envelope-solid.svg";
 
-  import { slide } from "svelte/transition";
   import {
     fetchAndRedirect,
     apiToken,
@@ -15,6 +14,7 @@
     apiDomain,
     persona,
   } from "../../js/store";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
 
   export let messages;
   let container;
@@ -79,7 +79,7 @@
   }
 </script>
 
-<div class="message-footer" transition:slide={{ duration: 300 }}>
+<div class="message-footer" >
   <button class="enable" on:click={() => showMessages("view")}>View</button>
 </div>
 {#if show}
@@ -93,6 +93,7 @@
               <img
                 src={`https://tecocdn.azureedge.net/ibill/iBill-assets/envelope-solid.svg`}
                 alt=""
+                use:lazyImage
               />
               <span id="unreaded-msgs">&nbsp;{messages.length}&nbsp;</span>
             </div>

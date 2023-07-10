@@ -2,11 +2,9 @@
 
 <script>
   // @ts-nocheck
-
-  //svg imports
-  // import circyle from "../../assets/cr.svg";
-  // import messageNotification from "../../assets/envelope-solid.svg";
   import MicImportantMessagesDetails from "./MIC-ImportantMessagesDetails.svelte";
+  import { useLazyImage as lazyImage } from "svelte-lazy-image";
+
   //unreaded messages counter
   import {
     fetchstore,
@@ -96,12 +94,14 @@
           <img
             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/envelope-solid.svg`}
             alt=""
+            use:lazyImage
           />
           <span id="unreaded-msgs">&nbsp;{state.messages.length}&nbsp;</span>
         {:else}
           <img
             src={`https://tecocdn.azureedge.net/ibill/iBill-assets/envelope-solid.svg`}
             alt=""
+            use:lazyImage
           />
           <span id="unreaded-msgs">&nbsp;{0}&nbsp;</span>
         {/if}
@@ -111,6 +111,7 @@
         src={`https://tecocdn.azureedge.net/ibill/iBill-assets/toggle.svg`}
         alt=""
         id={svgId}
+        use:lazyImage
       />
     </div>
     {#if state.messages}
