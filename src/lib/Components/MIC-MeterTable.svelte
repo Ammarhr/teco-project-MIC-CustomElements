@@ -97,7 +97,7 @@
     }
   });
 
-  //////// change the selected meter + call Dap Api
+  //////// change the selected meter + call Meter Api
   const handleSelectedMeter = (meterObject, i) => {
     scrollClass = "scroll-image";
     chartLegend = "";
@@ -152,6 +152,8 @@
         UOF,
         StandbyCustomer_Flag,
       } = selectedMeter;
+
+      // toggle animation words
       words = [
         {
           text: UOF,
@@ -170,6 +172,8 @@
           size: 18,
         },
       ];
+
+      // call daily chart api when the AMI_Flag is exist
       if (AMI_Flag == "X") {
         dailyUsageGet(
           refreshableToken,
@@ -190,6 +194,7 @@
           $SAPToken
         );
       }
+      // call monthy api cases calls
       let monthlyUrl;
       if (StandbyCustomer_Flag == "X" && DAP_dtoun == "x" && DAP_dtouf == "x") {
         onPeakOprand = "SUSTKWHP";
@@ -208,6 +213,8 @@
           monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${HistoricalFact}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
         }
       }
+
+      // monthly chart api call
       monthlyUsageGet(
         refreshableToken,
         monthlyUrl,
@@ -370,13 +377,14 @@
       .fill()
       .map((_, idx) => startPageIndex + idx);
   }
-  /// card toggle
+
+  // card toggle
   const cardToggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
   };
 
-  ////////// tabs functionality
+  // tabs functionality
   const activateTab = (num1, num2, activeTab) => {
     scrollClass = "scroll-image";
     if (setTimeoutId) {
@@ -416,7 +424,7 @@
     }
   };
 
-  ////// search & filter
+  // search & filter
   const handleSearch = (event) => {
     currentPage = 0;
     let str;
@@ -443,7 +451,7 @@
     }
   };
 
-  // toolt tip toggle function
+  // tempreature tool tip toggle function
   function tooltipToggle(close) {
     if (close == true) {
       toolTipShow = false;
@@ -507,6 +515,7 @@
     setTimeoutId = setTimeout(changeWord, 800);
   };
 
+  // show/hide tempreature chart
   const tempreatureShow = () => {
     tempData = !tempData;
     // MiJurney event call
@@ -537,7 +546,7 @@
     }
   };
 
-  // min width for scroll (chart)
+  // min width for scroll (Monthly chart)
   $: if (
     $monthlyUsageData &&
     $monthlyUsageData.MonthlyUsage &&
@@ -565,6 +574,8 @@
         break;
     }
   }
+
+  // min width for scroll (daily chart)
   $: if (
     $dailyUsageData &&
     $dailyUsageData.DailyUsage &&
@@ -592,6 +603,8 @@
         break;
     }
   }
+
+  // sort functionality
   import {
     sortByMeterNumber,
     sortByReadDate,
@@ -606,11 +619,12 @@
     sortByCritical,
     sortByService,
   } from "../../js/sorting-bundle";
-  /// sorting:
+  /// sorting obj
   let sortUiObj = {
     sortingType: "",
     activeSort: "",
   };
+
   const handleSort = (register) => {
     sortUiObj.activeSort = register;
     activeSort = register;
@@ -629,7 +643,6 @@
       sortUiObj.sortingType = "asen";
       sortingType = "asen";
     }
-
     if (items && items.length > 1) {
       switch (true) {
         case register == "1":
@@ -673,6 +686,7 @@
     }
   };
 
+  // rendering sort svg
   const renderSortSvg = (thIndex) => {
     if (items && items.length > 1) {
       if (activeSort == thIndex && sortingType == "asen") {
@@ -686,17 +700,31 @@
       return "";
     }
   };
+
+  // sroll animation annotation (table)
   let scrollClass = "scroll-image";
   const srollHandle = () => {
     scrollClass = "disable-scroll";
   };
+  // sroll animation annotation (chart)
   let scrollClass2 = "scroll-image";
   const srollHandle2 = () => {
     scrollClass2 = "disable-scroll";
   };
+
+  // change the chart unit (toggle animation)
   let currentWord = 0;
   function changeWord() {
     currentWord = (currentWord + 1) % words.length;
+  }
+
+  // scroll on click for chart tooltip into view
+  function scrollTo(e) {
+    let sad = document.querySelector(".apexcharts-tooltip");
+    if (sad)
+      setTimeout(() => {
+        sad.scrollIntoView({ behavior: "smooth" });
+      }, 200);
   }
 </script>
 
@@ -1208,6 +1236,7 @@
                         onOffPeakDemand,
                         chartLegend
                       )}
+                      on:click={(e) => scrollTo(e)}
                     />
                   {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
                     <!-- Daily usage OnPeak & OffPeak chart -->

@@ -18,7 +18,7 @@
     domain="jsdelivr.="
     eventdomain="s"
     personainput=""
-    issummaryaccount="true"
+    issummaryaccount="false"
   /> -->
 </div>
 

@@ -292,7 +292,7 @@ export function eraseCookie(name) {
 
 //* MiJureny call
 const mijCookie = "MIC-IBLL-MIJ";
-const start = new Date().getTime();
+export const start = writable('')
 let sessionDate = new Date();
 let ipify;
 const userAgent = navigator.userAgent;
@@ -370,7 +370,7 @@ function getSessionLocationsuccessCallback(position) {
                     : "",
             };
         })
-        .catch((error) => console.log("error", error));
+        .catch((error) => console.log());
 }
 
 function getSessionLocationerrorCallback(error) {
@@ -405,8 +405,13 @@ ipAdress().then((ip) => ipify = ip.ip)
 //*
 
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
+    var startTime;
+    
+    start.subscribe(value => {
+        startTime = value;
+    });
     const end = new Date().getTime();
-    const totalTime = (end - start) / 1000;
+    const totalTime = (end - startTime) / 1000;
 
     const uuid = getCookie(mijCookie);
     fetch(fetchUrl, {

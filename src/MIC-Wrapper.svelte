@@ -22,14 +22,16 @@
     setToken,
     generalErr,
     showToolTipDetails,
-    setEventDomain,
-    newToken,
     persona,
     setSummaryAccountFlag,
     isSummaryAccountFlag,
     setSAPTpken,
     pendingRequest,
     eraseCookie,
+    fetchAndRedirect,
+    apiToken,
+    apiDomain,
+    start
   } from "./js/store";
 
   export let token;
@@ -53,12 +55,48 @@
     setSummaryAccountFlag(issummaryaccount);
   }
   onMount(() => {
+    start.set(new Date().getTime());
     generalErr.set(false);
     // newToken.set("");
     showToolTipDetails.set(false);
-    console.log(document.cookie);
+
+    fetchAndRedirect(
+      $apiToken,
+      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      null,
+      {
+        EventCode: "IBILL_START",
+        Outcome: ``,
+        Feedback: "",
+        Persona: $persona,
+      }
+    );
   });
+  // window.onload = function () {
+  //   fetchAndRedirect(
+  //     $apiToken,
+  //     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+  //     null,
+  //     {
+  //       EventCode: "IBILL_START",
+  //       Outcome: ``,
+  //       Feedback: "",
+  //       Persona: $persona,
+  //     }
+  //   );
+  // };
   window.addEventListener("beforeunload", () => {
+    fetchAndRedirect(
+      $apiToken,
+      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      null,
+      {
+        EventCode: "IBILL_END",
+        Outcome: ``,
+        Feedback: "",
+        Persona: $persona,
+      }
+    )
     eraseCookie("MIC-IBLL-MIJ")
   });
 </script>
@@ -74,7 +112,7 @@
         </div>
       </div>
     {/if}
-    <mic-headerinformation />
+    <!-- <mic-headerinformation /> -->
     <!-- <MicHeaderInformation /> -->
     <div class="important-balance">
       <div class="balance">
