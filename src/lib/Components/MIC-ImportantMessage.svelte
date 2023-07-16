@@ -66,12 +66,13 @@
   let contentStyle;
   let footerStyle;
   let msgDataStyle;
+
   const toggle = () => {
     isOpen = !isOpen;
     svgId = "rotate-svg-" + isOpen;
     if (isOpen === true) {
       cardStyle = "max-height: 200vh;opacity: 1;transition:200ms;";
-      contentStyle = " height: calc(100% - 120px);";
+      contentStyle = "height: calc(100% - 120px);";
       footerStyle = "height:50px";
     } else {
       cardStyle = "height: unset;margin: 0; transition:200ms;";

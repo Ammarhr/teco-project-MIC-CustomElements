@@ -207,9 +207,6 @@
             break;
         }
       }
-      // searchArray = $data.Accounts.filter((account) => {
-      //   return account.AccountNumber?.includes(str.toLowerCase());
-      // });
     }
     if (searchArray[0]) {
       items = searchArray;
@@ -364,13 +361,13 @@
           {/if}
         </div>
         <div class="table-container" on:scroll={srollHandle}>
-          <div class={scrollClass}>
+          <!-- <div class={scrollClass}>
             <img
               src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
               alt=""
               use:lazyImage
             />
-          </div>
+          </div> -->
           {#if items}
             {#if tableData}
               <table class="table" id="table">
@@ -556,7 +553,6 @@
         {/if}
       {/if}
     </div>
-
     <!-- Canceled -->
     <!-- <div class="account-details account-card">
     <p>

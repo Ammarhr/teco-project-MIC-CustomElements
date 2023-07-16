@@ -180,7 +180,7 @@ const fillArray_helpper = (arr, len, fill) => {
     }
     return arr;
 }
-export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp, monthly, onOffPeakDemand, customLegend) => {
+export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp, monthly, onOffPeakDemand, customLegend, MaxUsage) => {
     let filterData;
     let toolTipUsage = chartUnit == "cost" ? "Cost:" : service == "Gas" ? "Gas Used: " : onOffPeakDemand ? onOffPeakDemand : "Energy Used: "
     let chartLegend = customLegend ? customLegend.toUpperCase() : service.toUpperCase();
@@ -499,14 +499,15 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                     enabled: false
                 },
             },
-            yaxis: [
+            yaxis: MaxUsage > 0 ? [
                 {
                     min: 0,
+                    // max: parseInt(MaxUsage),
                     tickAmount: 5,
                     labels: {
                         show: true,
                         formatter: function (val) {
-                            return val && val != null && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
+                            return val && val != null && val == 0 ? 0 : val && val % 1 !== 0 && parseInt(MaxUsage) < 5 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
                         },
                     },
                 },
@@ -525,7 +526,7 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
                         },
                     },
                 }
-            ],
+            ] : [],
 
         }
     }
