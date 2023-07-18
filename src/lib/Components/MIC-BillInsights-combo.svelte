@@ -22,33 +22,30 @@
     apiToken,
     latestBill,
     persona,
-    eventsDomain,
-    sunSelectServicesArray,
-    SAPToken,
   } from "../../js/store";
   export let insightservices;
   export let sunselectdata;
   export let emptytabs;
+  export let arrayofbody;
   ///// important variables
   let toggleArray = []; // array of toggle statuses
   let styleToggleArr = []; // array of toggle style
   let tabsToggleArr = [];
   let sunSelectArray = [];
   let sunArrayVal;
-  let recoToken;
   let isOpen = true; // toggle card status
   let svgId = "rotate-svg-" + isOpen; // toggle button rotate ID
   let avgClass = "red"; //toggle style class (complete it later)
   let chartWidth = 300; // the width of the charts
   let newArr;
-  export let arrayofbody;
   const [data, loading, error, get] = fetchstore(); // store fetch
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
+  // empty tabs array on each insights rendering
   $: if (typeof emptytabs == "boolean" && emptytabs === true) {
     tabsToggleArr = [];
   }
-  ///////// acordion functionality
+  // card acordion functionality
   const toggle = (i) => {
     toggleArray[i] = !toggleArray[i];
     svgId = "rotate-svg-";
@@ -61,7 +58,7 @@
     }
   };
 
-  ////////////////////////
+  // unused anymore:
   $: if (
     insightservices &&
     insightservices.length > 0 &&
@@ -76,7 +73,8 @@
       sunSelectArray.push(sunArrayVal);
     }
   }
-
+  
+  // first render for active tabs
   $: if (insightservices && !tabsToggleArr[0]) {
     tabsToggleArr = [];
     for (let i = 0; i < insightservices.length; i++) {
@@ -101,13 +99,15 @@
       toggleArray.push(false);
     }
   }
+
+  // resize windows == resize chart width
   window.addEventListener("resize", function () {
     if (window.innerWidth < 650) {
       chartWidth = window.innerWidth - 75;
     }
   });
 
-  // tabs:
+  // tabs: toggle function
   const activateTab = (i, j) => {
     if (j == 1) {
       tabsToggleArr[i][1] = "2";
@@ -138,6 +138,7 @@
         </div>
         <div class="content-container" style={styleToggleArr[i]}>
           <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <!-- tabs -->
           <div id="insights-tabs">
             {#if insightsService?.yearly?.VisibilityTab == true}
               <h6
@@ -616,6 +617,7 @@
               {/if}
             </div>
           {/if}
+          <!-- recommendation messages component section -->
           {#if $billNumber === $latestBill && arrayofbody && insightsService.BillContractNo}
             <!-- <MicInsightsRecomendation
               token={$apiToken}
@@ -656,8 +658,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // width: 370px;
-    // max-width: calc(100% - 40px);
     padding: 20px;
     transition: 0.3s;
     border-radius: 16px;

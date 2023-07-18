@@ -40,6 +40,7 @@
   }
 
   const handleChange = (e, latest1) => {
+    
     if (latest1 && $billNumber !== $latestBill) {
       selectedBill = latest1;
       newToken.set("");
@@ -91,6 +92,7 @@
       let latest = $data.bills[0].value;
       latestBill.set(latest);
     }
+    // 
     if (!selectedBill) {
       if ($data.bills.filter((bill) => bill.value == $data.selectedBill)[0]) {
         selectedLabelBill = $data.bills.filter(

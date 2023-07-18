@@ -77,7 +77,7 @@
     // dynamic totalAmmount colors
     if ($data.totalAmmount.includes("-")) {
       color = "#24A148";
-
+      
       absTotalAmmount = parseFloat(
         $data.totalAmmount?.split(",").join("")
       ).toFixed(2);

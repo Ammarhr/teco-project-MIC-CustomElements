@@ -72,19 +72,6 @@
       }
     );
   });
-  // window.onload = function () {
-  //   fetchAndRedirect(
-  //     $apiToken,
-  //     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-  //     null,
-  //     {
-  //       EventCode: "IBILL_START",
-  //       Outcome: ``,
-  //       Feedback: "",
-  //       Persona: $persona,
-  //     }
-  //   );
-  // };
   window.addEventListener("beforeunload", () => {
     fetchAndRedirect(
       $apiToken,
