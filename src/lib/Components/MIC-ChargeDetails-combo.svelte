@@ -350,10 +350,6 @@
                                         : ""}
                                       tooltipdis={level2Obj.ToolTip}
                                     />
-                                    <!-- <MicToolTip
-                                      tooltipurl={billService.URL || ""}
-                                      tooltipdis={level2Obj.ToolTip}
-                                    /> -->
                                   {/if}
                                 </div>
                               {:else if level2Obj.Order == 2 || level2Obj.Order == 3}

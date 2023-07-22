@@ -16,6 +16,9 @@
   import MicShadowLoading from "./lib/Components/MIC-ShadowLoading.svelte";
   import MicSummaryBilling from "./lib/Components/MIC-SummaryBilling.svelte";
   import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
+  // refactor components:
+  import MicMeterTable2 from "./lib/Components/MIC-MeterTable2.svelte";
+
   import { onDestroy, onMount } from "svelte";
   import {
     setDomain,
@@ -123,6 +126,7 @@
     <!-- <MicComboBill /> -->
     <mic-metertable />
     <!-- <MicMeterTable /> -->
+    <!-- <MicMeterTable2 /> -->
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />

@@ -73,7 +73,7 @@
       sunSelectArray.push(sunArrayVal);
     }
   }
-  
+
   // first render for active tabs
   $: if (insightservices && !tabsToggleArr[0]) {
     tabsToggleArr = [];
@@ -94,7 +94,7 @@
       ) {
         tabsToggleArr.push(["1", "2"]);
       } else {
-        tabsToggleArr.push(["2", "1"]);
+        tabsToggleArr.push(["2", "1"]); 
       }
       toggleArray.push(false);
     }
