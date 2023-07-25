@@ -1,4 +1,4 @@
-<svelte:options tag="mic-metertable" />
+<svelte:options tag="mic-metertable2" />
 
 <script>
   // @ts-nocheck

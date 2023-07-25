@@ -406,13 +406,12 @@ ipAdress().then((ip) => ipify = ip.ip)
 
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
     var startTime;
-    
+
     start.subscribe(value => {
         startTime = value;
     });
     const end = new Date().getTime();
     const totalTime = (end - startTime) / 1000;
-
     const uuid = getCookie(mijCookie);
     fetch(fetchUrl, {
         method: "POST",

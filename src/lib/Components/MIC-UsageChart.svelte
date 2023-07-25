@@ -1,3 +1,5 @@
+<svelte:options tag="mic-usage-charts" />
+
 <script>
   // @ts-nocheck
   import { onMount } from "svelte";
@@ -30,7 +32,7 @@
   let dailyMinwidth = "unset";
   let chartColor = "#044F8D";
   let onOffPeakDemand;
-  let chartLegend;
+  let chartLegend = "";
   let toolTipIconCon;
   let chartDisplayUnit = "usage";
   let tempData = true;
@@ -41,8 +43,12 @@
   let currentWord = 0;
   let scrollClass = "scroll-image";
 
-  export let refreshableToken;
-  export let selectedMeter;
+  export let refreshabletoken;
+  export let meterobj;
+
+  //demo:
+  export let dailyurl;
+  export let monthlyurl;
 
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
     fetchDailyUsageChart(); // daily usage fetch
@@ -52,9 +58,10 @@
     monthlyUsageError,
     monthlyUsageGet,
   ] = fetchMonthlyUsageChart(); // monthly usage fetch
-
+  let selectedmeter;
   onMount(() => {
-    if (selectedMeter) {
+    selectedmeter = JSON.parse(meterobj);
+    if (selectedmeter) {
       let {
         DLN,
         AMI_Flag,
@@ -72,7 +79,7 @@
         DAP_dtoun,
         DAP_dtouf,
         StandbyCustomer_Flag,
-      } = selectedMeter;
+      } = selectedmeter;
       scrollClass = "scroll-image";
       chartLegend = "";
       onOffPeakDemand = "";
@@ -80,9 +87,10 @@
       // call daily chart api when the AMI_Flag is exist
       if (AMI_Flag == "X") {
         dailyUsageGet(
-          refreshableToken,
+          refreshabletoken,
           //   `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-          "../../data/meterUsageDaily.json",
+          // "/data/meterUsageDaily.json",
+          dailyurl,
           {
             dln: DLN,
             sdt: DAP_StartDate,
@@ -120,11 +128,12 @@
 
       // monthly chart api call
       monthlyUsageGet(
-        refreshableToken,
+        refreshabletoken,
         // monthlyUrl,
-        "../../data/meterUsageMonthly.json",
+        // "/data/meterUsageMonthly.json",
+        monthlyurl,
         $SAPToken
-      );
+      ).then(() => {});
 
       // toggle animation words
       words = [
@@ -146,6 +155,54 @@
         },
       ];
     }
+
+    // chart legend:
+    if (selectedmeter) {
+      if (selectedmeter.DAP_kw == "x") {
+        chartColor = "#411084";
+        chartLegend = "Demand";
+        if (selectedmeter) {
+          if (selectedmeter.HistoricalFact == "KW_R_OPK") {
+            onOffPeakDemand = "Off Peak: ";
+          } else if (selectedmeter.HistoricalFact == "KW_R_PK") {
+            onOffPeakDemand = "On Peak: ";
+          } else {
+            onOffPeakDemand = "Demand: ";
+          }
+        }
+      } else if (
+        selectedmeter.DAP_dtoun == "x" &&
+        selectedmeter.DAP_dtouf !== "x"
+      ) {
+        chartColor = "#00B6F0";
+      } else if (
+        selectedmeter.DAP_dtoun !== "x" &&
+        selectedmeter.DAP_dtouf == "x"
+      ) {
+        chartColor = "#00294A";
+      } else if (
+        selectedmeter.DAP_dtoun == "x" &&
+        selectedmeter.DAP_dtouf == "x"
+      ) {
+        chartColor = "both";
+      } else if (selectedmeter.DAP_rkwh == "x") {
+        chartColor = "#96BDFF";
+        if (selectedmeter) {
+          if (selectedmeter.Operand == "YKWHRC") {
+            onOffPeakDemand = "Received: ";
+            chartLegend = "SELF-GENERATED";
+          }
+        }
+      } else {
+        chartColor = "#044F8D";
+        if (selectedmeter) {
+          if (selectedmeter.Operand == "YKWHDL") {
+            onOffPeakDemand = "Delivered: ";
+            chartLegend = "UTILITY PROVIDED";
+          }
+        }
+      }
+    }
   });
 
   // tabs functionality
@@ -161,30 +218,30 @@
     currentWord = 0;
     if (activeTab == "daily") {
       // MiJurney event call
-      fetchAndRedirect(
-        $apiToken,
-        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-        null,
-        {
-          EventCode: "Click_Daily_Tab",
-          Outcome: ``,
-          Feedback: "",
-          Persona: $persona,
-        }
-      );
+      // fetchAndRedirect(
+      //   $apiToken,
+      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      //   null,
+      //   {
+      //     EventCode: "Click_Daily_Tab",
+      //     Outcome: ``,
+      //     Feedback: "",
+      //     Persona: $persona,
+      //   }
+      // );
     } else {
       // MiJurney event call
-      fetchAndRedirect(
-        $apiToken,
-        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-        null,
-        {
-          EventCode: "Click_Monthly_Tab",
-          Outcome: ``,
-          Feedback: "",
-          Persona: $persona,
-        }
-      );
+      // fetchAndRedirect(
+      //   $apiToken,
+      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      //   null,
+      //   {
+      //     EventCode: "Click_Monthly_Tab",
+      //     Outcome: ``,
+      //     Feedback: "",
+      //     Persona: $persona,
+      //   }
+      // );
     }
   };
   // cost/usage chart toggle function
@@ -193,31 +250,31 @@
       chartDisplayUnit = "cost";
 
       // MiJurney event call
-      fetchAndRedirect(
-        $apiToken,
-        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-        null,
-        {
-          EventCode: "Click_Cost_Switch",
-          Outcome: ``,
-          Feedback: "",
-          Persona: $persona,
-        }
-      );
+      // fetchAndRedirect(
+      //   $apiToken,
+      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      //   null,
+      //   {
+      //     EventCode: "Click_Cost_Switch",
+      //     Outcome: ``,
+      //     Feedback: "",
+      //     Persona: $persona,
+      //   }
+      // );
     } else if (e.target.checked == false) {
       chartDisplayUnit = "usage";
       // MiJurney event call
-      fetchAndRedirect(
-        $apiToken,
-        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-        null,
-        {
-          EventCode: "Click_Usage_Switch",
-          Outcome: ``,
-          Feedback: "",
-          Persona: $persona,
-        }
-      );
+      // fetchAndRedirect(
+      //   $apiToken,
+      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      //   null,
+      //   {
+      //     EventCode: "Click_Usage_Switch",
+      //     Outcome: ``,
+      //     Feedback: "",
+      //     Persona: $persona,
+      //   }
+      // );
     }
     changeWord();
     setTimeoutId = setTimeout(changeWord, 800);
@@ -233,29 +290,29 @@
     tempData = !tempData;
     // MiJurney event call
     if (tempData == true) {
-      fetchAndRedirect(
-        $apiToken,
-        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-        null,
-        {
-          EventCode: "Click_Temp_Checkbox",
-          Outcome: `active`,
-          Feedback: "",
-          Persona: $persona,
-        }
-      );
+      // fetchAndRedirect(
+      //   $apiToken,
+      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      //   null,
+      //   {
+      //     EventCode: "Click_Temp_Checkbox",
+      //     Outcome: `active`,
+      //     Feedback: "",
+      //     Persona: $persona,
+      //   }
+      // );
     } else {
-      fetchAndRedirect(
-        $apiToken,
-        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-        null,
-        {
-          EventCode: "Click_Temp_Checkbox",
-          Outcome: `inactive`,
-          Feedback: "",
-          Persona: $persona,
-        }
-      );
+    //   fetchAndRedirect(
+    //     $apiToken,
+    //     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+    //     null,
+    //     {
+    //       EventCode: "Click_Temp_Checkbox",
+    //       Outcome: `inactive`,
+    //       Feedback: "",
+    //       Persona: $persona,
+    //     }
+    //   );
     }
   };
 
@@ -361,185 +418,94 @@
   }
 </script>
 
-<div id="meter-tab-container">
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  {#if $dailyUsageLoading || $monthlyUsageLoading}
-    <mic-shadowloading />
-  {:else if ($dailyUsageData && $dailyUsageData.DailyUsage) || ($monthlyUsageData && $monthlyUsageData.MonthlyUsage)}
-    <div id="meter-tabs">
-      {#if selectedMeter && selectedMeter.AMI_Flag != ""}
-        <h6
-          id={"meter-btn" + tab1}
-          on:click={() => {
-            activateTab("1", "2", "daily");
-          }}
-        >
-          Daily
-        </h6>
-      {/if}
-      {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage}
-        <h6
-          id={"meter-btn" + tab2}
-          on:click={() => activateTab("2", "1", "monthly")}
-        >
-          Monthly
-        </h6>
-      {/if}
-    </div>
-    <div />
-    <!-- option for Hadi to style -->
-    <div class="options" style="position: relative;">
-      {#if disableTemp == false}
-        <div class="temp">
-          <input
-            type="checkbox"
-            name="trmprature"
-            id="temp"
-            checked
-            on:click={tempreatureShow}
-          />
-          <span>Temperature</span>
+{#key selectedmeter}
+  <div id="meter-tab-container">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    {#if $dailyUsageLoading || $monthlyUsageLoading}
+      <mic-shadowloading />
+    {:else if ($dailyUsageData && $dailyUsageData.DailyUsage) || ($monthlyUsageData && $monthlyUsageData.MonthlyUsage)}
+      <div id="meter-tabs">
+        {#if selectedmeter && selectedmeter.AMI_Flag != ""}
+          <h6
+            id={"meter-btn" + tab1}
+            on:click={() => {
+              activateTab("1", "2", "daily");
+            }}
+          >
+            Daily
+          </h6>
+        {/if}
+        {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage}
+          <h6
+            id={"meter-btn" + tab2}
+            on:click={() => activateTab("2", "1", "monthly")}
+          >
+            Monthly
+          </h6>
+        {/if}
+      </div>
+      <div />
+      <!-- option for Hadi to style -->
+      <div class="options" style="position: relative;">
+        {#if disableTemp == false}
+          <div class="temp">
+            <input
+              type="checkbox"
+              name="trmprature"
+              id="temp"
+              checked
+              on:click={tempreatureShow}
+            />
+            <span>Temperature</span>
+            <img
+              src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
+              alt="usage chart tool tip"
+              class="chart-tool-tip"
+              bind:this={toolTipIconCon}
+              on:click={tooltipToggle}
+              use:lazyImage
+            />
+          </div>
+        {/if}
+        {#if activeSection == "monthly" && $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.TempTooltip}
+          <div class="tooltip-content" style={toolTipStyle}>
+            {@html $monthlyUsageData.MonthlyUsage.TempTooltip}
+          </div>
+        {:else if activeSection == "daily" && $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.TempTooltip}
+          <div class="tooltip-content" style={toolTipStyle}>
+            {@html $dailyUsageData.DailyUsage.TempTooltip}
+          </div>
+        {/if}
+        {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && activeSection == "monthly"}
+          <div class="toggle">
+            <input
+              type="checkbox"
+              id="check-4"
+              on:change={(e) => {
+                costUsageToggle(e);
+              }}
+            />
+            <label for="check-4">
+              <p class="toggle_usage">Usage</p>
+              <p class="toggle_cost">Cost</p></label
+            >
+          </div>
+        {/if}
+      </div>
+      <!-- Monthly Chart -->
+      <div id={"meter-tab1" + tab1} on:scroll={srollHandle}>
+        <div class={scrollClass}>
           <img
-            src={`https://tecocdn.azureedge.net/ibill/iBill-assets/tool-tip-icon.svg`}
-            alt="usage chart tool tip"
-            class="chart-tool-tip"
-            bind:this={toolTipIconCon}
-            on:click={tooltipToggle}
+            src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
+            alt=""
             use:lazyImage
           />
         </div>
-      {/if}
-      {#if activeSection == "monthly" && $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.TempTooltip}
-        <div class="tooltip-content" style={toolTipStyle}>
-          {@html $monthlyUsageData.MonthlyUsage.TempTooltip}
-        </div>
-      {:else if activeSection == "daily" && $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.TempTooltip}
-        <div class="tooltip-content" style={toolTipStyle}>
-          {@html $dailyUsageData.DailyUsage.TempTooltip}
-        </div>
-      {/if}
-      {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && activeSection == "monthly"}
-        <div class="toggle">
-          <input
-            type="checkbox"
-            id="check-4"
-            on:change={(e) => {
-              costUsageToggle(e);
-            }}
-          />
-          <label for="check-4">
-            <p class="toggle_usage">Usage</p>
-            <p class="toggle_cost">Cost</p></label
-          >
-        </div>
-      {/if}
-    </div>
-    <!-- Monthly Chart -->
-    <div id={"meter-tab1" + tab1} on:scroll={srollHandle}>
-      <div class={scrollClass}>
-        <img
-          src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
-          alt=""
-          use:lazyImage
-        />
-      </div>
-      {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails}
-        {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length == 0}
-          <div
-            class="chart"
-            style="min-width: {monthlyMinwidth};"
-            use:chart={renderMixChart(
-              null,
-              [chartColor],
-              "1410px",
-              400,
-              null,
-              null,
-              tempData
-            )}
-          />
-        {:else if selectedMeter.DAP_dtoun !== "x" && selectedMeter.DAP_dtouf !== "x"}
-          <div class="text">
-            <p>
-              {#each words as word, i}
-                <span
-                  class="letter {i === currentWord ? 'in' : 'out'}"
-                  style="font-size: {word.size}px"
-                >
-                  {word.text}
-                </span>
-              {/each}
-            </p>
-          </div>
-          <div
-            class="chart"
-            style="min-width: {monthlyMinwidth};"
-            use:chart={renderMixChart(
-              $monthlyUsageData.MonthlyUsage.MonthlyDetails,
-              [chartColor],
-              "1410px",
-              400,
-              selectedMeter.Service,
-              selectedMeter.UOF,
-              chartDisplayUnit,
-              tempData,
-              true,
-              onOffPeakDemand,
-              chartLegend,
-              $monthlyUsageData.MonthlyUsage.MaxUsage
-            )}
-          />
-        {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
-          <!-- Monthly usage OnPeak & OffPeak chart -->
-          <div class="text">
-            <p>
-              {#each words as word, i}
-                <span
-                  class="letter {i === currentWord ? 'in' : 'out'}"
-                  style="font-size: {word.size}px"
-                >
-                  {word.text}
-                </span>
-              {/each}
-            </p>
-          </div>
-          <div
-            class="chart"
-            style="min-width: {monthlyMinwidth};"
-            use:chart={onPeakOffPeakChart(
-              $monthlyUsageData.MonthlyUsage.MonthlyDetails,
-              selectedMeter.UOF,
-              true,
-              selectedMeter.BillingPeriod,
-              tempData,
-              selectedMeter.DAP_dtoun,
-              selectedMeter.DAP_dtouf,
-              chartColor,
-              chartDisplayUnit,
-              400,
-              $monthlyUsageData.MonthlyUsage.MaxUsage,
-              onPeakOprand,
-              offPeakOprand
-            )}
-          />
-        {/if}
-      {/if}
-    </div>
-    <!-- Daily Chart -->
-    {#if selectedMeter && selectedMeter.AMI_Flag != ""}
-      <div id={"meter-tab1" + tab2} on:scroll={srollHandle}>
-        <!-- <div class={scrollClass}>
-            <img
-              src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
-              alt=""
-              use:lazyImage
-            />
-          </div> -->
-        {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails}
-          {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails.length && $dailyUsageData.DailyUsage.DailyDetails.length == 0}
+        {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails}
+          {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length == 0}
             <div
               class="chart"
-              style="min-width: {dailyMinwidth};"
+              style="min-width: {monthlyMinwidth};"
               use:chart={renderMixChart(
                 null,
                 [chartColor],
@@ -550,8 +516,7 @@
                 tempData
               )}
             />
-          {:else if selectedMeter.DAP_dtoun !== "x" && selectedMeter.DAP_dtouf !== "x"}
-            <!-- Daily usage simple chart -->
+          {:else if selectedmeter.DAP_dtoun !== "x" && selectedmeter.DAP_dtouf !== "x"}
             <div class="text">
               <p>
                 {#each words as word, i}
@@ -564,27 +529,28 @@
                 {/each}
               </p>
             </div>
+            <!-- {console.log(JSON.parse(selectedmeter).Service, "selectedmeter.Service")}
+            {console.log(selectedmeter, "selectedmeter")} -->
             <div
               class="chart"
-              style="min-width: {dailyMinwidth};"
+              style="min-width: {monthlyMinwidth};"
               use:chart={renderMixChart(
-                $dailyUsageData.DailyUsage.DailyDetails,
+                $monthlyUsageData.MonthlyUsage.MonthlyDetails,
                 [chartColor],
                 "1410px",
                 400,
-                selectedMeter.Service,
-                selectedMeter.UOF,
+                selectedmeter.Service,
+                selectedmeter.UOF,
                 chartDisplayUnit,
                 tempData,
-                false,
+                true,
                 onOffPeakDemand,
                 chartLegend,
-                $dailyUsageData.DailyUsage.MaxUsage
+                $monthlyUsageData.MonthlyUsage.MaxUsage
               )}
-              on:click={(e) => scrollTo(e)}
             />
-          {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
-            <!-- Daily usage OnPeak & OffPeak chart -->
+          {:else if selectedmeter.DAP_dtoun == "x" || selectedmeter.DAP_dtouf == "x"}
+            <!-- Monthly usage OnPeak & OffPeak chart -->
             <div class="text">
               <p>
                 {#each words as word, i}
@@ -599,19 +565,19 @@
             </div>
             <div
               class="chart"
-              style="min-width: {dailyMinwidth};"
+              style="min-width: {monthlyMinwidth};"
               use:chart={onPeakOffPeakChart(
-                $dailyUsageData.DailyUsage.DailyDetails,
-                selectedMeter.UOF,
-                false,
-                null,
+                $monthlyUsageData.MonthlyUsage.MonthlyDetails,
+                selectedmeter.UOF,
+                true,
+                selectedmeter.BillingPeriod,
                 tempData,
-                selectedMeter.DAP_dtoun,
-                selectedMeter.DAP_dtouf,
+                selectedmeter.DAP_dtoun,
+                selectedmeter.DAP_dtouf,
                 chartColor,
                 chartDisplayUnit,
                 400,
-                $dailyUsageData.DailyUsage.MaxUsage,
+                $monthlyUsageData.MonthlyUsage.MaxUsage,
                 onPeakOprand,
                 offPeakOprand
               )}
@@ -619,102 +585,197 @@
           {/if}
         {/if}
       </div>
-    {/if}
-    <div class="legend-con">
-      {#if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
-        {#if chartDisplayUnit == "usage"}
-          {#if selectedMeter.DAP_dtoun == "x"}
+      <!-- Daily Chart -->
+      {#if selectedmeter && selectedmeter.AMI_Flag != ""}
+        <div id={"meter-tab1" + tab2} on:scroll={srollHandle}>
+          <!-- <div class={scrollClass}>
+            <img
+              src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
+              alt=""
+              use:lazyImage
+            />
+          </div> -->
+          {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails}
+            {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails.length && $dailyUsageData.DailyUsage.DailyDetails.length == 0}
+              <div
+                class="chart"
+                style="min-width: {dailyMinwidth};"
+                use:chart={renderMixChart(
+                  null,
+                  [chartColor],
+                  "1410px",
+                  400,
+                  null,
+                  null,
+                  tempData
+                )}
+              />
+            {:else if selectedmeter.DAP_dtoun !== "x" && selectedmeter.DAP_dtouf !== "x"}
+              <!-- Daily usage simple chart -->
+              <div class="text">
+                <p>
+                  {#each words as word, i}
+                    <span
+                      class="letter {i === currentWord ? 'in' : 'out'}"
+                      style="font-size: {word.size}px"
+                    >
+                      {word.text}
+                    </span>
+                  {/each}
+                </p>
+              </div>
+              <div
+                class="chart"
+                style="min-width: {dailyMinwidth};"
+                use:chart={renderMixChart(
+                  $dailyUsageData.DailyUsage.DailyDetails,
+                  [chartColor],
+                  "1410px",
+                  400,
+                  selectedmeter.Service,
+                  selectedmeter.UOF,
+                  chartDisplayUnit,
+                  tempData,
+                  false,
+                  onOffPeakDemand,
+                  chartLegend,
+                  $dailyUsageData.DailyUsage.MaxUsage
+                )}
+                on:click={(e) => scrollTo(e)}
+              />
+            {:else if selectedmeter.DAP_dtoun == "x" || selectedmeter.DAP_dtouf == "x"}
+              <!-- Daily usage OnPeak & OffPeak chart -->
+              <div class="text">
+                <p>
+                  {#each words as word, i}
+                    <span
+                      class="letter {i === currentWord ? 'in' : 'out'}"
+                      style="font-size: {word.size}px"
+                    >
+                      {word.text}
+                    </span>
+                  {/each}
+                </p>
+              </div>
+              <div
+                class="chart"
+                style="min-width: {dailyMinwidth};"
+                use:chart={onPeakOffPeakChart(
+                  $dailyUsageData.DailyUsage.DailyDetails,
+                  selectedmeter.UOF,
+                  false,
+                  null,
+                  tempData,
+                  selectedmeter.DAP_dtoun,
+                  selectedmeter.DAP_dtouf,
+                  chartColor,
+                  chartDisplayUnit,
+                  400,
+                  $dailyUsageData.DailyUsage.MaxUsage,
+                  onPeakOprand,
+                  offPeakOprand
+                )}
+              />
+            {/if}
+          {/if}
+        </div>
+      {/if}
+      <div class="legend-con">
+        {#if selectedmeter.DAP_dtoun == "x" || selectedmeter.DAP_dtouf == "x"}
+          {#if chartDisplayUnit == "usage"}
+            {#if selectedmeter.DAP_dtoun == "x"}
+              <div class="chart-legend">
+                <span
+                  class="legend-point"
+                  style="background: rgb(0, 182, 240); color: rgb(0, 182, 240);"
+                /><span class="legend-text">ON-PEAK</span>
+              </div>
+            {/if}
+            {#if selectedmeter.DAP_dtouf == "x"}
+              <div class="chart-legend">
+                <span
+                  class="legend-point"
+                  style="background: rgb(0, 41, 74); color: rgb(0, 41, 74);"
+                /><span class="legend-text">OFF-PEAK</span>
+              </div>
+            {/if}
+          {:else if chartDisplayUnit == "cost"}
             <div class="chart-legend">
               <span
                 class="legend-point"
-                style="background: rgb(0, 182, 240); color: rgb(0, 182, 240);"
-              /><span class="legend-text">ON-PEAK</span>
+                style="background: rgb(4, 79, 141); color: rgb(4, 79, 141);"
+              /><span class="legend-text">ُELECTRIC</span>
             </div>
           {/if}
-          {#if selectedMeter.DAP_dtouf == "x"}
-            <div class="chart-legend">
-              <span
-                class="legend-point"
-                style="background: rgb(0, 41, 74); color: rgb(0, 41, 74);"
-              /><span class="legend-text">OFF-PEAK</span>
-            </div>
-          {/if}
-        {:else if chartDisplayUnit == "cost"}
+        {:else}
           <div class="chart-legend">
             <span
               class="legend-point"
-              style="background: rgb(4, 79, 141); color: rgb(4, 79, 141);"
-            /><span class="legend-text">ُELECTRIC</span>
+              style="background: {chartColor}; color: {chartColor};"
+            /><span class="legend-text">
+              {#if selectedmeter.Service}
+                {chartLegend
+                  ? chartLegend.toUpperCase()
+                  : selectedmeter.Service.toUpperCase()}
+              {/if}
+            </span>
           </div>
         {/if}
-      {:else}
-        <div class="chart-legend">
-          <span
-            class="legend-point"
-            style="background: {chartColor}; color: {chartColor};"
-          /><span class="legend-text">
-            {#if selectedMeter.Service}
-              {chartLegend
-                ? chartLegend.toUpperCase()
-                : selectedMeter.Service.toUpperCase()}
+        {#if tempData == true}
+          <div class="chart-legend">
+            <span
+              class="legend-point leg-temp"
+              style="background: rgb(255, 131, 43); color: rgb(255, 131, 43);"
+            /><span class="legend-text">TEMPERATURE</span>
+          </div>
+        {/if}
+      </div>
+      <!-- Boxes of Information: Cost, Temp And Hit Peak -->
+      {#if $dailyUsageData.DailyUsage && activeSection == "daily"}
+        <div class="information-box">
+          {#if $dailyUsageData.DailyUsage.AVGCost}
+            <div>
+              <h6>AVG. COST PER DAY</h6>
+              <h4>
+                ${$dailyUsageData.DailyUsage.AVGCost}
+              </h4>
+            </div>
+          {/if}
+          {#if disableTemp == false}
+            {#if $dailyUsageData.DailyUsage.AVGTemp}
+              <div>
+                <h6>AVG. TEMP PER DAY</h6>
+                <h4>
+                  {$dailyUsageData.DailyUsage.AVGTemp}°
+                </h4>
+              </div>
+            {/if}
+          {/if}
+          {#if $dailyUsageData.DailyUsage.HitPeakDemand}
+            <div>
+              <h6>YOU HIT PEAK DEMAND</h6>
+              <h4>
+                {$dailyUsageData.DailyUsage.HitPeakDemand}
+              </h4>
+            </div>
+          {/if}
+        </div>
+      {/if}
+      <!-- DisClaimer Footer -->
+      {#if (activeSection == "daily" && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.FooterDisclaimer) || (activeSection == "monthly" && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.FooterDisclaimer)}
+        <div class="diclimer">
+          <span>
+            {#if activeSection == "daily"}
+              {@html $dailyUsageData.DailyUsage.FooterDisclaimer}
+            {:else if activeSection == "monthly"}
+              {@html $monthlyUsageData.MonthlyUsage.FooterDisclaimer}
             {/if}
           </span>
         </div>
       {/if}
-      {#if tempData == true}
-        <div class="chart-legend">
-          <span
-            class="legend-point leg-temp"
-            style="background: rgb(255, 131, 43); color: rgb(255, 131, 43);"
-          /><span class="legend-text">TEMPERATURE</span>
-        </div>
-      {/if}
-    </div>
-    <!-- Boxes of Information: Cost, Temp And Hit Peak -->
-    {#if $dailyUsageData.DailyUsage && activeSection == "daily"}
-      <div class="information-box">
-        {#if $dailyUsageData.DailyUsage.AVGCost}
-          <div>
-            <h6>AVG. COST PER DAY</h6>
-            <h4>
-              ${$dailyUsageData.DailyUsage.AVGCost}
-            </h4>
-          </div>
-        {/if}
-        {#if disableTemp == false}
-          {#if $dailyUsageData.DailyUsage.AVGTemp}
-            <div>
-              <h6>AVG. TEMP PER DAY</h6>
-              <h4>
-                {$dailyUsageData.DailyUsage.AVGTemp}°
-              </h4>
-            </div>
-          {/if}
-        {/if}
-        {#if $dailyUsageData.DailyUsage.HitPeakDemand}
-          <div>
-            <h6>YOU HIT PEAK DEMAND</h6>
-            <h4>
-              {$dailyUsageData.DailyUsage.HitPeakDemand}
-            </h4>
-          </div>
-        {/if}
-      </div>
     {/if}
-    <!-- DisClaimer Footer -->
-    {#if (activeSection == "daily" && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.FooterDisclaimer) || (activeSection == "monthly" && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.FooterDisclaimer)}
-      <div class="diclimer">
-        <span>
-          {#if activeSection == "daily"}
-            {@html $dailyUsageData.DailyUsage.FooterDisclaimer}
-          {:else if activeSection == "monthly"}
-            {@html $monthlyUsageData.MonthlyUsage.FooterDisclaimer}
-          {/if}
-        </span>
-      </div>
-    {/if}
-  {/if}
-</div>
+  </div>
+{/key}
 
 <style lang="scss">
   * {

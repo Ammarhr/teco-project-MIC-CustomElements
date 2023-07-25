@@ -181,9 +181,10 @@ const fillArray_helpper = (arr, len, fill) => {
     return arr;
 }
 export const renderMixChart = (data, color, width, height, service, unit, chartUnit, temp, monthly, onOffPeakDemand, customLegend, MaxUsage) => {
+   
     let filterData;
     let toolTipUsage = chartUnit == "cost" ? "Cost:" : service == "Gas" ? "Gas Used: " : onOffPeakDemand ? onOffPeakDemand : "Energy Used: "
-    let chartLegend = customLegend ? customLegend.toUpperCase() : service.toUpperCase();
+    let chartLegend = customLegend ? customLegend.toUpperCase() : service?.toUpperCase() || "ELECTRIC";
     let max = 0;
     if (data && chartUnit == "cost") {
         unit = "$"
@@ -533,7 +534,6 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
 
     return options;
 }
-
 
 export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit, height, maxScale, onPeakOprand, offPeakOprand) => {
 

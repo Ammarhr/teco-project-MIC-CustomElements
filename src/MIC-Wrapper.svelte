@@ -17,7 +17,8 @@
   import MicSummaryBilling from "./lib/Components/MIC-SummaryBilling.svelte";
   import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
   // refactor components:
-  import MicMeterTable2 from "./lib/Components/MIC-MeterTable2.svelte";
+  // import MicMeterTable2 from "./lib/Components/MIC-MeterTable2.svelte";
+  import MicUsageChart from "./lib/Components/MIC-UsageChart.svelte";
 
   import { onDestroy, onMount } from "svelte";
   import {
@@ -122,11 +123,32 @@
         <!-- <MicSummaryBilling /> -->
       </div>
     {/if}
-    <mic-combo-bill />
+    <!-- <mic-combo-bill /> -->
     <!-- <MicComboBill /> -->
     <mic-metertable />
-    <!-- <MicMeterTable /> -->
+    <MicMeterTable />
     <!-- <MicMeterTable2 /> -->
+    <!-- <mic-usage-charts selectedmeter={
+      {DLN:"X",
+      AMI_Flag:"X",
+      Contract:"X",
+      HistoricalFact:"z",
+      ZipCode:"X",
+      DAP_StartDate:"X",
+      DAP_EndDate:"X",
+      intp:"x",
+      DAP_dkwh:"X",
+      DAP_rkwh:"X",
+      DAP_pf:"X",
+      DAP_kw:"X",
+      UOF:"KWH",
+      DAP_dtoun:"X",
+      DAP_dtouf:"X",
+      Operand: "YKWHDL",
+      StandbyCustomer_Flag:"X",
+      Service:"ELECTRIC"
+    }}  refreshabletoken="q46846484864"/>
+  -->
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />

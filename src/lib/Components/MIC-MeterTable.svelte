@@ -74,8 +74,8 @@
       if ($isSummaryAccountFlag.toLowerCase() !== "true") {
         get(
           $apiToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
-          // "../../data/meterTable.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
+          "../../data/meterTable.json",
           $SAPToken
         ).then(() => {
           if ($data && $data.EPFlag) {
@@ -176,8 +176,8 @@
       if (AMI_Flag == "X") {
         dailyUsageGet(
           refreshableToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-          // "../../data/meterUsageDaily.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+          "/data/meterUsageDaily.json",
           {
             dln: DLN,
             sdt: DAP_StartDate,
@@ -216,8 +216,8 @@
       // monthly chart api call
       monthlyUsageGet(
         refreshableToken,
-        monthlyUrl,
-        // "../../data/meterUsageMonthly.json",
+        // monthlyUrl,
+        "../../data/meterUsageMonthly.json",
         $SAPToken
       );
     }
@@ -236,6 +236,7 @@
       );
     }
     newSelect = selectedMeter;
+    // conditions to render (chart: legend/color/tooltip)
     if (selectedMeter) {
       if (selectedMeter.DAP_kw == "x") {
         chartColor = "#411084";
@@ -328,7 +329,6 @@
   }
 
   //////// table first render
-
   $: if ($data && $data.MeterTabel) {
     tableData = $data.MeterTabel;
     selectedMeter = $data.MeterTabel[0];
@@ -726,7 +726,7 @@
     if (sad)
       setTimeout(() => {
         sad.scrollIntoView({ behavior: "smooth" });
-      }, 200);
+      }, 400);
   }
 </script>
 
@@ -1097,13 +1097,13 @@
             </div>
             <!-- Monthly Chart -->
             <div id={"meter-tab1" + tab1} on:scroll={srollHandle}>
-              <div class={scrollClass}>
+              <!-- <div class={scrollClass}>
                 <img
                   src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
                   alt=""
                   use:lazyImage
                 />
-              </div>
+              </div> -->
               {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails}
                 {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length == 0}
                   <div
@@ -1149,6 +1149,7 @@
                       chartLegend,
                       $monthlyUsageData.MonthlyUsage.MaxUsage
                     )}
+                    on:click={(e) => scrollTo(e)}
                   />
                 {:else if selectedMeter.DAP_dtoun == "x" || selectedMeter.DAP_dtouf == "x"}
                   <!-- Monthly usage OnPeak & OffPeak chart -->
@@ -1182,6 +1183,7 @@
                       onPeakOprand,
                       offPeakOprand
                     )}
+                    on:click={(e) => scrollTo(e)}
                   />
                 {/if}
               {/if}
@@ -1276,6 +1278,7 @@
                         onPeakOprand,
                         offPeakOprand
                       )}
+                      on:click={(e) => scrollTo(e)}
                     />
                   {/if}
                 {/if}
