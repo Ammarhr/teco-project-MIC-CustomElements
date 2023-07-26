@@ -364,13 +364,13 @@
           {/if}
         </div>
         <div class="table-container" on:scroll={srollHandle}>
-          <div class={scrollClass}>
+          <!-- <div class={scrollClass}>
             <img
               src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
               alt=""
               use:lazyImage
             />
-          </div>
+          </div> -->
           {#if items}
             {#if tableData}
               <table class="table" id="table">

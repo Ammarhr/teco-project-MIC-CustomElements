@@ -778,13 +778,13 @@
           </div>
         {/if}
         <div class="table-container" on:scroll={srollHandle2}>
-          <div class={scrollClass2}>
+          <!-- <div class={scrollClass2}>
             <img
               src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
               alt=""
               use:lazyImage
             />
-          </div>
+          </div> -->
           {#if items}
             {#if tableData}
               <table class="table" id="table">
@@ -1093,13 +1093,13 @@
             </div>
             <!-- Monthly Chart -->
             <div id={"meter-tab1" + tab1} on:scroll={srollHandle}>
-              <div class={scrollClass}>
+              <!-- <div class={scrollClass}>
                 <img
                   src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
                   alt=""
                   use:lazyImage
                 />
-              </div>
+              </div> -->
               {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage && $monthlyUsageData.MonthlyUsage.MonthlyDetails}
                 {#if $monthlyUsageData && $monthlyUsageData.MonthlyUsage.MonthlyDetails && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length && $monthlyUsageData.MonthlyUsage.MonthlyDetails.length == 0}
                   <div
@@ -1184,13 +1184,13 @@
             <!-- Daily Chart -->
             {#if selectedMeter && selectedMeter.AMI_Flag != ""}
               <div id={"meter-tab1" + tab2} on:scroll={srollHandle}>
-                <div class={scrollClass}>
+                <!-- <div class={scrollClass}>
                   <img
                     src="https://tecocdn.azureedge.net/ibill/iBill-assets/scroll-image.gif"
                     alt=""
                     use:lazyImage
                   />
-                </div>
+                </div> -->
                 {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails}
                   {#if $dailyUsageData && $dailyUsageData.DailyUsage && $dailyUsageData.DailyUsage.DailyDetails && $dailyUsageData.DailyUsage.DailyDetails.length && $dailyUsageData.DailyUsage.DailyDetails.length == 0}
                     <div
