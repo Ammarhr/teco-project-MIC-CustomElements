@@ -17,7 +17,7 @@
   import MicSummaryBilling from "./lib/Components/MIC-SummaryBilling.svelte";
   import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
   // refactor components:
-  // import MicMeterTable2 from "./lib/Components/MIC-MeterTable2.svelte";
+  import MicMeterTable2 from "./lib/Components/MIC-MeterTable2.svelte";
   import MicUsageChart from "./lib/Components/MIC-UsageChart.svelte";
 
   import { onDestroy, onMount } from "svelte";
@@ -35,7 +35,9 @@
     fetchAndRedirect,
     apiToken,
     apiDomain,
-    start
+    start,
+    userReact,
+    getCookie,
   } from "./js/store";
 
   export let token;
@@ -48,9 +50,11 @@
     setToken(token);
     setDomain(domain);
     setSAPTpken(saptoken);
-    // setAssetsUrl(assetspath);
+
     if (personainput == "Agent") {
       persona.set("Agent");
+    } else if (personainput && personainput !== "Agent") {
+      persona.set("simulator");
     } else {
       persona.set("customer");
     }
@@ -61,34 +65,28 @@
   onMount(() => {
     start.set(new Date().getTime());
     generalErr.set(false);
-    // newToken.set("");
     showToolTipDetails.set(false);
-
-    fetchAndRedirect(
-      $apiToken,
-      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      null,
-      {
-        EventCode: "IBILL_START",
-        Outcome: ``,
-        Feedback: "",
-        Persona: $persona,
-      }
-    );
+    userReact.set("false");
   });
+  let iBillCoockie;
   window.addEventListener("beforeunload", () => {
-    fetchAndRedirect(
-      $apiToken,
-      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      null,
-      {
-        EventCode: "IBILL_END",
-        Outcome: ``,
-        Feedback: "",
-        Persona: $persona,
-      }
-    )
-    eraseCookie("MIC-IBLL-MIJ")
+    iBillCoockie = getCookie("MIC-IBLL-MIJ");
+
+    if (iBillCoockie) {
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "IBILL_END",
+          Outcome: ``,
+          Feedback: "",
+          Persona: $persona,
+        },
+        true
+      );
+    }
+    eraseCookie("MIC-IBLL-MIJ");
   });
 </script>
 
@@ -123,32 +121,12 @@
         <!-- <MicSummaryBilling /> -->
       </div>
     {/if}
-    <!-- <mic-combo-bill /> -->
+    <mic-combo-bill />
     <!-- <MicComboBill /> -->
     <mic-metertable />
-    <MicMeterTable />
+    <!-- <MicMeterTable /> -->
     <!-- <MicMeterTable2 /> -->
-    <!-- <mic-usage-charts selectedmeter={
-      {DLN:"X",
-      AMI_Flag:"X",
-      Contract:"X",
-      HistoricalFact:"z",
-      ZipCode:"X",
-      DAP_StartDate:"X",
-      DAP_EndDate:"X",
-      intp:"x",
-      DAP_dkwh:"X",
-      DAP_rkwh:"X",
-      DAP_pf:"X",
-      DAP_kw:"X",
-      UOF:"KWH",
-      DAP_dtoun:"X",
-      DAP_dtouf:"X",
-      Operand: "YKWHDL",
-      StandbyCustomer_Flag:"X",
-      Service:"ELECTRIC"
-    }}  refreshabletoken="q46846484864"/>
-  -->
+    <!-- <mic-new-metertable /> -->
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />

@@ -72,8 +72,11 @@ export const getDate = derived(
 export const generatedFromTable = writable(false);
 //* Sunselect array;
 export const sunSelectServicesArray = writable([]);
-//*geral error flag;
+//* geral error flag;
 export const generalErr = writable(false);
+
+//* User react trigger
+export const userReact = writable("false");
 
 //* Agint persona:
 export const persona = writable('')
@@ -276,7 +279,7 @@ function setCookie(name, value, days) {
     }
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
-function getCookie(name) {
+export function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
@@ -290,7 +293,7 @@ export function eraseCookie(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-//* MiJureny call
+//* MiJureny call (first load)
 const mijCookie = "MIC-IBLL-MIJ";
 export const start = writable('')
 let sessionDate = new Date();
@@ -393,26 +396,65 @@ if (userAgent.indexOf("Edg") > -1) {
 } else if (userAgent.indexOf("Safari") > -1) {
     browserName = "Safari";
 }
-//*
-const ipAdress = async () => {
-    const response = await fetch("https://api.ipify.org?format=json", {
-        // keepalive: true,
-    });
-    return await response.json();
-}
-//*
-ipAdress().then((ip) => ipify = ip.ip)
-//*
+// //*
+// const ipAdress = async () => {
+//     const response = await fetch("https://api.ipify.org?format=json", {
+//         // keepalive: true,
+//     });
+//     return await response.json();
+// }
+// //*
+// ipAdress().then((ip) => ipify = ip.ip)
+// //*
 
-export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
+let requestOptions = {
+    method: "GET",
+    redirect: "follow",
+};
+
+fetch("https://worldtimeapi.org/api/timezone/Etc/GMT", requestOptions)
+    .then((response) => response.json())
+    .then(async (result) => {
+        // console.log(result);
+
+        let date = new Date(result.datetime);
+
+        sessionDate = date.toISOString();
+
+        ipify = result.client_ip;
+
+        let m = await getOldDataThreshold();
+
+        checkIfUpdatedDateIsOld();
+    })
+    .catch((error) => {
+        // console.log("error", error);
+
+        let date = new Date();
+
+        sessionDate = date.toISOString();
+    });
+
+export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody, leave) => {
     var startTime;
+    var reacted;
+
+    if (!leave) {
+        userReact.set("true")
+    }
 
     start.subscribe(value => {
         startTime = value;
     });
+
+    userReact.subscribe(value => {
+        reacted = value;
+    });
+
     const end = new Date().getTime();
     const totalTime = (end - startTime) / 1000;
     const uuid = getCookie(mijCookie);
+
     fetch(fetchUrl, {
         method: "POST",
         mode: "cors",
@@ -428,10 +470,12 @@ export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
             timestamp: "",
             AgentId: "",
             SessionDetail: {
-                IBillSession: uuid,
+                IBillSession: uuid, //session id
                 Durationtime: totalTime,
-                "Date&Time": sessionDate,
+                "Date&Time": sessionDate, // UTC formatting 
                 Browser: browserName,
+                // flag for event click
+                React: reacted
             },
             DeviceDetails: {
                 Device: isMobile ? "Mobile" : "Desktop",

@@ -14,7 +14,6 @@
     SAPToken,
     isSummaryAccountFlag,
   } from "../../js/store";
-  import scrollImage from "../../assets/scroll.gif";
   import { chart } from "../../js/apexchartsBundle";
   import {
     renderMixChart,
@@ -74,8 +73,8 @@
       if ($isSummaryAccountFlag.toLowerCase() !== "true") {
         get(
           $apiToken,
-          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
-          "../../data/meterTable.json",
+          `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
+          // "../../data/meterTable.json",
           $SAPToken
         ).then(() => {
           if ($data && $data.EPFlag) {
@@ -176,8 +175,8 @@
       if (AMI_Flag == "X") {
         dailyUsageGet(
           refreshableToken,
-          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-          "/data/meterUsageDaily.json",
+          `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+          // "/data/meterUsageDaily.json",
           {
             dln: DLN,
             sdt: DAP_StartDate,
@@ -216,8 +215,8 @@
       // monthly chart api call
       monthlyUsageGet(
         refreshableToken,
-        // monthlyUrl,
-        "../../data/meterUsageMonthly.json",
+        monthlyUrl, 
+        // "../../data/meterUsageMonthly.json",
         $SAPToken
       );
     }

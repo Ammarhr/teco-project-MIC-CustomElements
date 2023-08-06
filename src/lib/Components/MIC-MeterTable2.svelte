@@ -1,4 +1,4 @@
-<svelte:options tag="mic-metertable2" />
+<svelte:options tag="mic-new-metertable" />
 
 <script>
   // @ts-nocheck
@@ -12,7 +12,6 @@
     SAPToken,
     isSummaryAccountFlag,
   } from "../../js/store";
-  import scrollImage from "../../assets/scroll.gif";
   import { onMount } from "svelte";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
   import MicUsageChart from "./MIC-UsageChart.svelte";
@@ -36,7 +35,6 @@
   let chartLegend;
   let first = false; // trigger first render for the tabs
   let container;
-  let toolTipIconCon;
   let chartDisplayUnit = "usage";
   let tempData = true;
   let sortingType;
@@ -44,9 +42,6 @@
   let prevSortth;
   let newSelect = "";
   let disableTemp = false;
-  let onPeakOprand;
-  let offPeakOprand;
-  let words;
   let scrollClass = "scroll-image";
   const [data, loading, error, get] = fetchstore(); // meterTable fetch
 
@@ -56,8 +51,8 @@
       if ($isSummaryAccountFlag.toLowerCase() !== "true") {
         get(
           $apiToken,
-          //   `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
-          "../../data/meterTable.json",
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
+          // "../../data/meterTable.json",
           $SAPToken
         ).then(() => {
           if ($data && $data.EPFlag) {
@@ -699,7 +694,8 @@
         {/if}
         {#key refreshableToken}
           {#key selectedMeter}
-            <MicUsageChart {selectedMeter} {refreshableToken} />
+            <!-- <MicUsageChart {selectedMeter} {refreshableToken} /> -->
+            <mic-usage-charts selectedmeter={selectedMeter} {refreshableToken}/>
           {/key}
         {/key}
       {/if}

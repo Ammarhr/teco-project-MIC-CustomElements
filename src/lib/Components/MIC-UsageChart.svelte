@@ -5,16 +5,13 @@
   import { onMount } from "svelte";
 
   import {
-    fetchstore,
     apiDomain,
     apiToken,
     fetchDailyUsageChart,
     fetchMonthlyUsageChart,
-    newToken,
     persona,
     fetchAndRedirect,
     SAPToken,
-    isSummaryAccountFlag,
   } from "../../js/store";
   import { chart } from "../../js/apexchartsBundle";
   import {
@@ -44,11 +41,11 @@
   let scrollClass = "scroll-image";
 
   export let refreshabletoken;
-  export let meterobj;
+  export let selectedmeter;
 
   //demo:
-  export let dailyurl;
-  export let monthlyurl;
+  // export let dailyurl;
+  // export let monthlyurl;
 
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
     fetchDailyUsageChart(); // daily usage fetch
@@ -58,9 +55,9 @@
     monthlyUsageError,
     monthlyUsageGet,
   ] = fetchMonthlyUsageChart(); // monthly usage fetch
-  let selectedmeter;
+  // let selectedmeter;
   onMount(() => {
-    selectedmeter = JSON.parse(meterobj);
+    // selectedmeter = JSON.parse(meterobj);
     if (selectedmeter) {
       let {
         DLN,
@@ -88,9 +85,9 @@
       if (AMI_Flag == "X") {
         dailyUsageGet(
           refreshabletoken,
-          //   `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+            `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
           // "/data/meterUsageDaily.json",
-          dailyurl,
+          // dailyurl,
           {
             dln: DLN,
             sdt: DAP_StartDate,
@@ -129,9 +126,9 @@
       // monthly chart api call
       monthlyUsageGet(
         refreshabletoken,
-        // monthlyUrl,
+        monthlyUrl,
         // "/data/meterUsageMonthly.json",
-        monthlyurl,
+        // monthlyurl,
         $SAPToken
       ).then(() => {});
 
@@ -205,6 +202,18 @@
     }
   });
 
+
+   // select the dafault active tab
+   $: if (selectedmeter && selectedmeter.AMI_Flag == "") {
+    activeSection = "monthly";
+    tab1 = "2";
+    tab2 = "1";
+  } else if (selectedmeter && selectedmeter.AMI_Flag != "") {
+    activeSection = "daily";
+    tab1 = "1";
+    tab2 = "2";
+  }
+
   // tabs functionality
   const activateTab = (num1, num2, activeTab) => {
     scrollClass = "scroll-image";
@@ -218,30 +227,30 @@
     currentWord = 0;
     if (activeTab == "daily") {
       // MiJurney event call
-      // fetchAndRedirect(
-      //   $apiToken,
-      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      //   null,
-      //   {
-      //     EventCode: "Click_Daily_Tab",
-      //     Outcome: ``,
-      //     Feedback: "",
-      //     Persona: $persona,
-      //   }
-      // );
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Daily_Tab",
+          Outcome: ``,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
     } else {
       // MiJurney event call
-      // fetchAndRedirect(
-      //   $apiToken,
-      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      //   null,
-      //   {
-      //     EventCode: "Click_Monthly_Tab",
-      //     Outcome: ``,
-      //     Feedback: "",
-      //     Persona: $persona,
-      //   }
-      // );
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Monthly_Tab",
+          Outcome: ``,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
     }
   };
   // cost/usage chart toggle function
@@ -250,31 +259,31 @@
       chartDisplayUnit = "cost";
 
       // MiJurney event call
-      // fetchAndRedirect(
-      //   $apiToken,
-      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      //   null,
-      //   {
-      //     EventCode: "Click_Cost_Switch",
-      //     Outcome: ``,
-      //     Feedback: "",
-      //     Persona: $persona,
-      //   }
-      // );
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Cost_Switch",
+          Outcome: ``,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
     } else if (e.target.checked == false) {
       chartDisplayUnit = "usage";
       // MiJurney event call
-      // fetchAndRedirect(
-      //   $apiToken,
-      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      //   null,
-      //   {
-      //     EventCode: "Click_Usage_Switch",
-      //     Outcome: ``,
-      //     Feedback: "",
-      //     Persona: $persona,
-      //   }
-      // );
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Usage_Switch",
+          Outcome: ``,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
     }
     changeWord();
     setTimeoutId = setTimeout(changeWord, 800);
@@ -290,29 +299,29 @@
     tempData = !tempData;
     // MiJurney event call
     if (tempData == true) {
-      // fetchAndRedirect(
-      //   $apiToken,
-      //   `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-      //   null,
-      //   {
-      //     EventCode: "Click_Temp_Checkbox",
-      //     Outcome: `active`,
-      //     Feedback: "",
-      //     Persona: $persona,
-      //   }
-      // );
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Temp_Checkbox",
+          Outcome: `active`,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
     } else {
-    //   fetchAndRedirect(
-    //     $apiToken,
-    //     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-    //     null,
-    //     {
-    //       EventCode: "Click_Temp_Checkbox",
-    //       Outcome: `inactive`,
-    //       Feedback: "",
-    //       Persona: $persona,
-    //     }
-    //   );
+      fetchAndRedirect(
+        $apiToken,
+        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+        null,
+        {
+          EventCode: "Click_Temp_Checkbox",
+          Outcome: `inactive`,
+          Feedback: "",
+          Persona: $persona,
+        }
+      );
     }
   };
 
