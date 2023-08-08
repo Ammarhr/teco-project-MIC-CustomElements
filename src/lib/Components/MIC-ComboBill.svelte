@@ -18,7 +18,7 @@
   import { onMount } from "svelte";
   import MicBillInsightsCombo from "./MIC-BillInsights-combo.svelte";
   import MicChargeDetailsCombo from "./MIC-ChargeDetails-combo.svelte";
-
+  import MicBulkDownload from "./MIC-BulkDownload.svelte";
   let comboNewToken;
   let arrayOfBillInsights = [];
   let sunSelectArray = [];
@@ -28,6 +28,7 @@
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // sun select store fetch
   const [chargeData, chargeLoading, chargeError, chargeGet] = fetchstore(); // charge details  store fetch
   const [yearlyData, yearlyLoading, yearlyError, yearlyGet] = fetchstore(); // yearly energy store fetch
+  const [bulkData, bulkLoading, bulkError, bulkget] = fetchstore();
   let tries = 2;
   onMount(() => {
     if (
@@ -44,14 +45,14 @@
       if ($isSummaryAccountFlag.toLowerCase() !== "true") {
         chargeGet(
           $apiToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
-          // "../../../data/ChargeDetails.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+          "../../../data/ChargeDetails.json",
           $SAPToken
         );
         get(
           $apiToken,
-          // "../../../data/DemandInsight.json",
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
+          "../../../data/DemandInsight.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
           $SAPToken
         ).then(() => {
           if ($data && $data.services) {
@@ -60,8 +61,8 @@
         });
         sunget(
           $apiToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
-          // "../../data/sunSelect.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
+          "../../data/sunSelect.json",
           $SAPToken
         ).then(() => {
           if ($sundata && $sundata.SunSelect) {
@@ -71,11 +72,19 @@
         });
         yearlyGet(
           $apiToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
-          // "../../data/yearlyEnergy.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
+          "../../data/yearlyEnergy.json",
           $SAPToken
         );
       }
+    }
+    if ($apiDomain && $SAPToken && $apiToken && !$bulkData.BlkDownload) {
+      bulkget(
+        $apiToken,
+        "../../data/bulkDownload.json",
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`,
+        $SAPToken
+      );
     }
     comboNewToken = $apiToken;
     tries--;
@@ -152,6 +161,11 @@
     invoiceTotalArray = $chargeData.Section.filter((subSection) => {
       return subSection.SectionType == "InvoiceTotal";
     });
+  }
+
+  let bulkUrl;
+  $: if ($bulkData && $bulkData.BlkDownload) {
+    bulkUrl = $bulkData.BlkDownload;
   }
 
   $: if ($sundata && $sundata.SunSelect) {
@@ -246,28 +260,46 @@
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
               />
-              <!-- <MicChargeDetailsCombo
+              <MicChargeDetailsCombo
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
-              /> -->
+              />
             {:else if charge.SectionType !== "InvoiceTotal"}
               <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
-              <!-- <MicChargeDetailsCombo
-                charges={[charge]}
-                invoicetotal={""}
-              /> -->
+              <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} />
             {/if}
             {#if $isParentAccount !== "X"}
               {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
                 {#if i == arrayOfCharges.length - 1 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
-                  <mic-bulkdownload class="mic-insights bulk-mobile" />
+                  <mic-bulkdownload
+                    class="mic-insights bulk-mobile"
+                    blkurl={bulkUrl}
+                  />
+                  <MicBulkDownload
+                    class="mic-insights bulk-mobile"
+                    blkurl={bulkUrl}
+                  />
                 {/if}
               {:else if i == arrayOfCharges.length - 2 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
-                <mic-bulkdownload class="mic-insights bulk-mobile" />
+                <mic-bulkdownload
+                  class="mic-insights bulk-mobile"
+                  blkurl={bulkUrl}
+                />
+                <MicBulkDownload
+                  class="mic-insights bulk-mobile"
+                  blkurl={bulkUrl}
+                />
               {/if}
             {:else if $isParentAccount == "X" && i == arrayOfCharges.length - 1}
               <div class="insights">
-                <mic-bulkdownload class="mic-insights bulk-mobile" />
+                <mic-bulkdownload
+                  class="mic-insights bulk-mobile"
+                  blkurl={bulkUrl}
+                />
+                <MicBulkDownload
+                  class="mic-insights bulk-mobile"
+                  blkurl={bulkUrl}
+                />
               </div>
             {/if}
           </div>
@@ -286,11 +318,25 @@
                 {/if}
                 {#if i == 0}
                   <div class="insights">
-                    <mic-bulkdownload class="mic-insights bulk-desk" />
+                    <mic-bulkdownload
+                      class="mic-insights bulk-desk"
+                      blkurl={bulkUrl}
+                    />
+                    <MicBulkDownload
+                      class="mic-insights bulk-desk"
+                      blkurl={bulkUrl}
+                    />
                   </div>
                 {:else if i == arrayOfCharges.length - 1}
                   <div class="insights">
-                    <mic-bulkdownload class="mic-insights bulk-mobile" />
+                    <mic-bulkdownload
+                      class="mic-insights bulk-mobile"
+                      blkurl={bulkUrl}
+                    />
+                    <MicBulkDownload
+                      class="mic-insights bulk-mobile"
+                      blkurl={bulkUrl}
+                    />
                   </div>
                 {/if}
               {/if}
@@ -343,9 +389,23 @@
                       />
                     {/if}
                     {#if arrayOfBillInsights && arrayOfBillInsights.length >= arrayOfCharges.length - 1}
-                      <mic-bulkdownload class="mic-insights bulk-mobile" />
+                      <mic-bulkdownload
+                        class="mic-insights bulk-mobile"
+                        blkurl={bulkUrl}
+                      />
+                      <MicBulkDownload
+                        class="mic-insights bulk-mobile"
+                        blkurl={bulkUrl}
+                      />
                     {/if}
-                    <mic-bulkdownload class="mic-insights bulk-desk" />
+                    <mic-bulkdownload
+                      class="mic-insights bulk-desk"
+                      blkurl={bulkUrl}
+                    />
+                    <MicBulkDownload
+                      class="mic-insights bulk-desk"
+                      blkurl={bulkUrl}
+                    />
                   {/if}
                 {/if}
               </div>
@@ -364,7 +424,14 @@
                   yearlyarray={YearlyArray}
                 />
               {/if}
-              <mic-bulkdownload class="mic-insights bulk-desk" />
+              <mic-bulkdownload
+                class="mic-insights bulk-desk"
+                blkurl={bulkUrl}
+              />
+              <MicBulkDownload
+                class="mic-insights bulk-desk"
+                blkurl={bulkUrl}
+              />
             </div>
           {/if}
         {/if}
@@ -378,7 +445,7 @@
       {:else if YearlyArray}
         <mic-yearlyenergy class="mic-insights" yearlyarray={YearlyArray} />
       {/if}
-      <mic-bulkdownload class="mic-insights" />
+      <mic-bulkdownload class="mic-insights" blkurl={bulkUrl} />
     </div>
   {/if}
 </div>

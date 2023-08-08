@@ -13,12 +13,12 @@
 </script>
 
 <div class="app-container">
-  <!-- <MicWrapper
+  <MicWrapper
     token="smth"
     domain="jsdelivr.="
     personainput=""
     issummaryaccount="false"
-  /> -->
+  />
 </div>
 
 <style lang="scss">

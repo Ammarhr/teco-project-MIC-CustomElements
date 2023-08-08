@@ -14,17 +14,11 @@
   } from "../../js/store";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
 
+  export let blkurl;
   //mocking data
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiDomain && $SAPToken && $apiToken && !$data.BlkDownload) {
-      get(
-        $apiToken,
-        // "../../data/bulkDownload.json",
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`,
-        $SAPToken
-      );
-    }
+      console.log(blkurl);
   });
 
   let btnStatus;
@@ -42,7 +36,7 @@
   <mic-render-error />
   <!-- {:else if $generalErr == true}
     <div /> -->
-{:else if $data.BlkDownload}
+{:else if blkurl}
   <div
     class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
     style="background-image:url({`https://tecocdn.azureedge.net/ibill/iBill-assets/mask-bd.svg`});"
@@ -55,7 +49,7 @@
       <!-- svelte-ignore a11y-invalid-attribute -->
       <a
         class="reverseOrder m_1"
-        href={$data.BlkDownload}
+        href={blkurl}
         role="button"
         target="_blank"
         rel="noreferrer"

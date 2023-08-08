@@ -122,7 +122,7 @@
       </div>
     {/if}
     <mic-combo-bill />
-    <!-- <MicComboBill /> -->
+    <MicComboBill />
     <mic-metertable />
     <!-- <MicMeterTable /> -->
     <!-- <MicMeterTable2 /> -->
