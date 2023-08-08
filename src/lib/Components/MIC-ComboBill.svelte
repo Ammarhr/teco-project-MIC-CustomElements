@@ -28,7 +28,7 @@
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // sun select store fetch
   const [chargeData, chargeLoading, chargeError, chargeGet] = fetchstore(); // charge details  store fetch
   const [yearlyData, yearlyLoading, yearlyError, yearlyGet] = fetchstore(); // yearly energy store fetch
-  const [bulkData, bulkLoading, bulkError, bulkget] = fetchstore();
+  const [bulkData, bulkLoading, bulkError, bulkget] = fetchstore(); // bulk download energy store fetch
   let tries = 2;
   onMount(() => {
     if (
@@ -152,6 +152,7 @@
   $: if ($yearlyData && $yearlyData.NetMeter) {
     YearlyArray = $yearlyData.NetMeter;
   }
+  
   $: if ($data && $data.services) {
     arrayOfBillInsights = $data.services;
   }
@@ -270,35 +271,44 @@
             {/if}
             {#if $isParentAccount !== "X"}
               {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
-                {#if i == arrayOfCharges.length - 1 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
+                {#if i == arrayOfCharges.length - 1 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1 && bulkUrl}
                   <mic-bulkdownload
                     class="mic-insights bulk-mobile"
                     blkurl={bulkUrl}
+                    loading={$bulkLoading}
+                    error={$bulkError}
                   />
                   <MicBulkDownload
-                    class="mic-insights bulk-mobile"
                     blkurl={bulkUrl}
+                    loading={$bulkLoading}
+                    error={$bulkError}
                   />
                 {/if}
-              {:else if i == arrayOfCharges.length - 2 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1}
+              {:else if i == arrayOfCharges.length - 2 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1 && bulkUrl}
                 <mic-bulkdownload
                   class="mic-insights bulk-mobile"
                   blkurl={bulkUrl}
+                  loading={$bulkLoading}
+                  error={$bulkError}
                 />
                 <MicBulkDownload
-                  class="mic-insights bulk-mobile"
                   blkurl={bulkUrl}
+                  loading={$bulkLoading}
+                  error={$bulkError}
                 />
               {/if}
-            {:else if $isParentAccount == "X" && i == arrayOfCharges.length - 1}
+            {:else if $isParentAccount == "X" && i == arrayOfCharges.length - 1 && bulkUrl}
               <div class="insights">
                 <mic-bulkdownload
                   class="mic-insights bulk-mobile"
                   blkurl={bulkUrl}
+                  loading={$bulkLoading}
+                  error={$bulkError}
                 />
                 <MicBulkDownload
-                  class="mic-insights bulk-mobile"
                   blkurl={bulkUrl}
+                  loading={$bulkLoading}
+                  error={$bulkError}
                 />
               </div>
             {/if}
@@ -316,26 +326,32 @@
                     yearlyarray={YearlyArray}
                   />
                 {/if}
-                {#if i == 0}
+                {#if i == 0 && bulkUrl}
                   <div class="insights">
                     <mic-bulkdownload
                       class="mic-insights bulk-desk"
                       blkurl={bulkUrl}
+                      loading={$bulkLoading}
+                      error={$bulkError}
                     />
                     <MicBulkDownload
-                      class="mic-insights bulk-desk"
                       blkurl={bulkUrl}
+                      loading={$bulkLoading}
+                      error={$bulkError}
                     />
                   </div>
-                {:else if i == arrayOfCharges.length - 1}
+                {:else if i == arrayOfCharges.length - 1 && bulkUrl}
                   <div class="insights">
                     <mic-bulkdownload
                       class="mic-insights bulk-mobile"
                       blkurl={bulkUrl}
+                      loading={$bulkLoading}
+                      error={$bulkError}
                     />
                     <MicBulkDownload
-                      class="mic-insights bulk-mobile"
                       blkurl={bulkUrl}
+                      loading={$bulkLoading}
+                      error={$bulkError}
                     />
                   </div>
                 {/if}
@@ -388,24 +404,32 @@
                         yearlyarray={YearlyArray}
                       />
                     {/if}
-                    {#if arrayOfBillInsights && arrayOfBillInsights.length >= arrayOfCharges.length - 1}
+                    {#if arrayOfBillInsights && arrayOfBillInsights.length >= arrayOfCharges.length - 1 && bulkUrl}
                       <mic-bulkdownload
                         class="mic-insights bulk-mobile"
                         blkurl={bulkUrl}
+                        loading={$bulkLoading}
+                        error={$bulkError}
                       />
                       <MicBulkDownload
-                        class="mic-insights bulk-mobile"
                         blkurl={bulkUrl}
+                        loading={$bulkLoading}
+                        error={$bulkError}
                       />
                     {/if}
-                    <mic-bulkdownload
-                      class="mic-insights bulk-desk"
-                      blkurl={bulkUrl}
-                    />
-                    <MicBulkDownload
-                      class="mic-insights bulk-desk"
-                      blkurl={bulkUrl}
-                    />
+                    {#if bulkUrl}
+                      <mic-bulkdownload
+                        class="mic-insights bulk-desk"
+                        blkurl={bulkUrl}
+                        loading={$bulkLoading}
+                        error={$bulkError}
+                      />
+                      <MicBulkDownload
+                        blkurl={bulkUrl}
+                        loading={$bulkLoading}
+                        error={$bulkError}
+                      />
+                    {/if}
                   {/if}
                 {/if}
               </div>
@@ -428,10 +452,13 @@
                 class="mic-insights bulk-desk"
                 blkurl={bulkUrl}
               />
-              <MicBulkDownload
-                class="mic-insights bulk-desk"
-                blkurl={bulkUrl}
-              />
+              {#if bulkUrl}
+                <MicBulkDownload
+                  blkurl={bulkUrl}
+                  loading={$bulkLoading}
+                  error={$bulkError}
+                />
+              {/if}
             </div>
           {/if}
         {/if}

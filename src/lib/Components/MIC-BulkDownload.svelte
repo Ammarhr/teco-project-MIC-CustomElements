@@ -2,24 +2,12 @@
 
 <script>
   // @ts-nocheck
-  import { onMount } from "svelte";
-  // import backgroundPattern from "../../assets/mask-bd.svg";
-  import {
-    fetchstore,
-    apiDomain,
-    apiToken,
-    generalErr,
-    SAPToken,
-    persona,
-  } from "../../js/store";
+  import { generalErr, persona } from "../../js/store";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
 
   export let blkurl;
-  //mocking data
-  const [data, loading, error, get] = fetchstore();
-  onMount(() => {
-      console.log(blkurl);
-  });
+  export let loading;
+  export let error;
 
   let btnStatus;
   $: if ($persona && $persona == "Agent") {
@@ -29,13 +17,10 @@
   }
 </script>
 
-{#if $loading}
+{#if loading}
   <mic-loading />
-{:else if $error}
-  <!--error regarding to fetch-->
+{:else if error}
   <mic-render-error />
-  <!-- {:else if $generalErr == true}
-    <div /> -->
 {:else if blkurl}
   <div
     class="tecoGenericShadow roundedRadius20 tecoCard tecoBillBanner"
@@ -79,9 +64,6 @@
   $teco-dark-grey: #6c6c6c;
   $teco-yellow-shade: rgba(255, 210, 0, 0.15);
   $teco-red-shade: rgba(218, 30, 40, 0.03);
-  $screen-md-min: 991px;
-  $screen-custom-md-min: 1024px;
-  $screen-lg-min: 1200px;
   * {
     margin: 0;
     box-sizing: border-box;

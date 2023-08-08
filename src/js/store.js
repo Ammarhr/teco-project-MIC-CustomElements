@@ -27,7 +27,7 @@ export const changeBillNumber = (num) => {
     billNumber.set(num);
 }
 //* Domain changing
-export const apiDomain = writable('')
+export const apiDomain = writable('');
 export const setDomain = (domain) => {
     apiDomain.set(domain);
 }
@@ -36,7 +36,8 @@ export const apiToken = writable({});
 export const setToken = (token) => {
     apiToken.set(token);
 }
-export const eventsDomain = writable('')
+
+export const eventsDomain = writable('');
 export const setEventDomain = (domain) => {
     eventsDomain.set(domain)
 }
