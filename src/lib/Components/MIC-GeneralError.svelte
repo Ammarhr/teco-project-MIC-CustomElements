@@ -37,7 +37,7 @@
 
     <img
       src={`data:image/png;base64,${$data.RecommendationImage}`}
-      alt=""
+      alt="error screen"
       class="err-img"
       use:lazyImage
     />

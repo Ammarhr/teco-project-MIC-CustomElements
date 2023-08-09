@@ -93,6 +93,7 @@
     {#each charges as billService, i}
       {#if billService.SectionType == "Service" || billService.SectionType == "AccountLevel"}
         <div class="card" bind:this={componentContainer}>
+          <!-- show card collapse button when  Collapsible == false or not exist-->
           {#if billService.Collapsible == false || !billService.Collapsible}
             <div
               id="bills-header"
@@ -109,6 +110,7 @@
             </div>
           {/if}
           <div style={styleToggleArr[i]} class="bill-content {chargesClass}">
+            <!-- section title -->
             <span>
               <h3
                 id="sectiontitle"
@@ -133,6 +135,7 @@
               </p>
             {/if}
             <div id="content">
+              <!-- display charges content -->
               {#if billService.Section_Level1}
                 {#each billService.Section_Level1 as section, j}
                   {#if section.SectionType == "ServiceHeaderGroup"}
@@ -397,7 +400,6 @@
                             : section.FontSize}px; color:{section.Color}"
                         >
                           {#if section.IconPath && section.IconPath != ""}
-                            <!-- src="/src/assets/{section.IconPath}" -->
                             <img
                               src={`https://tecocdn.azureedge.net/ibill/iBill-assets/${section.IconPath}`}
                               alt=""
@@ -529,7 +531,7 @@
                 {/each}
               {/if}
             </div>
-            <!-- Section Total -->
+            <!-- Invoce Total -->
             {#if invoicetotal && typeof invoicetotal !== "string" && invoicetotal[0]}
               <div
                 class="total"
