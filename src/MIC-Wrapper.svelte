@@ -56,7 +56,7 @@
   }
   onMount(() => {
     start.set(new Date().getTime());
-    generalErr.set(false);
+    generalErr.set(true);
     // newToken.set("");
     showToolTipDetails.set(false);
 

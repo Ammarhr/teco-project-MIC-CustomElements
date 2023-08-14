@@ -30,7 +30,19 @@
 {#if $loading == true}
   <mic-loading />
 {:else if $err}
-  <div>Error..</div>
+<div class="container">
+  <p>Oops!</p>
+
+  <img
+    src="https://cdn.dribbble.com/users/774806/screenshots/3823110/media/6fed552a31a9ed3d0ef9bc210dcc70a2.gif"
+    alt=""
+    style="width: 150%;"
+    use:lazyImage
+  />
+  <p id="err-body">
+    
+  </p>
+</div>
 {:else if $data && $data.HTMLBody}
   <div class="container">
     <p>Oops! Something went wrong.</p>
@@ -42,7 +54,7 @@
       use:lazyImage
     />
     <p id="err-body">
-      {@html $data.HTMLBody}
+      
     </p>
   </div>
 {/if}
@@ -55,6 +67,7 @@
     align-items: center;
     max-width: 650px;
     margin: 20px auto;
+    overflow: hidden;
     p {
       font-weight: 400;
       font-size: 36px;
