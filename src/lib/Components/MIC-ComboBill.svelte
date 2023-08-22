@@ -261,13 +261,13 @@
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
               />
-              <MicChargeDetailsCombo
+              <!-- <MicChargeDetailsCombo
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
-              />
+              /> -->
             {:else if charge.SectionType !== "InvoiceTotal"}
               <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
-              <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} />
+              <!-- <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} /> -->
             {/if}
             {#if $isParentAccount !== "X"}
               {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
@@ -278,11 +278,11 @@
                     loading={$bulkLoading}
                     error={$bulkError}
                   />
-                  <MicBulkDownload
+                  <!-- <MicBulkDownload
                     blkurl={bulkUrl}
                     loading={$bulkLoading}
                     error={$bulkError}
-                  />
+                  /> -->
                 {/if}
               {:else if i == arrayOfCharges.length - 2 && arrayOfBillInsights && arrayOfBillInsights.length < arrayOfCharges.length - 1 && bulkUrl}
                 <mic-bulkdownload
@@ -291,11 +291,11 @@
                   loading={$bulkLoading}
                   error={$bulkError}
                 />
-                <MicBulkDownload
+                <!-- <MicBulkDownload
                   blkurl={bulkUrl}
                   loading={$bulkLoading}
                   error={$bulkError}
-                />
+                /> -->
               {/if}
             {:else if $isParentAccount == "X" && i == arrayOfCharges.length - 1 && bulkUrl}
               <div class="insights">
@@ -305,11 +305,11 @@
                   loading={$bulkLoading}
                   error={$bulkError}
                 />
-                <MicBulkDownload
+                <!-- <MicBulkDownload
                   blkurl={bulkUrl}
                   loading={$bulkLoading}
                   error={$bulkError}
-                />
+                /> -->
               </div>
             {/if}
           </div>
@@ -334,11 +334,11 @@
                       loading={$bulkLoading}
                       error={$bulkError}
                     />
-                    <MicBulkDownload
+                    <!-- <MicBulkDownload
                       blkurl={bulkUrl}
                       loading={$bulkLoading}
                       error={$bulkError}
-                    />
+                    /> -->
                   </div>
                 {:else if i == arrayOfCharges.length - 1 && bulkUrl}
                   <div class="insights">
@@ -348,11 +348,11 @@
                       loading={$bulkLoading}
                       error={$bulkError}
                     />
-                    <MicBulkDownload
+                    <!-- <MicBulkDownload
                       blkurl={bulkUrl}
                       loading={$bulkLoading}
                       error={$bulkError}
-                    />
+                    /> -->
                   </div>
                 {/if}
               {/if}
@@ -411,11 +411,11 @@
                         loading={$bulkLoading}
                         error={$bulkError}
                       />
-                      <MicBulkDownload
+                      <!-- <MicBulkDownload
                         blkurl={bulkUrl}
                         loading={$bulkLoading}
                         error={$bulkError}
-                      />
+                      /> -->
                     {/if}
                     {#if bulkUrl}
                       <mic-bulkdownload
@@ -424,11 +424,11 @@
                         loading={$bulkLoading}
                         error={$bulkError}
                       />
-                      <MicBulkDownload
+                      <!-- <MicBulkDownload
                         blkurl={bulkUrl}
                         loading={$bulkLoading}
                         error={$bulkError}
-                      />
+                      /> -->
                     {/if}
                   {/if}
                 {/if}
@@ -453,11 +453,11 @@
                 blkurl={bulkUrl}
               />
               {#if bulkUrl}
-                <MicBulkDownload
+                <!-- <MicBulkDownload
                   blkurl={bulkUrl}
                   loading={$bulkLoading}
                   error={$bulkError}
-                />
+                /> -->
               {/if}
             </div>
           {/if}

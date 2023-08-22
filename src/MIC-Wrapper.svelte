@@ -16,10 +16,6 @@
   import MicShadowLoading from "./lib/Components/MIC-ShadowLoading.svelte";
   import MicSummaryBilling from "./lib/Components/MIC-SummaryBilling.svelte";
   import MicInsightsRecomendation from "./lib/Components/MIC-InsightsRecomendation.svelte";
-  // refactor components:
-  import MicMeterTable2 from "./lib/Components/MIC-MeterTable2.svelte";
-  import MicUsageChart from "./lib/Components/MIC-UsageChart.svelte";
-
   import { onDestroy, onMount } from "svelte";
   import {
     setDomain,
@@ -35,9 +31,7 @@
     fetchAndRedirect,
     apiToken,
     apiDomain,
-    start,
-    userReact,
-    getCookie,
+    start
   } from "./js/store";
 
   export let token;
@@ -50,11 +44,9 @@
     setToken(token);
     setDomain(domain);
     setSAPTpken(saptoken);
-
+    // setAssetsUrl(assetspath);
     if (personainput == "Agent") {
       persona.set("Agent");
-    } else if (personainput && personainput !== "Agent") {
-      persona.set("simulator");
     } else {
       persona.set("customer");
     }
@@ -64,29 +56,48 @@
   }
   onMount(() => {
     start.set(new Date().getTime());
-    generalErr.set(false);
+    generalErr.set(true);
+    // newToken.set("");
     showToolTipDetails.set(false);
-    userReact.set("false");
-  });
-  let iBillCoockie;
-  window.addEventListener("beforeunload", () => {
-    iBillCoockie = getCookie("MIC-IBLL-MIJ");
 
-    if (iBillCoockie) {
-      fetchAndRedirect(
-        $apiToken,
-        `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-        null,
-        {
-          EventCode: "IBILL_END",
-          Outcome: ``,
-          Feedback: "",
-          Persona: $persona,
-        },
-        true
-      );
-    }
-    eraseCookie("MIC-IBLL-MIJ");
+    fetchAndRedirect(
+      $apiToken,
+      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      null,
+      {
+        EventCode: "IBILL_START",
+        Outcome: ``,
+        Feedback: "",
+        Persona: $persona,
+      }
+    );
+  });
+  // window.onload = function () {
+  //   fetchAndRedirect(
+  //     $apiToken,
+  //     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+  //     null,
+  //     {
+  //       EventCode: "IBILL_START",
+  //       Outcome: ``,
+  //       Feedback: "",
+  //       Persona: $persona,
+  //     }
+  //   );
+  // };
+  window.addEventListener("beforeunload", () => {
+    fetchAndRedirect(
+      $apiToken,
+      `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
+      null,
+      {
+        EventCode: "IBILL_END",
+        Outcome: ``,
+        Feedback: "",
+        Persona: $persona,
+      }
+    )
+    eraseCookie("MIC-IBLL-MIJ")
   });
 </script>
 
@@ -125,8 +136,6 @@
     <MicComboBill />
     <mic-metertable />
     <!-- <MicMeterTable /> -->
-    <!-- <MicMeterTable2 /> -->
-    <!-- <mic-new-metertable /> -->
   </div>
 {:else if $generalErr === true}
   <mic-generalerror {token} />
