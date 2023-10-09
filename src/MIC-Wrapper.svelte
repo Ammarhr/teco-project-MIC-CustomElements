@@ -31,7 +31,7 @@
     fetchAndRedirect,
     apiToken,
     apiDomain,
-    start
+    start,
   } from "./js/store";
 
   export let token;
@@ -56,7 +56,7 @@
   }
   onMount(() => {
     start.set(new Date().getTime());
-    generalErr.set(true);
+    generalErr.set(false);
     // newToken.set("");
     showToolTipDetails.set(false);
 
@@ -96,8 +96,8 @@
         Feedback: "",
         Persona: $persona,
       }
-    )
-    eraseCookie("MIC-IBLL-MIJ")
+    );
+    eraseCookie("MIC-IBLL-MIJ");
   });
 </script>
 
@@ -117,7 +117,7 @@
     <div class="important-balance">
       <div class="balance">
         <mic-balancesummary />
-        <!-- <MicBalanceSummary /> -->
+        <MicBalanceSummary />
       </div>
       <div class="messages">
         <mic-importentmessage />
@@ -138,8 +138,8 @@
     <!-- <MicMeterTable /> -->
   </div>
 {:else if $generalErr === true}
-  <mic-generalerror {token} />
-  <!-- <MicGeneralError {token} /> -->
+  <!-- <mic-generalerror {token} /> -->
+  <MicGeneralError {token} />
 {/if}
 
 <style lang="scss">

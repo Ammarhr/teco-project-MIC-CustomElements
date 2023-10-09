@@ -80,7 +80,7 @@ export const persona = writable('')
 
 let isCollectiveAccount = "";
 let parentAccount = ""
-
+let URLs = '';
 function setIsCollectiveAccountFlagHeader() {
     isCollectiveAccount = get(isSummaryAccountFlag);
     parentAccount = get(isParentAccount);
@@ -130,6 +130,7 @@ export function fetchstore() {
             error.set(e);
             generalErr.set(true);
             loading.set(false);
+            URLs = URLs + `, ${url}`
         } finally {
             arrOfRequests.pop()
             pendingRequest.set(arrOfRequests);
@@ -377,21 +378,45 @@ function getSessionLocationerrorCallback(error) {
     // console.log(`Error occurred: ${error.message}`);
 }
 
-//* get browser name 
+//* get browser name + version
 let browserName;
 
 if (userAgent.indexOf("Edg") > -1) {
-    browserName = "Microsoft Edge";
+    var match = /Edg\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Microsoft Edge " + version;
+    }
 } else if (userAgent.indexOf("OPR") > -1) {
-    browserName = "Opera";
+    var match = /OPR\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Opera " + version;
+    }
 } else if (userAgent.indexOf("Firefox") > -1) {
-    browserName = "Firefox";
+    var match = /Firefox\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Firefox " + version;
+    }
 } else if (userAgent.indexOf("MSIE") > -1) {
-    browserName = "Internet Explorer";
+    var match = /MSIE\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Internet Explorer " + version;
+    }
 } else if (userAgent.indexOf("Chrome") > -1) {
-    browserName = "Chrome";
+    var match = /Chrome\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Chrome " + version;
+    }
 } else if (userAgent.indexOf("Safari") > -1) {
-    browserName = "Safari";
+    var match = /Safari\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Safari " + version;
+    }
 }
 //*
 const ipAdress = async () => {
@@ -406,7 +431,7 @@ ipAdress().then((ip) => ipify = ip.ip)
 
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
     var startTime;
-    
+
     start.subscribe(value => {
         startTime = value;
     });
@@ -497,13 +522,13 @@ export function feedbackCall() {
 
     return [data, loading, error, setFeedback]
 }
-
+let logglyError;
 export function errorCallback() {
     const error = writable(false);
     const data = writable({});
     const loading = writable(false);;
 
-    async function errorHandler(token, url, saptoken) {
+    async function errorHandler(token, Url, saptoken) {
         loading.set(true)
         error.set(false);
         try {
@@ -511,7 +536,7 @@ export function errorCallback() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                const Publishresponse = await fetch(url, {
+                const Publishresponse = await fetch(Url, {
                     method: 'GET',
                     mode: "cors",
                     cache: "no-cache",
@@ -521,6 +546,18 @@ export function errorCallback() {
                         "UserCredentials": saptoken
                     },
                 });
+                const { status, statusText, url } = await Publishresponse;
+                logglyError = {
+                    "EventDate": new Date(),
+                    "EventRequest": "",
+                    "EventResponseCode": status,
+                    "EventResponseMessage": `Web-Components can't reach MiPortal: Device_Info: ${isMobile ? "Mobile" : "Desktop"}, iPhone 14, Browser: ${browserName}`,
+                    "EventMethod": "POST",
+                    "EventURLEndpoint": url,
+                    "EventCustomerInfo": "Account_Num:211002621376-Invoice_Num:605704992168"
+                }
+                console.log(logglyError.EventResponseMessage
+                    , "logglyError", URLs);
                 data.set(await Publishresponse.json());
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
