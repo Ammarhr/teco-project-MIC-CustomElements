@@ -17,7 +17,7 @@
   } from "../../js/store";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
   import { onMount } from "svelte";
-
+  import summaryAccountData from "../../../data/SummaryBilling.json";
   let items;
   let tableData;
   let pageSize = 6; // number of items per page
@@ -38,12 +38,13 @@
   // fetch accountTable fetch api on component mount
   onMount(() => {
     // if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
-      get(
-        $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/CollectiveAccounts`,
-        "../../data/SummaryBilling.json",
-        $SAPToken
-      ).then(() => {});
+    $data = summaryAccountData;
+    // get(
+    //   $apiToken,
+    //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/CollectiveAccounts`,
+    //   "../../data/SummaryBilling.json",
+    //   $SAPToken
+    // ).then(() => {});
     // }
     refreshableToken = $apiToken;
   });

@@ -16,9 +16,10 @@
     persona,
     SAPToken,
     isSummaryAccountFlag,
-    generatedFromTable
+    generatedFromTable,
   } from "../../js/store";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
+  import billSelector from "../../../data/BillSelector.json";
   // state
   let selectedBill;
   let selectedLabelBill;
@@ -28,17 +29,17 @@
   const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken();
 
   // $: if ($apiDomain && $apiToken && $SAPToken && !$data.bills) {
-    if ($isSummaryAccountFlag.toLowerCase() == "true") {
-      mainClass = "col-account";
-    }
-    get(
-      $apiToken,
-      "../../data/BillSelector.json",
-      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`,
-      $SAPToken
-    );
+  if ($isSummaryAccountFlag.toLowerCase() == "true") {
+    mainClass = "col-account";
+  }
+  // get(
+  //   $apiToken,
+  //   "../../data/BillSelector.json",
+  //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`,
+  //   $SAPToken
+  // );
   // }
-
+  $: $data = billSelector;
   const handleChange = (e, latest1) => {
     if (latest1 && $billNumber !== $latestBill) {
       selectedBill = latest1;

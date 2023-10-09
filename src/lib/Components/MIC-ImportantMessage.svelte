@@ -26,7 +26,6 @@
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
     // if ($apiToken && $SAPToken && !$data.messages && $generalErr !== true) {
-    $data = data1;
     // get(
     //   $apiToken,
     //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`,
@@ -34,11 +33,13 @@
     //   $SAPToken
     // );
     // }
+    $data = data1;
+    state = $data;
   });
 
-  $: if ($data && $data.messages) {
-    state = $data;
-  }
+  // $: if ($data && $data.messages) {
+  //   state = $data;
+  // }
   //hello fro
   //slice long message
   $: if (
