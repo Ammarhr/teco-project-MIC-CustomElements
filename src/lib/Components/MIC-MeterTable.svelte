@@ -23,6 +23,9 @@
   } from "../../js/MIC-chart-bundle";
   import { onMount } from "svelte";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
+  import meterData from "../../../data/meterTable.json";
+  import dailyData from "../../../data/meterUsageDaily.json";
+  import monthlyData from "../../../data/meterUsageMonthly.json";
 
   let items;
   let tableData;
@@ -68,30 +71,31 @@
     monthlyUsageError,
     monthlyUsageGet,
   ] = fetchMonthlyUsageChart(); // monthly usage fetch
-
   // fetch meterTable fetch api on component mount
   onMount(() => {
+    $data = meterData;
+    $monthlyUsageData = monthlyData;
     // if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
     if ($isSummaryAccountFlag.toLowerCase() !== "true") {
-      get(
-        $apiToken,
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
-        "../../data/meterTable.json",
-        $SAPToken
-      ).then(() => {
-        if ($data && $data.EPFlag) {
-          EP_Flag = $data.EPFlag;
-        } else {
-          EP_Flag = "";
-        }
-        if ($data && $data.TempFlag == false) {
-          disableTemp = false;
-          tempData = true;
-        } else {
-          disableTemp = true;
-          tempData = false;
-        }
-      });
+      // get(
+      //   $apiToken,
+      //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
+      //   "../../data/meterTable.json",
+      //   $SAPToken
+      // ).then(() => {
+      //   if ($data && $data.EPFlag) {
+      //     EP_Flag = $data.EPFlag;
+      //   } else {
+      //     EP_Flag = "";
+      //   }
+      //   if ($data && $data.TempFlag == false) {
+      //     disableTemp = false;
+      //     tempData = true;
+      //   } else {
+      //     disableTemp = true;
+      //     tempData = false;
+      //   }
+      // });
     }
     refreshableToken = $apiToken;
     // }
@@ -175,24 +179,25 @@
 
       // call daily chart api when the AMI_Flag is exist
       if (AMI_Flag == "X") {
-        dailyUsageGet(
-          refreshableToken,
-          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-          "../../data/meterUsageDaily.json",
-          {
-            dln: DLN,
-            sdt: DAP_StartDate,
-            edt: DAP_EndDate,
-            intp: intp,
-            dkwh: DAP_dkwh,
-            rkwh: DAP_rkwh,
-            pf: DAP_pf,
-            kw: DAP_kw,
-            dtoun: DAP_dtoun,
-            dtouf: DAP_dtouf,
-          },
-          $SAPToken
-        );
+        // dailyUsageGet(
+        //   refreshableToken,
+        //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+        //   "../../data/meterUsageDaily.json",
+        //   {
+        //     dln: DLN,
+        //     sdt: DAP_StartDate,
+        //     edt: DAP_EndDate,
+        //     intp: intp,
+        //     dkwh: DAP_dkwh,
+        //     rkwh: DAP_rkwh,
+        //     pf: DAP_pf,
+        //     kw: DAP_kw,
+        //     dtoun: DAP_dtoun,
+        //     dtouf: DAP_dtouf,
+        //   },
+        //   $SAPToken
+        // );
+        $dailyUsageData = dailyData;
       }
       // call monthy api cases calls
       let monthlyUrl;
@@ -215,12 +220,12 @@
       }
 
       // monthly chart api call
-      monthlyUsageGet(
-        refreshableToken,
-        // monthlyUrl,
-        "../../data/meterUsageMonthly.json",
-        $SAPToken
-      );
+      // monthlyUsageGet(
+      //   refreshableToken,
+      //   // monthlyUrl,
+      //   "../../data/meterUsageMonthly.json",
+      //   $SAPToken
+      // );
     }
     // MiJurney event call
     if (newSelect !== "" && selectedMeter) {

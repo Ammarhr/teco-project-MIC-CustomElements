@@ -19,6 +19,12 @@
   import MicBillInsightsCombo from "./MIC-BillInsights-combo.svelte";
   import MicChargeDetailsCombo from "./MIC-ChargeDetails-combo.svelte";
   import MicBulkDownload from "./MIC-BulkDownload.svelte";
+
+  import data1 from "../../../data/ChargeDetails.json";
+  import data2 from "../../../data/DemandInsight.json";
+  import data3 from "../../../data/sunSelect.json";
+  import data4 from "../../../data/yearlyEnergy.json";
+
   let comboNewToken;
   let arrayOfBillInsights = [];
   let sunSelectArray = [];
@@ -42,39 +48,41 @@
       tries > 0
     ) {
       if ($isSummaryAccountFlag.toLowerCase() !== "true") {
-        chargeGet(
-          $apiToken,
-          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
-          "../../../data/ChargeDetails.json",
-          $SAPToken
-        );
-        get(
-          $apiToken,
-          "../../../data/DemandInsight.json",
-          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
-          $SAPToken
-        ).then(() => {
-          if ($data && $data.services) {
-            arrayOfBillInsights = $data.services;
-          }
-        });
-        sunget(
-          $apiToken,
-          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
-          "../../data/sunSelect.json",
-          $SAPToken
-        ).then(() => {
-          if ($sundata && $sundata.SunSelect) {
-            newSunSelectArray = [];
-            sunSelectArray = $sundata.SunSelect;
-          }
-        });
-        yearlyGet(
-          $apiToken,
-          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
-          "../../data/yearlyEnergy.json",
-          $SAPToken
-        );
+        // chargeGet(
+        //   $apiToken,
+        //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+        //   "../../../data/ChargeDetails.json",
+        //   $SAPToken
+        // );
+        $chargeData = data1;
+        $data = data2;
+        // get(
+        //   $apiToken,
+        //   "../../../data/DemandInsight.json",
+        //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
+        //   $SAPToken
+        // ).then(() => {
+        //   if ($data && $data.services) {
+        //     arrayOfBillInsights = $data.services;
+        //   }
+        // });
+        // sunget(
+        //   $apiToken,
+        //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
+        //   "../../data/sunSelect.json",
+        //   $SAPToken
+        // ).then(() => {
+        //   if ($sundata && $sundata.SunSelect) {
+        //     newSunSelectArray = [];
+        //     sunSelectArray = $sundata.SunSelect;
+        //   }
+        // });
+        // yearlyGet(
+        //   $apiToken,
+        //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
+        //   "../../data/yearlyEnergy.json",
+        //   $SAPToken
+        // );
       }
     }
     comboNewToken = $apiToken;
@@ -379,7 +387,7 @@
       {/if}
       <mic-bulkdownload class="mic-insights" />
     </div>
-    {/if}
+  {/if}
 </div>
 
 <style lang="scss">

@@ -16,7 +16,7 @@
     SAPToken,
   } from "../../js/store";
   import { onMount } from "svelte";
-
+  import data1 from "../../../data/messages.json";
   //state
   let state = {};
   let message;
@@ -26,12 +26,13 @@
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
     // if ($apiToken && $SAPToken && !$data.messages && $generalErr !== true) {
-    get(
-      $apiToken,
-      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`,
-      "../../data/messages.json",
-      $SAPToken
-    );
+    $data = data1;
+    // get(
+    //   $apiToken,
+    //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`,
+    //   "../../data/messages.json",
+    //   $SAPToken
+    // );
     // }
   });
 

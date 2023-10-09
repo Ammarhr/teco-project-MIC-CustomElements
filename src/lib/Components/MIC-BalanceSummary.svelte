@@ -13,7 +13,7 @@
     persona,
     SAPToken,
   } from "../../js/store";
-
+  import dataJson from "../../../data/AccountBalanceData.json";
   var newElement;
   let color;
   let tries = 3;
@@ -33,13 +33,14 @@
     //   !$data.html_masseges &&
     //   tries > 0
     // ) {
-      get(
-        $apiToken,
-        "../../../data/AccountBalanceData.json",
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`,
-        $SAPToken
-      );
-      tries--;
+    $data = dataJson;
+    // get(
+    //   $apiToken,
+    //   "../../../data/AccountBalanceData.json",
+    //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`,
+    //   $SAPToken
+    // );
+    tries--;
     // }
   });
 

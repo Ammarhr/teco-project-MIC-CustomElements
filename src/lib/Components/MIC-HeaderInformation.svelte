@@ -4,7 +4,7 @@
   // @ts-nocheck
   import { fetchstore, apiDomain, apiToken, SAPToken } from "../../js/store";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
-
+  import data1 from "../../../data/accountData.json";
   //state
   let account;
   let statusClass = "Inactive";
@@ -12,14 +12,14 @@
   const [data, loading, error, get] = fetchstore();
 
   // $: if ($apiDomain && $SAPToken && $apiToken && !$data.account) {
-    get(
-      $apiToken,
-      "../../data/accountData.json",
-      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`,
-      $SAPToken
-    );
+  // get(
+  //   $apiToken,
+  //   "../../data/accountData.json",
+  //   // `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`,
+  //   $SAPToken
+  // );
   // }
-
+  $: $data = data1;
   $: if ($data) {
     account = $data.account;
   }

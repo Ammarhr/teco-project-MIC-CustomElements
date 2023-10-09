@@ -16,7 +16,7 @@ export const Agent = {
     domain: "portal_domain",
     personainput: "Agent",
     issummaryaccount: "False",
-    saptoken:"sap_token"
+    saptoken: "sap_token"
   },
 };
 export const Customer = {
@@ -25,7 +25,7 @@ export const Customer = {
     domain: "portal_domain",
     personainput: "",
     issummaryaccount: "False",
-    saptoken:"sap_token"
+    saptoken: "sap_token"
   },
 };
 export const SummaryAccount = {
@@ -34,6 +34,6 @@ export const SummaryAccount = {
     domain: "portal_domain",
     personainput: "",
     issummaryaccount: "True",
-    saptoken:"sap_token"
+    saptoken: "sap_token"
   },
 };
