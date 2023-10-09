@@ -20,8 +20,8 @@
     if ($apiDomain && $SAPToken && $apiToken && !$data.BlkDownload) {
       get(
         $apiToken,
-        // "../../data/bulkDownload.json",
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`,
+        "../../data/bulkDownload.json",
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BulkDownload`,
         $SAPToken
       );
     }

@@ -27,17 +27,17 @@
   const [data, loading, error, get] = fetchstore();
   const [dataToken, loadingToken, errorToken, getToken] = reGenerateToken();
 
-  $: if ($apiDomain && $apiToken && $SAPToken && !$data.bills) {
+  // $: if ($apiDomain && $apiToken && $SAPToken && !$data.bills) {
     if ($isSummaryAccountFlag.toLowerCase() == "true") {
       mainClass = "col-account";
     }
     get(
       $apiToken,
-      // "../../data/BillSelector.json",
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`,
+      "../../data/BillSelector.json",
+      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillSelector`,
       $SAPToken
     );
-  }
+  // }
 
   const handleChange = (e, latest1) => {
     if (latest1 && $billNumber !== $latestBill) {

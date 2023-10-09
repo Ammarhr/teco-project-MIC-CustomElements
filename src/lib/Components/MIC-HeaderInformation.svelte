@@ -11,14 +11,14 @@
 
   const [data, loading, error, get] = fetchstore();
 
-  $: if ($apiDomain && $SAPToken && $apiToken && !$data.account) {
+  // $: if ($apiDomain && $SAPToken && $apiToken && !$data.account) {
     get(
       $apiToken,
-      // "../../data/accountData.json",
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`,
+      "../../data/accountData.json",
+      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/AccountDetails`,
       $SAPToken
     );
-  }
+  // }
 
   $: if ($data) {
     account = $data.account;

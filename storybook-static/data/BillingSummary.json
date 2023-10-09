@@ -1,0 +1,325 @@
+{
+    "Sections": [
+      {
+        "Order": 1,
+        "Lable": "Natural Gas Charges",
+        "FontSize": 30,
+        "Color": "#00294A",
+        "IsItalic": false,
+        "IsBreakdown": false,
+        "SectionType": "Service",
+        "ServiceType": "Gas",
+        "URL": "https://www.peoplesgas.com/residential/billing-options/understanding-your-bill/",
+        "FontWeight": "",
+        "Section_Level1s": [
+          {
+            "Order": 1,
+            "Value": "5200217835",
+            "FontSize": 0,
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Config"
+          },
+          {
+            "Order": 2,
+            "FontSize": 0,
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Charge_Group",
+            "Section_Level2s": [
+              {
+                "Order": 1,
+                "Value": "Administration Fee",
+                "FontSize": 20,
+                "Color": "#000000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              },
+              {
+                "Order": 4,
+                "Value": "$216.00",
+                "FontSize": 20,
+                "Color": "#000000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              }
+            ]
+          },
+          {
+            "Order": 2,
+            "FontSize": 0,
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Service_Header_Group",
+            "Section_Level2s": [
+              {
+                "Order": 1,
+                "Value": "Administration Fee",
+                "FontSize": 20,
+                "Color": "#000000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              },
+              {
+                "Order": 2,
+                "Value": "$216.00",
+                "FontSize": 20,
+                "Color": "#000000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              }
+            ]
+          },
+          {
+            "Order": 2,
+            "FontSize": 0,
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Charge_Group",
+            "Section_Level2s": [
+              {
+                "Order": 1,
+                "Value": "Flat Distribution Charge",
+                "FontSize": 20,
+                "Color": "#000000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              },
+              {
+                "Order": 4,
+                "Value": "$207,000.00",
+                "FontSize": 20,
+                "Color": "#000000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              }
+            ]
+          },
+          {
+            "Order": 3,
+            "Lable": "Natural Gas Service Cost",
+            "Value": "$207,216.00",
+            "FontSize": 20,
+            "Color": "#005FAA",
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Total",
+            "FontWeight": "400"
+          },
+          {
+            "Order": 6,
+            "Lable": "Taxes & Other Fees",
+            "FontSize": 28,
+            "Color": "#5EB0F4",
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "CustomeSection",
+            "Section_Level2s": [
+              {
+                "Order": 1,
+                "FontSize": 0,
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge_Group",
+                "Section_Level3s": [
+                  {
+                    "Order": 1,
+                    "Value": "Gas Late Payment Fee",
+                    "FontSize": 20,
+                    "Color": "#000000",
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge",
+                    "FontWeight": "400"
+                  },
+                  {
+                    "Order": 4,
+                    "Value": "$114.22",
+                    "FontSize": 20,
+                    "Color": "#000000",
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge",
+                    "FontWeight": "400"
+                  }
+                ]
+              },
+              {
+                "Order": 1,
+                "FontSize": 0,
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge_Group",
+                "Section_Level3s": [
+                  {
+                    "Order": 1,
+                    "Value": "Neg Imbalance Usage CIST",
+                    "FontSize": 20,
+                    "Color": "#000000",
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge",
+                    "FontWeight": "400"
+                  },
+                  {
+                    "Order": 4,
+                    "Value": "$12.81",
+                    "FontSize": 20,
+                    "Color": "#000000",
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge",
+                    "FontWeight": "400"
+                  }
+                ]
+              },
+              {
+                "Order": 1,
+                "FontSize": 0,
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge_Group",
+                "Section_Level3s": [
+                  {
+                    "Order": 1,
+                    "Value": "Pos Imbalance Commodity CIST",
+                    "FontSize": 20,
+                    "Color": "#000000",
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge",
+                    "FontWeight": "400"
+                  },
+                  {
+                    "Order": 4,
+                    "Value": "$262.54",
+                    "FontSize": 20,
+                    "Color": "#000000",
+                    "IsItalic": false,
+                    "IsBreakdown": false,
+                    "SectionType": "Charge",
+                    "FontWeight": "400"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Order": 7,
+            "Lable": "Total Other Fees and Charges",
+            "Value": "$389.57",
+            "FontSize": 20,
+            "Color": "#005FAA",
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Total",
+            "FontWeight": "400"
+          }
+        ]
+      },
+      {
+        "Order": 3,
+        "Lable": "Miscellaneous Credits",
+        "FontSize": 30,
+        "Color": "#005faa",
+        "IsItalic": false,
+        "IsBreakdown": false,
+        "SectionType": "AccountLevel",
+        "FontWeight": "300",
+        "Section_Level1s": [
+          {
+            "Order": 1,
+            "FontSize": 0,
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Charge_Group",
+            "Section_Level2s": [
+              {
+                "Order": 1,
+                "Value": "Gas Late Payment Charge Credit",
+                "FontSize": 20,
+                "Color": "#000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              },
+              {
+                "Order": 4,
+                "Value": "-$441.73",
+                "FontSize": 20,
+                "Color": "#000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              }
+            ]
+          },
+          {
+            "Order": 1,
+            "FontSize": 0,
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Charge_Group",
+            "Section_Level2s": [
+              {
+                "Order": 1,
+                "Value": "Credit NegImb Usage CIST",
+                "FontSize": 20,
+                "Color": "#000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              },
+              {
+                "Order": 4,
+                "Value": "-$14.96",
+                "FontSize": 20,
+                "Color": "#000",
+                "IsItalic": false,
+                "IsBreakdown": false,
+                "SectionType": "Charge",
+                "FontWeight": "400"
+              }
+            ]
+          },
+          {
+            "Order": 2,
+            "Lable": "Total Current Month Miscellaneous Credits",
+            "Value": "-$456.69",
+            "FontSize": 20,
+            "Color": "#005FAA",
+            "IsItalic": false,
+            "IsBreakdown": false,
+            "SectionType": "Total",
+            "FontWeight": "400"
+          }
+        ]
+      },
+      {
+        "Order": 4,
+        "Lable": "Total Current Month's Charges",
+        "Value": "$199,990.72",
+        "FontSize": 35,
+        "Color": "#005FAA",
+        "IsItalic": false,
+        "IsBreakdown": false,
+        "SectionType": "InvoiceTotal",
+        "FontWeight": "400"
+      }
+    ]
+  }

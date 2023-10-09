@@ -71,30 +71,30 @@
 
   // fetch meterTable fetch api on component mount
   onMount(() => {
-    if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
-      if ($isSummaryAccountFlag.toLowerCase() !== "true") {
-        get(
-          $apiToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
-          // "../../data/meterTable.json",
-          $SAPToken
-        ).then(() => {
-          if ($data && $data.EPFlag) {
-            EP_Flag = $data.EPFlag;
-          } else {
-            EP_Flag = "";
-          }
-          if ($data && $data.TempFlag == false) {
-            disableTemp = false;
-            tempData = true;
-          } else {
-            disableTemp = true;
-            tempData = false;
-          }
-        });
-      }
-      refreshableToken = $apiToken;
+    // if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
+    if ($isSummaryAccountFlag.toLowerCase() !== "true") {
+      get(
+        $apiToken,
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/MeterData`,
+        "../../data/meterTable.json",
+        $SAPToken
+      ).then(() => {
+        if ($data && $data.EPFlag) {
+          EP_Flag = $data.EPFlag;
+        } else {
+          EP_Flag = "";
+        }
+        if ($data && $data.TempFlag == false) {
+          disableTemp = false;
+          tempData = true;
+        } else {
+          disableTemp = true;
+          tempData = false;
+        }
+      });
     }
+    refreshableToken = $apiToken;
+    // }
   });
 
   //////// change the selected meter + call Meter Api
@@ -177,8 +177,8 @@
       if (AMI_Flag == "X") {
         dailyUsageGet(
           refreshableToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
-          // "../../data/meterUsageDaily.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataDailyUsage?BilledAmount=${BilledAmount}`,
+          "../../data/meterUsageDaily.json",
           {
             dln: DLN,
             sdt: DAP_StartDate,
@@ -217,8 +217,8 @@
       // monthly chart api call
       monthlyUsageGet(
         refreshableToken,
-        monthlyUrl,
-        // "../../data/meterUsageMonthly.json",
+        // monthlyUrl,
+        "../../data/meterUsageMonthly.json",
         $SAPToken
       );
     }

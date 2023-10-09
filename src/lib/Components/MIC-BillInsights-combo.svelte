@@ -26,9 +26,14 @@
     sunSelectServicesArray,
     SAPToken,
   } from "../../js/store";
+
+  /**
+   * @type {array} Array of bill insights services
+   */
   export let insightservices;
   export let sunselectdata;
   export let emptytabs;
+  export let arrayofbody;
   ///// important variables
   let toggleArray = []; // array of toggle statuses
   let styleToggleArr = []; // array of toggle style
@@ -41,7 +46,6 @@
   let avgClass = "red"; //toggle style class (complete it later)
   let chartWidth = 300; // the width of the charts
   let newArr;
-  export let arrayofbody;
   const [data, loading, error, get] = fetchstore(); // store fetch
   const [sundata, sunloading, sunerror, sunget] = fetchstore(); // store fetch
 
@@ -117,6 +121,9 @@
       tabsToggleArr[i][1] = "1";
     }
   };
+  // testing
+  $: $latestBill = "54648168";
+  $: $billNumber = "54648168";
 </script>
 
 <!----------html----------->
@@ -617,23 +624,23 @@
             </div>
           {/if}
           {#if $billNumber === $latestBill && arrayofbody && insightsService.BillContractNo}
-            <!-- <MicInsightsRecomendation
+            <MicInsightsRecomendation
               token={$apiToken}
               billcontractnumber={insightsService.BillContractNo}
               body={arrayofbody}
-            /> -->
+            />
             <mic-recomendation
               token={$apiToken}
               billcontractnumber={insightsService.BillContractNo}
               body={arrayofbody}
             />
           {:else if $billNumber === $latestBill && $newToken && $newToken !== "" && insightsService.BillContractNo && typeof arrayofbody != "array"}
-            <!-- <MicInsightsRecomendation
+            <MicInsightsRecomendation
               token={$newToken.token}
               url={$apiDomain}
               billcontractnumber={insightsService.BillContractNo}
               body={arrayofbody}
-            /> -->
+            />
             <mic-recomendation
               token={$newToken.token}
               url={$apiDomain}

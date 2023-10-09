@@ -26,21 +26,21 @@
   const [data, loading, error, get] = fetchstore();
   // trigger token existence
   onMount(() => {
-    if (
-      $apiDomain &&
-      $SAPToken &&
-      $apiToken &&
-      !$data.html_masseges &&
-      tries > 0
-    ) {
+    // if (
+    //   $apiDomain &&
+    //   $SAPToken &&
+    //   $apiToken &&
+    //   !$data.html_masseges &&
+    //   tries > 0
+    // ) {
       get(
         $apiToken,
-        // "../../../data/AccountBalanceData.json",
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`,
+        "../../../data/AccountBalanceData.json",
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BalanceSummary`,
         $SAPToken
       );
       tries--;
-    }
+    // }
   });
 
   $: if ($persona && $persona == "Agent") {

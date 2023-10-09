@@ -1,0 +1,100 @@
+{
+   "MonthlyUsage": {
+      "FooterDisclaimer": "<p>The data on this graph is represented for informational purposes</p>\n",
+      "TempTooltip": "<div style=\"max-width:314px\"><span style=\"font-size:20px\"><span style=\"color:#005faa\">Temperature - How does it work </span></span></div>\n\n<div>\n<hr /></div>\n\n<p><span style=\"color:#000000; font-family:'Interstate'; font-size:14px\">The weather conditions and temperature outside can affect your usage. We provide you with the ability to see fluctuations in temperatures outside and how it may affect your energy consumptions</span></p>\n\n<div><span style=\"font-size:11px\"><em>This application uses your local weather and energy rates. The weather data provided is specific to this tool and is for informational purposes only.</em></span></div>\n",
+      "MaxUsage": "2987",
+      "MonthlyDetails": [
+         {
+            "Perioddate": "MAR",
+            "FullDate": "March 2022",
+            "Temperature": "62",
+            "UOM": "KW",
+            "Usage": "0.00",
+            "Cost": "0.0",
+            "CloudIcon": "",
+            "Switcher": "",
+            "Operand": "HIST_OFKWH",
+            "Days": "31",
+            "ToolTipEstimated": ""
+         },
+         {
+            "Perioddate": "MAR",
+            "FullDate": "March 2022",
+            "Temperature": "62",
+            "UOM": "KW",
+            "Usage": "0.0",
+            "Cost": "0.00",
+            "CloudIcon": "",
+            "Switcher": "",
+            "Operand": "HIST_PKKWH",
+            "Days": "31",
+            "ToolTipEstimated": ""
+         },
+         {
+            "Perioddate": "APR",
+            "FullDate": "April 2022",
+            "Temperature": "69",
+            "UOM": "KWH",
+            "Usage": "887.0",
+            "Cost": "0.00",
+            "CloudIcon": "",
+            "Switcher": "",
+            "Operand": "HIST_PKKWH",
+            "Days": "29",
+            "ToolTipEstimated": ""
+         },
+         {
+            "Perioddate": "APR",
+            "FullDate": "April 2022",
+            "Temperature": "69",
+            "UOM": "KWH",
+            "Usage": "2,823.0",
+            "Cost": "325.83",
+            "CloudIcon": "",
+            "Switcher": "",
+            "Operand": "HIST_OFKWH",
+            "Days": "29",
+            "ToolTipEstimated": ""
+         },
+         {
+            "Perioddate": "MAY",
+            "FullDate": "May 2022",
+            "Temperature": "73",
+            "UOM": "KW",
+            "Usage": "2,820.0",
+            "Cost": "350.14",
+            "CloudIcon": "",
+            "Switcher": "",
+            "Operand": "HIST_OFKWH",
+            "Days": "30",
+            "ToolTipEstimated": ""
+         },
+         {
+            "Perioddate": "MAY",
+            "FullDate": "May 2022",
+            "Temperature": "73",
+            "UOM": "KW",
+            "Usage": "1,125.0",
+            "Cost": "0.00",
+            "CloudIcon": "",
+            "Switcher": "",
+            "Operand": "HIST_PKKWH",
+            "Days": "30",
+            "ToolTipEstimated": ""
+         },
+         {
+            "Perioddate": "JUN",
+            "FullDate": "June 2022",
+            "Temperature": "77",
+            "UOM": "KW",
+            "Usage": "1,118.0",
+            "Cost": "0.00",
+            "CloudIcon": "",
+            "Switcher": "",
+            "Operand": "HIST_PKKWH",
+            "Days": "29",
+            "ToolTipEstimated": ""
+         }
+      ]
+   }
+}

@@ -1,0 +1,84 @@
+{
+    "services": [
+        {
+            "serviceName": "Electric",
+            "BillContractNo": "654646545646556",
+            "monthly": {
+                "VisibilityTab": true,
+                "unit": "KWH",
+                "valueConsumption": 1358,
+                "percentageConsumption": -105,
+                "valueTemp": 56,
+                "percentageTemp": 5,
+                "y": {
+                    "data": [
+                        5000,
+                        1000
+                    ]
+                },
+                "x": [
+                    "Nov 2021",
+                    "Oct 2021"
+                ]
+            },
+            "yearly": {
+                "VisibilityTab": false,
+                "unit": "KWH",
+                "valueConsumption": 1505,
+                "percentageConsumption": -80,
+                "valueTemp": 35,
+                "percentageTemp": 6,
+                "y": {
+                    "data": [
+                        1800,
+                        900
+                    ]
+                },
+                "x": [
+                    "Dec 2021",
+                    "Dec 2020"
+                ]
+            }
+        },
+        {
+            "serviceName": "Electric",
+            "BillContractNo": "654654654646",
+            "monthly": {
+                "VisibilityTab": false,
+                "unit": "KWH",
+                "valueConsumption": 1358,
+                "percentageConsumption": -105,
+                "valueTemp": 56,
+                "percentageTemp": 5,
+                "y": {
+                    "data": [
+                        5000,
+                        1000
+                    ]
+                },
+                "x": [
+                    "Nov 2021",
+                    "Oct 2021"
+                ]
+            },
+            "yearly": {
+                "VisibilityTab": true,
+                "unit": "THERMS",
+                "valueConsumption": 1358,
+                "percentageConsumption": 0,
+                "valueTemp": 56,
+                "percentageTemp": 5,
+                "y": {
+                    "data": [
+                        5000,
+                        1000
+                    ]
+                },
+                "x": [
+                    "Sep 2021",
+                    "Sep 2020"
+                ]
+            }
+        }
+    ]
+}

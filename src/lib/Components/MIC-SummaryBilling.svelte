@@ -37,14 +37,14 @@
   $: searchInput = document.getElementById("#search");
   // fetch accountTable fetch api on component mount
   onMount(() => {
-    if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
+    // if ($apiToken && $SAPToken && $apiDomain && !$data.results) {
       get(
         $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/CollectiveAccounts`,
-        // "../../data/SummaryBilling.json",
+        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/CollectiveAccounts`,
+        "../../data/SummaryBilling.json",
         $SAPToken
       ).then(() => {});
-    }
+    // }
     refreshableToken = $apiToken;
   });
 

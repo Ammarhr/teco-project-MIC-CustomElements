@@ -1,0 +1,49 @@
+{
+    "chartType": "bar",
+    "service": "gas",
+    "meterType": "ami",
+    "meterNumber": "1231231",
+    "unit": "therms",
+    "avgs": {   
+      "costPerDay": "$0.08",
+      "tempPerDay": "65"
+    },
+    "legends": {
+      "gas": {
+        "icon": "<>",
+        "color": "#1111"
+      },
+      "tempereature": {
+        "icon": "<>",
+        "color": "#2222"
+      }
+    },
+    "tooltip": {
+      "y": "Cost is <cost>",
+      "x": "Temp is <temp>"
+    },
+    "settings": {
+      "y": {
+        "type": "bar",
+        "color": "#12313"
+      },
+      "x": {
+        "type": "line",
+        "color": "#11233"
+      }
+    },
+    "dataset": [
+      {
+        "usage": {
+          "value": 4000,
+          "label": "therms",
+          "axis": "y"
+        },
+        "date": {
+          "value": "Dec 20 2022",
+          "label": null,
+          "axis": "x"
+        }
+      }
+    ]
+  }

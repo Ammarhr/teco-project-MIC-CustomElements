@@ -32,19 +32,19 @@
     feedbackCall();
 
   onMount(() => {
-    // console.log("this is nody from recommendations: ",body);
-    if (
-      body &&
-      $SAPToken &&
-      token &&
-      token !== "" &&
-      billcontractnumber &&
-      !$data.messages
-    ) {
-      let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages_New`;
-      // let devUrl = "../../../data/recomendationMessages.json";
-      get(token, devUrl, body, $SAPToken);
-    }
+    console.log("this is body from recommendations: ",body);
+    // if (
+    //   body &&
+    //   $SAPToken &&
+    //   token &&
+    //   token !== "" &&
+    //   billcontractnumber &&
+    //   !$data.messages
+    // ) {
+    // let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages_New`;
+    let devUrl = "../../../data/recomendationMessages.json";
+    get(token, devUrl, body, $SAPToken);
+    // }
   });
   // getting the data ready
   $: if ($data && $data.messages) {
@@ -114,7 +114,6 @@
     index = (index - 1) % messages.length;
   };
 
-  
   $: modalCon = document.querySelector(".modal-container");
   $: if (modalCon) {
     modalCon.addEventListener("click", function (event) {

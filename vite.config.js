@@ -8,7 +8,7 @@ export default defineConfig({
     svelte({
       preprocess: preprocess(),
       compilerOptions: {
-        customElement: true,
+        // customElement: true,
       },
     }),
   ],

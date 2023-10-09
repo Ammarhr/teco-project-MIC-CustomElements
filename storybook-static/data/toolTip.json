@@ -1,0 +1,67 @@
+{
+    "groups": [
+        {
+            "Title": "Terms Found On Your Charges",
+            "toolTips": [
+                {
+                    "title": "Basic Service Charge",
+                    "description": "A fixed daily or monthly amount that covers the cost to provide service to your location. These charges are billed monthly regardless of any service used."
+                },
+                {
+                    "title": "Energy Charges",
+                    "description": "The monthly Energy Charge includes all other costs of producing the electricity you purchase, except fuel. This includes conservation, environmental and capacity cost recovery charges."
+                },
+                {
+                    "title": "Fuel Charges",
+                    "description": "Cost of fuel used to produce electricity you purchased. Fuel costs are passed through from fuel suppliers to our customers with no markup or profit to Tampa Electric."
+                },
+                {
+                    "title": "Storm Protuction Charges",
+                    "description": " The cost of additional hardening efforts to further protect the power grid from hurricanes or other extreme weather events."
+                },
+                {
+                    "title": "Clean Energy Transition Mechanism",
+                    "description": "A charge to recover costs associated with electric meter upgrades and the closing of certain coal generating plants to supports Tampa Electric’s transition to produce clean energy."
+                }
+            ]
+        },
+        {
+            "Title": "Terms About Your Energy",
+            "toolTips": [
+                {
+                    "title": "Avarage kWh per day",
+                    "description": "A kilowatthour (kWh) is a unit of energy used by an electrical device during a given period."
+                },
+                {
+                    "title": "Bright Choices",
+                    "description": "The associated fees and charges for leased outdoor lighting services."
+                },
+                {
+                    "title": "Sun To Go",
+                    "description": "The amount of electricity purchased from solar generating sources serving the Sun to Go program, which provides optional renewable energy purchases in 200 kWh blocks."
+                },
+                {
+                    "title": "Share",
+                    "description": "A Peoples Gas program administered by the Salvation Army and Catholic Charities that helps pay energy bills of customers in need. If you choose to contribute, your contribution is tax deductible and is matched by Peoples Gas. "
+                }
+            ]
+        },
+        {
+            "Title": "Terms About Your Rate",
+            "toolTips": [
+                {
+                    "title": "Budget Billing",
+                    "description": "A Peoples Gas program administered by the Salvation Army and Catholic Charities that helps pay energy bills of customers in need. If you choose to contribute, your contribution is tax deductible and is matched by Peoples Gas. "
+                },
+                {
+                    "title": "Rate Schedule",
+                    "description": "The amount {rate) you pay depends on your customer category. The cost of providing service varies with the customer group."
+                },
+                {
+                    "title": "Buried Piping Notification ",
+                    "description": "Federal regulations require that Peoples Gas notify our customers who own buried piping of the following: 1) When excavating near buried gas piping, the piping should be located in advance; 2) The gas supplier does not own or maintain the customer’s buried piping; 3) Buried piping that is not maintained may be subject to corrosion and/or leakage. Buried piping should be inspected periodically and any unsafe conditions repaired. Licensed plumbers, heating and air conditioning contractors, or Peoples Gas can conduct inspections. "
+                }
+            ]
+        }
+    ]
+}

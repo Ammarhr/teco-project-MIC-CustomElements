@@ -1,0 +1,162 @@
+{
+    "SummaryAccount": "2234567890",
+    "StatementDate": "Nov 30, 2021",
+    "Accounts": [
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "",
+            "CurrentCharges": "",
+            "Status": "",
+            "ContactName": "",
+            "IsParentAccount": "X",
+            "InvoiceNumber": "16546845",
+            "IsElectric": "",
+            "IsGas": "",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "126 Main St, Tampa, FL",
+            "CurrentCharges": "1,506.69",
+            "Status": "Active",
+            "ContactName": "John Crepp",
+            "IsParentAccount": "",
+            "InvoiceNumber": "16546845",
+            "IsElectric": "X",
+            "IsGas": "X",
+            "IsLighting": "X"
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Tampa, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Tampa, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Tampa, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Wachiton, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Aclahoma, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Detroit, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Tampa, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Texas, FL",
+            "CurrentCharges": "3,406.48",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Rod Island, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Kentaki, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, Siattle, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        },
+        {
+            "AccountNumber": "123456789",
+            "ServiceAddress": "124 Main St, NY City, FL",
+            "CurrentCharges": "3,406",
+            "ContactName": "Tohnny sami",
+            "IsParentAccount": "",
+            "InvoiceNumber": "1654684",
+            "IsElectric": "",
+            "IsGas": "X",
+            "IsLighting": ""
+        }
+    ]
+}

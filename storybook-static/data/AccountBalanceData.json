@@ -1,0 +1,13 @@
+{
+   "totalAmmount": "-800,122,21.55",
+   "dueDate": "May 25, 2017",
+   "html_masseges": [
+      {
+         "message": "<p><span style=\"font-size:20px\">Your previous payment of <strong data-renderer-mark=\"true\">$</strong><strong>27.44</strong> was received on<strong> Apr 25, 2017</strong></span></p>\n"
+      }
+   ],
+   "pay_now_link": "https://dev.account.tecoenergy.com/Payment/PayNow",
+   "title": "Total Amount Due",
+   "postive_color": "#005faa",
+   "negative_color": "#24A148"
+}

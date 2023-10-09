@@ -18,7 +18,7 @@
   import { onMount } from "svelte";
   import MicBillInsightsCombo from "./MIC-BillInsights-combo.svelte";
   import MicChargeDetailsCombo from "./MIC-ChargeDetails-combo.svelte";
-
+  import MicBulkDownload from "./MIC-BulkDownload.svelte";
   let comboNewToken;
   let arrayOfBillInsights = [];
   let sunSelectArray = [];
@@ -44,14 +44,14 @@
       if ($isSummaryAccountFlag.toLowerCase() !== "true") {
         chargeGet(
           $apiToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
-          // "../../../data/ChargeDetails.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+          "../../../data/ChargeDetails.json",
           $SAPToken
         );
         get(
           $apiToken,
-          // "../../../data/DemandInsight.json",
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
+          "../../../data/DemandInsight.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/BillInsight`,
           $SAPToken
         ).then(() => {
           if ($data && $data.services) {
@@ -60,8 +60,8 @@
         });
         sunget(
           $apiToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
-          // "../../data/sunSelect.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/SunSelect`,
+          "../../data/sunSelect.json",
           $SAPToken
         ).then(() => {
           if ($sundata && $sundata.SunSelect) {
@@ -71,8 +71,8 @@
         });
         yearlyGet(
           $apiToken,
-          `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
-          // "../../data/yearlyEnergy.json",
+          // `${$apiDomain}/api/ibill/webcomponents/v1/Post/YearlyEnergy`,
+          "../../data/yearlyEnergy.json",
           $SAPToken
         );
       }
@@ -88,9 +88,9 @@
   ) {
     chargeGet(
       $newToken.token,
-      `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ChargeDetails`,
+      "../../data/ChargeDetails.json",
       $SAPToken
-      // "../../data/ChargeDetails.json"
     )
       .then(() => {
         insightsArray = [];
@@ -176,6 +176,7 @@
     let arryOfConfigue = $chargeData.Section.map((subSection) => {
       return subSection.ConfigValue;
     });
+    console.log(arryOfConfigue, "arryOfConfigue 1");
     arrayOfbody = [];
     for (let i = 0; i < $chargeData.Section.length; i++) {
       insight = arrayOfBillInsights.filter((results) => {
@@ -246,16 +247,13 @@
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
               />
-              <!-- <MicChargeDetailsCombo
+              <MicChargeDetailsCombo
                 charges={[charge]}
                 invoicetotal={invoiceTotalArray}
-              /> -->
+              />
             {:else if charge.SectionType !== "InvoiceTotal"}
               <mic-billingsummary-combo charges={[charge]} invoicetotal={""} />
-              <!-- <MicChargeDetailsCombo
-                charges={[charge]}
-                invoicetotal={""}
-              /> -->
+              <MicChargeDetailsCombo charges={[charge]} invoicetotal={""} />
             {/if}
             {#if $isParentAccount !== "X"}
               {#if arrayOfCharges[arrayOfCharges.length - 1] && arrayOfCharges[arrayOfCharges.length - 1].SectionType && arrayOfCharges[arrayOfCharges.length - 1].SectionType !== "InvoiceTotal"}
@@ -306,23 +304,23 @@
                       emptytabs={emptyTabs}
                       arrayofbody={arrayOfbody[i]}
                     />
-                    <!-- <MicBillInsightsCombo 
-                  insightservices={insightsArray[i]}
-                  sunselectdata={sunSelectArray}
-                  emptytabs={emptyTabs}
-                  arrayofbody={arrayOfbody[i]}
-                /> -->
+                    <MicBillInsightsCombo
+                      insightservices={insightsArray[i]}
+                      sunselectdata={sunSelectArray}
+                      emptytabs={emptyTabs}
+                      arrayofbody={arrayOfbody[i]}
+                    />
                   {:else}
                     <mic-insights-combo
                       insightservices={insightsArray[i]}
                       sunselectdata={sunSelectArray}
                       emptytabs={emptyTabs}
                     />
-                    <!-- <MicBillInsightsCombo 
-                  insightservices={insightsArray[i]}
-                  sunselectdata={sunSelectArray}
-                  emptytabs={emptyTabs}
-                /> -->
+                    <MicBillInsightsCombo
+                      insightservices={insightsArray[i]}
+                      sunselectdata={sunSelectArray}
+                      emptytabs={emptyTabs}
+                    />
                   {/if}
                 {/key}
                 {#if $isParentAccount !== "X"}
@@ -346,6 +344,7 @@
                       <mic-bulkdownload class="mic-insights bulk-mobile" />
                     {/if}
                     <mic-bulkdownload class="mic-insights bulk-desk" />
+                    <MicBulkDownload />
                   {/if}
                 {/if}
               </div>
@@ -380,7 +379,7 @@
       {/if}
       <mic-bulkdownload class="mic-insights" />
     </div>
-  {/if}
+    {/if}
 </div>
 
 <style lang="scss">

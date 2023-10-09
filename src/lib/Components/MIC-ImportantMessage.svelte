@@ -25,14 +25,14 @@
 
   const [data, loading, error, get] = fetchstore();
   onMount(() => {
-    if ($apiToken && $SAPToken && !$data.messages && $generalErr !== true) {
-      get(
-        $apiToken,
-        `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`,
-        // "../../data/messages.json",
-        $SAPToken
-      );
-    }
+    // if ($apiToken && $SAPToken && !$data.messages && $generalErr !== true) {
+    get(
+      $apiToken,
+      // `${$apiDomain}/api/ibill/webcomponents/v1/Post/ImportantMessages`,
+      "../../data/messages.json",
+      $SAPToken
+    );
+    // }
   });
 
   $: if ($data && $data.messages) {
@@ -146,7 +146,7 @@
             <span />
           {:else}
             <mic-messagesdetails messages={state.messages} />
-            <!-- <MicImportantMessagesDetails messages={state.messages} /> -->
+            <MicImportantMessagesDetails messages={state.messages} />
           {/if}
         </div>
       {/if}
