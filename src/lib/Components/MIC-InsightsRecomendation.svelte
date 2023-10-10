@@ -15,7 +15,7 @@
   } from "../../js/store";
   import { onMount } from "svelte";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
-
+  import recommendationData from "../../../data/recomendationMessages.json";
   export let token;
   export let body;
   export let billcontractnumber;
@@ -32,7 +32,7 @@
     feedbackCall();
 
   onMount(() => {
-    console.log("this is body from recommendations: ",body);
+    console.log("this is body from recommendations: ", body);
     // if (
     //   body &&
     //   $SAPToken &&
@@ -43,7 +43,9 @@
     // ) {
     // let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages_New`;
     let devUrl = "../../../data/recomendationMessages.json";
-    get(token, devUrl, body, $SAPToken);
+    // get(token, devUrl, body, $SAPToken);
+
+    $data = recommendationData;
     // }
   });
   // getting the data ready
