@@ -44,7 +44,6 @@
     // let devUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/RecomendationMessages_New`;
     let devUrl = "../../../data/recomendationMessages.json";
     // get(token, devUrl, body, $SAPToken);
-
     $data = recommendationData;
     // }
   });
