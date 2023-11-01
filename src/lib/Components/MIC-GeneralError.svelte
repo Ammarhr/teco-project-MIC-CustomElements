@@ -11,7 +11,7 @@
   } from "../../js/store";
   import { onMount } from "svelte";
   import { useLazyImage as lazyImage } from "svelte-lazy-image";
-  import errorImage from "../../assets/Computer troubleshooting-rafiki.svg";
+  // import errorImage from "../../assets/Computer troubleshooting-rafiki.svg";
   export let token;
   const [data, loading, err, errorHandler] = errorCallback();
   onMount(() => {
@@ -19,8 +19,8 @@
       errorHandler(
         token,
         // "../../../data/generalErr.json"
-        // `${$apiDomain}/api/ibill/webcomponents/v1/Post/GetErrorMessages?Code=ER_General_001`,
-        "http://localhost:3030/simulate-error",
+        `${$apiDomain}/api/ibill/webcomponents/v1/Post/GetErrorMessages?Code=ER_General_001`,
+        // "http://localhost:3030/simulate-error",
         $SAPToken
       ).then(() => loading.set(false));
     }
@@ -34,11 +34,14 @@
   <mic-loading />
 {:else if $err}
   <div class="container">
-    <img src={errorImage} alt="" style="width: 540px;" use:lazyImage />
-    <p>Oops!</p>
+    <!-- <img src={errorImage} alt="" style="width: 540px;" use:lazyImage /> -->
+    <!-- <p>Oops!</p> -->
     <div id="err-body">
-      <p style="font-size: 28px;">An unexpected error has occurred.</p>
-      <p style="font-size: 22px;">Please refresh your browser and try again.</p>
+      <!-- <p style="font-size: 28px;">An unexpected error has occurred.</p> -->
+      <p style="font-size: 22px; line-height:1; margin-bottom: 12px;">
+        An unexpected error has occurred.
+        Please refresh your browser and try again.
+      </p>
     </div>
     <div class="buttons">
       <button class="btn-refresh" on:click={refreshPage}>
@@ -99,8 +102,8 @@
   }
 
   button {
-    padding: 16px;
-    font-size: 22px;
+    padding: 12px;
+    font-size: 16px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -122,6 +125,9 @@
   }
 
   .btn-refresh {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     background: #005faa;
     &:hover .icon {
       transform: rotate(360deg) scale(1.2);

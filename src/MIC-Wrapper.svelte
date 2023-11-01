@@ -72,19 +72,7 @@
       }
     );
   });
-  // window.onload = function () {
-  //   fetchAndRedirect(
-  //     $apiToken,
-  //     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-  //     null,
-  //     {
-  //       EventCode: "IBILL_START",
-  //       Outcome: ``,
-  //       Feedback: "",
-  //       Persona: $persona,
-  //     }
-  //   );
-  // };
+
   window.addEventListener("beforeunload", () => {
     fetchAndRedirect(
       $apiToken,
@@ -117,7 +105,7 @@
     <div class="important-balance">
       <div class="balance">
         <mic-balancesummary />
-        <MicBalanceSummary />
+        <!-- <MicBalanceSummary /> -->
       </div>
       <div class="messages">
         <mic-importentmessage />
@@ -138,8 +126,8 @@
     <!-- <MicMeterTable /> -->
   </div>
 {:else if $generalErr === true}
-  <!-- <mic-generalerror {token} /> -->
-  <MicGeneralError {token} />
+  <mic-generalerror {token} />
+  <!-- <MicGeneralError {token} /> -->
 {/if}
 
 <style lang="scss">
