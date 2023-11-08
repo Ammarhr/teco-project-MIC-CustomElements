@@ -543,15 +543,12 @@ export function errorCallback() {
                         'Authorization': `Bearer ${token}`,
                         'UserCredentials': saptoken
                     },
-                });;
-                const jsonRespopns = await Publishresponse.json()
-                data.set(jsonRespopns);
-
+                });
+                data.set(Publishresponse?.data);
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
-
             let accountInfo = getAccountAndInvoiceNumber();
             logglyErrorBody = {
                 "EventDate": new Date(),

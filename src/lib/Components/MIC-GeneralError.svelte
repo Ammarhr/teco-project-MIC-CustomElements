@@ -39,8 +39,8 @@
     <div id="err-body">
       <!-- <p style="font-size: 28px;">An unexpected error has occurred.</p> -->
       <p style="font-size: 22px; line-height:1; margin-bottom: 12px;">
-        An unexpected error has occurred.
-        Please refresh your browser and try again.
+        An unexpected error has occurred. Please refresh your browser and try
+        again.
       </p>
     </div>
     <div class="buttons">
