@@ -31,7 +31,7 @@
     fetchAndRedirect,
     apiToken,
     apiDomain,
-    start
+    start,
   } from "./js/store";
 
   export let token;
@@ -72,19 +72,7 @@
       }
     );
   });
-  // window.onload = function () {
-  //   fetchAndRedirect(
-  //     $apiToken,
-  //     `${$apiDomain}/rest/restmijourney/v1/CreateEvent`,
-  //     null,
-  //     {
-  //       EventCode: "IBILL_START",
-  //       Outcome: ``,
-  //       Feedback: "",
-  //       Persona: $persona,
-  //     }
-  //   );
-  // };
+
   window.addEventListener("beforeunload", () => {
     fetchAndRedirect(
       $apiToken,
@@ -96,8 +84,8 @@
         Feedback: "",
         Persona: $persona,
       }
-    )
-    eraseCookie("MIC-IBLL-MIJ")
+    );
+    eraseCookie("MIC-IBLL-MIJ");
   });
 </script>
 

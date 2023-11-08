@@ -80,7 +80,7 @@ export const persona = writable('')
 
 let isCollectiveAccount = "";
 let parentAccount = ""
-
+let URLs = '';
 function setIsCollectiveAccountFlagHeader() {
     isCollectiveAccount = get(isSummaryAccountFlag);
     parentAccount = get(isParentAccount);
@@ -94,12 +94,14 @@ let headerFlag
 //* fetch function
 let arrOfRequests = [];
 export const pendingRequest = writable([])
+
 export function fetchstore() {
     const loading = writable(false);
     const error = writable(false);
     const data = writable({});
-    // generalErr.set(false)
-    headerFlag = setIsCollectiveAccountFlagHeader()
+    let statusCode;
+
+    headerFlag = setIsCollectiveAccountFlagHeader();
     const getData = async (token, url, saptoken) => {
         loading.set(true);
         error.set(false);
@@ -109,7 +111,7 @@ export function fetchstore() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                //* test data
+
                 const Publishresponse = await axios.post(url, JSON.stringify({}), {
                     headers: {
                         'Content-Type': 'application/json',
@@ -119,7 +121,7 @@ export function fetchstore() {
                     },
                     withCredentials: true,
                 });
-                // if (Publishresponse.status !== 204)  
+
                 data.set(await Publishresponse.data);
                 // console.log(await Publishresponse);
                 loading.set(false);
@@ -130,6 +132,7 @@ export function fetchstore() {
             error.set(e);
             generalErr.set(true);
             loading.set(false);
+            URLs = URLs + `${url}:(status code: ${e?.request?.status}), `
         } finally {
             arrOfRequests.pop()
             pendingRequest.set(arrOfRequests);
@@ -377,21 +380,44 @@ function getSessionLocationerrorCallback(error) {
     // console.log(`Error occurred: ${error.message}`);
 }
 
-//* get browser name 
+//* get browser name + version
 let browserName;
-
 if (userAgent.indexOf("Edg") > -1) {
-    browserName = "Microsoft Edge";
+    var match = /Edg\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Microsoft Edge " + version;
+    }
 } else if (userAgent.indexOf("OPR") > -1) {
-    browserName = "Opera";
+    var match = /OPR\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Opera " + version;
+    }
 } else if (userAgent.indexOf("Firefox") > -1) {
-    browserName = "Firefox";
+    var match = /Firefox\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Firefox " + version;
+    }
 } else if (userAgent.indexOf("MSIE") > -1) {
-    browserName = "Internet Explorer";
+    var match = /MSIE\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Internet Explorer " + version;
+    }
 } else if (userAgent.indexOf("Chrome") > -1) {
-    browserName = "Chrome";
+    var match = /Chrome\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Chrome " + version;
+    }
 } else if (userAgent.indexOf("Safari") > -1) {
-    browserName = "Safari";
+    var match = /Safari\/(\d+\.\d+\.\d+\.\d+)/.exec(userAgent);
+    if (match !== null) {
+        var version = match[1];
+        browserName = "Safari " + version;
+    }
 }
 //*
 const ipAdress = async () => {
@@ -406,7 +432,7 @@ ipAdress().then((ip) => ipify = ip.ip)
 
 export const fetchAndRedirect = (token, fetchUrl, redirectUrl, fetchBody) => {
     var startTime;
-    
+
     start.subscribe(value => {
         startTime = value;
     });
@@ -497,13 +523,13 @@ export function feedbackCall() {
 
     return [data, loading, error, setFeedback]
 }
-
+let logglyErrorBody;
 export function errorCallback() {
     const error = writable(false);
     const data = writable({});
     const loading = writable(false);;
 
-    async function errorHandler(token, url, saptoken) {
+    async function errorHandler(token, Url, saptoken) {
         loading.set(true)
         error.set(false);
         try {
@@ -511,28 +537,73 @@ export function errorCallback() {
                 data.set({ errrorMessage: "No Token provided!" });
                 throw new Error("No Token provided!");
             } else if (token) {
-                const Publishresponse = await fetch(url, {
-                    method: 'GET',
-                    mode: "cors",
-                    cache: "no-cache",
+                const Publishresponse = await axios.get(Url, {
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`,
-                        "UserCredentials": saptoken
+                        'Authorization': `Bearer ${token}`,
+                        'UserCredentials': saptoken
                     },
                 });
-                data.set(await Publishresponse.json());
+                data.set(Publishresponse?.data);
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
             }
         } catch (e) {
-            error.set(e);
+            let accountInfo = getAccountAndInvoiceNumber();
+            logglyErrorBody = {
+                "EventDate": new Date(),
+                "EventRequest": "",
+                "EventResponseCode": `${e?.request?.status}`,
+                "EventResponseMessage": `${e?.message || "Web-Components can't reach MiPortal"}: Device_Info: ${isMobile ? "Mobile" : "Desktop"}, Browser: ${browserName}`,
+                "EventMethod": "POST",
+                "EventURLEndpoint": URLs,
+                "EventCustomerInfo": accountInfo
+            }
+            reportToLogServer(logglyErrorBody);
+            error.set(e.message);
+            console.log(e.message, "e.message");
         }
     }
+
     loading.set(false)
 
     return [data, loading, error, errorHandler]
 }
+
+// get account and invoice  number from teco url:
+function getAccountAndInvoiceNumber() {
+    if (window.location.href.indexOf("account.tecoenergy") > 0) {
+        return window.location.href?.split("?")[1]
+    } else {
+        return 'MiPortal Simulator'
+    }
+}
+// reporting to loggly:
+function reportToLogServer(reportBody) {
+
+    console.log(reportBody, "reportBody");
+    fetch('https://logs-01.loggly.com/bulk/3b515df6-b48b-4060-bbef-7ffe0e4961ff/tag/WC_Exception', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reportBody),
+    })
+        .then(response => {
+            if (response.status === 200) {
+                // Successfully reported to the log server
+            } else {
+                // Handle errors in reporting
+                console.error('Failed to report to log server');
+            }
+        })
+        .catch(error => {
+            // Handle network errors while reporting
+            console.error('Network error while reporting to log server:', error);
+        });
+}
+
+
 
 export const latestBill = writable('');
 export const newToken = writable('');
@@ -572,7 +643,6 @@ export function reGenerateToken() {
         } finally {
             arrOfRequests.pop()
             pendingRequest.set(arrOfRequests);
-
         }
         loading.set(false);
     }
