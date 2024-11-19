@@ -211,7 +211,7 @@ export const fetchMonthlyUsageChart = () => {
                     },
                     body: JSON.stringify({}),
                 });
-                // if (Publishresponse.status !== 204)  
+                // if (Publishresponse.status !== 204)                  
                 data.set(await Publishresponse.json());
             } else {
                 data.set({ errrorMessage: "Invalid Token" });
@@ -557,7 +557,8 @@ export function errorCallback() {
                 "EventResponseMessage": `${e?.message || "Web-Components can't reach MiPortal"}: Device_Info: ${isMobile ? "Mobile" : "Desktop"}, Browser: ${browserName}`,
                 "EventMethod": "POST",
                 "EventURLEndpoint": URLs,
-                "EventCustomerInfo": accountInfo
+                "EventCustomerInfo": accountInfo,
+                "Token": token
             }
             reportToLogServer(logglyErrorBody);
             error.set(e.message);

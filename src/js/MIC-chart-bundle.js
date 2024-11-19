@@ -534,12 +534,13 @@ export const renderMixChart = (data, color, width, height, service, unit, chartU
 }
 
 
-export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit, height, maxScale, onPeakOprand, offPeakOprand) => {
+
+export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offPeak, color, chartUnit, height, maxScale, onPeakOprand, offPeakOprand, supperOffPeakOprand, sOffPeak) => {
 
     let costArray = [];
     let daysArray = []
-    let offPeakArray
-    let OnPeakArray
+    let offPeakArray = []
+    let OnPeakArray = []
     let categoriesArray;
     let serviceData = [];
     let cloudArray = [];
@@ -547,6 +548,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
     let dTounVal = 0, dToufVal = 0;
     let notationY = 0;
     let itirate = 1;
+    let superOffPeakArray = []
     if (monthly == false) {
         if (data && data.length > 0) {
             serviceData = data.map((results) => {
@@ -634,11 +636,9 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         }
     }
 
-
-    OnPeakArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == onPeakOprand : result.Dtype == "dtoun")
+    OnPeakArray = data.filter((result, i) => result.Operand == onPeakOprand || result.Dtype == "dtoun")
         .map(value => value.Usage !== "" ? parseFloat(value?.Usage?.split(",").join('')) : null)
-
-    offPeakArray = data.filter((result, i) => onPeak !== "x" && offPeak == "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == offPeakOprand : result.Dtype == "dtouf")
+    offPeakArray = data.filter((result, i) => result.Operand == offPeakOprand || result.Dtype == "dtouf")
         .map(value => value.Usage !== "" ? parseFloat(value?.Usage?.split(",").join('')) : null)
 
     costArray = data.filter(value => value.Cost !== "0.00" && value.Cost !== "" ? parseFloat(value?.Cost?.split(",").join('')).toFixed(2) : null)
@@ -652,6 +652,22 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         daysArray = data.filter((result, i) => onPeak == "x" && offPeak !== "x" ? true : onPeak == "x" && offPeak == "x" && monthly == true ? result.Operand == onPeakOprand : result.Dtype == "dtoun")
             .map(value => value.Days !== "" ? value.Days : null)
     }
+
+
+    superOffPeakArray = categoriesArray.map((item) => {
+        let dataSet = null;
+        for (let index = 0; index < data.length; index++) {
+            if ((data[index]?.Operand == supperOffPeakOprand || data[index]?.Dtype == "sdtouf") && item?.toUpperCase() == data[index]?.Perioddate?.toUpperCase()) {
+
+                dataSet = data[index]
+                break;
+            }
+        }
+        return dataSet;
+    })
+
+    superOffPeakArray = superOffPeakArray.map(value => value && value.Usage !== "" ? parseFloat(value?.Usage?.split(",").join('')) : null)
+
     let serisData = chartUnit == "usage" ? ([(onPeak == "x" ? {
         name: 'ONPEAK',
         type: 'column',
@@ -672,23 +688,43 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
         type: 'column',
         color: "#ffffff",
         data: [],
-    }), {
+    }), (sOffPeak == "x" ? {
+        name: 'SUPEROFFPEAK',
+        type: 'column',
+        color: "#10839F",
+        data: fillArray_helpper(superOffPeakArray, 13, 0)
+    } : {
+        name: ' ',
+        type: 'column',
+        color: "#ffffff",
+        data: [],
+    }), temp == true ? {
         name: 'TEMPERATURE',
         type: 'line',
         color: "#FF832B",
         data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => monthly == true ? result.Operand == onPeakOprand : result.Dtype == "dtoun")
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
+    } : {
+        name: ' ',
+        type: 'column',
+        color: "#FF832B",
+        data: []
     }]) : ([{
         name: 'ELECTRIC',
         type: 'column',
         color: "#044F8D",
         data: fillArray_helpper(costArray, 13, 0)
-    }, {
+    }, temp == true ? {
         name: 'TEMPERATURE',
         type: 'line',
         color: "#FF832B",
         data: temp == true && onPeak == "x" && offPeak == "x" ? data.filter((result, i) => monthly == true ? result.Operand == onPeakOprand : result.Dtype == "dtoun")
             .map(value => value.Temperature !== "" ? value.Temperature : null) : temp == true ? data.map(value => value.Temperature !== "" ? value.Temperature : null) : []
+    } : {
+        name: ' ',
+        type: 'column',
+        color: "#FF832B",
+        data: []
     }])
 
     let options;
@@ -804,6 +840,23 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                 },
                 {
                     min: 0,
+                    max: chartUnit == "usage" ? parseInt(maxScale) + parseInt(maxScale) * 0.1 : undefined,
+                    tickAmount: 5,
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: false,
+                        formatter: function (val) {
+                            return val && val == 0 ? 0 : val && val % 1 !== 0 && val < 1 ? val.toFixed(2) : val && val > 1 ? parseInt(val) : val;
+                        },
+                    }
+                },
+                {
+                    min: 0,
                     tickAmount: 5,
                     axisBorder: {
                         show: false,
@@ -825,7 +878,7 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                     borderRadiusApplication: 'end',
                     columnWidth: "70%",
                     dataLabels: {
-                        position: "top", // top, center, bottom,
+                        position: "top", // top, ceter, bottom
                     },
                     distributed: false,
                 }
@@ -860,7 +913,6 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                 "</span>"
                                 :
                                 ((chartUnit == "usage" ?
-
                                     (`<div class="apexcharts-tooltip-text" style="margin-top: 8px;">` +
                                         (series[0] && series[0][dataPointIndex] != null && series[0][dataPointIndex] >= 0 ? "</div>" +
                                             '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">' +
@@ -879,7 +931,18 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                             "</span>"
                                             +
                                             "<span style='font-weight:300;'>"
-                                            + series[1][dataPointIndex].toLocaleString() + " " + unit : ""))
+                                            + series[1][dataPointIndex].toLocaleString() + " " + unit : "")
+                                        +
+                                        (series[2] && series[2][dataPointIndex] != null && series[2][dataPointIndex] >= 0 ? "</div>"
+                                            +
+                                            '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
+                                            + `<span style='font-weight:700; margin-bottom:6px'>` +
+                                            "Super Off Peak: " +
+                                            "</span>"
+                                            +
+                                            "<span style='font-weight:300; margin-left:4px;'>"
+                                            + series[2][dataPointIndex].toLocaleString() + " " + unit : "")
+                                    )
                                     : (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00") ?
                                         '<div style="padding-top:14px"> ' +
                                         (costArray[dataPointIndex] && costArray[dataPointIndex] !== "0.00" ?
@@ -896,14 +959,14 @@ export const onPeakOffPeakChart = (data, unit, monthly, days, temp, onPeak, offP
                                         : ""
                                 )
                                     +
-                                    (series[2] && series[2][dataPointIndex] ? "</div>"
+                                    (series[3] && series[3][dataPointIndex] ? "</div>"
                                         + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                                         + `<span style='font-weight:700; margin-bottom:6px'>` +
                                         "Avg. Temp: " +
                                         "</span>"
                                         +
                                         "<span style='font-weight:300;'>"
-                                        + series[2][dataPointIndex] + "°" : "") +
+                                        + series[3][dataPointIndex] + "°" : "") +
                                     (daysArray && monthly == true ? "</div>"
                                         + '<div class="arrow_box" style="display:flex; flex-direction:row; justify-content: space-between;">'
                                         + `<span style='font-weight:700; margin-bottom:6px'>` +
