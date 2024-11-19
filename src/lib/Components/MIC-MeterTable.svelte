@@ -58,6 +58,7 @@
   let disableTemp = false;
   let onPeakOprand;
   let offPeakOprand;
+  let superOffPeakOprand;
   let words;
   const [data, loading, error, get] = fetchstore(); // meterTable fetch
   const [dailyUsageData, dailyUsageLoading, dailyUsageError, dailyUsageGet] =
@@ -142,6 +143,7 @@
         DAP_kw,
         DAP_dtoun,
         DAP_dtouf,
+        DAP_sdtouf,
         BilledAmount,
         Contract,
         MeterNumber,
@@ -189,7 +191,8 @@
             pf: DAP_pf,
             kw: DAP_kw,
             dtoun: DAP_dtoun,
-            dtouf: DAP_dtouf,
+            dtouf: DAP_dtouf, // new Body attruibute for super offPeak
+            sdtouf: DAP_sdtouf,
           },
           $SAPToken
         );
@@ -203,14 +206,24 @@
       } else {
         onPeakOprand = "HIST_PKKWH";
         offPeakOprand = "HIST_OFKWH";
-        if (DAP_dtoun == "x" && DAP_dtouf == "x" && Operand == "YKWH") {
-          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=HIST_PKKWH&Dln=${DLN}&ZipCode=${ZipCode}`;
+        superOffPeakOprand = "HIST_SOKWH";
+        if (
+          DAP_dtoun == "x" &&
+          DAP_dtouf == "x" &&
+          DAP_sdtouf == "x" &&
+          Operand == "YKWH"
+        ) {
+          // add new condition fo the super offPeak 3rd operand
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${offPeakOprand}&Operand2=${onPeakOprand}&&Operand3=${superOffPeakOprand}&Dln=${DLN}&ZipCode=${ZipCode}`;
+        } else if (DAP_dtoun == "x" && DAP_dtouf == "x" && Operand == "YKWH") {
+          // add new condition fo the super offPeak 3rd operand
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${offPeakOprand}&Operand2=${onPeakOprand}&Operand3=&Dln=${DLN}&ZipCode=${ZipCode}`;
         } else if (DAP_dtoun !== "x" && DAP_dtouf == "x" && Operand == "YKWH") {
-          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_OFKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${offPeakOprand}&Operand2=&Operand3=&Dln=${DLN}&ZipCode=${ZipCode}`;
         } else if (DAP_dtoun == "x" && DAP_dtouf !== "x" && Operand == "YKWH") {
-          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=HIST_PKKWH&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${onPeakOprand}&Operand2=&Operand3=&Dln=${DLN}&ZipCode=${ZipCode}`;
         } else {
-          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${HistoricalFact}&Operand2=&Dln=${DLN}&ZipCode=${ZipCode}`;
+          monthlyUrl = `${$apiDomain}/api/ibill/webcomponents/v1/Post/meterDataMonthlyUsage?Contract=${Contract}&MeterNo=&Operand1=${HistoricalFact}&Operand2=&Operand3=&Dln=${DLN}&ZipCode=${ZipCode}`;
         }
       }
 
@@ -252,6 +265,12 @@
         }
       } else if (
         selectedMeter.DAP_dtoun == "x" &&
+        selectedMeter.DAP_dtouf == "x" &&
+        selectedMeter.DAP_sdtouf == "x"
+      ) {
+        chartColor = "super";
+      } else if (
+        selectedMeter.DAP_dtoun == "x" &&
         selectedMeter.DAP_dtouf !== "x"
       ) {
         chartColor = "#00B6F0";
@@ -264,7 +283,7 @@
         selectedMeter.DAP_dtoun == "x" &&
         selectedMeter.DAP_dtouf == "x"
       ) {
-        chartColor = "both";
+        chartColor = "both"; // add another condition for the new super offPeak color
       } else if (selectedMeter.DAP_rkwh == "x") {
         chartColor = "#96BDFF";
         if (selectedMeter) {
@@ -478,7 +497,6 @@
       }
     });
   }
-
   // cost/usage chart toggle function
   const costUsageToggle = (e) => {
     if (e.target.checked == true) {
@@ -1175,7 +1193,9 @@
                       400,
                       $monthlyUsageData.MonthlyUsage.MaxUsage,
                       onPeakOprand,
-                      offPeakOprand
+                      offPeakOprand,
+                      superOffPeakOprand,
+                      selectedMeter.DAP_sdtouf
                     )}
                   />
                 {/if}
@@ -1268,7 +1288,9 @@
                         400,
                         $dailyUsageData.DailyUsage.MaxUsage,
                         onPeakOprand,
-                        offPeakOprand
+                        offPeakOprand,
+                        superOffPeakOprand,
+                        selectedMeter?.DAP_sdtouf
                       )}
                     />
                   {/if}
@@ -1292,6 +1314,14 @@
                         class="legend-point"
                         style="background: rgb(0, 41, 74); color: rgb(0, 41, 74);"
                       /><span class="legend-text">OFF-PEAK</span>
+                    </div>
+                  {/if}
+                  {#if selectedMeter.DAP_sdtouf == "x"}
+                    <div class="chart-legend">
+                      <span
+                        class="legend-point"
+                        style="background: rgb(16, 131, 159); color: rgb(0, 41, 74);"
+                      /><span class="legend-text">SUPER OFF-PEAK</span>
                     </div>
                   {/if}
                 {:else if chartDisplayUnit == "cost"}
@@ -1895,7 +1925,8 @@
     border-radius: 12px;
     padding: 16px;
     right: 0;
-    box-shadow: 0px 10px 15px rgba(16, 24, 40, 0.1),
+    box-shadow:
+      0px 10px 15px rgba(16, 24, 40, 0.1),
       0px 4px 6px rgba(16, 24, 40, 0.1);
     width: calc(314px - 32px);
     &::before {
